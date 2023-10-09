@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 
+interface DropdownMenuProps {
+  options: string[];
+  onSelect: (option: string) => void;
+}
 
-
-const DropdownMenu = ({ options, onSelect }) => {
+const DropdownMenu: React.FC<DropdownMenuProps> = ({ options, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
@@ -10,7 +13,7 @@ const DropdownMenu = ({ options, onSelect }) => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionSelect = (option) => {
+  const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
     onSelect(option);
     setIsOpen(false);

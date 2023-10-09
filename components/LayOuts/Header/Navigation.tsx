@@ -12,7 +12,7 @@ const Navigation = () => {
           .then((data) => setCategories(data))
           .catch((error) => console.error('Error fetching categories:', error));
       }, []);
-    const handleOptionSelect = (selectedOption) => {
+    const handleOptionSelect = (selectedOption:any) => {
         console.log('Selected Option:', selectedOption);
         // You can perform actions when an option is selected
       };
