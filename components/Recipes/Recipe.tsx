@@ -11,8 +11,8 @@ const Recipe: React.FC<{ recipe: RecipeData }>  = (recipe: any) => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Recipe</h1>
-      <ul>
-        <li key={recipe._id} className="bg-purple-300 p-4 rounded shadow mb-4">
+      <>
+        <div key={recipe._id} className="bg-purple-300 p-4 rounded shadow mb-4">
           <h2 className="text-2xl font-semibold">{recipe.recipe.title}</h2>
           <p className="text-gray-600">{recipe.recipe.description}</p>
           <p className="text-gray-600">Prep Time: {recipe.recipe.prep} minutes</p>
@@ -59,15 +59,15 @@ const Recipe: React.FC<{ recipe: RecipeData }>  = (recipe: any) => {
             )}
           </ul>
           <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
-          <ul className="list-disc list-inside">
+          <ol className="list-disc list-inside">
             {recipe.recipe.instructions.map((instruction: string, index: number) => (
               <li key={index} className="text-gray-600">
                 {instruction}
               </li>
             ))}
-          </ul> 
-        </li>
-      </ul>
+          </ol> 
+        </div>
+      </>
     </div>
   );
 };

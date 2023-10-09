@@ -2,7 +2,7 @@
 
 import { getAllRecipes, DBConnection } from "@/helpers/mongoDB-utils";
 
-const ITEMS_PER_PAGE = 20; //Recipies to be rendered on each page
+const ITEMS_PER_PAGE = 100; //Recipies to be rendered on each page
 
 const handler = async (req: any, res: any) => {
   if (req.method !== "GET") {
