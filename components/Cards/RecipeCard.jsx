@@ -13,6 +13,7 @@ const RecipeCard = ({ recipe }) => {
 
   return (
     <div className="bg-purple-300 p-4 rounded shadow mb-4">
+        
       <h2 className="text-2xl font-semibold">{recipe.title}</h2>
       <p className="text-gray-600">{recipe.description}</p>
       <p className="text-gray-600"><b>Prep Time:</b> {formatTime(recipe.prep)} minutes</p>
@@ -31,6 +32,7 @@ const RecipeCard = ({ recipe }) => {
           </li>
         ))}
       </ul>
+
       <h3 className="mt-2 text-lg font-semibold">Images</h3>
       <ul className="list-disc list-inside">
         <Carousel responsive={responsive}>

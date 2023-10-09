@@ -1,3 +1,4 @@
+import { formatTime } from "../../helpers/TimeConvertor";
 import RecipeCard from "../Cards/RecipeCard";
 const Recipe  = (recipe) => {
   const  recipes   = recipe.recipe;
@@ -22,6 +23,7 @@ const Recipe  = (recipe) => {
             )}
           </ul>
           <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
+          <h4><b>Total cooking Time:</b> {formatTime(recipes.cook)}</h4>
           <ul className="list-disc list-inside">
             {recipes.instructions.map((instruction, index) => (
               <li key={index} className="text-gray-600">
