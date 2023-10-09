@@ -3,7 +3,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "../../helpers/settings/settings";
 import { RecipeData } from "../Types/recipeTypes";
-const Recipe: React.FC<{ recipe: RecipeData }>  = (recipe: any) => {
+const Recipe  = (recipe) => {
   const { recipes } = recipe.recipe;
   if (!recipes) {
     return <div>Loading...</div>;
@@ -25,7 +25,7 @@ const Recipe: React.FC<{ recipe: RecipeData }>  = (recipe: any) => {
           </p>
           <h3 className="mt-2 text-lg font-semibold">Tags:</h3>
          <ul className="list-disc list-inside">
-            {recipes.tags.map((tag: any, index: any) => (
+            {recipes.tags.map((tag, index) => (
               <li key={index} className="text-gray-600">
                 {tag}
               </li>
@@ -34,7 +34,7 @@ const Recipe: React.FC<{ recipe: RecipeData }>  = (recipe: any) => {
           <h3 className="mt-2 text-lg font-semibold">Images</h3>
           <ul className="list-disc list-inside">
             <Carousel responsive={responsive}>
-              {recipes.images.map((image: any, index: any) => (
+              {recipes.images.map((image, index) => (
                 <div key={index} className="text-gray-600">
                   <div>
                     <Image
@@ -52,7 +52,7 @@ const Recipe: React.FC<{ recipe: RecipeData }>  = (recipe: any) => {
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
           <ul className="list-disc list-inside">
             {Object.entries(recipes.ingredients).map(
-              ([ingredient, amount]: any, index) => (
+              ([ingredient, amount], index) => (
                 <li key={index} className="text-gray-600">
                   {ingredient}: {amount}
                 </li>
@@ -61,7 +61,7 @@ const Recipe: React.FC<{ recipe: RecipeData }>  = (recipe: any) => {
           </ul>
           <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
           <ol className="list-disc list-inside">
-            {recipes.instructions.map((instruction: string, index: number) => (
+            {recipes.instructions.map((instruction, index ) => (
               <li key={index} className="text-gray-600">
                 {instruction}
               </li>

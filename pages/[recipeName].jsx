@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { fetchRecipeDataFromMongo } from "@/helpers/mongoDB-utils";
 import Recipe from "@/components/Recipes/Recipe";
-const RecipePage = ({ recipe }:any) =>{
+const RecipePage = ({ recipe }) =>{
 const router = useRouter();
 const { recipeName } = router.query;
 if(!recipe){
@@ -13,7 +13,7 @@ if(!recipe){
         </div>
   );
 };
-export const getServerSideProps=async({params}:any)=>{
+export const getServerSideProps=async({params})=>{
   const recipeName = params.recipeName;
   const recipe = await fetchRecipeDataFromMongo(recipeName, 'recipes');
 

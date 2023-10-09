@@ -17,6 +17,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "stories/Recipe.stories.tsx", "stories/RecipeList.stories.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "stories/Recipe.stories.tsx", "stories/RecipeList.stories.tsx", "tailwind.config.js", "components/LayOuts/Header/DropdownMenu.jsx", "components/LayOuts/Header/HeaderLayout.jsx", "components/LayOuts/Header/Navigation.jsx", "components/Recipes/Recipe.jsx", "helpers/settings/settings.jsx", "pages/index.jsx", "pages/[recipeName].jsx", "pages/_document.jsx", "pages/_app.jsx"],
   "exclude": ["node_modules"]
 }

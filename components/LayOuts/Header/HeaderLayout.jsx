@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Navigation from './Navigation';
 
-const HeaderLayout = ({ children }: any) => {
+const HeaderLayout = ({ children }) => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   const toggleTheme = () => {
