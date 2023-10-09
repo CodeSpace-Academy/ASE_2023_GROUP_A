@@ -1,6 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 
 :root {
   --foreground-rgb: rgb(99, 99, 218);
@@ -29,11 +30,11 @@ body {
 /* Light mode styles */
 .light-mode {
   background-color: #ffffff;
-  color: #ad0000;
+  color: #000000;
 }
 
 /* Dark mode styles */
 .dark-mode {
   background-color: #1a1a1a;
-  color: #ff700b;
+  color: #ffffff;
 }

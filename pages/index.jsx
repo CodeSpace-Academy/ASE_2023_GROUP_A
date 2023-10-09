@@ -1,5 +1,3 @@
-
-
 import RecipeList from "../components/RecipesList/RecipeList";
 
 const Home= ()=> {

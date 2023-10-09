@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:css": "tailwindcss build path/to/your/styles.css -o path/to/your/output.css"
   },
   "dependencies": {
     "mongodb": "^6.1.0",
@@ -21,5 +22,10 @@
     "@types/node": "20.8.3",
     "@types/react": "18.2.25",
     "typescript": "5.2.2"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "next.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
