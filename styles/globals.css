@@ -29,11 +29,11 @@ body {
 /* Light mode styles */
 .light-mode {
   background-color: #ffffff;
-  color: #000000;
+  color: #ad0000;
 }
 
 /* Dark mode styles */
 .dark-mode {
   background-color: #1a1a1a;
-  color: #ffffff;
+  color: #ff700b;
 }
