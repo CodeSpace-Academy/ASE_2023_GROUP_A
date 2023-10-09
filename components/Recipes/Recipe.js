@@ -2,6 +2,8 @@ import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "../../helpers/settings/settings";
+
+
 const Recipe  = (recipe) => {
   if (!recipe.recipe) {
     return <div>Loading...</div>;
