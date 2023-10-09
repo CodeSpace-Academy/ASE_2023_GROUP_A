@@ -4,7 +4,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Link from "next/link";
 import { responsive } from "../../helpers/settings/settings";
-
+import { formatTime } from "../../helpers/TimeConvertor";
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,10 +51,10 @@ return(
                 <h2 className="text-2xl font-semibold">{recipe.title}</h2>
                 <p className="text-gray-600">{recipe.description}</p>
                 <p className="text-gray-600">
-                  Prep Time: {recipe.prep} minutes
+                  Prep Time: {formatTime(recipe.prep)} minutes
                 </p>
                 <p className="text-gray-600">
-                  Cook Time: {recipe.cook} minutes
+                  Cook Time: {formatTime(recipe.cook)} minutes
                 </p>
                 <p className="text-gray-600">Category: {recipe.category}</p>
                 <p className="text-gray-600">Servings: {recipe.servings}</p>

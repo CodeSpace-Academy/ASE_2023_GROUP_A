@@ -2,7 +2,7 @@ import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "../../helpers/settings/settings";
-
+import { formatTime } from "../../helpers/TimeConvertor";
 
 const Recipe  = (recipe) => {
   const  recipes   = recipe.recipe;
@@ -17,8 +17,8 @@ const Recipe  = (recipe) => {
         <li key={recipe._id} className="bg-purple-300 p-4 rounded shadow mb-4">
           <h2 className="text-2xl font-semibold">{recipes.title}</h2>
           <p className="text-gray-600">{recipes.description}</p>
-          <p className="text-gray-600">Prep Time: {recipes.prep} minutes</p>
-          <p className="text-gray-600">Cook Time: {recipes.cook} minutes</p>
+          <p className="text-gray-600">Prep Time: {formatTime(recipes.prep)} minutes</p>
+          <p className="text-gray-600">Cook Time: {formatTime(recipes.cook)} minutes</p>
           <p className="text-gray-600">Category: {recipes.category}</p>
           <p className="text-gray-600">Servings: {recipes.servings}</p>
           <p className="text-gray-600">
