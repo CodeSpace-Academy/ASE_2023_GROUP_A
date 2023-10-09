@@ -2,18 +2,19 @@ import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "../../helpers/settings/settings";
-import { RecipeData } from "../Types/recipeTypes";
-const Recipe: React.FC<{ recipe: RecipeData }>  = (recipe: any) => {
-  const { recipes } = recipe.recipe;
-  if (!recipes) {
+
+
+const Recipe  = (recipe) => {
+  const  recipes   = recipe.recipe;
+  if (!recipe) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Recipe</h1>
-      <>
-        <div key={recipe._id} className="bg-purple-300 p-4 rounded shadow mb-4">
+      <ul>
+        <li key={recipe._id} className="bg-purple-300 p-4 rounded shadow mb-4">
           <h2 className="text-2xl font-semibold">{recipes.title}</h2>
           <p className="text-gray-600">{recipes.description}</p>
           <p className="text-gray-600">Prep Time: {recipes.prep} minutes</p>
@@ -25,7 +26,7 @@ const Recipe: React.FC<{ recipe: RecipeData }>  = (recipe: any) => {
           </p>
           <h3 className="mt-2 text-lg font-semibold">Tags:</h3>
          <ul className="list-disc list-inside">
-            {recipes.tags.map((tag: any, index: any) => (
+            {recipes.tags.map((tag, index) => (
               <li key={index} className="text-gray-600">
                 {tag}
               </li>
@@ -34,7 +35,7 @@ const Recipe: React.FC<{ recipe: RecipeData }>  = (recipe: any) => {
           <h3 className="mt-2 text-lg font-semibold">Images</h3>
           <ul className="list-disc list-inside">
             <Carousel responsive={responsive}>
-              {recipes.images.map((image: any, index: any) => (
+              {recipes.images.map((image, index) => (
                 <div key={index} className="text-gray-600">
                   <div>
                     <Image
@@ -52,7 +53,7 @@ const Recipe: React.FC<{ recipe: RecipeData }>  = (recipe: any) => {
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
           <ul className="list-disc list-inside">
             {Object.entries(recipes.ingredients).map(
-              ([ingredient, amount]: any, index) => (
+              ([ingredient, amount], index) => (
                 <li key={index} className="text-gray-600">
                   {ingredient}: {amount}
                 </li>
@@ -60,15 +61,15 @@ const Recipe: React.FC<{ recipe: RecipeData }>  = (recipe: any) => {
             )}
           </ul>
           <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
-          <ol className="list-disc list-inside">
-            {recipes.instructions.map((instruction: string, index: number) => (
+          <ul className="list-disc list-inside">
+            {recipes.instructions.map((instruction, index) => (
               <li key={index} className="text-gray-600">
                 {instruction}
               </li>
             ))}
-          </ol> 
-        </div>
-      </>
+          </ul> 
+        </li>
+      </ul>
     </div>
   );
 };
