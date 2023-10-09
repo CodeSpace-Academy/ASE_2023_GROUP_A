@@ -1,7 +1,6 @@
 import React,{useState, useEffect} from 'react';
 import DropdownMenu from './DropdownMenu';
 import Link from 'next/link';
-import { fetchCategories } from '@/helpers/mongoDB-utils';
 const Navigation = () => {
     const [categories, setCategories] = useState([]); // State to store fetched categories
     // Fetch categories from MongoDB when the component mounts
