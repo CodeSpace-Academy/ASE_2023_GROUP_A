@@ -4,15 +4,14 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Link from "next/link";
 import { responsive } from "../../helpers/settings/settings";
-
-import type { Recipe } from "../Types/recipeTypes";
-const RecipeList: React.FC<{ recipe: Recipe }> = () => {
+import { formatTime } from "../../helpers/TimeConvertor";
+const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true); // Initialize loading state
 
   useEffect(() => {
-    const fetchRecipes = async (page:number) => {
+    const fetchRecipes = async (page) => {
       try {
         const response = await fetch(`/api/recipes?page=${page}`);
         if (response.ok) {
@@ -30,7 +29,7 @@ const RecipeList: React.FC<{ recipe: Recipe }> = () => {
     fetchRecipes(currentPage);
   }, [currentPage]);
 
-  const handlePageChange = (newPage:number) => {
+  const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
 return(
@@ -43,7 +42,7 @@ return(
         <p>Loading...</p>
       ) : (
         <>
-          {recipes.map((recipe:any) => (
+          {recipes.map((recipe) => (
             <div
               key={recipe._id}
               className="bg-purple-300 p-4 rounded shadow mb-4"
@@ -52,10 +51,10 @@ return(
                 <h2 className="text-2xl font-semibold">{recipe.title}</h2>
                 <p className="text-gray-600">{recipe.description}</p>
                 <p className="text-gray-600">
-                  Prep Time: {recipe.prep} minutes
+                  Prep Time: {formatTime(recipe.prep)} minutes
                 </p>
                 <p className="text-gray-600">
-                  Cook Time: {recipe.cook} minutes
+                  Cook Time: {formatTime(recipe.cook)} minutes
                 </p>
                 <p className="text-gray-600">Category: {recipe.category}</p>
                 <p className="text-gray-600">Servings: {recipe.servings}</p>
@@ -64,7 +63,7 @@ return(
                 </p>
                 <h3 className="mt-2 text-lg font-semibold">Tags:</h3>
                 <ul className="list-disc list-inside">
-                  {recipe.tags.map((tag:number, index:number) => (
+                  {recipe.tags.map((tag, index) => (
                     <li key={index} className="text-gray-600">
                       {tag}
                     </li>
@@ -74,7 +73,7 @@ return(
               <h3 className="mt-2 text-lg font-semibold">Images</h3>
               <ul className="list-disc list-inside">
                 <Carousel responsive={responsive}>
-                  {recipe.images.map((image:string, index:number) => (
+                  {recipe.images.map((image, index) => (
                     <div key={index} className="text-gray-600">
                       <div>
                         <Image
