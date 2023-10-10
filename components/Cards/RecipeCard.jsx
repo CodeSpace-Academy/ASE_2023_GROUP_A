@@ -53,7 +53,9 @@ const RecipeCard = ({ recipe }) => {
       <p className="text-gray-600">
         {new Date(recipe.published).toLocaleDateString()}
       </p>
+
       <h3 className="mt-2 text-lg font-semibold">Tags:</h3>
+
       <ul className="list-disc list-inside">
         {recipe.tags.map((tag, index) => (
           <li key={index} className="text-gray-600">
