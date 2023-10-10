@@ -9,7 +9,7 @@ import calculateTotalTime from "../TimeAndDate/TotalTimeConverntion";
 
 import Tags from "../Tags/Tags";
 const RecipeCard = ({ recipe }) => {
-  // const recipes = recipe.recipe
+
 
   return (
     <div className="bg-amber-600 p-4 rounded shadow mb-4">
