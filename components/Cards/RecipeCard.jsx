@@ -14,25 +14,8 @@ const RecipeCard = ({ recipe }) => {
   return (
     <div className="bg-purple-300 p-4 rounded shadow mb-4">
       <h2 className="text-2xl font-semibold">{recipe.title}</h2>
-      <p className="text-gray-600">{recipe.description}</p>
-      <p className="text-gray-600"><b>Prep Time:</b> {formatTime(recipe.prep)} minutes</p>
-      <p className="text-gray-600"><b>Cook Time:</b> {formatTime(recipe.cook)} minutes</p>
-      <p className="text-gray-600"><b>Total Time:</b> {calculateTotalTime(recipe.prep, recipe.cook)}</p>
-      <p className="text-gray-600"><b>Category:</b> {recipe.category}</p>
-      <p className="text-gray-600"><b>Servings:</b> {recipe.servings}</p><b>Published:</b>
-      <p className="text-gray-600">
-         {new Date(recipe.published).toLocaleDateString()}
-      </p>
-      <h3 className="mt-2 text-lg font-semibold">Tags:</h3>
-      <ul className="list-disc list-inside">
-        {recipe.tags.map((tag, index) => (
-          <li key={index} className="text-gray-600">
-            {tag}
-          </li>
-        ))}
-      </ul>
       <h3 className="mt-2 text-lg font-semibold">Images</h3>
-      <ul className="list-disc list-inside">
+      <section className="list-disc list-inside">
         <Carousel responsive={responsive}>
           {recipe.images.map((image, index) => (
             <div key={index} className="text-gray-600">
@@ -42,12 +25,40 @@ const RecipeCard = ({ recipe }) => {
                   alt={recipe.title}
                   width={300}
                   height={300}
-                  className="w-full h-auto"
+                  className="max-w-full h-auto object-fit: cover"
                 />
               </div>
             </div>
           ))}
         </Carousel>
+      </section>
+      <p className="text-gray-600">{recipe.description}</p>
+      <p className="text-gray-600">
+        <b>Prep Time:</b> {formatTime(recipe.prep)} minutes
+      </p>
+      <p className="text-gray-600">
+        <b>Cook Time:</b> {formatTime(recipe.cook)} minutes
+      </p>
+      <p className="text-gray-600">
+        <b>Total Time:</b> {calculateTotalTime(recipe.prep, recipe.cook)}
+      </p>
+      <p className="text-gray-600">
+        <b>Category:</b> {recipe.category}
+      </p>
+      <p className="text-gray-600">
+        <b>Servings:</b> {recipe.servings}
+      </p>
+      <b>Published:</b>
+      <p className="text-gray-600">
+        {new Date(recipe.published).toLocaleDateString()}
+      </p>
+      <h3 className="mt-2 text-lg font-semibold">Tags:</h3>
+      <ul className="list-disc list-inside">
+        {recipe.tags.map((tag, index) => (
+          <li key={index} className="text-gray-600">
+            {tag}
+          </li>
+        ))}
       </ul>
     </div>
   );

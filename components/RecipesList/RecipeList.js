@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
+import Link from "next/link";
 
 const RecipeList = () => {
+
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true); // Initialize loading state
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchRecipes = async (page) => {
@@ -13,6 +16,7 @@ const RecipeList = () => {
         if (response.ok) {
           const fetchedRecipes = await response.json();
           setRecipes(fetchedRecipes.recipes);
+          setTotalPages(fetchedRecipes.recipes.length);
           setLoading(false); // Set loading to false when data is fetched
         } else {
           console.error("Failed to fetch recipes");
@@ -37,27 +41,27 @@ return(
         ) : (
           <>
             {recipes.map((recipe) => (
-              <RecipeCard key={recipe._id} recipe={recipe} />
+              <Link href={`/${encodeURIComponent(recipe.title)}`} key={recipe._id}><RecipeCard key={recipe._id} recipe={recipe} /></Link>
             ))}
           </>
         )}
       </div>
     <div className="flex justify-between mt-4">
-  <button
-    onClick={() => handlePageChange(currentPage - 1)}
-    disabled={currentPage === 1}
-    className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
-      currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-    }`}
-  >
-    Previous
-  </button>
-  <button
-    onClick={() => handlePageChange(currentPage + 1)}
-    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-  >
-    Next
-  </button>
+    <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
+            currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+        >
+          Previous ({currentPage - 1} of {totalPages})
+        </button>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Next ({currentPage + 1} of {totalPages})
+        </button>
 </div>
   </div>
 )
