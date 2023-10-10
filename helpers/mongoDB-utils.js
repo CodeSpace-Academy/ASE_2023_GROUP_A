@@ -95,25 +95,3 @@ export const fetchCategories = async () => {
     console.error("Error fetching categories:", error);
   }
 };
-
-// export const fetchAndSortRecipes = async () => {
-//   try {
-//     const client = await DBConnection();
-//     const recipes = await getAllRecipes(client, 0, 30); // Adjust the limit as needed
-//     const sortedRecipes = {};
-
-//     recipes.forEach((recipe:any) => {
-//       const category = recipe.category;
-
-//       if (!sortedRecipes[category]) {
-//         sortedRecipes[category] = [];
-//       }
-
-//       sortedRecipes[category].push(recipe);
-//     });
-//   client.close();
-//    return sortedRecipes;
-//   } catch (error) {
-//     console.error("Error fetching and sorting recipes:", error);
-//   }
-// };

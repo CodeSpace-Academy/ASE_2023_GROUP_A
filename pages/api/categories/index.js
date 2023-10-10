@@ -2,6 +2,7 @@
 import { fetchCategories } from "../../../helpers/mongoDB-utils";
 
 export default async function handler(req, res) {
+  
   if (req.method === 'GET') {
     try {
       const categories = await fetchCategories();

@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-
-
+import React, { useState } from "react";
 
 const DropdownMenu = ({ options, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,8 +14,6 @@ const DropdownMenu = ({ options, onSelect }) => {
     setIsOpen(false);
   };
 
-  
-
   return (
     <div className="relative inline-block text-left">
       <div>
@@ -29,7 +25,7 @@ const DropdownMenu = ({ options, onSelect }) => {
           aria-haspopup="true"
           aria-expanded="true"
         >
-          {selectedOption ? selectedOption : 'Select a category'}
+          {selectedOption ? selectedOption : "Select a category"}
           <svg
             className="-mr-1 ml-2 h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
