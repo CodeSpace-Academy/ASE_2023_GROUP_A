@@ -6,6 +6,7 @@ import "react-multi-carousel/lib/styles.css";
 import { responsive } from "../../helpers/settings/settings";
 import { formatTime } from "../../helpers/TimeConvertor";
 import calculateTotalTime from "../TimeAndDate/TotalTimeConverntion";
+
 const RecipeCard = ({ recipe }) => {
   if (!recipe) {
     return <div>Loading...</div>;

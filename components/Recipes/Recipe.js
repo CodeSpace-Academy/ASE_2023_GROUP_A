@@ -1,7 +1,10 @@
 import { formatTime } from "../../helpers/TimeConvertor";
 import RecipeCard from "../Cards/RecipeCard";
+import Instructions from "../Instructions/Instructions";
+
 const Recipe = (recipe) => {
   const recipes = recipe.recipe;
+
   if (!recipe) {
     return <div>Loading...</div>;
   }
@@ -12,6 +15,7 @@ const Recipe = (recipe) => {
       <ul>
         <li key={recipe._id} className="bg-amber-600 p-4 rounded shadow mb-4">
           <RecipeCard recipe={recipes} />
+
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
           <ul className="list-disc list-inside">
             {Object.entries(recipes.ingredients).map(
@@ -22,17 +26,12 @@ const Recipe = (recipe) => {
               )
             )}
           </ul>
-          <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
+
           <h4>
             <b>Total cooking Time:</b> {formatTime(recipes.cook)}
           </h4>
-          <ul className="list-disc list-inside">
-            {recipes.instructions.map((instruction, index) => (
-              <li key={index} className="text-gray-600">
-                {instruction}
-              </li>
-            ))}
-          </ul>
+
+          <Instructions recipes={recipes} />
         </li>
       </ul>
     </div>
