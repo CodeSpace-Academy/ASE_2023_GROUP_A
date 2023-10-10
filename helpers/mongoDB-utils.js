@@ -1,6 +1,5 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
-const uri =
-  `mongodb+srv://${process.env.mongodb_username}:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.mongodb_username}:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -20,11 +19,7 @@ export const DBConnection = async () => {
     throw error;
   }
 };
-export const getAllRecipes = async (
-  client: any,
-  skip: number,
-  limit: number
-) => {
+export const getAllRecipes = async (client, skip, limit) => {
   try {
     const db = await client.db("devdb");
     const allRecipes = await db
@@ -40,7 +35,7 @@ export const getAllRecipes = async (
   }
 };
 
-export const fetchRecipeDataFromMongo = async (recipeName: any,collection:string|any) => {
+export const fetchRecipeDataFromMongo = async (recipeName, collection) => {
   try {
     // Establish a connection to MongoDB and select your database and collection
     const client = await DBConnection();
@@ -62,7 +57,7 @@ export const generateDynamicPaths = async () => {
   try {
     const client = await DBConnection();
     const recipes = await getAllRecipes(client, 0, 5);
-    const dynamicPaths = recipes.map((recipe: any) => ({
+    const dynamicPaths = recipes.map((recipe) => ({
       params: { recipeName: recipe.title },
     }));
     return dynamicPaths;
@@ -72,7 +67,7 @@ export const generateDynamicPaths = async () => {
   }
 };
 
-export const getAllCategories = async (client: string | any) => {
+export const getAllCategories = async (client) => {
   try {
     const db = client.db("devdb");
     const categoriesDocument = await db.collection("categories").findOne({});
@@ -88,32 +83,10 @@ export const fetchCategories = async () => {
   try {
     const client = await DBConnection();
     const fetchedCategories = await getAllCategories(client);
-  console.log(fetchedCategories)
+    console.log(fetchedCategories);
     client.close();
     return fetchedCategories;
   } catch (error) {
     console.error("Error fetching categories:", error);
   }
 };
-
-// export const fetchAndSortRecipes = async () => {
-//   try {
-//     const client = await DBConnection();
-//     const recipes = await getAllRecipes(client, 0, 30); // Adjust the limit as needed
-//     const sortedRecipes = {};
-
-//     recipes.forEach((recipe:any) => {
-//       const category = recipe.category;
-
-//       if (!sortedRecipes[category]) {
-//         sortedRecipes[category] = [];
-//       }
-
-//       sortedRecipes[category].push(recipe);
-//     });
-//   client.close();
-//    return sortedRecipes;
-//   } catch (error) {
-//     console.error("Error fetching and sorting recipes:", error);
-//   }
-// };
