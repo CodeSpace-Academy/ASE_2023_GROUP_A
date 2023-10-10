@@ -4,7 +4,7 @@ import { getAllRecipes, DBConnection } from "../../../helpers/mongoDB-utils";
 
 const ITEMS_PER_PAGE = 100; //Recipies to be rendered on each page
 
-const handler = async (req: any, res: any) => {
+const handler = async (req, res) => {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -20,7 +20,7 @@ const handler = async (req: any, res: any) => {
     res.status(408).json({ error: "Error fetching recipes" });
   }
 };
-export const getTotalRecipesCount = async (client:any) => {
+export const getTotalRecipesCount = async (client) => {
   try {
     const db = client.db(); // Get the MongoDB database
     const recipesCollection = db.collection("recipes"); // Change this to your actual collection name
