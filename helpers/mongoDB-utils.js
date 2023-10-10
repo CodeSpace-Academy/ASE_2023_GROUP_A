@@ -21,9 +21,9 @@ export const DBConnection = async () => {
   }
 };
 export const getAllRecipes = async (
-  client: any,
-  skip: number,
-  limit: number
+  client,
+  skip,
+  limit
 ) => {
   try {
     const db = await client.db("devdb");
@@ -40,7 +40,7 @@ export const getAllRecipes = async (
   }
 };
 
-export const fetchRecipeDataFromMongo = async (recipeName: any,collection:string|any) => {
+export const fetchRecipeDataFromMongo = async (recipeName,collection) => {
   try {
     // Establish a connection to MongoDB and select your database and collection
     const client = await DBConnection();
@@ -62,7 +62,7 @@ export const generateDynamicPaths = async () => {
   try {
     const client = await DBConnection();
     const recipes = await getAllRecipes(client, 0, 5);
-    const dynamicPaths = recipes.map((recipe: any) => ({
+    const dynamicPaths = recipes.map((recipe) => ({
       params: { recipeName: recipe.title },
     }));
     return dynamicPaths;
@@ -72,7 +72,7 @@ export const generateDynamicPaths = async () => {
   }
 };
 
-export const getAllCategories = async (client: string | any) => {
+export const getAllCategories = async (client) => {
   try {
     const db = client.db("devdb");
     const categoriesDocument = await db.collection("categories").findOne({});

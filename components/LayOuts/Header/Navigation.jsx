@@ -1,6 +1,7 @@
-import React,{useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import DropdownMenu from './DropdownMenu';
 import Link from 'next/link';
+
 const Navigation = () => {
     const [categories, setCategories] = useState([]); // State to store fetched categories
     // Fetch categories from MongoDB when the component mounts
@@ -11,7 +12,7 @@ const Navigation = () => {
           .then((data) => setCategories(data))
           .catch((error) => console.error('Error fetching categories:', error));
       }, []);
-    const handleOptionSelect = (selectedOption:any) => {
+    const handleOptionSelect = (selectedOption) => {
         console.log('Selected Option:', selectedOption);
         // You can perform actions when an option is selected
       };
