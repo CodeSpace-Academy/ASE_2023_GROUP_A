@@ -34,10 +34,10 @@ const RecipeCard = ({ recipe }) => {
       </section>
       <p className="text-gray-600">{recipe.description}</p>
       <p className="text-gray-600">
-        <b>Prep Time:</b> {formatTime(recipe.prep)} minutes
+        <b>Prep Time:</b> {formatTime(recipe.prep)}
       </p>
       <p className="text-gray-600">
-        <b>Cook Time:</b> {formatTime(recipe.cook)} minutes
+        <b>Cook Time:</b> {formatTime(recipe.cook)}
       </p>
       <p className="text-gray-600">
         <b>Total Time:</b> {calculateTotalTime(recipe.prep, recipe.cook)}
