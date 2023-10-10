@@ -6,10 +6,10 @@ import "react-multi-carousel/lib/styles.css";
 import { responsive } from "../../helpers/settings/settings";
 import { formatTime } from "../../helpers/TimeConvertor";
 import calculateTotalTime from "../TimeAndDate/TotalTimeConverntion";
+
+import Tags from "../Tags/Tags";
 const RecipeCard = ({ recipe }) => {
-  if (!recipe) {
-    return <div>Loading...</div>;
-  }
+  // const recipes = recipe.recipe
 
   return (
     <div className="bg-amber-600 p-4 rounded shadow mb-4">
@@ -52,14 +52,7 @@ const RecipeCard = ({ recipe }) => {
       <p className="text-gray-600">
         {new Date(recipe.published).toLocaleDateString()}
       </p>
-      <h3 className="mt-2 text-lg font-semibold">Tags:</h3>
-      <ul className="list-disc list-inside">
-        {recipe.tags.map((tag, index) => (
-          <li key={index} className="text-gray-600">
-            {tag}
-          </li>
-        ))}
-      </ul>
+     <Tags recipe={recipe}/>
     </div>
   );
 };
