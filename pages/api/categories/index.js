@@ -1,7 +1,9 @@
 // Import MongoDB-related functions
 import { fetchCategories} from "../../../helpers/mongoDB-utils";
 
-export default async function handler(req:any, res:any) {
+
+export default async function handler(req, res) {
+  
   if (req.method === 'GET') {
     try {
       const categories = await fetchCategories();
