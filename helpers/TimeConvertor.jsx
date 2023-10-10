@@ -1,3 +1,4 @@
+
 export const formatTime =(cookTimeInMinutes)=> {
   
     if (cookTimeInMinutes >= 60) {
@@ -8,3 +9,5 @@ export const formatTime =(cookTimeInMinutes)=> {
       return `${cookTimeInMinutes} minute${cookTimeInMinutes > 1 ? 's' : ''}`;
     }
   }
+
+
