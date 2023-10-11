@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
 import Link from "next/link";
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true); // Initialize loading state
+  const [loading, setLoading] = useState(true); 
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const RecipeList = () => {
           const fetchedRecipes = await response.json();
           setRecipes(fetchedRecipes.recipes);
           setTotalPages(fetchedRecipes.recipes.length);
-          setLoading(false); // Set loading to false when data is fetched
+          setLoading(false); 
         } else {
           console.error("Failed to fetch recipes");
         }
