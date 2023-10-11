@@ -17,7 +17,6 @@ const handler = async (req, res) => {
       getAllRecipes(client, skip, ITEMS_PER_PAGE),
      await getTotalRecipesCount(client) // Fetch the total number of recipes
     ]);
-    console.log('TotalRecipeNumber:',totalRecipes)
 
     res.status(200).json({ recipes: recipesData, totalRecipes });
     client.close();

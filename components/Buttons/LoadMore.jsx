@@ -13,7 +13,7 @@ const LoadMoreButton =({ handlePageChange, currentPage, totalRecipes })=>{
             currentPage >= totalPages ? "opacity-50 cursor-not-allowed" : ""
           }`}
         >
-          Load More ({currentPage * 100} of {totalPages})
+          Load More ({ (totalPages) - (currentPage * 100)})
         </button>
       </div>
     )
