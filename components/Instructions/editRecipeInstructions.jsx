@@ -40,7 +40,7 @@ function EditRecipeInstructions({ recipes }) {
   };
   return (
     <section>
-      <div class="flex ">
+      <div className="flex ">
         Edit recipe{" "}
         <svg
           xmlns="http://www.w3.org/2000/svg"
