@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import DropdownMenu from "./DropdownMenu";
 import Link from "next/link";
+import Image from "next/image";
 
 const Navigation = () => {
   const [categories, setCategories] = useState([]); // State to store fetched categories
@@ -17,11 +18,31 @@ const Navigation = () => {
     // You can perform actions when an option is selected
   };
 
+  const heading = "< Cooking Devs >";
+
   return (
-    <div className="container bg-blue-400 w-full mx-auto p-4">
-      <Link href={`/`}>Home</Link>
-      <h1 className="text-3xl font-bold mb-4">Recipe Website</h1>
-      <DropdownMenu options={categories} onSelect={handleOptionSelect} />
+    <div className="container bg-orange-700 w-full mx-auto p-4">
+      <ul className="nav_list">
+        <li>
+          <Link href={`/`}>
+            <Image
+              src={"/CookingDevs_logo.png"}
+              width={80}
+              height={50}
+              className="logo"
+            />
+          </Link>
+        </li>
+        <li>
+          <h1
+            className="text-3xl font-bold mb-4"
+            dangerouslySetInnerHTML={{ __html: heading }}
+          ></h1>
+        </li>
+        <li>
+          <DropdownMenu options={categories} onSelect={handleOptionSelect} />
+        </li>
+      </ul>
     </div>
   );
 };
