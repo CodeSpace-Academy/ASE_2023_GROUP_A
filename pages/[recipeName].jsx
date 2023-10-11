@@ -3,6 +3,7 @@ import { fetchRecipeDataFromMongo } from "../helpers/mongoDB-utils";
 import Recipe from "../components/Recipes/Recipe";
 
 const RecipePage = ({ recipe }) => {
+
   const router = useRouter();
   const { recipeName } = router.query;
 
