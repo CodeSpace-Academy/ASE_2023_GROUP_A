@@ -5,7 +5,7 @@ import RecipeInstructions from "../Instructions/RecipeInstructions";
 const Recipe = (recipe) => {
   const recipes = recipe.recipe;
 
-  if (!recipe) {
+  if (!recipes) {
     return <div>Loading...</div>;
   }
   const ingredientsList = Object.entries(recipes.ingredients);
