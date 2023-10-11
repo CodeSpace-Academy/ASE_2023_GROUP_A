@@ -24,7 +24,6 @@ const RecipeInstructions = ({ recipes }) => {
       <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
 
       <EditRecipeInstructions />
-
       <ol className="list-decimal list-inside">{reorderedInstructions}</ol>
     </Fragment>
   );
