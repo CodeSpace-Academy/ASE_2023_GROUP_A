@@ -86,6 +86,7 @@ export const fetchCategories = async () => {
   try {
     const client = await DBConnection();
     const fetchedCategories = await getAllCategories(client);
+    client.close();
     return fetchedCategories;
   } catch (error) {
     console.error("Error fetching categories:", error);
