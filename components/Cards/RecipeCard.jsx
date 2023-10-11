@@ -4,8 +4,9 @@ import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "../../helpers/settings/settings";
-import { formatTime } from "../../helpers/TimeConvertor";
-import calculateTotalTime from "../TimeAndDate/TotalTimeConverntion";
+import CookTime from "../TimeAndDate/TimeConvertor";
+
+
 const RecipeCard = ({ recipe }) => {
   if (!recipe) {
     return <div>Loading...</div>;
@@ -33,15 +34,14 @@ const RecipeCard = ({ recipe }) => {
         </Carousel>
       </section>
       <p className="text-gray-600">{recipe.description}</p>
-      <p className="text-gray-600">
-        <b>Prep Time:</b> {formatTime(recipe.prep)} minutes
-      </p>
-      <p className="text-gray-600">
-        <b>Cook Time:</b> {formatTime(recipe.cook)} minutes
-      </p>
-      <p className="text-gray-600">
-        <b>Total Time:</b> {calculateTotalTime(recipe.prep, recipe.cook)}
-      </p>
+
+
+      <CookTime cookTimeInMinutes = {recipe.prep} label={'Prep Time'} />
+
+      <CookTime cookTimeInMinutes={recipe.cook} label={'Cook Time'} />
+
+      <CookTime cookTimeInMinutes={recipe.cook} prepTimeInMinutes={recipe.prep}  label='Total time'/>
+
       <p className="text-gray-600">
         <b>Category:</b> {recipe.category}
       </p>
