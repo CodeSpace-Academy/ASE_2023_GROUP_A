@@ -1,7 +1,8 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
-const uri = `mongodb+srv://${process.env.mongodb_username}:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
+const uri =
+  `mongodb+srv://${process.env.mongodb_username}:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
 
-const client = new MongoClient(uri, {
+export const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -19,7 +20,11 @@ export const DBConnection = async () => {
     throw error;
   }
 };
-export const getAllRecipes = async (client, skip, limit) => {
+export const getAllRecipes = async (
+  client,
+  skip,
+  limit
+) => {
   try {
     const db = await client.db("devdb");
     const allRecipes = await db
@@ -35,17 +40,15 @@ export const getAllRecipes = async (client, skip, limit) => {
   }
 };
 
-export const fetchRecipeDataFromMongo = async (recipeName, collection) => {
+export const fetchRecipeDataFromMongo = async (recipeName,collection) => {
   try {
     // Establish a connection to MongoDB and select your database and collection
     const client = await DBConnection();
     const db = client.db("devdb");
     const collec = db.collection(collection);
-
     // Query for the recipe using the provided recipeId
     const recipeData = await collec.findOne({ title: recipeName });
     // Close the MongoDB connection
-    client.close();
     return recipeData; // Return the retrieved recipe data
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
@@ -83,10 +86,34 @@ export const fetchCategories = async () => {
   try {
     const client = await DBConnection();
     const fetchedCategories = await getAllCategories(client);
-    console.log(fetchedCategories);
-    client.close();
+  console.log(fetchedCategories)
     return fetchedCategories;
   } catch (error) {
     console.error("Error fetching categories:", error);
   }
 };
+
+export const getTotalRecipesCount = async (client) => {
+  try {
+    const db = client.db('devdb'); // Get the MongoDB database
+    const recipesCollection = db.collection("recipes"); // Change this to your actual collection name
+    // Use the aggregation framework to count the documents
+    const countResult = await recipesCollection.aggregate([
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 },
+        },
+      },
+    ]).toArray();
+    if (countResult.length > 0) {
+      return countResult[0].count;
+    } else {
+      return 0; // No documents found, return 0
+    }
+  } catch (error) {
+    console.error("Error fetching total recipes count:", error);
+    throw error;
+  }
+};
+
