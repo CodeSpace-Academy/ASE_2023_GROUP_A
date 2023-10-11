@@ -1,6 +1,6 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
-const uri =
-  `mongodb+srv://${process.env.mongodb_username}:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
+
+const uri =process.env.MONGO_DB;
 
 export const client = new MongoClient(uri, {
   serverApi: {
