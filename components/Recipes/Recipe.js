@@ -8,7 +8,7 @@ const Recipe = (recipe) => {
   if (!recipe) {
     return <div>Loading...</div>;
   }
-  const IngredientsList = Object.entries(recipes.ingredients);
+  const ingredientsList = Object.entries(recipes.ingredients);
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Recipe</h1>
@@ -18,7 +18,7 @@ const Recipe = (recipe) => {
 
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
           <ul className="list-disc list-inside">
-            {IngredientsList.map(([ingredient, amount], index) => (
+            {ingredientsList.map(([ingredient, amount], index) => (
               <li key={index} className="text-gray-600">
                 {ingredient}: {amount}
               </li>
