@@ -55,7 +55,9 @@ export const fetchRecipeDataFromMongo = async (recipeName,collection) => {
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
     throw error;
-  }
+  }finally {
+    client.close()
+    }
 };
 
 export const generateDynamicPaths = async () => {
