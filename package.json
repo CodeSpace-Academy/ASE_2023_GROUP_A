@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.16",
-    "mongodb": "^3.6.6",
+    "mongodb": "^6.1.0",
     "next": "13.5.4",
     "postcss-import": "^15.1.0",
     "react": "^18",
