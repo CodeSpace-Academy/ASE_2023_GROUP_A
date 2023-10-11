@@ -4,7 +4,6 @@ import Link from "next/link";
 import Loading from "../Loading/Loading";
 import LoadMoreButton from "../Buttons/LoadMore";
 
-
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,7 +52,9 @@ const RecipeList = () => {
           </>
         )}
       </div>
+
 <LoadMoreButton handlePageChange={handlePageChange} currentPage={currentPage} totalRecipes={totalRecipes}/>
+
     </div>
   );
 };
