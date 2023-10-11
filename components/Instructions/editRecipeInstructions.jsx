@@ -70,7 +70,7 @@ function EditRecipeInstructions({ recipes }) {
         ))}
       </ol>
       <button
-        class=" flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className=" flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         onClick={handleSaveChanges}
       >
         Save new edits

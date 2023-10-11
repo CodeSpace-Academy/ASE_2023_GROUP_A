@@ -37,8 +37,6 @@ export const getAllRecipes = async (
   } catch (error) {
     console.error("Error fetching recipes:", error);
     throw error;
-  }finally{
-    client.close();
   }
 };
 
@@ -50,7 +48,7 @@ export const fetchRecipeDataFromMongo = async (recipeName,collection) => {
     const collec = db.collection(collection);
     // Query for the recipe using the provided recipeId
     const recipeData = await collec.findOne({ title: recipeName });
-    client.close();
+    // Close the MongoDB connection
     return recipeData; // Return the retrieved recipe data
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
@@ -78,7 +76,6 @@ export const getAllCategories = async (client) => {
     const db = client.db("devdb");
     const categoriesDocument = await db.collection("categories").findOne({});
     const categories = categoriesDocument.categories;
-    client.close();
     return categories;
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -90,12 +87,10 @@ export const fetchCategories = async () => {
   try {
     const client = await DBConnection();
     const fetchedCategories = await getAllCategories(client);
-  console.log(fetchedCategories)
+    client.close();
     return fetchedCategories;
   } catch (error) {
     console.error("Error fetching categories:", error);
-  }finally{
-    client.close();
   }
 };
 
@@ -120,8 +115,6 @@ export const getTotalRecipesCount = async (client) => {
   } catch (error) {
     console.error("Error fetching total recipes count:", error);
     throw error;
-  }finally{
-    client.close();
   }
 };
 
