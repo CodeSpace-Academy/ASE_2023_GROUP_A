@@ -1,8 +1,12 @@
 // api/recipes.js (API route for fetching recipes with pagination)
 
-import { getAllRecipes, DBConnection, getTotalRecipesCount } from "../../../helpers/mongoDB-utils";
+import {
+  getAllRecipes,
+  DBConnection,
+  getTotalRecipesCount,
+} from "../../../helpers/mongoDB-utils";
 
-const ITEMS_PER_PAGE = 100; //Recipies to be rendered on each page
+const ITEMS_PER_PAGE = 100; //Recipes to be rendered on each page
 
 const handler = async (req, res) => {
   if (req.method !== "GET") {
@@ -15,7 +19,7 @@ const handler = async (req, res) => {
 
     const [recipesData, totalRecipes] = await Promise.all([
       getAllRecipes(client, skip, ITEMS_PER_PAGE),
-     await getTotalRecipesCount(client) // Fetch the total number of recipes
+      await getTotalRecipesCount(client), // Fetch the total number of recipes
     ]);
 
     res.status(200).json({ recipes: recipesData, totalRecipes });
