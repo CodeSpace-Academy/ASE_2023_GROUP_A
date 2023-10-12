@@ -7,8 +7,8 @@ import LoadMoreButton from "../Buttons/LoadMore";
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [totalRecipes, setTotalRecipes] = useState(0);
+  const [loading, setLoading] = useState(true); // Initialize loading state
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchRecipes = async (page) => {
@@ -16,9 +16,9 @@ const RecipeList = () => {
         const response = await fetch(`/api/recipes?page=${page}`);
         if (response.ok) {
           const fetchedRecipes = await response.json();
-          setRecipes((prevRecipes) => [...prevRecipes, ...fetchedRecipes.recipes]);
+          setRecipes((prevRecipes)=>[...prevRecipes, ...fetchedRecipes.recipes]);
           setTotalRecipes(fetchedRecipes.totalRecipes);
-          setLoading(false);
+          setLoading(false); // Set loading to false when data is fetched
         } else {
           console.error("Failed to fetch recipes");
         }
@@ -30,8 +30,8 @@ const RecipeList = () => {
     fetchRecipes(currentPage);
   }, [currentPage]);
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+  const handlePageChange = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
   };
 
   return (
@@ -39,33 +39,23 @@ const RecipeList = () => {
       <h1 className="text-3xl font-bold mb-4">Recipes</h1>
       <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {loading ? (
-          <Loading />
+          <p>Loading...</p>
         ) : (
           <>
             {recipes.map((recipe) => (
-              <Link href={`/${encodeURIComponent(recipe.title)}`} key={recipe._id}>
+              <Link
+                href={`/${encodeURIComponent(recipe.title)}`}
+                key={recipe._id}
+              >
                 <RecipeCard key={recipe._id} recipe={recipe} />
               </Link>
             ))}
           </>
         )}
       </div>
-      <div className="flex justify-between mt-4">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
-            currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        >
-          Previous
-        </button>
-        <LoadMoreButton
-          handlePageChange={handlePageChange}
-          currentPage={currentPage}
-          totalRecipes={totalRecipes}
-        />
-      </div>
+
+<LoadMoreButton handlePageChange={handlePageChange} currentPage={currentPage} totalRecipes={totalRecipes}/>
+
     </div>
   );
 };
