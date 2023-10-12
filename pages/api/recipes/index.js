@@ -1,7 +1,7 @@
 // api/recipes.js (API route for fetching recipes with pagination)
 import { getAllRecipes, DBConnection, getTotalRecipesCount } from "../../../helpers/mongoDB-utils";
 
-const ITEMS_PER_PAGE = 100; //Recipies to be rendered on each page
+const ITEMS_PER_PAGE = 100; //Recipes to be rendered on each page
 const handler = async (req, res) => {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
