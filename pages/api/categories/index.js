@@ -1,6 +1,5 @@
 // Import MongoDB-related functions
-import { fetchCategories} from "../../../helpers/mongoDB-utils";
-
+import { fetchCategories } from "../../../helpers/mongoDB-utils";
 
 export default async function handler(req, res) {
   
