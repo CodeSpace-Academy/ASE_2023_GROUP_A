@@ -25,12 +25,7 @@ const Navigation = () => {
       <ul className="nav_list">
         <li>
           <Link href={`/`}>
-            <Image
-              src={"/CookingDevs_logo.png"}
-              width={80}
-              height={50}
-              className="logo"
-            />
+            Home
           </Link>
         </li>
         <li>
