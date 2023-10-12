@@ -18,7 +18,6 @@ const handler = async (req, res) => {
     res.status(200).json({ recipes: recipesData, totalRecipes });
     client.close();
   } catch (error) {
-    client.close();
     console.error("Error fetching recipes:", error);
     res.status(408).json({ error: "Error fetching recipes" });
   }
