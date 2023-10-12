@@ -1,4 +1,6 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
+
+
 const uri = `mongodb+srv://${process.env.mongodb_username}:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, {
@@ -19,9 +21,11 @@ export const DBConnection = async () => {
     throw error;
   }
 };
+
 export const getAllRecipes = async (client, skip, limit) => {
   try {
     const db = await client.db("devdb");
+    
     const allRecipes = await db
       .collection("recipes")
       .find({})

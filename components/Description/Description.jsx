@@ -1,8 +1,15 @@
-const Description = () => {
+import DescriptionError from "./DescriptionError";
+
+const Description = ({ recipe }) => {
+   
   return (
     <div>
-      <h1>Description</h1>
-      <p>This is a description</p>
+      <h1 className="font-bold">Description</h1>
+      {!recipe ? (
+        <DescriptionError recipe={recipe} />
+      ) : (
+        <p className="text-slate-900">{recipe.description}</p>
+      )}
     </div>
   );
 };
