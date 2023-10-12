@@ -1,6 +1,6 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 const uri =
-  `mongodb+srv://${process.env.mongodb_username}:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
+  `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
 
 export const client = new MongoClient(uri, {
   serverApi: {
@@ -37,6 +37,9 @@ export const getAllRecipes = async (
   } catch (error) {
     console.error("Error fetching recipes:", error);
     throw error;
+  }finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
   }
 };
 
@@ -48,12 +51,13 @@ export const fetchRecipeDataFromMongo = async (recipeName,collection) => {
     const collec = db.collection(collection);
     // Query for the recipe using the provided recipeId
     const recipeData = await collec.findOne({ title: recipeName });
-    // Close the MongoDB connection
     return recipeData; // Return the retrieved recipe data
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
     throw error;
-  }
+  }finally {
+    client.close()
+    }
 };
 
 export const generateDynamicPaths = async () => {
@@ -63,6 +67,7 @@ export const generateDynamicPaths = async () => {
     const dynamicPaths = recipes.map((recipe) => ({
       params: { recipeName: recipe.title },
     }));
+    console.log('Client Closed')
     return dynamicPaths;
   } catch (error) {
     console.error("Error generating dynamic paths:", error);
@@ -86,7 +91,7 @@ export const fetchCategories = async () => {
   try {
     const client = await DBConnection();
     const fetchedCategories = await getAllCategories(client);
-  console.log(fetchedCategories)
+    console.log('Client Close')
     return fetchedCategories;
   } catch (error) {
     console.error("Error fetching categories:", error);

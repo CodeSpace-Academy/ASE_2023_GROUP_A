@@ -41,10 +41,10 @@ const RecipeList = () => {
           <Loading/>
         ) : (
           <>
-            {recipes.map((recipe) => (
+            {recipes.map((recipe, index) => (
               <Link
                 href={`/${encodeURIComponent(recipe.title)}`}
-                key={recipe._id}
+                key={index}
               >
                 <RecipeCard key={recipe._id} recipe={recipe} />
               </Link>
