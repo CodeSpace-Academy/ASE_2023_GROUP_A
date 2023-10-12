@@ -7,6 +7,7 @@ import { responsive } from "../../helpers/settings/settings";
 import { formatTime } from "../../helpers/TimeConvertor";
 import calculateTotalTime from "../TimeAndDate/TotalTimeConverntion";
 import Description from "../Description/Description";
+
 const RecipeCard = ({ recipe }) => {
   if (!recipe) {
     return <div>Loading...</div>;
@@ -18,8 +19,8 @@ const RecipeCard = ({ recipe }) => {
       <h3 className="mt-2 text-lg font-semibold">Images</h3>
       <section className="list-disc list-inside">
         <Carousel responsive={responsive}>
-          {recipe.images.map((image, index) => (
-            <div key={index} className="text-gray-600">
+          {recipe.images.map((image) => (
+            <div key={image} className="text-gray-600">
               <div>
                 <Image
                   src={image}
@@ -53,7 +54,9 @@ const RecipeCard = ({ recipe }) => {
       <p className="text-gray-600">
         {new Date(recipe.published).toLocaleDateString()}
       </p>
+
       <h3 className="mt-2 text-lg font-semibold">Tags:</h3>
+
       <ul className="list-disc list-inside">
         {recipe.tags.map((tag, index) => (
           <li key={index} className="text-gray-600">

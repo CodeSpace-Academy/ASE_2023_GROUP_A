@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
 import Link from "next/link";
+import Loading from "../Loading/Loading";
+import LoadMoreButton from "../Buttons/LoadMore";
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true); // Initialize loading state
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalRecipes, setTotalRecipes] = useState(0); // Add totalRecipes state
 
   useEffect(() => {
     const fetchRecipes = async (page) => {
@@ -14,8 +16,8 @@ const RecipeList = () => {
         const response = await fetch(`/api/recipes?page=${page}`);
         if (response.ok) {
           const fetchedRecipes = await response.json();
-          setRecipes(fetchedRecipes.recipes);
-          setTotalPages(fetchedRecipes.recipes.length);
+          setRecipes((prevRecipes)=>[...prevRecipes, ...fetchedRecipes.recipes]);
+          setTotalRecipes(fetchedRecipes.totalRecipes);
           setLoading(false); // Set loading to false when data is fetched
         } else {
           console.error("Failed to fetch recipes");
@@ -28,21 +30,21 @@ const RecipeList = () => {
     fetchRecipes(currentPage);
   }, [currentPage]);
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+  const handlePageChange = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
   };
   return (
     <div>
       <h1 className="text-3xl font-bold mb-4">Recipes</h1>
       <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {loading ? (
-          <p>Loading...</p>
+          <Loading/>
         ) : (
           <>
-            {recipes.map((recipe) => (
+            {recipes.map((recipe, index) => (
               <Link
                 href={`/${encodeURIComponent(recipe.title)}`}
-                key={recipe._id}
+                key={index}
               >
                 <RecipeCard key={recipe._id} recipe={recipe} />
               </Link>
@@ -50,23 +52,9 @@ const RecipeList = () => {
           </>
         )}
       </div>
-      <div className="flex justify-between mt-4">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
-            currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        >
-          Previous ({currentPage - 1} of {totalPages})
-        </button>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Next ({currentPage + 1} of {totalPages})
-        </button>
-      </div>
+
+<LoadMoreButton handlePageChange={handlePageChange} currentPage={currentPage} totalRecipes={totalRecipes}/>
+
     </div>
   );
 };
