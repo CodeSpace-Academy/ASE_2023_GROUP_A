@@ -1,17 +1,16 @@
 import CookTime from "../TimeAndDate/TimeConvertor";
 import RecipeCard from "../Cards/RecipeCard";
-
+import RecipeInstructions from "../Instructions/RecipeInstructions";
 
 const Recipe = (recipe) => {
 
   const recipes = recipe.recipe;
 
-  if (!recipe) {
-
+  if (!recipes) {
     return <div>Loading...</div>;
 
   }
-
+  const ingredientsList = Object.entries(recipes.ingredients);
   return (
 
     <div className="container mx-auto p-4">
@@ -23,12 +22,11 @@ const Recipe = (recipe) => {
         <li key={recipe._id} className="bg-amber-600 p-4 rounded shadow mb-4">
 
           <RecipeCard recipe={recipes} />
-          
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
 
           <ul className="list-disc list-inside">
 
-            {Object.entries(recipes.ingredients).map(
+            {ingredientsList.map(
 
               ([ingredient, amount], index) => (
 
@@ -62,6 +60,11 @@ const Recipe = (recipe) => {
 
           </ul>
 
+          <h4>
+            <b>Total cooking Time:</b> {formatTime(recipes.cook)}
+          </h4>
+
+          <RecipeInstructions recipes={recipes} />
         </li>
 
       </ul>
