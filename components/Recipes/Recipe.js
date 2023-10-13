@@ -1,6 +1,7 @@
 import { formatTime } from "../../helpers/TimeConvertor";
 import RecipeCard from "../Cards/RecipeCard";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
+import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 
 const Recipe = (recipe) => {
   const recipes = recipe.recipe;
@@ -30,6 +31,7 @@ const Recipe = (recipe) => {
           </h4>
 
           <RecipeInstructions recipes={recipes} />
+          <UpdateRecipeInstructions />
         </li>
       </ul>
     </div>
