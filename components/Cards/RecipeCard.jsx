@@ -7,10 +7,14 @@ import { responsive } from "../../helpers/settings/settings";
 import { formatTime } from "../../helpers/TimeConvertor";
 import calculateTotalTime from "../TimeAndDate/TotalTimeConverntion";
 
+import Tags from "../Tags/Tags";
+
+
 const RecipeCard = ({ recipe  }) => {
   if (!recipe) {
     return <div>Loading...</div>;
   }
+
 
   return (
     <div  className="bg-amber-600 p-4 rounded shadow mb-4">
@@ -54,15 +58,8 @@ const RecipeCard = ({ recipe  }) => {
         {new Date(recipe.published).toLocaleDateString()}
       </p>
 
-      <h3 className="mt-2 text-lg font-semibold">Tags:</h3>
+     <Tags recipe={recipe}/>
 
-      <ul className="list-disc list-inside">
-        {recipe.tags.map((tag, index) => (
-          <li key={index} className="text-gray-600">
-            {tag}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 };
