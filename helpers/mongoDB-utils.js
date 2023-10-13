@@ -48,9 +48,9 @@ export const fetchRecipeDataFromMongo = async (recipeName,collection) => {
     // Establish a connection to MongoDB and select your database and collection
     const client = await DBConnection();
     const db = client.db("devdb");
-    const collec = db.collection(collection);
+    const collect = db.collection(collection);
     // Query for the recipe using the provided recipeId
-    const recipeData = await collec.findOne({ title: recipeName });
+    const recipeData = await collect.findOne({ title: recipeName });
     return recipeData; // Return the retrieved recipe data
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
