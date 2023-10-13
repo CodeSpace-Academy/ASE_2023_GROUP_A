@@ -2,16 +2,20 @@
 import React from "react";
 import Image from "next/image";
 import Carousel from "react-multi-carousel";
+
 import "react-multi-carousel/lib/styles.css";
-import { responsive } from "../../helpers/settings/settings";
-import { formatTime } from "../../helpers/TimeConvertor";
-import calculateTotalTime from "../TimeAndDate/TotalTimeConverntion";
+
 import Description from "../Description/Description";
+import CookTime from "../TimeAndDate/TimeConvertor";
+
+import Tags from "../Tags/Tags";
+
 
 const RecipeCard = ({ recipe }) => {
   if (!recipe) {
     return <div>Loading...</div>;
   }
+
 
   return (
     <div className="bg-amber-500 p-4 rounded shadow mb-4">
@@ -34,16 +38,15 @@ const RecipeCard = ({ recipe }) => {
           ))}
         </Carousel>
       </section>
-      <Description recipe={recipe} />
-      <p className="text-black">
-        <b>Prep Time:</b> {formatTime(recipe.prep)} minutes
-      </p>
-      <p className="text-gray-600">
-        <b>Cook Time:</b> {formatTime(recipe.cook)} minutes
-      </p>
-      <p className="text-gray-600">
-        <b>Total Time:</b> {calculateTotalTime(recipe.prep, recipe.cook)}
-      </p>
+      <Description recipe={recipe}/>
+
+
+      <CookTime cookTimeInMinutes = {recipe.prep} label={'Prep Time'} />
+
+      <CookTime cookTimeInMinutes={recipe.cook} label={'Cook Time'} />
+
+      <CookTime cookTimeInMinutes={recipe.cook} prepTimeInMinutes={recipe.prep}  label='Total time'/>
+
       <p className="text-gray-600">
         <b>Category:</b> {recipe.category}
       </p>
@@ -55,15 +58,8 @@ const RecipeCard = ({ recipe }) => {
         {new Date(recipe.published).toLocaleDateString()}
       </p>
 
-      <h3 className="mt-2 text-lg font-semibold">Tags:</h3>
+     <Tags recipe={recipe}/>
 
-      <ul className="list-disc list-inside">
-        {recipe.tags.map((tag, index) => (
-          <li key={index} className="text-gray-600">
-            {tag}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 };

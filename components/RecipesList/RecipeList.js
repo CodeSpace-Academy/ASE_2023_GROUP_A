@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
 import Link from "next/link";
 import Loading from "../Loading/Loading";
@@ -7,8 +7,10 @@ import LoadMoreButton from "../Buttons/LoadMore";
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true); // Initialize loading state
   const [totalRecipes, setTotalRecipes] = useState(0); // Add totalRecipes state
+
 
   useEffect(() => {
     const fetchRecipes = async (page) => {
@@ -16,9 +18,11 @@ const RecipeList = () => {
         const response = await fetch(`/api/recipes?page=${page}`);
         if (response.ok) {
           const fetchedRecipes = await response.json();
+
           setRecipes((prevRecipes)=>[...prevRecipes, ...fetchedRecipes.recipes]);
           setTotalRecipes(fetchedRecipes.totalRecipes);
           setLoading(false); // Set loading to false when data is fetched
+
         } else {
           console.error("Failed to fetch recipes");
         }
