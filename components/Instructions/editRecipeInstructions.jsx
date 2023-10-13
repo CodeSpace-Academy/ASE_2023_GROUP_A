@@ -1,43 +1,101 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
-function EditRecipeInstructions({ recipes }) {
-  const [instructions, setInstructions] = useState([]);
+// function EditRecipeInstructions({ recipes }) {
+//   const [instructions, setInstructions] = useState([]);
+
+//   useEffect(() => {
+//     if (recipes) {
+//       const fetchRecipeInstructions = async () => {
+//         const response = await fetch(`/api/recipes/${recipe.id}/instructions`);
+//         const instructions = await response.json();
+
+//         setInstructions(instructions);
+//       };
+//       fetchRecipeInstructions();
+//     }
+//   }, [recipes]);
+
+//   const handleInstructionChange = (index, newInstruction) => {
+//     setInstructions((prevInstructions) => {
+//       const updatedInstructions = [...prevInstructions];
+//       updatedInstructions[index] = newInstruction;
+//       return updatedInstructions;
+//     });
+//   };
+
+//   const handleSaveChanges = async () => {
+//     const response = await fetch(`/api/recipes/${recipes._id}/instructions`, {
+//       method: "PUT",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(instructions),
+//     });
+
+//     if (response.ok) {
+//       <p>Recipe instructions updated</p>;
+//     } else {
+//       <p>Whoopsie, failed to load recipe instructions, please try again</p>;
+//     }
+//   };
+//   return (
+//     <section>
+//       <div class="flex ">Edit recipe </div>
+//       <input />
+//       <h1>hi </h1>
+//       <ol>
+//         {instructions.map((instruction, index) => (
+//           <li key={index}>
+//             <input
+//               type="text"
+//               value={instruction}
+//               onChange={(e) => handleInstructionChange(index, e.target.value)}
+//             />
+//           </li>
+//         ))}
+//       </ol>
+//       <button
+//         class=" flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+//         onClick={handleSaveChanges}
+//       >
+//         Save new edits
+//       </button>
+//     </section>
+//   );
+// }
+
+// export default EditRecipeInstructions;
+
+import React, { useState, useEffect } from "react";
+
+const UpdateRecipeInstructions = ({ recipeId }) => {
+  const [recipe, setRecipe] = useState(null);
+  const [newInstructions, setNewInstructions] = useState("");
+
+  const getRecipe = async () => {
+    const recipe = await db.getRecipe(recipe._Id);
+    setRecipe(recipe);
+  };
 
   useEffect(() => {
-    if (recipes) {
-      const fetchRecipeInstructions = async () => {
-        const response = await fetch(`/api/recipes/${recipe.id}/instructions`);
-        const instructions = await response.json();
+    getRecipe();
+  }, []);
 
-        setInstructions(instructions);
-      };
-      fetchRecipeInstructions();
-    }
-  }, [recipes]);
-
-  const handleInstructionChange = (index, newInstruction) => {
-    setInstructions((prevInstructions) => {
-      const updatedInstructions = [...prevInstructions];
-      updatedInstructions[index] = newInstruction;
-      return updatedInstructions;
-    });
+  const handleInstructionsChange = (event) => {
+    setNewInstructions(event.target.value);
   };
 
-  const handleSaveChanges = async () => {
-    const response = await fetch(`/api/recipes/${recipes._id}/instructions`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(instructions),
-    });
+  const handleSave = async () => {
+    // Update the recipe instructions.
+    const updatedRecipe = UpdateRecipeInstructions(recipe, newInstructions);
 
-    if (response.ok) {
-      <p>Recipe instructions updated</p>;
-    } else {
-      <p>Whoopsie, failed to load recipe instructions, please try again</p>;
-    }
+    // Display the updated recipe to the user.
+    displayRecipe(updatedRecipe);
+
+    // Save the changes to the database (optional).
+    // await saveRecipe(updatedRecipe);
   };
+
   return (
     <section>
       <div className="flex ">
@@ -69,26 +127,15 @@ function EditRecipeInstructions({ recipes }) {
           </li>
         ))}
       </ol>
+
       <button
         className=" flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         onClick={handleSaveChanges}
       >
-        Save new edits
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="w-5 h-5"
-        >
-          <path
-            fillRule="evenodd"
-            d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-            clipRule="evenodd"
-          />
-        </svg>
+        Save
       </button>
     </section>
   );
-}
+};
 
-export default EditRecipeInstructions;
+export default UpdateRecipeInstructions;

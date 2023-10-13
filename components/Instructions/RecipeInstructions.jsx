@@ -1,6 +1,3 @@
-import { Fragment } from "react";
-import EditRecipeInstructions from "./editRecipeInstructions";
-
 const RecipeInstructions = ({ recipes }) => {
   const sortedInstructions = [];
 
@@ -23,7 +20,6 @@ const RecipeInstructions = ({ recipes }) => {
     <Fragment>
       <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
 
-      <EditRecipeInstructions />
       <ol className="list-decimal list-inside">{reorderedInstructions}</ol>
     </Fragment>
   );
