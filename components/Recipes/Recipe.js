@@ -1,6 +1,7 @@
 import CookTime from "../TimeAndDate/TimeConvertor";
 import RecipeCard from "../Cards/RecipeCard";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
+import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 
 const Recipe = (recipe) => {
 
@@ -60,11 +61,8 @@ const Recipe = (recipe) => {
 
           </ul>
 
-          <h4>
-            <b>Total cooking Time:</b> {formatTime(recipes.cook)}
-          </h4>
-
           <RecipeInstructions recipes={recipes} />
+          <UpdateRecipeInstructions />
         </li>
 
       </ul>
