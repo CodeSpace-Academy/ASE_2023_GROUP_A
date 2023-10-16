@@ -5,7 +5,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "../../helpers/settings/settings";
 import CookTime from "../TimeAndDate/TimeConvertor";
-
+import Description from "../Description/Description";
 import Tags from "../Tags/Tags";
 
 
@@ -36,7 +36,7 @@ const RecipeCard = ({ recipe  }) => {
           ))}
         </Carousel>
       </section>
-      <p className="text-gray-600">{recipe.description}</p>
+      <Description description={recipe.description} recipeId={recipe._id}/>
 
 
       <CookTime cookTimeInMinutes = {recipe.prep} label={'Prep Time'} />

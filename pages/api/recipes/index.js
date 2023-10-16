@@ -10,6 +10,7 @@ const ITEMS_PER_PAGE = 100; //Recipies to be rendered on each page
 
 const handler = async (req, res) => {
   if (req.method !== "GET") {
+    
     return res.status(405).json({ error: "Method not allowed" });
   }
   try {
