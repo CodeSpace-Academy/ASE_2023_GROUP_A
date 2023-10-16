@@ -1,46 +1,30 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-function EditRecipeInstructions({ recipes }) {
-  const [instructions, setInstructions] = useState([]);
+const EditRecipeInstructions = ({ instructions, onSave }) => {
+  const [newInstructions, setNewInstructions] = useState([...instructions]);
+  const [currentInstruction, setCurrentInstruction] = useState("");
 
-  useEffect(() => {
-    if (recipes) {
-      const fetchRecipeInstructions = async () => {
-        const response = await fetch(`/api/recipes/${recipe.id}/instructions`);
-        const instructions = await response.json();
-
-        setInstructions(instructions);
-      };
-      fetchRecipeInstructions();
-    }
-  }, [recipes]);
-
-  const handleInstructionChange = (index, newInstruction) => {
-    setInstructions((prevInstructions) => {
-      const updatedInstructions = [...prevInstructions];
-      updatedInstructions[index] = newInstruction;
-      return updatedInstructions;
-    });
-  };
-
-  const handleSaveChanges = async () => {
-    const response = await fetch(`/api/recipes/${recipes._id}/instructions`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(instructions),
-    });
-
-    if (response.ok) {
-      <p>Recipe instructions updated</p>;
-    } else {
-      <p>Whoopsie, failed to load recipe instructions, please try again</p>;
+  const handleAddInstruction = () => {
+    if (currentInstruction) {
+      setNewInstructions([...newInstructions, currentInstruction]);
+      setCurrentInstruction("");
     }
   };
+
+  const handleRemoveInstruction = (index) => {
+    const updatedInstructions = [...newInstructions];
+    updatedInstructions.splice(index, 1);
+    setNewInstructions(updatedInstructions);
+  };
+
+  const handleSaveChanges = () => {
+    onSave(newInstructions);
+  };
+
   return (
     <section>
-      <div className="flex ">
+      <div className="flex">
+        {" "}
         Edit recipe{" "}
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -57,20 +41,38 @@ function EditRecipeInstructions({ recipes }) {
           />
         </svg>
       </div>
-      {/* <input /> */}
+
       <ol>
-        {instructions.map((instruction, index) => (
+        {newInstructions.map((instruction, index) => (
           <li key={index}>
             <input
               type="text"
               value={instruction}
-              onChange={(e) => handleInstructionChange(index, e.target.value)}
+              onChange={(e) => {
+                const updatedInstructions = [...newInstructions];
+                updatedInstructions[index] = e.target.value;
+                setNewInstructions(updatedInstructions);
+              }}
             />
+            <button onClick={() => handleRemoveInstruction(index)}>
+              Remove
+            </button>
           </li>
         ))}
       </ol>
+
+      <ol>
+        {" "}
+        <input
+          type="text"
+          value={currentInstruction}
+          onChange={(e) => setCurrentInstruction(e.target.value)}
+        />
+      </ol>
+
+      <button onClick={handleAddInstruction}>Add New Instruction</button>
       <button
-        className=" flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="flex bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded"
         onClick={handleSaveChanges}
       >
         Save new edits
@@ -89,6 +91,6 @@ function EditRecipeInstructions({ recipes }) {
       </button>
     </section>
   );
-}
+};
 
 export default EditRecipeInstructions;
