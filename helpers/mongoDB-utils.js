@@ -37,7 +37,7 @@ export const getAllRecipes = async (
   } catch (error) {
     console.error("Error fetching recipes:", error);
     throw error;
-  }finally {
+  } finally {
     // Ensures that the client will close when you finish/error
     await client.close();
   }
@@ -55,9 +55,7 @@ export const fetchRecipeDataFromMongo = async (recipeName,collection) => {
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
     throw error;
-  }finally {
-    client.close()
-    }
+  }
 };
 
 export const generateDynamicPaths = async () => {
