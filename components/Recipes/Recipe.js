@@ -43,23 +43,8 @@ const Recipe = (recipe) => {
 
           </ul>
 
-          <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
 
           <CookTime cookTimeInMinutes = {recipes.cook} label={'Total cooking Time'}/>
-
-          <ul className="list-disc list-inside">
-
-            {recipes.instructions.map((instruction, index) => (
-
-              <li key={index} className="text-gray-600">
-
-                {instruction}
-
-              </li>
-
-            ))}
-
-          </ul>
 
           <RecipeInstructions recipes={recipes} />
           <UpdateRecipeInstructions />
