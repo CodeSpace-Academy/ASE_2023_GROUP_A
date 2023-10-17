@@ -3,9 +3,9 @@ import DescriptionError from "../error-messages/DescriptionError";
 const Description = ({ recipe }) => {
   return (
     <div>
-      <h1 className="font-bold">Description</h1>
+      <h3 className="font-bold">Description</h3>
       {!recipe ? (
-        <DescriptionError recipe={recipe} />
+        <DescriptionError  />
       ) : (
         <p className="text-slate-900">{recipe.description}</p>
       )}
