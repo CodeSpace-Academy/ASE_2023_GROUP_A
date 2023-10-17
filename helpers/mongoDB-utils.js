@@ -28,7 +28,7 @@ export const getAllRecipes = async (
   try {
     const db = await client.db("devdb");
     const allRecipes = await db
-      .collection("recipes")
+      .collection("recipes_edit")
       .find({})
       .skip(skip)
       .limit(limit)
@@ -37,9 +37,6 @@ export const getAllRecipes = async (
   } catch (error) {
     console.error("Error fetching recipes:", error);
     throw error;
-  }finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
   }
 };
 
@@ -55,9 +52,7 @@ export const fetchRecipeDataFromMongo = async (recipeName,collection) => {
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
     throw error;
-  }finally {
-    client.close()
-    }
+  }
 };
 
 export const generateDynamicPaths = async () => {
@@ -101,7 +96,7 @@ export const fetchCategories = async () => {
 export const getTotalRecipesCount = async (client) => {
   try {
     const db = client.db('devdb'); // Get the MongoDB database
-    const recipesCollection = db.collection("recipes"); // Change this to your actual collection name
+    const recipesCollection = db.collection("recipes_edit"); // Change this to your actual collection name
     // Use the aggregation framework to count the documents
     const countResult = await recipesCollection.aggregate([
       {
@@ -121,4 +116,50 @@ export const getTotalRecipesCount = async (client) => {
     throw error;
   }
 };
+export const updateDescription = async (id, description) => {
+  try {
+    const client = await DBConnection();
+    const db = client.db('devdb');
+    const result = await db.collection("recipes_edit").updateOne(
+      { _id: id },
+      {$unset: {description}},
+      { $set: { description: description } },
+    (err, result)=>{
+      if(err)throw err;
+      if(result.modifiedCount === 1){
+        console.log("Document updated");
+      }else{
+      console.log("Document Not Found or not updated")  ; 
+      }
+      
+    }
+    );
 
+    if (result.modifiedCount === 1) {
+      console.log("Description updated successfully.");
+      return true;
+    } else {
+      console.log("Description was not updated.");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error updating description:", error);
+    return false; // Handle any errors and return false
+  }
+}
+
+
+export const getUpdatedDescription = async(id)=>{
+try{
+  const client = await DBConnection();
+  const db = client.db('devdb');
+  const recipe = await db.collection("recipes_edit").findOne({ _id:id });
+  if(recipe){
+    return recipe.description;
+  } else {
+    console.log( "Recipe not found" );
+  }
+}catch(error){
+  console.error("Error fetching description:", error);
+};
+};

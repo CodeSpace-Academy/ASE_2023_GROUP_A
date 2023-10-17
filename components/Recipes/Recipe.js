@@ -3,9 +3,8 @@ import RecipeCard from "../Cards/RecipeCard";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
 import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 
-const Recipe = (recipe) => {
-
-  const recipes = recipe.recipe;
+const Recipe = ({recipe, newDescription}) => {
+  const recipes = recipe;
 
   if (!recipes) {
     return <div>Loading...</div>;
@@ -22,7 +21,7 @@ const Recipe = (recipe) => {
 
         <li key={recipe._id} className="bg-amber-600 p-4 rounded shadow mb-4">
 
-          <RecipeCard recipe={recipes} />
+          <RecipeCard recipe={recipes} newDescription={newDescription}/>
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
 
           <ul className="list-disc list-inside">
@@ -33,7 +32,7 @@ const Recipe = (recipe) => {
 
                 <li key={index} className="text-gray-600">
 
-                  {ingredient}: {amount}
+                  {ingredient}: {amount}:
 
                 </li>
 

@@ -10,7 +10,6 @@ const ITEMS_PER_PAGE = 100; //Recipies to be rendered on each page
 
 const handler = async (req, res) => {
   if (req.method !== "GET") {
-    
     return res.status(405).json({ error: "Method not allowed" });
   }
   try {
@@ -26,7 +25,7 @@ const handler = async (req, res) => {
   } catch (error) {
     console.error("Error fetching recipes:", error);
     res.status(408).json({ error: "Error fetching recipes" });
-  }
+  };
 };
 
 export default handler;
