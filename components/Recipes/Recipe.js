@@ -29,7 +29,7 @@ const Recipe = ({recipe, Allergies}) => {
             ))}
           </ul>
 
-          <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
+         
 
           <CookTime
             cookTimeInMinutes={recipes.cook}
