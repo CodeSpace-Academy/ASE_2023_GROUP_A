@@ -54,16 +54,6 @@ const RecipeList = () => {
         )}
       </div>
 
-      <div className="flex justify-between my-4">
-        <button
-          onClick={() => handlePageChange(-1)}
-          disabled={currentPage === 1}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Load Previous
-        </button>
-      </div>
-
       {recipes.length > 0 && (
         <LoadMoreButton
           handlePageChange={() => handlePageChange(1)}
