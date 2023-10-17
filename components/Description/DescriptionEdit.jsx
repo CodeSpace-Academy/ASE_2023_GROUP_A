@@ -1,7 +1,6 @@
  import { useState , useRef} from "react";
 
 const DescriptionEdit = ({ initialDescription, onSave}) => {
-  // const [description, setDescription] = useState(initialDescription);
   const [newDescription, setNewDescription] = useState(initialDescription);
   const newTextRef = useRef();
 

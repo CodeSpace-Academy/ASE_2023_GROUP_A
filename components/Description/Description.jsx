@@ -4,20 +4,18 @@ import DescriptionEdit from "./DescriptionEdit";
 
 export default function Description({ description, recipeId }) {
     
-//   const [expanded, setExpanded] = useState(false);
+
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description || "");
 
   const databaseUrl = `https://descriptions-for-recipes-default-rtdb.firebaseio.com/description/.json`;
 
-//   const toggleExpand = () => {
-//     setExpanded(!expanded);
-//   };
+
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   };
-  //   useEffect(() => {}, []);
+ 
 
   const handleEditComplete = (editedDescription) => {
     setEditedDescription(editedDescription);
