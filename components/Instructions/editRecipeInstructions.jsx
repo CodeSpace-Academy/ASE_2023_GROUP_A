@@ -1,12 +1,26 @@
-import React, { useState } from "react";
+/**
+ * The `EditRecipeInstructions` component allows users to edit and save recipe instructions.
+ * @returns The component is returning a section element containing a form for editing recipe instructions.
+ * It displays the current instructions as a numbered list, with each instruction displayed in an input field.
+ * The user can edit the instructions by typing in the input fields.
+ * The user can also add a new instruction by typing in the input field at the bottom and clicking the "Save new edits" button.
+ *  The user can also remove an instruction
+ */
 
-const EditRecipeInstructions = ({ instructions, onSave }) => {
+import { useState, useEffect } from "react";
+
+const EditRecipeInstructions = ({ instructions }) => {
   const [newInstructions, setNewInstructions] = useState([...instructions]);
   const [currentInstruction, setCurrentInstruction] = useState("");
 
   const handleAddInstruction = () => {
     if (currentInstruction) {
+      const updatedInstructions = [...newInstructions, currentInstruction];
       setNewInstructions([...newInstructions, currentInstruction]);
+      localStorage.setItem(
+        "recipeInstructions",
+        JSON.stringify(updatedInstructions)
+      );
       setCurrentInstruction("");
     }
   };
@@ -15,31 +29,24 @@ const EditRecipeInstructions = ({ instructions, onSave }) => {
     const updatedInstructions = [...newInstructions];
     updatedInstructions.splice(index, 1);
     setNewInstructions(updatedInstructions);
+    localStorage.setItem(
+      "recipeInstructions",
+      JSON.stringify(updatedInstructions)
+    );
   };
 
-  const handleSaveChanges = () => {
-    onSave(newInstructions);
-  };
+  useEffect(() => {
+    // Update the state of the component when the recipeInstructions item is saved to local storage
+    const recipeInstructions = localStorage.getItem("recipeInstructions");
+    if (recipeInstructions) {
+      setNewInstructions(JSON.parse(recipeInstructions));
+    }
+  }, []);
 
   return (
     <section>
       <div className="flex">
-        {" "}
-        Edit recipe{" "}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-          />
-        </svg>
+        <strong>Update instructions to your liking</strong>
       </div>
 
       <ol>
@@ -52,7 +59,12 @@ const EditRecipeInstructions = ({ instructions, onSave }) => {
                 const updatedInstructions = [...newInstructions];
                 updatedInstructions[index] = e.target.value;
                 setNewInstructions(updatedInstructions);
+                localStorage.setItem(
+                  "recipeInstructions",
+                  JSON.stringify(updatedInstructions)
+                );
               }}
+              className="w-200 border border-gray-300 rounded-md mr-2 p-1"
             />
             <button onClick={() => handleRemoveInstruction(index)}>
               Remove
@@ -62,7 +74,6 @@ const EditRecipeInstructions = ({ instructions, onSave }) => {
       </ol>
 
       <ol>
-        {" "}
         <input
           type="text"
           value={currentInstruction}
@@ -70,24 +81,11 @@ const EditRecipeInstructions = ({ instructions, onSave }) => {
         />
       </ol>
 
-      <button onClick={handleAddInstruction}>Add New Instruction</button>
       <button
-        className="flex bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={handleSaveChanges}
+        className="flex bg-blue-500 hover-bg-blue-700 text-white font-bold py-1 px-1 rounded"
+        onClick={handleAddInstruction}
       >
         Save new edits
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="w-5 h-5"
-        >
-          <path
-            fillRule="evenodd"
-            d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-            clipRule="evenodd"
-          />
-        </svg>
       </button>
     </section>
   );

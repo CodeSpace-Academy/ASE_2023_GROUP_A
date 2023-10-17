@@ -7,13 +7,13 @@ import { responsive } from "../../helpers/settings/settings";
 import { formatTime } from "../../helpers/TimeConvertor";
 import calculateTotalTime from "../TimeAndDate/TotalTimeConverntion";
 
-const RecipeCard = ({ recipe  }) => {
+const RecipeCard = ({ recipe }) => {
   if (!recipe) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div  className="bg-amber-600 p-4 rounded shadow mb-4">
+    <div className="bg-amber-600 p-4 rounded shadow mb-4">
       <h2 className="text-2xl font-semibold">{recipe.title}</h2>
       <h3 className="mt-2 text-lg font-semibold">Images</h3>
       <section className="list-disc list-inside">
