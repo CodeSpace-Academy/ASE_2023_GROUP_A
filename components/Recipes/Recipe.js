@@ -43,8 +43,11 @@ const Recipe = (recipe) => {
 
           </ul>
 
+         
 
           <CookTime cookTimeInMinutes = {recipes.cook} label={'Total cooking Time'}/>
+
+         
 
           <RecipeInstructions recipes={recipes} />
           <UpdateRecipeInstructions />
