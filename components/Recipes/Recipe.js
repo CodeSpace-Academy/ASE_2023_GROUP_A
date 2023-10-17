@@ -18,6 +18,7 @@ const Recipe = ({recipe, Allergies}) => {
       <ul>
         <li key={recipe._id} className="bg-amber-600 p-4 rounded shadow mb-4">
           <RecipeCard recipe={recipes}   />
+          <Allergens allergens={Allergies}/>
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
 
           <ul className="list-disc list-inside">
@@ -44,7 +45,7 @@ const Recipe = ({recipe, Allergies}) => {
           </ul>
 
           <RecipeInstructions recipes={recipes} />
-          <Allergens allergens={Allergies}/>
+
           <UpdateRecipeInstructions />
           
         </li>
