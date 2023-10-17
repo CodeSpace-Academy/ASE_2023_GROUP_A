@@ -4,7 +4,7 @@ import RecipeInstructions from "../Instructions/RecipeInstructions";
 import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 import Allergens from "../Allergens/allergens";
 
-const Recipe = ({recipe, Allergies}) => {
+const Recipe = ({ recipe, Allergies }) => {
   const recipes = recipe;
 
   if (!recipes) {
@@ -17,8 +17,8 @@ const Recipe = ({recipe, Allergies}) => {
 
       <ul>
         <li key={recipe._id} className="bg-amber-600 p-4 rounded shadow mb-4">
-          <RecipeCard recipe={recipes}   />
-          <Allergens allergens={Allergies}/>
+          <RecipeCard recipe={recipes} />
+          <Allergens allergens={Allergies} />
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
 
           <ul className="list-disc list-inside">
@@ -28,8 +28,6 @@ const Recipe = ({recipe, Allergies}) => {
               </li>
             ))}
           </ul>
-
-         
 
           <CookTime
             cookTimeInMinutes={recipes.cook}
@@ -45,9 +43,7 @@ const Recipe = ({recipe, Allergies}) => {
           </ul>
 
           <RecipeInstructions recipes={recipes} />
-
           <UpdateRecipeInstructions />
-          
         </li>
       </ul>
     </main>
