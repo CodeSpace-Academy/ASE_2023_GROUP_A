@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 const EditRecipeInstructions = ({ instructions }) => {
   const [newInstructions, setNewInstructions] = useState([...instructions]);
   const [currentInstruction, setCurrentInstruction] = useState("");
+  const [showEdit, setShowEdit] = useState(true);
 
   const handleAddInstruction = () => {
     if (currentInstruction) {
@@ -43,36 +44,41 @@ const EditRecipeInstructions = ({ instructions }) => {
     }
   }, []);
 
+  const toggleEdit = () => {
+    setShowEdit(!showEdit); // Toggling the showEdit state
+  };
+
   return (
     <section>
       <div className="flex">
         <strong>Update instructions to your liking</strong>
+        <button onClick={toggleEdit}>Toggle Edit</button>
       </div>
-
-      <ol>
-        {newInstructions.map((instruction, index) => (
-          <li key={index}>
-            <input
-              type="text"
-              value={instruction}
-              onChange={(e) => {
-                const updatedInstructions = [...newInstructions];
-                updatedInstructions[index] = e.target.value;
-                setNewInstructions(updatedInstructions);
-                localStorage.setItem(
-                  "recipeInstructions",
-                  JSON.stringify(updatedInstructions)
-                );
-              }}
-              className="w-200 border border-gray-300 rounded-md mr-2 p-1"
-            />
-            <button onClick={() => handleRemoveInstruction(index)}>
-              Remove
-            </button>
-          </li>
-        ))}
-      </ol>
-
+      {showEdit && (
+        <ol>
+          {newInstructions.map((instruction, index) => (
+            <li key={index}>
+              <input
+                type="text"
+                value={instruction}
+                onChange={(e) => {
+                  const updatedInstructions = [...newInstructions];
+                  updatedInstructions[index] = e.target.value;
+                  setNewInstructions(updatedInstructions);
+                  localStorage.setItem(
+                    "recipeInstructions",
+                    JSON.stringify(updatedInstructions)
+                  );
+                }}
+                className="w-200 border border-gray-300 rounded-md mr-2 p-1"
+              />
+              <button onClick={() => handleRemoveInstruction(index)}>
+                Remove
+              </button>
+            </li>
+          ))}
+        </ol>
+      )}
       <ol>
         <input
           type="text"

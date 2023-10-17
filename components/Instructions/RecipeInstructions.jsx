@@ -5,7 +5,6 @@
  */
 
 import { Fragment, useEffect, useState } from "react";
-
 import EditRecipeInstructions from "./editRecipeInstructions";
 
 const RecipeInstructions = ({ recipes }) => {
@@ -29,7 +28,6 @@ const RecipeInstructions = ({ recipes }) => {
   return (
     <Fragment>
       <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
-
       <ol className="list-decimal list-inside">
         {instructions.map((instruction, index) => (
           <li key={index} className="text-gray-600">
