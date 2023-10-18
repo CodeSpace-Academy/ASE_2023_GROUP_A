@@ -38,7 +38,7 @@ const RecipeCard = ({ recipe  }) => {
         </Carousel>
       </section>
       
-      <Description />
+      <Description recipe={recipe} />
 
 
       <CookTime cookTimeInMinutes = {recipe.prep} label={'Prep Time'} />
