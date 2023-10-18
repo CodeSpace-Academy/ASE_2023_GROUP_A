@@ -1,7 +1,9 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
-const uri =
-  `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
 
+// MongoDB connection URI, including authentication details
+const uri = `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
+
+// Create a MongoDB client instance with specific server API version and options
 export const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -10,6 +12,7 @@ export const client = new MongoClient(uri, {
   },
 });
 
+// Establish a connection to the MongoDB server
 export const DBConnection = async () => {
   try {
     await client.connect();
@@ -20,11 +23,9 @@ export const DBConnection = async () => {
     throw error;
   }
 };
-export const getAllRecipes = async (
-  client,
-  skip,
-  limit
-) => {
+
+// Fetch all recipes with optional skip and limit parameters
+export const getAllRecipes = async (client, skip, limit) => {
   try {
     const db = await client.db("devdb");
     const allRecipes = await db
@@ -38,26 +39,26 @@ export const getAllRecipes = async (
     console.error("Error fetching recipes:", error);
     throw error;
   } finally {
-    // Ensures that the client will close when you finish/error
+    // Ensure that the client will be closed when you're done or if an error occurs
     await client.close();
   }
 };
 
-export const fetchRecipeDataFromMongo = async (recipeName,collection) => {
+// Fetch recipe data from MongoDB based on the recipe title and collection
+export const fetchRecipeDataFromMongo = async (recipeName, collection) => {
   try {
-    // Establish a connection to MongoDB and select your database and collection
     const client = await DBConnection();
     const db = client.db("devdb");
     const collec = db.collection(collection);
-    // Query for the recipe using the provided recipeId
     const recipeData = await collec.findOne({ title: recipeName });
-    return recipeData; // Return the retrieved recipe data
+    return recipeData;
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
     throw error;
   }
 };
 
+// Generate dynamic paths for Next.js based on recipe titles
 export const generateDynamicPaths = async () => {
   try {
     const client = await DBConnection();
@@ -65,7 +66,7 @@ export const generateDynamicPaths = async () => {
     const dynamicPaths = recipes.map((recipe) => ({
       params: { recipeName: recipe.title },
     }));
-    console.log('Client Closed')
+    console.log('Client Closed');
     return dynamicPaths;
   } catch (error) {
     console.error("Error generating dynamic paths:", error);
@@ -73,6 +74,7 @@ export const generateDynamicPaths = async () => {
   }
 };
 
+// Fetch all categories from MongoDB
 export const getAllCategories = async (client) => {
   try {
     const db = client.db("devdb");
@@ -85,17 +87,19 @@ export const getAllCategories = async (client) => {
   }
 };
 
+// Fetch categories using the DBConnection function
 export const fetchCategories = async () => {
   try {
     const client = await DBConnection();
     const fetchedCategories = await getAllCategories(client);
-    console.log('Client Close')
+    console.log('Client Close');
     return fetchedCategories;
   } catch (error) {
     console.error("Error fetching categories:", error);
   }
 };
 
+// Get the total count of recipes in the MongoDB collection
 export const getTotalRecipesCount = async (client) => {
   try {
     const db = client.db('devdb'); // Get the MongoDB database

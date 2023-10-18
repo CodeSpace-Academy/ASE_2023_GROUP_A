@@ -7,7 +7,6 @@ import LoadMoreButton from "../Buttons/LoadMore";
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true); // Initialize loading state
   const [totalRecipes, setTotalRecipes] = useState(0); // Add totalRecipes state
 
