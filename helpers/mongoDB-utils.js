@@ -54,6 +54,20 @@ export const fetchRecipeDataFromMongo = async (recipeName,collection) => {
     throw error;
   }
 };
+export const fetchRecipeDataFromMongoById = async (recipeId,collection) => {
+  try {
+    // Establish a connection to MongoDB and select your database and collection
+    const client = await DBConnection();
+    const db = client.db("devdb");
+    const collec = db.collection(collection);
+    // Query for the recipe using the provided recipeId
+    const recipeData = await collec.findOne({ _id: recipeId });
+    return recipeData; // Return the retrieved recipe data
+  } catch (error) {
+    console.error("Error fetching recipe data from MongoDB:", error);
+    throw error;
+  }
+};
 
 export const generateDynamicPaths = async () => {
   try {
@@ -118,24 +132,15 @@ export const getTotalRecipesCount = async (client) => {
 };
 export const updateDescription = async (id, description) => {
   try {
-    const client = await DBConnection();
-    const db = client.db('devdb');
-    const result = await db.collection("recipes_edit").updateOne(
-      { _id: id },
-      {$unset: {description}},
-      { $set: { description: description } },
-    (err, result)=>{
-      if(err)throw err;
-      if(result.modifiedCount === 1){
-        console.log("Document updated");
-      }else{
-      console.log("Document Not Found or not updated")  ; 
-      }
-      
-    }
-    );
+    const response = await fetch(`/api/description?id=${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ description }),
+    });
 
-    if (result.modifiedCount === 1) {
+    if (response.ok) {
       console.log("Description updated successfully.");
       return true;
     } else {
@@ -146,14 +151,15 @@ export const updateDescription = async (id, description) => {
     console.error("Error updating description:", error);
     return false; // Handle any errors and return false
   }
-}
+};
+
 
 
 export const getUpdatedDescription = async(id)=>{
 try{
   const client = await DBConnection();
   const db = client.db('devdb');
-  const recipe = await db.collection("recipes_edit").findOne({ _id:id });
+  const recipe = await db.collection("recipes").findOne({ _id:id });
   if(recipe){
     return recipe.description;
   } else {
@@ -163,3 +169,4 @@ try{
   console.error("Error fetching description:", error);
 };
 };
+

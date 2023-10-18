@@ -16,13 +16,13 @@ export default function Description({ description, recipeId }) {
 
   const handleDescriptionSave = async (newDescription) => {
     try {
-      //API request to update the description in the database
-      const response = await fetch(`/api/Description`, {
+      // API request to update the description in the database by including the recipeId in the URL
+      const response = await fetch(`/api/description/${recipeId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: recipeId, description: newDescription }),
+        body: JSON.stringify({ description: newDescription }),
       });
       if (response.ok) {
         // Update the description in the UI
@@ -38,6 +38,7 @@ export default function Description({ description, recipeId }) {
       console.error("Error updating description:", error);
     }
   };
+  
 
   // useEffect(() => {
   //   // Fetch the description data from Firebase when the component mounts

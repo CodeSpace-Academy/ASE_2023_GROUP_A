@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { fetchRecipeDataFromMongo, getUpdatedDescription } from "../helpers/mongoDB-utils";
 import Recipe from "../components/Recipes/Recipe";
 
-const RecipePage = ({ recipe, newDescription }) => {
+const RecipePage = ({ recipe }) => {
 
   const router = useRouter();
   const { recipeName } = router.query;
@@ -12,7 +12,7 @@ const RecipePage = ({ recipe, newDescription }) => {
   }
   return (
     <div>
-      <Recipe recipe={recipe} newDescription={newDescription}/>
+      <Recipe recipe={recipe}/>
     </div>
   );
 };
@@ -20,10 +20,8 @@ const RecipePage = ({ recipe, newDescription }) => {
 export const getServerSideProps = async ({ params }) => {
   const recipeName = params.recipeName;
   const recipe = await fetchRecipeDataFromMongo(recipeName, "recipes");
-  const newDescription = await getUpdatedDescription(recipe._id);
-  console.log("Fetched R8 Desc:", newDescription);
   return {
-    props: { recipe , newDescription},
+    props: { recipe },
   };
 };
 

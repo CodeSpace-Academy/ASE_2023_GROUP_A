@@ -21,7 +21,7 @@ const Recipe = ({recipe, newDescription}) => {
 
         <li key={recipe._id} className="bg-amber-600 p-4 rounded shadow mb-4">
 
-          <RecipeCard recipe={recipes} newDescription={newDescription}/>
+          <RecipeCard recipe={recipes}/>
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
 
           <ul className="list-disc list-inside">
