@@ -14,7 +14,7 @@ const RecipeCard = ({ recipe }) => {
   }
 
   return (
-    <section className="bg-amber-600 p-4 rounded shadow mb-4">
+    <section className="bg-gray-200 p-4 rounded shadow mb-4">
       <h2 className="text-2xl font-semibold">{recipe.title}</h2>
       <h3 className="mt-2 text-lg font-semibold">Images</h3>
       <section className="list-disc list-inside">
