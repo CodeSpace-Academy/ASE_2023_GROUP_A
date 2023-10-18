@@ -10,6 +10,7 @@ const Home = () => {
           _id: "",
           title: "",
           description: "",
+          allergens: "",
           prep: 0,
           cook: 0,
           category: "",
