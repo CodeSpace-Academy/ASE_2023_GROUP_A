@@ -6,6 +6,7 @@ import "react-multi-carousel/lib/styles.css";
 import { responsive } from "../../helpers/settings/settings";
 import CookTime from "../TimeAndDate/TimeConvertor";
 import Tags from "../Tags/Tags";
+import Description from "../Description/Description";
 
 const RecipeCard = ({ recipe }) => {
   if (!recipe) {
@@ -33,7 +34,8 @@ const RecipeCard = ({ recipe }) => {
           ))}
         </Carousel>
       </section>
-      <p className="text-gray-600">{recipe.description} </p>
+      
+      <Description recipe={recipe} />
 
       <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
 
