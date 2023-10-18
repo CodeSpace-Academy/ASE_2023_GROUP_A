@@ -7,9 +7,8 @@ import LoadMoreButton from "../Buttons/LoadMore";
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true); // Initialize loading state
-  const [totalRecipes, setTotalRecipes] = useState(0); // Add totalRecipes state
+  const [loading, setLoading] = useState(true);
+  const [totalRecipes, setTotalRecipes] = useState(0);
 
   useEffect(() => {
     const fetchRecipes = async (page) => {
@@ -17,13 +16,9 @@ const RecipeList = () => {
         const response = await fetch(`/api/recipes?page=${page}`);
         if (response.ok) {
           const fetchedRecipes = await response.json();
-
-          setRecipes((prevRecipes) => [
-            ...prevRecipes,
-            ...fetchedRecipes.recipes,
-          ]);
+          setRecipes((prevRecipes) => [...prevRecipes, ...fetchedRecipes.recipes]);
           setTotalRecipes(fetchedRecipes.totalRecipes);
-          setLoading(false); // Set loading to false when data is fetched
+          setLoading(false);
         } else {
           console.error("Failed to fetch recipes");
         }
@@ -59,11 +54,13 @@ const RecipeList = () => {
         )}
       </div>
 
-      <LoadMoreButton
-        handlePageChange={handlePageChange}
-        currentPage={currentPage}
-        totalRecipes={totalRecipes}
-      />
+      {recipes.length > 0 && (
+        <LoadMoreButton
+          handlePageChange={() => handlePageChange(1)}
+          currentPage={currentPage}
+          totalRecipes={totalRecipes}
+        />
+      )}
     </div>
   );
 };
