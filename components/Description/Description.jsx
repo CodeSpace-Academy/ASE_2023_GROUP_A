@@ -3,7 +3,7 @@ import DescriptionError from "../error-messages/DescriptionError";
 const Description = ({ recipe }) => {
   return (
     <div>
-      <h3 className="font-bold">Description</h3>
+      <h3 className="font-bold text-black">Description</h3>
       {!recipe ? (
         <DescriptionError  />
       ) : (
