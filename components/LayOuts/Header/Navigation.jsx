@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Navigation = () => {
   const [categories, setCategories] = useState([]); // State to store fetched categories
-  // Fetch categories from MongoDB when the component mounts
+  // Fetch categories from MongoDB 
   useEffect(() => {
     // Fetch categories from the API route
     fetch("/api/categories")
@@ -14,7 +14,6 @@ const Navigation = () => {
   }, []);
   const handleOptionSelect = (selectedOption) => {
     console.log("Selected Option:", selectedOption);
-    // You can perform actions when an option is selected
   };
 
   return (
