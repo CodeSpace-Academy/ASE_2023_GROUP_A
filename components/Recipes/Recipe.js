@@ -1,31 +1,39 @@
-import { formatTime } from "../../helpers/TimeConvertor";
+import CookTime from "../TimeAndDate/TimeConvertor";
 import RecipeCard from "../Cards/RecipeCard";
-const Recipe = (recipe) => {
-  const recipes = recipe.recipe;
-  if (!recipe) {
+import RecipeInstructions from "../Instructions/RecipeInstructions";
+import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
+import Allergens from "../Allergens/allergens";
+
+const Recipe = ({ recipe, Allergies }) => {
+  const recipes = recipe;
+
+  if (!recipes) {
     return <div>Loading...</div>;
   }
-
+  const ingredientsList = Object.entries(recipes.ingredients);
   return (
-    <div className="container mx-auto p-4">
+    <main className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Recipe</h1>
+
       <ul>
         <li key={recipe._id} className="bg-amber-600 p-4 rounded shadow mb-4">
           <RecipeCard recipe={recipes} />
+          <Allergens allergens={Allergies} />
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
+
           <ul className="list-disc list-inside">
-            {Object.entries(recipes.ingredients).map(
-              ([ingredient, amount], index) => (
-                <li key={index} className="text-gray-600">
-                  {ingredient}: {amount}
-                </li>
-              )
-            )}
+            {ingredientsList.map(([ingredient, amount], index) => (
+              <li key={index} className="text-gray-600">
+                {ingredient}: {amount}
+              </li>
+            ))}
           </ul>
-          <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
-          <h4>
-            <b>Total cooking Time:</b> {formatTime(recipes.cook)}
-          </h4>
+
+          <CookTime
+            cookTimeInMinutes={recipes.cook}
+            label={"Total cooking Time"}
+          />
+
           <ul className="list-disc list-inside">
             {recipes.instructions.map((instruction, index) => (
               <li key={index} className="text-gray-600">
@@ -33,9 +41,12 @@ const Recipe = (recipe) => {
               </li>
             ))}
           </ul>
+
+          <RecipeInstructions recipes={recipes} />
+          <UpdateRecipeInstructions />
         </li>
       </ul>
-    </div>
+    </main>
   );
 };
 

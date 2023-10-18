@@ -1,7 +1,6 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 :root {
   --foreground-rgb: rgb(99, 99, 218);
@@ -39,16 +38,42 @@ body {
   color: #ffffff;
 }
 
-.logo {
-  border-color: transparent;
-  border-radius: 100%;
-  width: 90px;
-  height: 90px;
+.messages{
+  display: block;
 }
 
-.nav_list {
-  display: flex;
-  list-style: none;
-  flex-direction: row;
-  gap: 5rem;
+/* Styling for the allergens button */
+
+
+/* .dropdown {
+  position: relative;
+  display: inline-block;
 }
+
+.dropdown-toggle {
+  background-color: #926d22;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 5px 0;
+  list-style: none;
+  margin: 0;
+}
+
+.dropdown-menu .dropdown-item {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.dropdown.is-open .dropdown-menu {
+  display: block;
+} */
+
