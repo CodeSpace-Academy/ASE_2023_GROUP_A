@@ -29,7 +29,7 @@ export const getAllRecipes = async (client, skip, limit) => {
   try {
     const db = await client.db("devdb");
     const allRecipes = await db
-      .collection("recipes")
+      .collection("recipes_edit")
       .find({})
       .skip(skip)
       .limit(limit)
@@ -102,8 +102,9 @@ export const fetchCategories = async () => {
 // Get the total count of recipes in the MongoDB collection
 export const getTotalRecipesCount = async (client) => {
   try {
-    const db = client.db('devdb');
-    const recipesCollection = db.collection("recipes");
+    const db = client.db('devdb'); // Get the MongoDB database
+    const recipesCollection = db.collection("recipes_edit"); // Change this to your actual collection name
+    // Use the aggregation framework to count the documents
     const countResult = await recipesCollection.aggregate([
       {
         $group: {
@@ -120,5 +121,34 @@ export const getTotalRecipesCount = async (client) => {
   } catch (error) {
     console.error("Error fetching total recipes count:", error);
     throw error;
+  }
+};
+
+
+
+
+// fetching allergens from MongoDB
+
+export const getAllAllergens = async (client) => {
+  try {
+    const db = client.db("devdb");
+    const allergensDocument = db.collection("allergens");
+    const allergens = await allergensDocument.findOne({});
+    return (allergens.allergens);
+  } catch (error) {
+    console.error("Error fetching allergens:", error);
+    throw error;
+  }
+};
+
+export const fetchAllergens = async () => {
+  try {
+    const client = await DBConnection();
+    const fetchedAllergens = await getAllAllergens(client);
+  
+    return fetchedAllergens;
+  } catch (error) {
+    console.error("Error fetching allergens:", error);
+    return null;
   }
 };
