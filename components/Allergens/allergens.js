@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import classes from "./allergens.module.css";
 
 function Allergens({ allergens }) {
@@ -15,13 +15,18 @@ function Allergens({ allergens }) {
           Allergens
         </button>
         {isDropdownOpen && (
-          <ul className={classes["dropdown-menu"]}>
-            {allergens.map((all, index) => (
-              <li key={index} className={classes["dropdown-item"]}>
-                {all}
-              </li>
-            ))}
-          </ul>
+          <div className="flex flex-wrap justify-center"> 
+  <ul className="flex flex-wrap justify-evenly sm:justify-center md:justify-between">
+    {allergens.map((all, index) => (
+      <li key={index} className={`text-center mb-1 sm:mb-0 md:mb-0 sm:mr-1 md:mr-4 ${classes["dropdown-item"]}`}>
+        <span className="mr-2">
+          <img src={`/images/icons/${all}.png`} alt={all} width={24} height={24} />
+        </span>
+        {all}
+      </li>
+    ))}
+  </ul>
+</div>
         )}
       </div>
     </>
@@ -29,3 +34,7 @@ function Allergens({ allergens }) {
 }
 
 export default Allergens;
+
+
+
+

@@ -9,6 +9,7 @@ const Home = () => {
         recipe={{
           _id: "",
           title: "",
+          images: [],
           description: "",
           allergens: "",
           prep: 0,
@@ -17,10 +18,13 @@ const Home = () => {
           servings: 0,
           published: "",
           tags: [],
-          images: [],
+          
         }}
       />
     </main>
   );
 };
 export default Home;
+
+
+
