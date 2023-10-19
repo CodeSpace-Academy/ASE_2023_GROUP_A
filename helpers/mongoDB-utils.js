@@ -29,7 +29,7 @@ export const getAllRecipes = async (client, skip, limit) => {
   try {
     const db = await client.db("devdb");
     const allRecipes = await db
-      .collection("recipes_edit_edit")
+      .collection("recipes_edit")
       .find({})
       .skip(skip)
       .limit(limit)
@@ -117,7 +117,7 @@ export const fetchCategories = async () => {
 export const getTotalRecipesCount = async (client) => {
   try {
     const db = client.db('devdb'); // Get the MongoDB database
-    const recipesCollection = db.collection("recipes_edit_edit"); // Change this to your actual collection name
+    const recipesCollection = db.collection("recipes_edit"); // Change this to your actual collection name
     // Use the aggregation framework to count the documents
     const countResult = await recipesCollection.aggregate([
       {
