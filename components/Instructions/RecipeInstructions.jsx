@@ -13,6 +13,10 @@ const RecipeInstructions = ({ recipes }) => {
 
   // Fetching data from local storage when the component mounts
   useEffect(() => {
+    const fetchInstructions = async () => {
+      return await fetch(`/api/instructions/${recipes._id}`);
+    };
+    fetchInstructions(); //I was testing if the api routing is responding so yeah i will take a look into this tomorrow mornig
     const recipeInstructions = localStorage.getItem("recipeInstructions");
     if (recipeInstructions) {
       setInstructions(JSON.parse(recipeInstructions));
@@ -21,6 +25,12 @@ const RecipeInstructions = ({ recipes }) => {
 
   // Function to handle saving changes to local storage
   const handleSaveChanges = (newInstructions) => {
+    const updateInstructions = async () => {
+      return await fetch(`/api/instructions/${recipes._id}`, {
+        method: "PUT",
+      });
+    };
+    updateInstructions();//I was testing if the api routing is responding so yeah i will take a look into this tomorrow mornig
     localStorage.setItem("recipeInstructions", JSON.stringify(newInstructions));
     setInstructions(newInstructions);
   };
