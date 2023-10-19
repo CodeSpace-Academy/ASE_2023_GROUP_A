@@ -2,8 +2,10 @@ import RecipeList from "../components/RecipesList/RecipeList";
 import EnvError from "./error";
 
 const Home = () => {
-  if (process.env.NEXT_PUBLIC_ENV_VAR) {
+  try {if (process.env.NEXT_PUBLIC_ENV_VAR) {
     return <EnvError />;
+  }} catch (error) {
+    console.error(error);
   }
 
   return (
