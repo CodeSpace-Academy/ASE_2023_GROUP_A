@@ -1,30 +1,20 @@
-import RecipeList from "../components/RecipesList/RecipeList";
+
+import Loading from '../components/Loading/Loading'
+
+
+
 
 const Home = () => {
+  // const router = useRouter();
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 `}
-    >
-      <RecipeList
-        recipe={{
-          _id: "",
-          title: "",
-          images: [],
-          description: "",
-          allergens: "",
-          prep: 0,
-          cook: 0,
-          category: "",
-          servings: 0,
-          published: "",
-          tags: [],
-          
-        }}
-      />
-    </main>
+    // <main className={`flex min-h-screen flex-col items-center justify-between p-24 `}>
+    //   {router.pathname !== '/' && <Navigation />}
+    // </main>
+    <div>
+      <Loading/>
+    </div>
   );
 };
+
 export default Home;
-
-
-

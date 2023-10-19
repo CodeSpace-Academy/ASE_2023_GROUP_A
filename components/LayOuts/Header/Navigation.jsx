@@ -36,9 +36,9 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="bg-yellow-700">
+    <nav className="bg-red-600">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div className="relative flex h-16 items-center justify-between">
+        <div className="relative flex h-60 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* <!-- Mobile menu button--> */}
             <button
@@ -92,10 +92,10 @@ const Navigation = () => {
           <div className="flex flex-shrink-0 items-center">
             <Link href={`/`}>
               <Image
-                src="/Images/logo1.png"
+                src="/Images/logo.png"
                 alt="Cooking Devs"
-                height={80}
-                width={60}
+                height={150}
+                width={180}
               />
             </Link>
           </div>
@@ -103,17 +103,17 @@ const Navigation = () => {
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-                <Link
-                  href={`/Recipes`}
+                {/* <Link
+                  href={`/recipes`}
                   className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 >
                   Recipe
-                </Link>
+                </Link> */}
                 <Link
-                  href={`/Recipes`}
+                  href={`/recipeList`}
                   className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 >
-                  All recipes
+                  Recipes
                 </Link>
                 <Link
                   href={`/Favourites`}
@@ -209,19 +209,19 @@ const Navigation = () => {
           {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
 
           <Link
-            href="#"
+            href={`/`}
             className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-          >
-            Recipe
+          >Home
+           
           </Link>
           <Link
-            href="#"
+            href={`/recipes`}
             className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
           >
-            All Recipe
+           Recipe
           </Link>
           <Link
-            href="#"
+            href={`/recipeList`}
             className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
           >
             Favourites

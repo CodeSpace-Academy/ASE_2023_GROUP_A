@@ -1,22 +1,39 @@
-/* components/Loading.module.css */
-.loadingContainer {
+   /* components/Home.module.css */
+   .homeContainer {
+    background-image: url('https://www.royco.co.za/cdn-cgi/image/width=1440,height=640,f=auto,quality=90/sites/g/files/fnmzdf1866/files/2023-04/Recipe%20BackgroundUpdate.jpg');
+    background-size: cover; /* You can set the background size as needed */
+    background-position: center; /* You can adjust the background position */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 100vh;
+    justify-content: center;
+    min-height: 100vh;
   }
   
-  .loader {
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top: 4px solid #0070f3;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
+
+.logoContainer {
+  margin-bottom: 20px;
+}
+
+.loaderContainer {
+  margin: 20px;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #103157;
+  color: white;
+  border-radius: 5px;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+
+
+
