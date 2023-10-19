@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import DescriptionEdit from "./DescriptionEdit";
+import DescriptionError from "../error-messages/DescriptionError";
 
-export default function Description({ description, recipeId }) {
+const Description = ({ description, recipeId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description || "");
 
@@ -39,41 +40,13 @@ export default function Description({ description, recipeId }) {
     }
   };
   
-
-  // useEffect(() => {
-  //   // Fetch the description data from Firebase when the component mounts
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         `https://descriptions-for-recipes-default-rtdb.firebaseio.com/description/.json`
-  //       );
-
-  //       if (response.ok) {
-  //         const data = await response.json();
-  //         // Set the fetched description data in the component state
-
-  //         if (data.id === recipeId) {
-  //           setEditedDescription(data.description || ""); // Use an empty string as a default value if data is not found
-  //           console.log(data.id);
-  //         }
-  //       } else {
-  //         console.error("Failed to fetch description data.");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching description data:", error);
-  //     }
-  //   };
-
-  //   fetchData(); // Call the fetchData function when the component mounts
-  // }, [databaseUrl]);
-
-
-  if (!description) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div>
+      <h3 className="font-bold text-black">Description</h3>
+      {!description ? (
+        <DescriptionError  />
+      ) : (
+        <div>
       <p>{isEditing ? editedDescription : editedDescription || description}</p>
       {isEditing ? (
         <DescriptionEdit
@@ -99,5 +72,9 @@ export default function Description({ description, recipeId }) {
         </button>
       )}
     </div>
+      )}
+    </div>
   );
-}
+};
+
+export default Description;

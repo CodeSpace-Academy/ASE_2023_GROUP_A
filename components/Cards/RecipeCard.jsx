@@ -1,25 +1,26 @@
 // RecipeCard.js
+
 import React from "react";
 import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "../../helpers/settings/settings";
 import CookTime from "../TimeAndDate/TimeConvertor";
-import Description from "../Description/Description";
 import Tags from "../Tags/Tags";
+import Description from "../Description/Description";
 
-const RecipeCard = ({ recipe ,newDescription }) => {
+const RecipeCard = ({ recipe }) => {
   if (!recipe) {
     return <div>Loading...</div>;
   }
 
-
   return (
-    <div  className="bg-amber-600 p-4 rounded shadow mb-4">
+    <section className="bg-amber-600 p-4 rounded shadow mb-4">
       <h2 className="text-2xl font-semibold">{recipe.title}</h2>
       <h3 className="mt-2 text-lg font-semibold">Images</h3>
       <section className="list-disc list-inside">
         <Carousel responsive={responsive}>
+          {/* Map through recipe images and display them in a carousel */}
           {recipe.images.map((image) => (
             <div key={image} className="text-gray-600">
               <div>
@@ -37,12 +38,15 @@ const RecipeCard = ({ recipe ,newDescription }) => {
       </section>
       <Description description={recipe.description}  recipeId={recipe._id}/>
 
+      <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
 
-      <CookTime cookTimeInMinutes = {recipe.prep} label={'Prep Time'} />
+      <CookTime cookTimeInMinutes={recipe.cook} label={"Cook Time"} />
 
-      <CookTime cookTimeInMinutes={recipe.cook} label={'Cook Time'} />
-
-      <CookTime cookTimeInMinutes={recipe.cook} prepTimeInMinutes={recipe.prep}  label='Total time'/>
+      <CookTime
+        cookTimeInMinutes={recipe.cook}
+        prepTimeInMinutes={recipe.prep}
+        label="Total time"
+      />
 
       <p className="text-gray-600">
         <b>Category:</b> {recipe.category}
@@ -50,14 +54,15 @@ const RecipeCard = ({ recipe ,newDescription }) => {
       <p className="text-gray-600">
         <b>Servings:</b> {recipe.servings}
       </p>
+
+      {/* Display the publication date of the recipe */}
       <b>Published:</b>
       <p className="text-gray-600">
         {new Date(recipe.published).toLocaleDateString()}
       </p>
 
-     <Tags recipe={recipe}/>
-
-    </div>
+      <Tags recipe={recipe} />
+    </section>
   );
 };
 
