@@ -10,9 +10,6 @@ const handler = async (req, res) => {
     const { description } = req.body;
     const recipeId = req.query.recipeId; // Access the recipeId from the dynamic route parameter
     try {
-      console.log("Recipe ID:", recipeId);
-      console.log("Description:", description);
-
       const client = await DBConnection();
       const db = client.db("devdb");
       const collection = db.collection("recipes_edit");
