@@ -1,8 +1,8 @@
 // pages/api/description/[recipeId].js
 
-import { ObjectId } from "mongodb";
+// import { ObjectId } from "mongodb";
 import { DBConnection } from "@/helpers/mongoDB-utils";
-import Recipe from './../../../components/Recipes/Recipe';
+// import Recipe from './../../../components/Recipes/Recipe';
 
 const handler = async (req, res) => {
   if (req.method === "PUT") {

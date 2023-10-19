@@ -25,7 +25,7 @@ const Description = ({ description, recipeId }) => {
         },
         body: JSON.stringify({ description: newDescription }),
       });
-      if (response.ok) {
+      if (response) {
         // Update the description in the UI
         setEditedDescription(newDescription);
         // Set isEditingDescription to false to exit the editing mode
