@@ -1,7 +1,10 @@
-import CookTime from "../TimeAndDate/TimeConvertor";
+import React from "react";
 import RecipeCard from "../Cards/RecipeCard";
+import CookTime from "../TimeAndDate/TimeConvertor";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
 import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
+import Tags from "../Tags/Tags";
+import Image from "next/image";
 
 const Recipe = (props) => {
   const { recipe } = props;
@@ -11,13 +14,31 @@ const Recipe = (props) => {
   }
 
   const ingredientsList = Object.entries(recipe.ingredients);
-
+  const firstImage = recipe.images[0];
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Recipe</h1>
-      <ul>
-        <li key={recipe._id} className="bg-gray-200 p-4 rounded shadow mb-4">
-          <RecipeCard recipe={recipe} />
+      <div className="bg-white p-4 rounded shadow mb-4 lg:flex"> {/* Use flex for layout */}
+        <div className="lg:w-1/2"> {/* Left column for image */}
+        {/* <RecipeCard recipe={recipe} hideViewRecipeButton={true} /> */}
+        <h1>{recipe.title}</h1>
+        <div>
+          <Image src={firstImage}
+          alt={recipe.title}
+          width={300}
+          height={300}
+          layout="responsive"
+          className="max-w-full h-auto object-cover"/>
+         
+        </div>
+        </div>
+        <div className="lg:w-1/2 p-4"> {/* Right column for text */}
+          <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
+          <CookTime cookTimeInMinutes={recipe.cook} label={"Cook Time"} />
+          <CookTime
+            cookTimeInMinutes={recipe.cook}
+            prepTimeInMinutes={recipe.prep}
+            label="Total Time"
+          />
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
           <ul className="list-disc list-inside">
             {ingredientsList.map(([ingredient, amount], index) => (
@@ -26,11 +47,22 @@ const Recipe = (props) => {
               </li>
             ))}
           </ul>
-          <CookTime cookTimeInMinutes={recipe.cook} label={'Total cooking Time'} />
+          <CookTime cookTimeInMinutes={recipe.cook} label={'Total Cooking Time'} />
           <RecipeInstructions recipes={recipe} />
           <UpdateRecipeInstructions />
-        </li>
-      </ul>
+          <p className="text-gray-600">
+            <b>Category:</b> {recipe.category}
+          </p>
+          <p className="text-gray-600">
+            <b>Servings:</b> {recipe.servings}
+          </p>
+          <b>Published:</b>
+          <p className="text-gray-600">
+            {new Date(recipe.published).toLocaleDateString()}
+          </p>
+          <Tags recipe={recipe} />
+        </div>
+      </div>
     </div>
   );
 };
