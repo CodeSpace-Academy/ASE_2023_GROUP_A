@@ -1,4 +1,5 @@
 // RecipeCard.js
+
 import React from "react";
 import Image from "next/image";
 import Carousel from "react-multi-carousel";
@@ -19,6 +20,7 @@ const RecipeCard = ({ recipe }) => {
       <h3 className="mt-2 text-lg font-semibold">Images</h3>
       <section className="list-disc list-inside">
         <Carousel responsive={responsive}>
+          {/* Map through recipe images and display them in a carousel */}
           {recipe.images.map((image) => (
             <div key={image} className="text-gray-600">
               <div>
@@ -53,6 +55,8 @@ const RecipeCard = ({ recipe }) => {
       <p className="text-gray-600">
         <b>Servings:</b> {recipe.servings}
       </p>
+
+      {/* Display the publication date of the recipe */}
       <b>Published:</b>
       <p className="text-gray-600">
         {new Date(recipe.published).toLocaleDateString()}

@@ -7,10 +7,14 @@ import Allergens from "../Allergens/allergens";
 const Recipe = ({ recipe, Allergies }) => {
   const recipes = recipe;
 
+  // If there's no recipe data available, display a loading message
   if (!recipes) {
     return <div>Loading...</div>;
   }
+
+  // Convert the ingredients object into an array of key-value pairs
   const ingredientsList = Object.entries(recipes.ingredients);
+
   return (
     <main className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Recipe</h1>
@@ -42,7 +46,10 @@ const Recipe = ({ recipe, Allergies }) => {
             ))}
           </ul>
 
+          {/* Render the RecipeInstructions component to display recipe instructions */}
           <RecipeInstructions recipes={recipes} />
+
+          {/* Render the UpdateRecipeInstructions component to allow updating instructions */}
           <UpdateRecipeInstructions />
         </li>
       </ul>
