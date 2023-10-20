@@ -1,3 +1,5 @@
+/* The code is defining a React component called `EditRecipeInstructions`. This component allows users
+to edit and save recipe instructions. */
 /**
  * The `EditRecipeInstructions` component allows users to edit and save recipe instructions.
  * @returns The component is returning a section element containing a form for editing recipe instructions.
@@ -9,40 +11,15 @@
 
 import { useState, useEffect } from "react";
 
-const EditRecipeInstructions = ({ instructions }) => {
-  const [newInstructions, setNewInstructions] = useState([...instructions]);
+const EditRecipeInstructions = ({ instructions, onSave,onDelete,setInstructions }) => {
+  const [newInstructions, setNewInstructions] = useState(instructions);
   const [currentInstruction, setCurrentInstruction] = useState("");
-  const [showEdit, setShowEdit] = useState(true);
+  const [showEdit, setShowEdit] = useState(false);
 
-  const handleAddInstruction = () => {
-    if (currentInstruction) {
-      const updatedInstructions = [...newInstructions, currentInstruction];
-      setNewInstructions([...newInstructions, currentInstruction]);
-      localStorage.setItem(
-        "recipeInstructions",
-        JSON.stringify(updatedInstructions)
-      );
-      setCurrentInstruction("");
-    }
-  };
-
-  const handleRemoveInstruction = (index) => {
-    const updatedInstructions = [...newInstructions];
-    updatedInstructions.splice(index, 1);
-    setNewInstructions(updatedInstructions);
-    localStorage.setItem(
-      "recipeInstructions",
-      JSON.stringify(updatedInstructions)
-    );
-  };
 
   useEffect(() => {
-    // Update the state of the component when the recipeInstructions item is saved to local storage
-    const recipeInstructions = localStorage.getItem("recipeInstructions");
-    if (recipeInstructions) {
-      setNewInstructions(JSON.parse(recipeInstructions));
-    }
-  }, []);
+    setCurrentInstruction(" ")
+  }, [instructions]);
 
   const toggleEdit = () => {
     setShowEdit(!showEdit); // Toggling the showEdit state
@@ -56,23 +33,28 @@ const EditRecipeInstructions = ({ instructions }) => {
       </div>
       {showEdit && (
         <ol>
-          {newInstructions.map((instruction, index) => (
+          {instructions.map((instruction, index) => (
             <li key={index}>
               <input
                 type="text"
                 value={instruction}
                 onChange={(e) => {
-                  const updatedInstructions = [...newInstructions];
+                  const updatedInstructions = [...instructions];
                   updatedInstructions[index] = e.target.value;
-                  setNewInstructions(updatedInstructions);
-                  localStorage.setItem(
-                    "recipeInstructions",
-                    JSON.stringify(updatedInstructions)
-                  );
+                  setInstructions(updatedInstructions);
                 }}
                 className="w-200 border border-gray-300 rounded-md mr-2 p-1"
               />
-              <button onClick={() => handleRemoveInstruction(index)}>
+              <button
+                onClick={() =>
+                  onDelete(
+                    index,
+                    instructions.filter(
+                      (instruction) => instruction.trim() !== ""
+                    )
+                  )
+                }
+              >
                 Remove
               </button>
             </li>
@@ -89,7 +71,7 @@ const EditRecipeInstructions = ({ instructions }) => {
 
       <button
         className="flex bg-blue-500 hover-bg-blue-700 text-white font-bold py-1 px-1 rounded"
-        onClick={handleAddInstruction}
+        onClick={() => onSave(newInstructions.concat(currentInstruction))}
       >
         Save new edits
       </button>
