@@ -1,4 +1,3 @@
-
 /* The code is defining a React component called `EditRecipeInstructions`. This component allows users
 to edit and save recipe instructions. */
 /**
@@ -76,7 +75,6 @@ const EditRecipeInstructions = ({ instructions, onSave,onDelete,setInstructions 
       >
         Save new edits
       </button>
-
     </section>
   );
 };
