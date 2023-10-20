@@ -1,0 +1,25 @@
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-toggle {
+    background-color: #c74918;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50px;
+  }
+  
+ 
+  .dropdown-menu .dropdown-item {
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .dropdown.is-open .dropdown-menu {
+    display: block;
+  }
+  

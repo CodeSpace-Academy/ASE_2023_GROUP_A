@@ -1,11 +1,13 @@
 // RecipeCard.js
+
 import React from "react";
 import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "../../helpers/settings/settings";
-import { formatTime } from "../../helpers/TimeConvertor";
-import calculateTotalTime from "../TimeAndDate/TotalTimeConverntion";
+import CookTime from "../TimeAndDate/TimeConvertor";
+import Tags from "../Tags/Tags";
+import Description from "../Description/Description";
 
 const RecipeCard = ({ recipe }) => {
   if (!recipe) {
@@ -18,6 +20,7 @@ const RecipeCard = ({ recipe }) => {
       <h3 className="mt-2 text-lg font-semibold">Images</h3>
       <section className="list-disc list-inside">
         <Carousel responsive={responsive}>
+          {/* Map through recipe images and display them in a carousel */}
           {recipe.images.map((image) => (
             <div key={image} className="text-gray-600">
               <div>
@@ -34,35 +37,31 @@ const RecipeCard = ({ recipe }) => {
         </Carousel>
       </section>
       <p className="text-gray-600">{recipe.description}</p>
-      <p className="text-gray-600">
-        <b>Prep Time:</b> {formatTime(recipe.prep)} minutes
-      </p>
-      <p className="text-gray-600">
-        <b>Cook Time:</b> {formatTime(recipe.cook)} minutes
-      </p>
-      <p className="text-gray-600">
-        <b>Total Time:</b> {calculateTotalTime(recipe.prep, recipe.cook)}
-      </p>
+
+      <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
+
+      <CookTime cookTimeInMinutes={recipe.cook} label={"Cook Time"} />
+
+      <CookTime
+        cookTimeInMinutes={recipe.cook}
+        prepTimeInMinutes={recipe.prep}
+        label="Total time"
+      />
+
       <p className="text-gray-600">
         <b>Category:</b> {recipe.category}
       </p>
       <p className="text-gray-600">
         <b>Servings:</b> {recipe.servings}
       </p>
+
+      {/* Display the publication date of the recipe */}
       <b>Published:</b>
       <p className="text-gray-600">
         {new Date(recipe.published).toLocaleDateString()}
       </p>
 
-      <h3 className="mt-2 text-lg font-semibold">Tags:</h3>
-
-      <ul className="list-disc list-inside">
-        {recipe.tags.map((tag, index) => (
-          <li key={index} className="text-gray-600">
-            {tag}
-          </li>
-        ))}
-      </ul>
+      <Tags recipe={recipe} />
     </div>
   );
 };

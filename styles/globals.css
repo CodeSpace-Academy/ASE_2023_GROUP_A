@@ -37,3 +37,7 @@ body {
   background-color: #1a1a1a;
   color: #ffffff;
 }
+
+.messages {
+  display: block;
+}
