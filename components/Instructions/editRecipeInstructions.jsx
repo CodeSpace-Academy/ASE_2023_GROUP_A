@@ -1,3 +1,5 @@
+/* The code is defining a React component called `EditRecipeInstructions`. This component allows users
+to edit and save recipe instructions. */
 /**
  * The `EditRecipeInstructions` component allows users to edit and save recipe instructions.
  * @returns The component is returning a section element containing a form for editing recipe instructions.
@@ -14,26 +16,10 @@ const EditRecipeInstructions = ({ instructions, onSave,onDelete,setInstructions 
   const [currentInstruction, setCurrentInstruction] = useState("");
   const [showEdit, setShowEdit] = useState(false);
 
-  // const handleAddInstruction = () => {
-  //   if (currentInstruction) {
-  //     const updatedInstructions = [...newInstructions, currentInstruction];
-  //     setNewInstructions([...newInstructions, currentInstruction]);
-  //     localStorage.setItem(
-  //       "recipeInstructions",
-  //       JSON.stringify(updatedInstructions)
-  //     );
-  //     setCurrentInstruction("");
-  //   }
-  // };
 
-
-  // useEffect(() => {
-  //   // Update the state of the component when the recipeInstructions item is saved to local storage
-  //   const recipeInstructions = localStorage.getItem("recipeInstructions");
-  //   if (recipeInstructions) {
-  //     setNewInstructions(JSON.parse(recipeInstructions));
-  //   }
-  // }, []);
+  useEffect(() => {
+    setCurrentInstruction(" ")
+  }, [instructions]);
 
   const toggleEdit = () => {
     setShowEdit(!showEdit); // Toggling the showEdit state
@@ -63,7 +49,7 @@ const EditRecipeInstructions = ({ instructions, onSave,onDelete,setInstructions 
                 onClick={() =>
                   onDelete(
                     index,
-                    newInstructions.filter(
+                    instructions.filter(
                       (instruction) => instruction.trim() !== ""
                     )
                   )

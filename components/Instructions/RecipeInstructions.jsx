@@ -1,3 +1,5 @@
+/* The code is a React component called `RecipeInstructions`. It displays a list of instructions for a
+recipe and allows the user to edit and save changes to the instructions. */
 /**
  * The component displays a list of instructions for a recipe and allows the user to
  * edit and save changes to the instructions.

@@ -1,3 +1,12 @@
+/**
+ * This is a JavaScript function that handles requests to update or retrieve instructions for a recipe
+ * in a MongoDB database.
+ * @param request - The `request` parameter is an object that contains information about the incoming
+ * HTTP request. It includes properties such as `query` (containing query parameters), `body`
+ * (containing the request body), and `method` (containing the HTTP method used in the request).
+ * @param response - The `response` parameter is the HTTP response object that is used to send the
+ * response back to the client. It is used to set the status code, headers, and send the response body.
+ */
 import { DBConnection } from "../../../helpers/mongoDB-utils";
 
 const handler = async (request, response) => {
@@ -7,12 +16,11 @@ const handler = async (request, response) => {
     try {
       const client = await DBConnection();
       const db = client.db("devdb");
-      const collection = db.collection("recipes_edit");
+      const collection = db.collection("recipes");
       const results = await collection.findOneAndUpdate(
         { _id: id },
         { $set: { instructions: instructions } }
         );
-        console.log(results.instructions)
       client.close();
       if (results.ok && results.value) {
         response.status(201).json({
@@ -24,12 +32,6 @@ const handler = async (request, response) => {
       console.error("Error updating Instructions:", error);
       response.status(500).json({ error: "Failed to update Instructions" });
     }
-    // console.log(
-    //   "New Instructions to be added to MongoDB:",
-    //   instructions,
-    //   "for",
-    //   id
-    // );
     response
       .status(202)
       .json({ message: "Got the request to post instructions for:", id });
@@ -37,9 +39,8 @@ const handler = async (request, response) => {
     try {
       const client = await DBConnection();
       const db = client.db("devdb");
-      const collection = db.collection("recipes_edit");
+      const collection = db.collection("recipes");
         const recipe = await collection.findOne({ _id: id });
-        console.log(recipe.instructions)
         response.status(200).json({ instructions: recipe.instructions });
          client.close();
     } catch (err) {
