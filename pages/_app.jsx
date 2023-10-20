@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import Navigation from "@/components/LayOuts/Header/Navigation";
 import { ThemeProvider } from 'next-themes'
 
+
 function App({ Component, pageProps }) {
 
   const router = useRouter();

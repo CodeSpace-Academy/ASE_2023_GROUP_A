@@ -8,7 +8,7 @@ const Loading = () => {
   return (
     <div className={styles.homeContainer}>
       <div className={styles.logoContainer}>
-        <Link href="/recipeList"> 
+        <Link href="/home"> 
             <Image src="/Images/logo.png" alt="Your Logo" width={250} height={300} />
         </Link>
       </div>
