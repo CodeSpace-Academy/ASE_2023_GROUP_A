@@ -50,7 +50,7 @@ const Description = ({ description, recipeId }) => {
       <p>{isEditing ? editedDescription : editedDescription || description}</p>
       {isEditing ? (
         <DescriptionEdit
-          initialDescription={editedDescription}
+          initialDescription={description}
           onSave={handleDescriptionSave}
         />
       ) : (
