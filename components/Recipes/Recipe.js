@@ -1,7 +1,6 @@
 import CookTime from "../TimeAndDate/TimeConvertor";
 import RecipeCard from "../Cards/RecipeCard";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
-import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 import Allergens from "../Allergens/allergens";
 
 const Recipe = ({ recipe, Allergies }) => {
@@ -49,8 +48,6 @@ const Recipe = ({ recipe, Allergies }) => {
           {/* Render the RecipeInstructions component to display recipe instructions */}
           <RecipeInstructions recipes={recipes} />
 
-          {/* Render the UpdateRecipeInstructions component to allow updating instructions */}
-          <UpdateRecipeInstructions />
         </li>
       </ul>
     </main>
