@@ -1,4 +1,5 @@
-import { formatTime } from "../../helpers/TimeConvertor";
+"";
+import CookTime from "../TimeAndDate/TimeConvertor";
 import RecipeCard from "../Cards/RecipeCard";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
 import Allergens from "../Allergens/allergens";
@@ -42,10 +43,6 @@ const Recipe = ({ recipe, Allergies }) => {
               </li>
             ))}
           </ul>
-
-          <h4>
-            <b>Total cooking Time:</b> {formatTime(recipes.cook)}
-          </h4>
 
           {/* Render the RecipeInstructions component to display recipe instructions */}
           <RecipeInstructions recipes={recipes} />
