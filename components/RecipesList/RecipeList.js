@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
 import Link from "next/link";
 import Loading from "../Loading/Loading";
@@ -16,7 +16,11 @@ const RecipeList = () => {
         const response = await fetch(`/api/recipes?page=${page}`);
         if (response.ok) {
           const fetchedRecipes = await response.json();
-          setRecipes((prevRecipes)=>[...prevRecipes, ...fetchedRecipes.recipes]);
+
+          setRecipes((prevRecipes) => [
+            ...prevRecipes,
+            ...fetchedRecipes.recipes,
+          ]);
           setTotalRecipes(fetchedRecipes.totalRecipes);
           setLoading(false); // Set loading to false when data is fetched
         } else {
@@ -38,14 +42,11 @@ const RecipeList = () => {
       <h1 className="text-3xl font-bold mb-4">Recipes</h1>
       <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {loading ? (
-          <Loading/>
+          <Loading />
         ) : (
           <>
             {recipes.map((recipe, index) => (
-              <Link
-                href={`/${encodeURIComponent(recipe.title)}`}
-                key={index}
-              >
+              <Link href={`/${encodeURIComponent(recipe.title)}`} key={index}>
                 <RecipeCard key={recipe._id} recipe={recipe} />
               </Link>
             ))}
@@ -53,8 +54,11 @@ const RecipeList = () => {
         )}
       </div>
 
-<LoadMoreButton handlePageChange={handlePageChange} currentPage={currentPage} totalRecipes={totalRecipes}/>
-
+      <LoadMoreButton
+        handlePageChange={handlePageChange}
+        currentPage={currentPage}
+        totalRecipes={totalRecipes}
+      />
     </div>
   );
 };
