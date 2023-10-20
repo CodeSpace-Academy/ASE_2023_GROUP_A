@@ -12,7 +12,7 @@ const handler = async (req, res) => {
     try {
       const client = await DBConnection();
       const db = client.db("devdb");
-      const collection = db.collection("recipes_edit");
+      const collection = db.collection("recipes");
       
       const result = await collection.findOneAndUpdate(
         { _id: recipeId }, // Ensure recipeId is an ObjectId
@@ -36,7 +36,7 @@ const handler = async (req, res) => {
     try{
         const client = await DBConnection();
         const db = client.db("devdb");
-        const collection = db.collection("recipes_edit");
+        const collection = db.collection("recipes");
         const recipe = await collection.findOne({ _id: recipeId });
         if(recipe){
             //Here we return the newly updated description from mongoDB
