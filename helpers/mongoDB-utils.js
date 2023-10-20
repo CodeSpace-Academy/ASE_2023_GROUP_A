@@ -20,6 +20,7 @@ export const DBConnection = async () => {
     throw error;
   }
 };
+
 export const getAllRecipes = async (
   client,
   skip,
