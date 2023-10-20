@@ -1,3 +1,4 @@
+
 /* The code is a React component called `RecipeInstructions`. It displays a list of instructions for a
 recipe and allows the user to edit and save changes to the instructions. */
 /**
@@ -6,14 +7,15 @@ recipe and allows the user to edit and save changes to the instructions. */
  * @returns  a fragment containing a heading, an ordered list of instructions, and an EditRecipeInstructions component.
  */
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, } from "react";
 import EditRecipeInstructions from "./editRecipeInstructions";
 
 // RecipeInstructions component displays a list of instructions for a recipe
 const RecipeInstructions = ({ recipes }) => {
+
   // State to manage the instructions
   const [instructions, setInstructions] = useState([]);
-  const [loading, setLoading] = useState(true);
+   const [loading, setLoading] = useState(true);
 
   // Fetching data from local storage when the component mounts
   useEffect(() => {
@@ -73,7 +75,9 @@ const RecipeInstructions = ({ recipes }) => {
         setInstructions(
           updatedInstructions.filter((instruction) => instruction.trim() !== "")
         );
-        console.log(updatedInstructions);
+        console.log(
+          updatedInstructions
+        );
       }
     } catch (err) {
       // Handle errors if the API request fails
@@ -81,19 +85,19 @@ const RecipeInstructions = ({ recipes }) => {
     }
   };
   if (loading) {
-    return <div className="bg-zinc-500 rounded-md">Loading...</div>;
-  }
+  return(<div className="bg-zinc-500 rounded-md">Loading...</div>)
+}
   return (
     <Fragment>
       <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
 
-      {/* <ol className="list-decimal list-inside">
+      <ol className="list-decimal list-inside">
         {instructions.map((instruction, index) => (
           <li key={index} className="text-gray-600">
             {instruction}
           </li>
         ))}
-      </ol> */}
+      </ol>
 
       <EditRecipeInstructions
         instructions={instructions}
@@ -101,6 +105,7 @@ const RecipeInstructions = ({ recipes }) => {
         onDelete={handleRemoveInstruction}
         setInstructions={setInstructions} // Pass the setInstructions function
       />
+
     </Fragment>
   );
 };

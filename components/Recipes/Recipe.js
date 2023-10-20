@@ -35,13 +35,13 @@ const Recipe = ({ recipe, Allergies }) => {
             label={"Total cooking Time"}
           />
 
-          <ul className="list-disc list-inside">
+          {/* <ul className="list-disc list-inside">
             {recipes.instructions.map((instruction, index) => (
               <li key={index} className="text-gray-600">
                 {instruction}
               </li>
             ))}
-          </ul>
+          </ul> */}
 
           {/* Render the RecipeInstructions component to display recipe instructions */}
           <RecipeInstructions recipes={recipes} />
