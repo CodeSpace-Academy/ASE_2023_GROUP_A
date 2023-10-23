@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> 58de6292b2f60f6281dc2c8470a9329042dceb15
 /* The code is a React component called `RecipeInstructions`. It displays a list of instructions for a
 recipe and allows the user to edit and save changes to the instructions. */
 /**
@@ -15,7 +11,6 @@ import EditRecipeInstructions from "./editRecipeInstructions";
 
 // RecipeInstructions component displays a list of instructions for a recipe
 const RecipeInstructions = ({ recipes }) => {
-
   // State to manage the instructions
   const [instructions, setInstructions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -91,10 +86,6 @@ const RecipeInstructions = ({ recipes }) => {
   return (
     <Fragment>
       <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
-<<<<<<< HEAD
-=======
-
->>>>>>> 58de6292b2f60f6281dc2c8470a9329042dceb15
       <ol className="list-decimal list-inside">
         {instructions.map((instruction, index) => (
           <li key={index} className="text-gray-600">
@@ -109,10 +100,6 @@ const RecipeInstructions = ({ recipes }) => {
         onDelete={handleRemoveInstruction}
         setInstructions={setInstructions} // Pass the setInstructions function
       />
-<<<<<<< HEAD
-=======
-
->>>>>>> 58de6292b2f60f6281dc2c8470a9329042dceb15
     </Fragment>
   );
 };
