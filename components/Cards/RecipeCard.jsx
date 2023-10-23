@@ -1,64 +1,37 @@
-// RecipeCard.js
 import React from "react";
 import Image from "next/image";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import { responsive } from "../../helpers/settings/settings";
-import CookTime from "../TimeAndDate/TimeConvertor";
-import Tags from "../Tags/Tags";
+import Link from "next/link";
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = ({ recipe, description }) => {
   if (!recipe) {
     return <div>Loading...</div>;
   }
 
+  const firstImage = recipe.images[0];
+
   return (
-    <section className="bg-amber-600 p-4 rounded shadow mb-4">
-      <h2 className="text-2xl font-semibold">{recipe.title}</h2>
-      <h3 className="mt-2 text-lg font-semibold">Images</h3>
-      <section className="list-disc list-inside">
-        <Carousel responsive={responsive}>
-          {recipe.images.map((image) => (
-            <div key={image} className="text-gray-600">
-              <div>
-                <Image
-                  src={image}
-                  alt={recipe.title}
-                  width={300}
-                  height={300}
-                  className="max-w-full h-auto object-fit: cover"
-                />
-              </div>
-            </div>
-          ))}
-        </Carousel>
-      </section>
-      <p className="text-gray-600">{recipe.description} </p>
-
-      <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
-
-      <CookTime cookTimeInMinutes={recipe.cook} label={"Cook Time"} />
-
-      <CookTime
-        cookTimeInMinutes={recipe.cook}
-        prepTimeInMinutes={recipe.prep}
-        label="Total time"
-      />
-
-      <p className="text-gray-600">
-        <b>Category:</b> {recipe.category}
-      </p>
-      <p className="text-gray-600">
-        <b>Servings:</b> {recipe.servings}
-      </p>
-      <b>Published:</b>
-      <p className="text-gray-600">
-        {new Date(recipe.published).toLocaleDateString()}
-      </p>
-
-      <Tags recipe={recipe} />
-    </section>
+    <div className="bg-white p-4 rounded shadow mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105">
+      {/* Make cards white */}
+      <div className="w-full h-48 md:h-60 mb-4 relative">
+        <Image
+          src={firstImage}
+          alt={recipe.title}
+          layout="fill"
+          objectFit="cover"
+          className="rounded-lg"
+        />
+      </div>
+      <div className="flex flex-col justify-between h-full">
+        <h2 className="text-2xl font-semibold mb-2">{recipe.title}</h2>
+        <div className="rounded bg-red-500 text-white p-2 mt-2 transition-transform hover:scale-105 duration-300 ease-in-out">
+          <Link href={`/${encodeURIComponent(recipe.title)}`}>
+            <button className="w-full text-center">View Recipe</button>
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 };
+
 
 export default RecipeCard;

@@ -9,12 +9,11 @@ import { useState, useEffect } from "react";
 import DropdownMenu from "./DropdownMenu";
 import Link from "next/link";
 import Image from "next/image";
-import { useTheme } from "next-themes";
 
 const Navigation = () => {
   const { theme, setTheme } = useTheme();
   const [categories, setCategories] = useState([]); // State to store fetched categories
-  // Fetch categories from MongoDB when the component mounts
+  // Fetch categories from MongoDB 
   useEffect(() => {
     // Fetch categories from the API route
     fetch("/api/categories")
@@ -24,7 +23,6 @@ const Navigation = () => {
   }, []);
   const handleOptionSelect = (selectedOption) => {
     console.log("Selected Option:", selectedOption);
-    // You can perform actions when an option is selected
   };
   // Function to toggle the theme
   const toggleTheme = () => {
