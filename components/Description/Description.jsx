@@ -15,7 +15,7 @@ const Description = ({ description, recipeId }) => {
     toggleEditing(false);
   };
 
-  console.log("editedDescription" , editedDescription)
+  
 
   const handleDescriptionSave = async (newDescription) => {
     try {
