@@ -9,7 +9,7 @@ import CookTime from "../TimeAndDate/TimeConvertor";
 import Tags from "../Tags/Tags";
 import Description from "../Description/Description";
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = ({ recipe, description }) => {
   if (!recipe) {
     return <div>Loading...</div>;
   }
@@ -36,8 +36,7 @@ const RecipeCard = ({ recipe }) => {
           ))}
         </Carousel>
       </section>
-      
-      <Description recipe={recipe} />
+      <Description description={description}  recipeId={recipe._id}/>
 
       <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
 
@@ -66,5 +65,6 @@ const RecipeCard = ({ recipe }) => {
     </section>
   );
 };
+
 
 export default RecipeCard;
