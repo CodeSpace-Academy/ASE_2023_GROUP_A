@@ -36,7 +36,8 @@ const RecipeCard = ({ recipe }) => {
           ))}
         </Carousel>
       </section>
-      <p className="text-gray-600">{recipe.description}</p>
+
+      <Description recipe={recipe} />
 
       <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
 

@@ -1,4 +1,3 @@
-"";
 import CookTime from "../TimeAndDate/TimeConvertor";
 import RecipeCard from "../Cards/RecipeCard";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
@@ -16,7 +15,7 @@ const Recipe = ({ recipe, Allergies }) => {
   const ingredientsList = Object.entries(recipes.ingredients);
 
   return (
-    <div className="container mx-auto p-4">
+    <main className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Recipe</h1>
       <ul>
         <li key={recipe._id} className="bg-amber-600 p-4 rounded shadow mb-4">
@@ -36,19 +35,19 @@ const Recipe = ({ recipe, Allergies }) => {
             label={"Total cooking Time"}
           />
 
-          <ul className="list-disc list-inside">
+          {/* <ul className="list-disc list-inside">
             {recipes.instructions.map((instruction, index) => (
               <li key={index} className="text-gray-600">
                 {instruction}
               </li>
             ))}
-          </ul>
+          </ul> */}
 
           {/* Render the RecipeInstructions component to display recipe instructions */}
           <RecipeInstructions recipes={recipes} />
         </li>
       </ul>
-    </div>
+    </main>
   );
 };
 
