@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
 import Link from "next/link";
 import Loading from "../Loading/Loading";
@@ -7,9 +7,8 @@ import LoadMoreButton from "../Buttons/LoadMore";
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true); // Initialize loading state
-  const [totalRecipes, setTotalRecipes] = useState(0); // Add totalRecipes state
+  const [loading, setLoading] = useState(true);
+  const [totalRecipes, setTotalRecipes] = useState(0);
 
 
   useEffect(() => {
@@ -34,9 +33,13 @@ const RecipeList = () => {
     fetchRecipes(currentPage);
   }, [currentPage]);
 
-  const handlePageChange = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
+  const handlePageChange = (pageDelta) => {
+    const newPage = currentPage + pageDelta;
+    if (newPage > 0 && newPage <= totalRecipes) {
+      setCurrentPage(newPage);
+    }
   };
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-4">Recipes</h1>
@@ -57,8 +60,13 @@ const RecipeList = () => {
         )}
       </div>
 
-<LoadMoreButton handlePageChange={handlePageChange} currentPage={currentPage} totalRecipes={totalRecipes}/>
-
+      {recipes.length > 0 && (
+        <LoadMoreButton
+          handlePageChange={() => handlePageChange(1)}
+          currentPage={currentPage}
+          totalRecipes={totalRecipes}
+        />
+      )}
     </div>
   );
 };

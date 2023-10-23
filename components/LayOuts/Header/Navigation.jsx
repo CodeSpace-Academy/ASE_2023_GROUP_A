@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import DropdownMenu from "./DropdownMenu";
 import Link from "next/link";
-import Image from 'next/image' 
+import Image from "next/image";
 
 const Navigation = () => {
   const [categories, setCategories] = useState([]); // State to store fetched categories
@@ -16,6 +16,8 @@ const Navigation = () => {
   const handleOptionSelect = (selectedOption) => {
     console.log("Selected Option:", selectedOption);
   };
+
+  const heading = "< Cooking Devs >";
 
   return (
     // <div className="container bg-blue-400 w-full mx-auto p-4">
@@ -118,5 +120,4 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
-
+export default Navigation;
