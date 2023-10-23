@@ -50,8 +50,8 @@ const Recipe = (props) => {
         </div>
         </div>
         <div className="lg:w-1/2 p-4"> {/* Right column for text */}
-          <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
           <Description description={recipe.description}  recipeId={recipe._id}/>
+          <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
           <CookTime cookTimeInMinutes={recipe.cook} label={"Cook Time"} />
           <CookTime
             cookTimeInMinutes={recipe.cook}
