@@ -15,6 +15,8 @@ const Description = ({ description, recipeId }) => {
     toggleEditing(false);
   };
 
+  console.log("editedDescription" , editedDescription)
+
   const handleDescriptionSave = async (newDescription) => {
     try {
       // API request to update the description in the database by including the recipeId in the URL
