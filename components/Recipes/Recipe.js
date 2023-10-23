@@ -6,6 +6,7 @@ import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 import Tags from "../Tags/Tags";
 import Image from "next/image";
 import Description from "../Description/Description";
+import Allergens from "../Allergens/allergens";
 
 const Recipe = (props) => {
   const { recipe } = props;
@@ -58,6 +59,7 @@ const Recipe = (props) => {
             prepTimeInMinutes={recipe.prep}
             label="Total Time"
           />
+          <Allergens/>
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
           <ul className="list-disc list-inside">
             {ingredientsList.map(([ingredient, amount], index) => (

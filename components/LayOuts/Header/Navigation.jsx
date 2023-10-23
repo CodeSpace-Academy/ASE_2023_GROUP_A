@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from 'next/image' 
+import Image from "next/image";
+import { useTheme } from "next-themes";
+import DropdownMenu from "../Header/DropdownMenu";
 
 const Navigation = () => {
-  const [categories, setCategories] = useState([]); // State to store fetched categories
-  // Fetch categories from MongoDB when the component mounts
+  const { theme, setTheme } = useTheme();
+  const [categories, setCategories] = useState([]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   useEffect(() => {
     fetch("/api/categories")
       .then((response) => response.json())
@@ -14,6 +18,19 @@ const Navigation = () => {
 
   const handleOptionSelect = (selectedOption) => {
     console.log("Selected Option:", selectedOption);
+    // You can perform actions when an option is selected
+  };
+
+  const toggleTheme = () => {
+    if (theme === "light") {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
   };
 
   return (
@@ -26,30 +43,27 @@ const Navigation = () => {
                 <Image
                   src="/Images/logo.png"
                   alt="Cooking Devs"
-                  width={75} 
+                  width={75}
                   height={70}
                 />
               </Link>
             </div>
           </div>
           {/* Desktop View Navigation Links */}
-          <div className="hidden sm:flex items-center space-x-4  ">
+          <div className="hidden sm:flex items-center space-x-4">
             <NavLink href={`/recipeList`} text="Recipes" />
             <NavLink href={`/Favourites`} text="Favourites" />
           </div>
           <div className="flex items-center space-x-4 md:space-x-8">
             <ToggleThemeButton theme={theme} toggleTheme={toggleTheme} />
-            <DropdownMenu options={categories} onSelect={handleOptionSelect} />
           </div>
           {/* Mobile Menu Button */}
           <div className="sm:hidden">
             <MobileMenuButton onClick={toggleMobileMenu} />
           </div>
-          
-          
         </div>
         {/* Mobile Dropdown Menu */}
-        
+        <DropdownMenu options={categories} onSelect={handleOptionSelect} />
         {mobileMenuOpen && (
           <MobileMenu
             onClose={() => setMobileMenuOpen(false)}
@@ -58,9 +72,67 @@ const Navigation = () => {
         )}
       </div>
     </nav>
-    
   );
 };
 
-export default Navigation;
+const NavLink = ({ href, text }) => (
+  <Link href={href} className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 text-2xl font-medium">
+      {text}
+  </Link>
+);
 
+const ToggleThemeButton = ({ theme, toggleTheme }) => (
+  <button
+    type="button"
+    onClick={toggleTheme}
+    className="text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+  >
+    {theme === "light" ? (
+      <svg
+        className="w-6 h-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
+        />
+      </svg>
+    ) : (
+      <svg
+        className="w-6 h-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    )}
+  </button>
+);
+
+const MobileMenuButton = ({ onClick }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className="text-gray-400 hover:text-white p-2 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+  >
+    <span className="sr-only">Open main menu</span>
+    <svg
+      className="w-6 h-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+      />
+    </svg>
+  </button>
+);
+
+export default Navigation;
