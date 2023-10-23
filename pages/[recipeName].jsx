@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { fetchAllergens, fetchRecipeDataFromMongo } from "../helpers/mongoDB-utils";
 import Recipe from "../components/Recipes/Recipe";
+import Description from './../components/Description/Description';
 
 const RecipePage = ({ recipe, allergens }) => {
   const router = useRouter();
@@ -19,7 +20,7 @@ const RecipePage = ({ recipe, allergens }) => {
   }
   return (
     <div>
-      <Recipe recipe={recipe} Allergies={allergens} />
+      <Recipe recipe={recipe} description={recipe.description} Allergies={allergens} />
     </div>
   );
 };

@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import RecipeCard from "../Cards/RecipeCard";
 import CookTime from "../TimeAndDate/TimeConvertor";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
 import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 import Tags from "../Tags/Tags";
 import Image from "next/image";
+import Description from "../Description/Description";
 
 const Recipe = (props) => {
   const { recipe } = props;
+
+  useEffect(() => {
+    // Fetch the updated description using an API call here
+    const fetchUpdatedDescription = async () => {
+      try {
+        const response = await fetch(`/api/description/${recipe._id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setDescription(data.description); // Set the description in the state
+        } else {
+          console.error('Failed to fetch updated description');
+        }
+      } catch (error) {
+        console.error('Error fetching updated description:', error);
+      }
+    };
+  })
 
   if (!recipe) {
     return <div>Loading...</div>;
@@ -33,6 +51,7 @@ const Recipe = (props) => {
         </div>
         <div className="lg:w-1/2 p-4"> {/* Right column for text */}
           <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
+          <Description description={recipe.description}  recipeId={recipe._id}/>
           <CookTime cookTimeInMinutes={recipe.cook} label={"Cook Time"} />
           <CookTime
             cookTimeInMinutes={recipe.cook}

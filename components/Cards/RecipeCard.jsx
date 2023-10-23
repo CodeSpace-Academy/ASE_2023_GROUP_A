@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = ({ recipe, description }) => {
   if (!recipe) {
     return <div>Loading...</div>;
   }
@@ -32,5 +32,6 @@ const RecipeCard = ({ recipe }) => {
     </div>
   );
 };
+
 
 export default RecipeCard;

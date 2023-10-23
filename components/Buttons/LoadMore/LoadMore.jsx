@@ -17,7 +17,7 @@ const LoadMoreButton = ({ handlePageChange, currentPage, totalRecipes }) => {
                 onClick={handlePageChange}
                 // Disable the button when currentPage is greater than or equal to totalPages
                 disabled={currentPage >= totalPages}
-                className={`bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded ${
+                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
                     currentPage >= totalPages ? "opacity-50 cursor-not-allowed" : ""
                 }`}
             >
