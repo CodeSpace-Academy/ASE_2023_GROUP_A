@@ -53,7 +53,7 @@ const Navigation = () => {
           </button>
         </div>
         <div className="flex flex-shrink-0 items-center">
-          <Link href={`/`}>
+          <Link href={`/home`}>
             <Image  src="/Images/logo1.png" alt="Your Company" height={80} width={60}/>
             </Link>
           </div>
