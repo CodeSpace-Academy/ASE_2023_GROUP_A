@@ -10,16 +10,16 @@ function Allergens({ allergens }) {
 
   return (
     <>
-      <div className="dropdown">
+      <div className="dropdown mt-4">
         <button onClick={toggleDropdown} className={classes["dropdown-toggle"]}>
           Allergens
         </button>
         {isDropdownOpen && (
-          <div className="flex flex-wrap justify-center"> 
+          <div className="flex flex-wrap justify-center "> 
   <ul className="flex flex-wrap justify-evenly sm:justify-center md:justify-between">
     {allergens.map((all, index) => (
-      <li key={index} className={`text-center mb-1 sm:mb-0 md:mb-0 sm:mr-1 md:mr-4 ${classes["dropdown-item"]}`}>
-        <span className="mr-2">
+      <li key={index} className={`text-center mb-2 sm:mb-0 md:mb-0 sm:mr-1 md:mr-4 ${classes["dropdown-item"]}`}>
+        <span className="mr-1 ">
           <img src={`/images/icons/${all}.png`} alt={all} width={24} height={24} />
         </span>
         {all}
@@ -36,5 +36,27 @@ function Allergens({ allergens }) {
 export default Allergens;
 
 
+// // Import necessary libraries and components
+
+// function Allergens({ allergens, onAllergenSelect, selectedAllergen }) {
+//   return (
+//     <div className="allergens">
+//       <h2>Allergens:</h2>
+//       <div className="allergen-list">
+//         {allergens.map((allergen, index) => (
+//           <div
+//             key={index}
+//             className={`allergen-item ${selectedAllergen === allergen ? 'selected' : ''}`}
+//             onClick={() => onAllergenSelect(allergen)}
+//           >
+//             {allergen}
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Allergens;
 
 

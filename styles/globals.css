@@ -3,10 +3,11 @@
 @import "tailwindcss/utilities";
 
 /* global-styles.css */
-body {
+/* body {
   background-color: #ead9d9;;
-}
+} */
 
 h1{
   font-size: 25px;
 }
+
