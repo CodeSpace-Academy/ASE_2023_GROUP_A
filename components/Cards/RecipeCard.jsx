@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import CookTime from "../TimeAndDate/TimeConvertor";
-import Link from "next/link"; // Import Link from Next.js
+import Link from "next/link"; 
 
 const RecipeCard = ({ recipe }) => {
   if (!recipe) {
