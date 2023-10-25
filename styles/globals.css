@@ -10,3 +10,16 @@ body {
 h1{
   font-size: 25px;
 }
+
+/* styles.css */
+.category-content,
+.servings-content,
+.tags-content {
+  display: none;
+}
+
+.category-button.active + .category-content,
+.servings-button.active + .servings-content,
+.tags-button.active + .tags-content {
+  display: block;
+}

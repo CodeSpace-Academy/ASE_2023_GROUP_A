@@ -48,9 +48,9 @@ const DropdownMenu = ({ options, onSelect }) => {
       </div>
 
       {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <div className="origin-top-right absolute right-0 mt-1 w-28 rounded-md shadow-lg bg-white ring-2 ring-blue ring-opacity-2 focus:outline-none z-10">
           <div
-            className="py-1"
+            className="py-1 max-h-40 overflow-y-auto"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
