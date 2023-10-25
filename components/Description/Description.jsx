@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import DescriptionEdit from "./DescriptionEdit";
 import DescriptionError from "../error-messages/DescriptionError";
 
+
 const Description = ({ description, recipeId }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedDescription, setEditedDescription] = useState(description || "");
+  const [editedDescription, setEditedDescription] = useState(description);
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);
@@ -17,7 +18,6 @@ const Description = ({ description, recipeId }) => {
 
   const handleDescriptionSave = async (newDescription) => {
     try {
-      // API request to update the description in the database by including the recipeId in the URL
       const response = await fetch(`/api/description/${recipeId}`, {
         method: "PUT",
         headers: {
@@ -26,16 +26,12 @@ const Description = ({ description, recipeId }) => {
         body: JSON.stringify({ description: newDescription }),
       });
       if (response) {
-        // Update the description in the UI
         setEditedDescription(newDescription);
-        // Set isEditingDescription to false to exit the editing mode
-        setIsEditing(false);
+        setIsEditing(false); 
       } else {
-        // Handle the case when the update request fails
         console.error("Failed to update description.");
       }
     } catch (error) {
-      // Handle any errors that occur during the update process
       console.error("Error updating description:", error);
     }
   };
@@ -47,14 +43,15 @@ const Description = ({ description, recipeId }) => {
         <DescriptionError />
       ) : (
         <div>
-          {!isEditing && <p>{isEditing ? description : editedDescription}</p>}
+          {!isEditing && <p>{editedDescription}</p>} 
           {isEditing ? (
             <DescriptionEdit
-              initialDescription={description}
+              initialDescription={editedDescription} 
               onSave={handleDescriptionSave}
+              toggleEditing={toggleEditing}
             />
           ) : (
-            <button onClick={toggleEditing} onChange={handleEditComplete}>
+            <button onClick={toggleEditing}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

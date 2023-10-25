@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 
-const DescriptionEdit = ({ initialDescription, onSave }) => {
+const DescriptionEdit = ({ initialDescription, onSave, toggleEditing }) => {
   // const [description, setDescription] = useState(initialDescription);
   const [newDescription, setNewDescription] = useState(initialDescription);
   const newTextRef = useRef();
@@ -11,6 +11,7 @@ const DescriptionEdit = ({ initialDescription, onSave }) => {
 
   const handleSave = () => {
     onSave(newDescription);
+    toggleEditing();
   };
 
   return (
