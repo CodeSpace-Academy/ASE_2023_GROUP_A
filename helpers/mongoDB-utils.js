@@ -1,7 +1,15 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 // MongoDB connection URI, including authentication details
-const uri = `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
+let uri;
+
+try {
+  if (!process.env.mongodb_username || !process.env.mongodb_password)
+    throw new Error("Some files missing!");
+  uri = `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
+} catch (error) {
+  console.log("Setiings: ", error);
+}
 
 // Create a MongoDB client instance with specific server API version and options
 export const client = new MongoClient(uri, {
@@ -66,7 +74,7 @@ export const generateDynamicPaths = async () => {
     const dynamicPaths = recipes.map((recipe) => ({
       params: { recipeName: recipe.title },
     }));
-    console.log('Client Closed');
+    console.log("Client Closed");
     return dynamicPaths;
   } catch (error) {
     console.error("Error generating dynamic paths:", error);
@@ -92,7 +100,7 @@ export const fetchCategories = async () => {
   try {
     const client = await DBConnection();
     const fetchedCategories = await getAllCategories(client);
-    console.log('Client Close');
+    console.log("Client Close");
     return fetchedCategories;
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -102,17 +110,19 @@ export const fetchCategories = async () => {
 // Get the total count of recipes in the MongoDB collection
 export const getTotalRecipesCount = async (client) => {
   try {
-    const db = client.db('devdb'); // Get the MongoDB database
+    const db = client.db("devdb"); // Get the MongoDB database
     const recipesCollection = db.collection("recipes_edit"); // Change this to your actual collection name
     // Use the aggregation framework to count the documents
-    const countResult = await recipesCollection.aggregate([
-      {
-        $group: {
-          _id: null,
-          count: { $sum: 1 },
+    const countResult = await recipesCollection
+      .aggregate([
+        {
+          $group: {
+            _id: null,
+            count: { $sum: 1 },
+          },
         },
-      },
-    ]).toArray();
+      ])
+      .toArray();
     if (countResult.length > 0) {
       return countResult[0].count;
     } else {
@@ -124,9 +134,6 @@ export const getTotalRecipesCount = async (client) => {
   }
 };
 
-
-
-
 // fetching allergens from MongoDB
 
 export const getAllAllergens = async (client) => {
@@ -134,7 +141,7 @@ export const getAllAllergens = async (client) => {
     const db = client.db("devdb");
     const allergensDocument = db.collection("allergens");
     const allergens = await allergensDocument.findOne({});
-    return (allergens.allergens);
+    return allergens.allergens;
   } catch (error) {
     console.error("Error fetching allergens:", error);
     throw error;
@@ -145,7 +152,7 @@ export const fetchAllergens = async () => {
   try {
     const client = await DBConnection();
     const fetchedAllergens = await getAllAllergens(client);
-  
+
     return fetchedAllergens;
   } catch (error) {
     console.error("Error fetching allergens:", error);

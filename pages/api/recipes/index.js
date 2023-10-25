@@ -24,6 +24,7 @@ const handler = async (req, res) => {
     client.close();
   } catch (error) {
     console.error("Error fetching recipes:", error);
+    res.status(200).json({ message: "Some files missing" });
     res.status(408).json({ error: "Error fetching recipes" });
   }
 };

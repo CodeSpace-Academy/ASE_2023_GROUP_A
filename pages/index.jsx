@@ -2,10 +2,8 @@ import RecipeList from "../components/RecipesList/RecipeList";
 import EnvError from "./error";
 
 const Home = () => {
-  try {if (process.env.NEXT_PUBLIC_ENV_VAR) {
+  if (!process.env.mongodb_password && process.env.mongodb_username) {
     return <EnvError />;
-  }} catch (error) {
-    console.error(error);
   }
 
   return (
