@@ -70,7 +70,7 @@ const Navigation = () => {
             </button>
           </div>
           <div className="flex mr-10 flex-shrink-0 items-center">
-            <Link href={`/recipeList`}>
+            <Link href={`/home`}>
               <Image
                 src="/Images/logo3.png"
                 alt="Cooking Devs"
@@ -159,7 +159,7 @@ const Navigation = () => {
               id="mobile-menu"
             >
               <Link
-                href={`/recipelist`}
+                href={`/recipeList`}
                 className="text-black-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
               >
                 Recipe
