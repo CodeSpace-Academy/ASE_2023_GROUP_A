@@ -5,12 +5,15 @@ import Link from "next/link";
 const RecipeCard = ({ recipe, description }) => {
   if (!recipe) {
     return <div>Loading...</div>;
+    
   }
 
   const firstImage = recipe.images[0];
+  
 
   return (
-    <div className="bg-white p-4 rounded shadow mt-2 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105">
+    
+    <div className="bg-white-400 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105">
       {/* Make cards white */}
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
         <Image
