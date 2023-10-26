@@ -1,12 +1,18 @@
-import RecipeList from "../components/RecipesList/RecipeList";
+
+import Loading from '../components/Loading/Loading'
+
+
+
 
 const Home = () => {
+
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 `}
-    >
-      <RecipeList />
-    </main>
+   
+    <div>
+      <Loading/>
+    </div>
   );
 };
+
 export default Home;

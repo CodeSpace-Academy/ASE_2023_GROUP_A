@@ -6,9 +6,10 @@ import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 import Tags from "../Tags/Tags";
 import Image from "next/image";
 import Description from "../Description/Description";
+import Allergens from "../Allergens/allergens";
 
-const Recipe = (props) => {
-  const { recipe } = props;
+const Recipe = ({recipe, Allergies}) => {
+  // const { recipe } = props;
 
   useEffect(() => {
     // Fetch the updated description using an API call here
@@ -34,7 +35,7 @@ const Recipe = (props) => {
   const ingredientsList = Object.entries(recipe.ingredients);
   const firstImage = recipe.images[0];
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mt-20 mx-auto p-4">
       <div className="bg-white p-4 rounded shadow mb-4 lg:flex"> {/* Use flex for layout */}
         <div className="lg:w-1/2"> {/* Left column for image */}
         {/* <RecipeCard recipe={recipe} hideViewRecipeButton={true} /> */}
@@ -58,6 +59,7 @@ const Recipe = (props) => {
             prepTimeInMinutes={recipe.prep}
             label="Total Time"
           />
+          <Allergens allergens={Allergies}/>
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
           <ul className="list-disc list-inside">
             {ingredientsList.map(([ingredient, amount], index) => (
