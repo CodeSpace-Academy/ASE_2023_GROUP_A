@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
 import Link from "next/link";
-import Loading from "../Loading/Loading";
 import LoadMoreButton from "../Buttons/LoadMore";
 
 const RecipeList = () => {
@@ -44,9 +43,6 @@ const RecipeList = () => {
     <div>
       <h1 className="text-3xl font-bold font-mono mb-4">Recipes</h1>
       <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {loading ? (
-          <Loading/>
-        ) : (
           <>
             {recipes.map((recipe, index) => (
               <Link
@@ -57,7 +53,7 @@ const RecipeList = () => {
               </Link>
             ))}
           </>
-        )}
+        {/* )} */}
       </div>
 
       {recipes.length > 0 && (

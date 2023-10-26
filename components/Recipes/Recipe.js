@@ -6,9 +6,10 @@ import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 import Tags from "../Tags/Tags";
 import Image from "next/image";
 import Description from "../Description/Description";
+import Allergens from "../Allergens/allergens";
 
-const Recipe = (props) => {
-  const { recipe } = props;
+const Recipe = ({ recipe, Allergies }) => {
+  // const { recipe } = props;
   const [showCategory, setShowCategory] = useState(false);
   const [showServings, setShowServings] = useState(false);
   const [showTags, setShowTags] = useState(false);
@@ -22,10 +23,10 @@ const Recipe = (props) => {
   const firstImage = recipe.images[0];
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto mt-24 p-4">
       <div className="bg-white p-4 rounded shadow mb-4 lg:flex">
         <div className="lg:w-1/2">
-          <h1>{recipe.title}</h1>
+          <h1 className="text-2xl font-bold">{recipe.title}</h1>
           <div>
             <Image
               src={firstImage}
@@ -37,33 +38,20 @@ const Recipe = (props) => {
             />
           </div>
           <div className="mt-4 text-gray-600">
-            <button
-              onClick={() => setShowServings(!showServings)}
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mb-4"
-            >
-              <b>Servings</b>
-            </button>
-            {showServings && (
-              <div>
-                <p>{recipe.servings}</p>
-              </div>
-            )}
+            <p><b>Servings</b>: {recipe.servings}</p>
           </div>
-          <div>
+          <div className="mt-4 text-gray-600">
+            <p><b>Category</b>: {recipe.category}</p>
+          </div>  
+          <div className="mt-4 text-gray-600">
             <button
-              onClick={() => setShowCategory(!showCategory)}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-4"
-            >
-              <b>Category</b>
-            </button>
-            {showCategory && <p>{recipe.category}</p>}
-          </div>
-          <div>
-          <button
               onClick={() => setShowTags(!showTags)}
-              className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded mb-4"
+              className="bg-yellow-500 hover:bg-yellow-600 flex flex-row text-white font-bold py-2 px-4 rounded mb-4"
             >
               <b>Tags</b>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+              </svg>
             </button>
             {showTags && (
               <div>
@@ -81,6 +69,7 @@ const Recipe = (props) => {
             prepTimeInMinutes={recipe.prep}
             label="Total Time"
           />
+          <Allergens allergens={Allergies}/>
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
           <ul className="list-disc list-inside">
             {ingredientsList.map(([ingredient, amount], index) => (
@@ -95,9 +84,12 @@ const Recipe = (props) => {
           />
           <button
             onClick={() => setShowInstructions(!showInstructions)}
-            className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded mb-4"
+            className="bg-indigo-500 hover:bg-indigo-600 text-white flex flex-row font-bold py-2 px-4 rounded mb-4"
           >
             <h3 className="text-lg font-semibold">Instructions</h3>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 mt-0.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+            </svg>
           </button>
           {showInstructions && <RecipeInstructions recipes={recipe} />}
           <UpdateRecipeInstructions />
