@@ -18,7 +18,7 @@ const DescriptionEdit = ({ initialDescription, onSave, toggleEditing }) => {
     <div>
       <textarea
         ref={newTextRef}
-        className="w-auto h-auto"
+        className="w-auto h-auto bg-gray-300"
         value={newDescription}
         onChange={handleDescriptionChange}
         rows={5}

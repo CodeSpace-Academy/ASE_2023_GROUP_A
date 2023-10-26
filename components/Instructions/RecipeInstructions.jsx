@@ -43,7 +43,7 @@ const RecipeInstructions = ({ recipes }) => {
 
   return (
     <Fragment>
-      <h3 className="mt-2 text-lg font-semibold">Instructions</h3>
+      <h3 className="mt-2 text-lg font-semibold"></h3>
       {loading ? (
         // Display a loading message while instructions are being processed
         <p>Loading...</p>

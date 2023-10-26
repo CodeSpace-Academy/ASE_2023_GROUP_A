@@ -1,14 +1,15 @@
-//Loading.js
+import React from 'react'
+import RecipeList from '../RecipesList/RecipeList'
+import Navigation from '../LayOuts/Header/Navigation'
 
-import React from 'react';
-import styles from './Loading.module.css';
-
-const Loading = () => {
+function Loading() {
   return (
-    <div className={styles.loadingContainer}>
-      <div className={styles.loader}></div>
+    <div>
+     
+      <Navigation/>
+      <RecipeList/>
     </div>
-  );
-};
+  )
+}
 
-export default Loading;
+export default Loading
