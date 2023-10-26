@@ -149,7 +149,7 @@ const Navigation = () => {
               </button>
             </div>
             <div
-              className={`absolute top-12 left-0 ${mobileMenuOpen ? "bg-red-500 w-full mt-5 text- mr-6  " : "hidden"}`}
+              className={`absolute top-12 left-0 ${mobileMenuOpen ? "bg-red-500 w-full mt-5 text- mr-6 text-center " : "hidden"}`}
               id="mobile-menu"
             >
               <Link
