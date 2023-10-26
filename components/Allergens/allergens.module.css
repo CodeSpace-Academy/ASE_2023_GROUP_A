@@ -8,11 +8,13 @@
     background-color: #251610;
     color: #fff;
     border: none;
-    padding: 8px;
+    display: flex;
+    flex-direction: row;
+    padding: 8px 10px;
     margin-top: -10px;
     margin-bottom: 10px;
     cursor: pointer;
-    border-radius: 50px;
+    border-radius: 5px;
   }
   
  

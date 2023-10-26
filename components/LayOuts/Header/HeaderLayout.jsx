@@ -17,13 +17,7 @@ const HeaderLayout = ({ children }) => {
         theme === "dark" ? "dark-mode" : "light-mode"
       }`}
     >
-      {/* Button to toggle the theme (light/dark) */}
-      <button onClick={toggleTheme}>Toggle Theme</button>
-      
-      {/* Render the Navigation component within the header layout */}
       <Navigation />
-
-      {/* Render the children components within the header layout */}
       {children}
     </div>
   );
