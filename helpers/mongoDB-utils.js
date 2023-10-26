@@ -29,7 +29,7 @@ export const getAllRecipes = async (client, skip, limit) => {
   try {
     const db = await client.db("devdb");
     const allRecipes = await db
-      .collection("recipes_edit")
+      .collection("recipes")
       .find({})
       .skip(skip)
       .limit(limit)
@@ -38,8 +38,8 @@ export const getAllRecipes = async (client, skip, limit) => {
   } catch (error) {
     console.error("Error fetching recipes:", error);
     throw error;
-  } finally {
-    // Ensure that the client will be closed when you're done or if an error occurs
+  }finally {
+    // Ensures that the client will close when you finish/error
     await client.close();
   }
 };
@@ -52,6 +52,20 @@ export const fetchRecipeDataFromMongo = async (recipeName, collection) => {
     const collec = db.collection(collection);
     const recipeData = await collec.findOne({ title: recipeName });
     return recipeData;
+  } catch (error) {
+    console.error("Error fetching recipe data from MongoDB:", error);
+    throw error;
+  }
+};
+export const fetchRecipeDataFromMongoById = async (recipeId,collection) => {
+  try {
+    // Establish a connection to MongoDB and select your database and collection
+    const client = await DBConnection();
+    const db = client.db("devdb");
+    const collec = db.collection(collection);
+    // Query for the recipe using the provided recipeId
+    const recipeData = await collec.findOne({ _id: recipeId });
+    return recipeData; // Return the retrieved recipe data
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
     throw error;
@@ -103,7 +117,7 @@ export const fetchCategories = async () => {
 export const getTotalRecipesCount = async (client) => {
   try {
     const db = client.db('devdb'); // Get the MongoDB database
-    const recipesCollection = db.collection("recipes_edit"); // Change this to your actual collection name
+    const recipesCollection = db.collection("recipes"); // Change this to your actual collection name
     // Use the aggregation framework to count the documents
     const countResult = await recipesCollection.aggregate([
       {

@@ -2,78 +2,11 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-:root {
-  --foreground-rgb: rgb(99, 99, 218);
-  --background-start-rgb: rgb(223, 172, 181);
-  --background-end-rgb: purple;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: pink;
-    --background-start-rgb: brown;
-    --background-end-rgb: yellow;
-  }
-}
-
+/* global-styles.css */
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: #ead9d9;;
 }
 
-/* Light mode styles */
-.light-mode {
-  background-color: #ffffff;
-  color: #000000;
+h1{
+  font-size: 25px;
 }
-
-/* Dark mode styles */
-.dark-mode {
-  background-color: #1a1a1a;
-  color: #ffffff;
-}
-
-.messages{
-  display: block;
-}
-
-/* Styling for the allergens button */
-
-
-/* .dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-toggle {
-  background-color: #926d22;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 5px 0;
-  list-style: none;
-  margin: 0;
-}
-
-.dropdown-menu .dropdown-item {
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.dropdown.is-open .dropdown-menu {
-  display: block;
-} */
-
