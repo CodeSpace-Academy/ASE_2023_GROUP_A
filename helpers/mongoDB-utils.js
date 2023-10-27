@@ -1,7 +1,8 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 // MongoDB connection URI, including authentication details
-const uri = process.env.MONGODB_URI;
+const uri =`mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority
+`
 
 // Create a MongoDB client instance with specific server API version and options
 const client = new MongoClient(uri, {
