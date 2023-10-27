@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { fetchAllergens, fetchRecipeDataFromMongo } from "../helpers/mongoDB-utils";
+import { DBConnection, fetchAllergens, fetchRecipeDataFromMongo } from "@/helpers/mongoDB-utils";
 import Recipe from "../components/Recipes/Recipe";
 import Description from './../components/Description/Description';
 
@@ -27,7 +27,9 @@ const RecipePage = ({ recipe, allergens }) => {
 
 export const getServerSideProps = async ({ params }) => {
   const recipeName = params.recipeName;
-  const recipe = await fetchRecipeDataFromMongo(recipeName, "recipes");
+  const client = await DBConnection()
+  const recipe = await fetchRecipeDataFromMongo(client,recipeName, "recipes");
+  
   const allergens = await fetchAllergens();
   
   if(!allergens || !recipe){
