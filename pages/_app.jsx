@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { Fragment } from "react";
 import Navigation from "@/components/LayOuts/Header/Navigation";
 import { ThemeProvider } from "next-themes";
-import { FavoritesContextProvider } from "@/store/Favorites-context";
+import { FavoritesContextProvider } from "@/Context/Favorites-context";
 
 function App({ Component, pageProps }) {
   const router = useRouter();

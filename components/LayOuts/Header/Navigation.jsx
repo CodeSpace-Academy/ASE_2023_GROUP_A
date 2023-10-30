@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 
 //Faves
 import { useContext } from "react";
-import FavoritesContext from "@/store/Favorites-context";
+import FavoritesContext from "@/Context/Favorites-context";
 import Badge from "@mui/material/Badge";
 
 const Navigation = () => {

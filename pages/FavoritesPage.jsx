@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import FavoritesContext from "@/store/Favorites-context";
+import FavoritesContext from "@/Context/Favorites-context";
 
 import RecipeList from "@/components/RecipesList/RecipeList";
 import Link from "next/link";

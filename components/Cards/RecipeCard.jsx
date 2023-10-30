@@ -6,7 +6,7 @@ import FavoriteButton from "../Buttons/Favorites/FavoritesButton";
 
 //Fav Button
 import { useContext } from "react";
-import FavoritesContext from "@/store/Favorites-context";
+import FavoritesContext from "@/Context/Favorites-context";
 
 const RecipeCard = ({ recipe }) => {
   if (!recipe) {
