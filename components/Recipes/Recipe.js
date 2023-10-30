@@ -38,19 +38,34 @@ const Recipe = ({ recipe, Allergies }) => {
             />
           </div>
           <div className="mt-4 text-gray-600">
-            <p><b>Servings</b>: {recipe.servings}</p>
+            <p>
+              <b>Servings</b>: {recipe.servings}
+            </p>
           </div>
           <div className="mt-4 text-gray-600">
-            <p><b>Category</b>: {recipe.category}</p>
-          </div>  
+            <p>
+              <b>Category</b>: {recipe.category}
+            </p>
+          </div>
           <div className="mt-4 text-gray-600">
             <button
               onClick={() => setShowTags(!showTags)}
               className="bg-yellow-500 hover:bg-yellow-600 flex flex-row text-white font-bold py-2 px-4 rounded mb-4"
             >
               <b>Tags</b>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                />
               </svg>
             </button>
             {showTags && (
@@ -69,7 +84,7 @@ const Recipe = ({ recipe, Allergies }) => {
             prepTimeInMinutes={recipe.prep}
             label="Total Time"
           />
-          <Allergens allergens={Allergies}/>
+          <Allergens allergens={Allergies} />
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
           <ul className="list-disc list-inside">
             {ingredientsList.map(([ingredient, amount], index) => (
@@ -87,12 +102,23 @@ const Recipe = ({ recipe, Allergies }) => {
             className="bg-indigo-500 hover:bg-indigo-600 text-white flex flex-row font-bold py-2 px-4 rounded mb-4"
           >
             <h3 className="text-lg font-semibold">Instructions</h3>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 mt-0.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6 mt-0.5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+              />
             </svg>
           </button>
-          {showInstructions && <RecipeInstructions recipes={recipe} />}
-          <UpdateRecipeInstructions />
+          {/* {showInstructions && <RecipeInstructions recipes={recipe} />}
+          <UpdateRecipeInstructions /> */}
           <div className="text-gray-600 mt-4">
             <b>Published:</b>
             <p>{new Date(recipe.published).toLocaleDateString()}</p>

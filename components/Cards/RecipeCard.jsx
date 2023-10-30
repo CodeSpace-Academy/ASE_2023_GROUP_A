@@ -1,19 +1,37 @@
 import React from "react";
 import Image from "next/image";
 import CookTime from "../TimeAndDate/TimeConvertor";
-import Link from "next/link"; 
+import Link from "next/link";
+import FavoriteButton from "../Buttons/Favorites/FavoritesButton";
+
+//Fav Button
+import { useContext } from "react";
+import FavoritesContext from "@/store/Favorites-context";
 
 const RecipeCard = ({ recipe }) => {
   if (!recipe) {
     return <div>Loading...</div>;
-    
   }
 
   const firstImage = recipe.images[0];
-  
 
+  const favoriteCtx = useContext(FavoritesContext);
+
+  const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe.id);
+
+  function toggleFavoriteButton() {
+    if (recipeIsFavorite) {
+      favoriteCtx.removeFavorite(recipe.id);
+    } else {
+      favoriteCtx.addFavorite({
+        id: recipe.id,
+        title: recipe.title,
+        description: recipe.description,
+        image: recipe.image,
+      });
+    }
+  }
   return (
-    
     <div className="bg-white-400 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105">
       {/* Make cards white */}
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
@@ -37,6 +55,12 @@ const RecipeCard = ({ recipe }) => {
             <CookTime cookTimeInMinutes={recipe.cook} label={"Cook Time"} />
           </div>
         </div>
+        <div>
+          <button onClick={toggleFavoriteButton}>
+            {recipeIsFavorite ? "Remove from Faves" : "Add to Faves"}
+          </button>
+          {/* <FavoriteButton /> */}
+        </div>
         <div className="rounded bg-red-500 text-white p-2 mt-2 transition-transform hover:scale-105 duration-300 ease-in-out">
           <Link href={`/${encodeURIComponent(recipe.title)}`}>
             <button className="w-full text-center view-recipe-button">
@@ -45,6 +69,7 @@ const RecipeCard = ({ recipe }) => {
           </Link>
         </div>
       </div>
+
       <style jsx>{`
         .view-recipe-button {
           background: linear-gradient(135deg, white 50%, red 50%);

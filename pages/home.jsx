@@ -1,3 +1,4 @@
+import FavoriteButton from "@/components/Buttons/Favorites/FavoritesButton";
 import classes from "./home.module.css";
 
 export default function HomePage() {
@@ -25,12 +26,12 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-        <div>
-          <h2>Featured Recipes</h2>
-        </div>
-        <div>
-          <h2>Favorites Recipes</h2>
-        </div>
+      <div>
+        <h2>Welcome back to your Favorite place, the Kitchen</h2>
+      </div>
+      <div>
+        <h2>Favorites Recipes</h2>
+      </div>
     </>
   );
 }
