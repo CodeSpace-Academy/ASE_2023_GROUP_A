@@ -4,7 +4,7 @@ import Link from "next/link";
 import LoadMoreButton from "../Buttons/LoadMore";
 import fetchRecipes from "@/helpers/hook";
 
-const SearchBar = ({ onSearch, searchHistory, setSearchHistory }) => {
+export const SearchBar = ({ onSearch, searchHistory, setSearchHistory }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchHistoryVisible, setSearchHistoryVisible] = useState(false);
   const [searchTimeout, setSearchTimeout] = useState(null); // State to store the search delay timer
@@ -43,27 +43,32 @@ const SearchBar = ({ onSearch, searchHistory, setSearchHistory }) => {
   };
 
   return (
-    <div className="bg-white p-4 relative">
-      <div className="flex items-center">
-        <div className="ml-2"></div>
+    <div
+      className="absolute p-5 flex top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
+      style={{ zIndex: 1 }}
+    >
+      <div className="">
         <input
           type="text"
           placeholder="Search by title..."
           value={searchTerm}
           onClick={() => setSearchHistoryVisible(true)}
           onChange={(e) => handleSearch(e.target.value)}
-          className="px-2 py-1 border rounded-md border-gray-400 focus:outline-none focus:ring focus:border-blue-300"
+          className="px-2 py-2 border rounded-md border-gray-400 focus:outline-none focus:ring focus:border-blue-300"
           style={{ maxWidth: "300px" }}
         />
-
-        <div className="ml-2"></div>
+      </div>
+      <div>
         <button
           className="ml-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
           onClick={handleSearchClick}
         >
           Search
         </button>
-        <div className="ml-2"></div>
+      </div>
+
+      <div>
+        {" "}
         <button
           className="ml-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
           onClick={clearSearch}
@@ -71,6 +76,7 @@ const SearchBar = ({ onSearch, searchHistory, setSearchHistory }) => {
           Clear
         </button>
       </div>
+
       {searchHistoryVisible && searchHistory.length > 0 && (
         <div
           className="bg-white p-1 border border-gray-300 rounded mt-1"
@@ -124,23 +130,33 @@ const RecipeList = () => {
   };
 
   return (
-    <div className="pt-20">
-      <SearchBar
-        onSearch={handleSearch}
-        searchHistory={searchHistory}
-        setSearchHistory={setSearchHistory}
-      />
+    <div>
+       <div className="w-full">
+        <img
+          src="https://www.royco.co.za/cdn-cgi/image/width=1440,height=640,f=auto,quality=90/sites/g/files/fnmzdf1866/files/2023-04/Recipe%20BackgroundUpdate.jpg"
+          alt="Hero Image"
+          className="w-full"
+        />
+      </div>
+
+      <div>
+        <SearchBar
+          onSearch={handleSearch}
+          searchHistory={searchHistory}
+          setSearchHistory={setSearchHistory}
+        />
+      </div>
 
       <h1 className="text-3xl font-bold font-mono mb-4">Recipes</h1>
       <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {recipes.map((recipe, index) => (
-          <Link href={`/${encodeURIComponent(recipe.title)}`} key={index}>
+          <div href={`/${encodeURIComponent(recipe.title)}`} key={index}>
             <RecipeCard
               key={recipe._id}
               recipe={recipe}
               description={recipe.description}
             />
-          </Link>
+          </div>
         ))}
       </div>
 

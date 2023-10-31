@@ -11,7 +11,7 @@ const RecipeCard = ({ recipe }) => {
   const firstImage = recipe.images[0];
 
   return (
-    <div className="bg-white-400 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105">
+    <div className="p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105">
       {/* Make cards white */}
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
         <Image
@@ -34,11 +34,11 @@ const RecipeCard = ({ recipe }) => {
             <CookTime cookTimeInMinutes={recipe.cook} label={"Cook Time"} />
           </div>
         </div>
-        <div className="text-center text-gray-600 mt-4">
+        <div className="text-center text-black-600 mt-4">
           <b>Published:</b>
           <p>{new Date(recipe.published).toLocaleDateString()}</p>
         </div>
-        <div className="rounded bg-red-500 text-white p-2 mt-2 transition-transform hover:scale-105 duration-300 ease-in-out">
+        <div className="rounded bg-blue-500 text-white p-2 mt-2 transition-transform hover:scale-105 duration-300 ease-in-out">
           <Link href={`/${encodeURIComponent(recipe.title)}`}>
             <button className="w-full text-center view-recipe-button">
               View Recipe
@@ -48,7 +48,7 @@ const RecipeCard = ({ recipe }) => {
       </div>
       <style jsx>{`
         .view-recipe-button {
-          background: linear-gradient(135deg, white 50%, red 50%);
+          background: linear-gradient(135deg, white 50%, grey 50%);
           background-size: 200% 100%;
           background-position: 100% 0;
           transition: background-position 2s,
@@ -58,7 +58,7 @@ const RecipeCard = ({ recipe }) => {
 
         .view-recipe-button:hover {
           background-position: 0 0;
-          color: red;
+          color: black;
         }
 
         .recipe-title-container {

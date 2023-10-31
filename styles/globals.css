@@ -3,9 +3,11 @@
 @import "tailwindcss/utilities";
 
 /* global-styles.css */
-/* body {
-  background-color: #ead9d9;;
-} */
+body {
+background-color: rgba(81, 132, 216, 0.5);
+;
+
+} 
 
 /* h1{
   font-size: 25px;

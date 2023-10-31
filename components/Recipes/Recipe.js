@@ -23,7 +23,7 @@ const Recipe = ({ recipe, Allergies }) => {
   return (
     <div className="container mx-auto mt-24 p-4">
       <Link href="/">
-        <span className="text-gray-600 text-sm">
+        <span className="text-gray-600 text-lg">
           <FaArrowLeft />
         </span>
       </Link>
