@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from "react"; // Import useState from React
 import CookTime from "../TimeAndDate/TimeConvertor";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
 import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
@@ -6,6 +6,8 @@ import Tags from "../Tags/Tags";
 import Image from "next/image";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
+import Link from "next/link"; // Import Link
+import { FaArrowLeft } from "react-icons/fa"; // Import FaArrowLeft
 
 const Recipe = ({ recipe, Allergies }) => {
   const [showTags, setShowTags] = useState(false);
@@ -20,6 +22,11 @@ const Recipe = ({ recipe, Allergies }) => {
 
   return (
     <div className="container mx-auto mt-24 p-4">
+      <Link href="/">
+        <span className="text-gray-600 text-sm">
+          <FaArrowLeft />
+        </span>
+      </Link>
       <div className="bg-white p-4 rounded shadow mb-4 lg:flex">
         <div className="lg:w-1/2">
           <h1 className="text-2xl font-bold">{recipe.title}</h1>
@@ -118,10 +125,6 @@ const Recipe = ({ recipe, Allergies }) => {
           </button>
           {showInstructions && <RecipeInstructions recipes={recipe} />}
           <UpdateRecipeInstructions />
-          <div className="text-gray-600 mt-4">
-            <b>Published:</b>
-            <p>{new Date(recipe.published).toLocaleDateString()}</p>
-          </div>
         </div>
       </div>
     </div>
