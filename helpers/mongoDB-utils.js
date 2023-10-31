@@ -1,8 +1,11 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
-const uri =
-  `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
 
-export const client = new MongoClient(uri, {
+// MongoDB connection URI, including authentication details
+const uri =`mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority
+`
+
+// Create a MongoDB client instance with specific server API version and options
+const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -10,64 +13,72 @@ export const client = new MongoClient(uri, {
   },
 });
 
-export const DBConnection = async () => {
+// Connect to the MongoDB server only once and store the client instance
+export async function DBConnection() {
   try {
     await client.connect();
     console.log("Connected to MongoDB");
-    return client;
+    return client
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
     throw error;
   }
 };
-export const getAllRecipes = async (
-  client,
-  skip,
-  limit
-) => {
+
+// Call the connectToMongoDB function when your application starts
+// const client = await DBConnection(); 
+
+// Fetch all recipes with optional skip and limit parameters
+export const getAllRecipes = async (client, skip, limit, ) => {
+  const db = client.db('devdb');
+  let query = db.collection('recipes').find();
+  query.limit(limit);
+
   try {
-    const db = await client.db("devdb");
-    const allRecipes = await db
-      .collection("recipes")
-      .find({})
-      .skip(skip)
-      .limit(limit)
-      .toArray(); // Convert to an array for easier iteration
-    return allRecipes;
+    const recipes = await query.toArray();
+    return recipes;
   } catch (error) {
     console.error("Error fetching recipes:", error);
     throw error;
-  }finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
   }
 };
 
-export const fetchRecipeDataFromMongo = async (recipeName,collection) => {
+// Fetch recipe data from MongoDB based on the recipe title and collection
+export const fetchRecipeDataFromMongo = async (client, recipeName, collection) => {
   try {
-    // Establish a connection to MongoDB and select your database and collection
-    const client = await DBConnection();
-    const db = client.db("devdb");
-    const collect = db.collection(collection);
-    // Query for the recipe using the provided recipeId
-    const recipeData = await collect.findOne({ title: recipeName });
-    return recipeData; // Return the retrieved recipe data
+    // const client = await DBConnection()
+    const db = client.db('devdb');
+    const collec = db.collection(collection);
+    const recipeData = collec.findOne({ title: recipeName });
+    return recipeData;
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
     throw error;
-  }finally {
-    client.close()
-    }
+  }
 };
 
-export const generateDynamicPaths = async () => {
+// Fetch recipe data from MongoDB based on the recipe ID and collection
+// export const fetchRecipeDataFromMongoById = async (client, recipeId) => {
+//   try {
+//     const db = client.db('devdb');
+//     const collec = db.collection('recipes');
+//     const recipeData = collec.findOne({ _id: recipeId });
+//     return recipeData;
+//   } catch (error) {
+//     console.error("Error fetching recipe data from MongoDB:", error);
+//     throw error;
+//   }
+// };
+
+// Generate dynamic paths for Next.js based on recipe titles
+export const generateDynamicPaths = async (client) => {
   try {
-    const client = await DBConnection();
-    const recipes = await getAllRecipes(client, 0, 5);
+    const db = client.db('devdb');
+    const recipes = await getAllRecipes(client, 0, 5, 'recipes');
     const dynamicPaths = recipes.map((recipe) => ({
       params: { recipeName: recipe.title },
     }));
-    console.log('Client Closed')
+    console.log("Client Closed");
     return dynamicPaths;
   } catch (error) {
     console.error("Error generating dynamic paths:", error);
@@ -75,10 +86,11 @@ export const generateDynamicPaths = async () => {
   }
 };
 
-export const getAllCategories = async (client) => {
+// Fetch all categories from MongoDB
+export const getAllCategories = async () => {
   try {
-    const db = client.db("devdb");
-    const categoriesDocument = await db.collection("categories").findOne({});
+    const db = client.db();
+    const categoriesDocument = db.collection("categories").findOne({});
     const categories = categoriesDocument.categories;
     return categories;
   } catch (error) {
@@ -87,30 +99,34 @@ export const getAllCategories = async (client) => {
   }
 };
 
-export const fetchCategories = async () => {
+export const fetchAllergens = async () => {
   try {
-    const client = await DBConnection();
-    const fetchedCategories = await getAllCategories(client);
-    console.log('Client Close')
-    return fetchedCategories;
+    const db = client.db('devdb');
+    const allergensDocument = await db.collection("allergens").findOne({});
+    const allergens = allergensDocument.allergens;
+    return allergens;
   } catch (error) {
-    console.error("Error fetching categories:", error);
+    console.error("Error fetching allergens:", error);
+    throw error;
   }
 };
+
 
 export const getTotalRecipesCount = async (client) => {
   try {
     const db = client.db('devdb'); // Get the MongoDB database
-    const recipesCollection = db.collection("recipes"); // Change this to your actual collection name
+    const recipesCollection = db.collection('recipes'); // Change this to your actual collection name
     // Use the aggregation framework to count the documents
-    const countResult = await recipesCollection.aggregate([
-      {
-        $group: {
-          _id: null,
-          count: { $sum: 1 },
+    const countResult = recipesCollection
+      .aggregate([
+        {
+          $group: {
+            _id: null,
+            count: { $sum: 1 },
+          },
         },
-      },
-    ]).toArray();
+      ])
+      .toArray();
     if (countResult.length > 0) {
       return countResult[0].count;
     } else {
@@ -121,4 +137,3 @@ export const getTotalRecipesCount = async (client) => {
     throw error;
   }
 };
-

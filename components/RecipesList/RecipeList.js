@@ -7,9 +7,8 @@ import fetchRecipes from "@/helpers/hook";
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [totalRecipes, setTotalRecipes] = useState(0);
-  const [originalRecipes, setOriginalRecipes] = useState([])
+  const [loading, setLoading] = useState(true); // Initialize loading state
+  const [totalRecipes, setTotalRecipes] = useState(0); // Add totalRecipes state
 
   useEffect(() => {
     
@@ -18,15 +17,8 @@ const RecipeList = () => {
   }, []);
 
   const handlePageChange = () => {
-    setCurrentPage((prevPage)=> prevPage + 1)
-  const handlePageChange = (pageDelta) => {
-    const newPage = currentPage + pageDelta;
-    if (newPage > 0 && newPage <= totalRecipes) {
-      setCurrentPage(newPage);
-    }
+    setCurrentPage((prevPage) => prevPage + 1);
   };
-
-
   return (
     <div>
       <h1 className="text-3xl font-bold font-mono mb-4">Recipes</h1>
@@ -41,24 +33,7 @@ const RecipeList = () => {
               </Link>
             ))}
           </>
-        {/* )} */}
-      </div>
-
-      {recipes.length > 0 && (
-        <LoadMoreButton
-          handlePageChange={() => handlePageChange(1)}
-          currentPage={currentPage}
-          totalRecipes={totalRecipes}
-        />
-      )}
-      <div className="flex justify-between my-4">
-        <button
-          onClick={() => handlePageChange(-1)}
-          disabled={currentPage === 1}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Load Previous
-        </button>
+        )}
       </div>
 
       {recipes.length > 0 && (
