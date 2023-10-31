@@ -1,26 +1,28 @@
 import { useState, createContext } from "react";
 
 const FavoritesContext = createContext({
-  favorites: [],
+  userFavorites: [],
   totalFavorites: 0,
-  addFavorite: (favoriteRecipe) => {},
+  addFavorite: (recipeId) => {},
   removeFavorite: (recipeId) => {},
-  itemIsFavorite: (recipeId) => {},
+  recipeIsFavorite: (recipeId) => {},
 });
 
 export function FavoritesContextProvider(props) {
+
   const [userFavorites, setUserFavorites] = useState([]);
 
-  function addFavoritesHandler(favoriteRecipe) {
+  function addFavoritesHandler(recipeId) {
     setUserFavorites((prevUserFavorites) => {
-      return prevUserFavorites.concat(favoriteRecipe);
+      return prevUserFavorites.concat(recipeId);
     });
   }
   function removeFavoritesHandler(recipeId) {
     setUserFavorites((prevUserFavorites) => {
-      return prevUserFavorites.filter((recipe) => recipe.id !== recipeId);
+      return prevUserFavorites.filter((id) => id !== recipeId);
     });
   }
+  
 
   function recipeIsFavoriteHandler(recipeId) {
     return userFavorites.some((recipe) => recipe.id === recipeId);

@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from "react";
-import RecipeCard from "../Cards/RecipeCard";
-import CookTime from "../TimeAndDate/TimeConvertor";
-import RecipeInstructions from "../Instructions/RecipeInstructions";
-import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
+import React, { useState } from "react";
+import{CookTime, PrepTime, Published, TotalTime}from "../TimeAndDate/TimeConvertor";
 import Tags from "../Tags/Tags";
 import Image from "next/image";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
 
 const Recipe = ({ recipe, Allergies }) => {
-  // const { recipe } = props;
-  const [showCategory, setShowCategory] = useState(false);
-  const [showServings, setShowServings] = useState(false);
   const [showTags, setShowTags] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
 
@@ -77,13 +71,9 @@ const Recipe = ({ recipe, Allergies }) => {
         </div>
         <div className="lg:w-1/2 p-4">
           <Description description={recipe.description} recipeId={recipe._id} />
-          <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
-          <CookTime cookTimeInMinutes={recipe.cook} label={"Cook Time"} />
-          <CookTime
-            cookTimeInMinutes={recipe.cook}
-            prepTimeInMinutes={recipe.prep}
-            label="Total Time"
-          />
+          <PrepTime prepTime={recipe.prep} />
+          <CookTime cookTime={recipe.cook} />
+          <TotalTime totalTime={recipe} />
           <Allergens allergens={Allergies} />
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
           <ul className="list-disc list-inside">
@@ -120,8 +110,7 @@ const Recipe = ({ recipe, Allergies }) => {
           {/* {showInstructions && <RecipeInstructions recipes={recipe} />}
           <UpdateRecipeInstructions /> */}
           <div className="text-gray-600 mt-4">
-            <b>Published:</b>
-            <p>{new Date(recipe.published).toLocaleDateString()}</p>
+          <Published published={recipe.published} />
           </div>
         </div>
       </div>

@@ -1,33 +1,33 @@
 import React from "react";
 import Image from "next/image";
-import CookTime from "../TimeAndDate/TimeConvertor";
-import Link from "next/link";
-import FavoriteButton from "../Buttons/Favorites/FavoritesButton";
-
+import theme from "./RecipeCard.module.css"
+import { CookTime,PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 //Fav Button
 import { useContext } from "react";
 import FavoritesContext from "@/Context/Favorites-context";
+import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRicepe"
 
 const RecipeCard = ({ recipe }) => {
   if (!recipe) {
     return <div>Loading...</div>;
   }
 
-  const firstImage = recipe.images[0];
+  const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
+
 
   const favoriteCtx = useContext(FavoritesContext);
 
-  const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe.id);
+  const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id);
 
   function toggleFavoriteButton() {
     if (recipeIsFavorite) {
-      favoriteCtx.removeFavorite(recipe.id);
+      favoriteCtx.removeFavorite(recipe._id);
     } else {
       favoriteCtx.addFavorite({
-        id: recipe.id,
+        id: recipe._id,
         title: recipe.title,
         description: recipe.description,
-        image: recipe.image,
+        images: recipe.images,
       });
     }
   }
@@ -44,15 +44,15 @@ const RecipeCard = ({ recipe }) => {
         />
       </div>
       <div className="flex flex-col justify-between h-full">
-        <div className="mb-4 recipe-title-container text-center">
+        <div className={`mb-4 ${theme.recipeTitleContainer} text-center`}>
           <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2">
             {recipe.title}
           </h2>
           <div className="mb-2">
-            <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
+            <PrepTime prepTime={recipe.prep}/>
           </div>
           <div className="mb-2">
-            <CookTime cookTimeInMinutes={recipe.cook} label={"Cook Time"} />
+          <CookTime cookTime={recipe.cook} />
           </div>
         </div>
         <div>
@@ -61,38 +61,8 @@ const RecipeCard = ({ recipe }) => {
           </button>
           {/* <FavoriteButton /> */}
         </div>
-        <div className="rounded bg-red-500 text-white p-2 mt-2 transition-transform hover:scale-105 duration-300 ease-in-out">
-          <Link href={`/${encodeURIComponent(recipe.title)}`}>
-            <button className="w-full text-center view-recipe-button">
-              View Recipe
-            </button>
-          </Link>
-        </div>
+      <ViewRecipeDetails recipe={recipe}/>
       </div>
-
-      <style jsx>{`
-        .view-recipe-button {
-          background: linear-gradient(135deg, white 50%, red 50%);
-          background-size: 200% 100%;
-          background-position: 100% 0;
-          transition: background-position 2s,
-            color 0.6s cubic-bezier(0.75, 0, 0.25, 0);
-          color: white;
-        }
-
-        .view-recipe-button:hover {
-          background-position: 0 0;
-          color: red;
-        }
-
-        .recipe-title-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          min-height: 3rem; /* Adjust the minimum height as needed */
-        }
-      `}</style>
     </div>
   );
 };

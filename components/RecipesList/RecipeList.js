@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
-import Link from "next/link";
-import LoadMoreButton from "../Buttons/LoadMore";
+import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
