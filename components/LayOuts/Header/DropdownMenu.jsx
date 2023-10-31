@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 
+// DropdownMenu component allows users to select an option from a dropdown list
 const DropdownMenu = ({ options, onSelect }) => {
+  // State to manage the dropdown's open/closed state and the selected option
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
+  // Function to toggle the dropdown's open/closed state
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
+  // Function to handle the selection of an option
   const handleOptionSelect = (option) => {
+    // Set the selected option, trigger the provided onSelect callback, and close the dropdown
     setSelectedOption(option);
     onSelect(option);
     setIsOpen(false);
@@ -43,14 +48,15 @@ const DropdownMenu = ({ options, onSelect }) => {
       </div>
 
       {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <div className="origin-top-right absolute right-0 mt-2 w-56 max-h-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none overflow-y-auto">
           <div
-            className="py-1"
+            className="py-1 max-h-40 overflow-y-auto"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
             {options.map((option) => (
+              // Render each option as a button and handle its selection
               <button
                 key={option}
                 onClick={() => handleOptionSelect(option)}

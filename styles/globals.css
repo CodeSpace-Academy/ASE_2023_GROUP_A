@@ -2,38 +2,24 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-:root {
-  --foreground-rgb: rgb(99, 99, 218);
-  --background-start-rgb: rgb(223, 172, 181);
-  --background-end-rgb: purple;
+/* global-styles.css */
+/* body {
+  background-color: #ead9d9;;
+} */
+
+/* h1{
+  font-size: 25px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: pink;
-    --background-start-rgb: brown;
-    --background-end-rgb: yellow;
-  }
+/* styles.css */
+.category-content,
+.servings-content,
+.tags-content {
+  display: none;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-/* Light mode styles */
-.light-mode {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-/* Dark mode styles */
-.dark-mode {
-  background-color: #1a1a1a;
-  color: #ffffff;
+.category-button.active + .category-content,
+.servings-button.active + .servings-content,
+.tags-button.active + .tags-content {
+  display: block;
 }

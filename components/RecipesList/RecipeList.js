@@ -1,35 +1,24 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
 import Link from "next/link";
-import Loading from "../Loading/Loading";
 import LoadMoreButton from "../Buttons/LoadMore";
+import fetchRecipes from "@/helpers/hook";
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [totalRecipes, setTotalRecipes] = useState(0);
+  const [originalRecipes, setOriginalRecipes] = useState([])
 
   useEffect(() => {
-    const fetchRecipes = async (page) => {
-      try {
-        const response = await fetch(`/api/recipes?page=${page}`);
-        if (response.ok) {
-          const fetchedRecipes = await response.json();
-          setRecipes((prevRecipes) => [...prevRecipes, ...fetchedRecipes.recipes]);
-          setTotalRecipes(fetchedRecipes.totalRecipes);
-          setLoading(false);
-        } else {
-          console.error("Failed to fetch recipes");
-        }
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-      }
-    };
+    
+    fetchRecipes({setRecipes, setOriginalRecipes, setTotalRecipes, setLoading})
 
-    fetchRecipes(currentPage);
-  }, [currentPage]);
+  }, []);
 
+  const handlePageChange = () => {
+    setCurrentPage((prevPage)=> prevPage + 1)
   const handlePageChange = (pageDelta) => {
     const newPage = currentPage + pageDelta;
     if (newPage > 0 && newPage <= totalRecipes) {
@@ -37,23 +26,31 @@ const RecipeList = () => {
     }
   };
 
+
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-4">Recipes</h1>
+      <h1 className="text-3xl font-bold font-mono mb-4">Recipes</h1>
       <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {loading ? (
-          <Loading />
-        ) : (
           <>
             {recipes.map((recipe, index) => (
-              <Link href={`/${encodeURIComponent(recipe.title)}`} key={index}>
-                <RecipeCard key={recipe._id} recipe={recipe} />
+              <Link
+                href={`/${encodeURIComponent(recipe.title)}`}
+                key={index}
+              >
+                <RecipeCard key={recipe._id} recipe={recipe} description={recipe.description} />
               </Link>
             ))}
           </>
-        )}
+        {/* )} */}
       </div>
 
+      {recipes.length > 0 && (
+        <LoadMoreButton
+          handlePageChange={() => handlePageChange(1)}
+          currentPage={currentPage}
+          totalRecipes={totalRecipes}
+        />
+      )}
       <div className="flex justify-between my-4">
         <button
           onClick={() => handlePageChange(-1)}
@@ -74,5 +71,6 @@ const RecipeList = () => {
     </div>
   );
 };
+
 
 export default RecipeList;

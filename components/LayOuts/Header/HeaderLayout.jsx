@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Navigation from "./Navigation";
 
+// HeaderLayout component serves as a layout for the application's header
 const HeaderLayout = ({ children }) => {
+  // State to manage the theme (light or dark)
   const [theme, setTheme] = useState("light");
 
+  // Function to toggle between light and dark themes
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
@@ -14,7 +17,6 @@ const HeaderLayout = ({ children }) => {
         theme === "dark" ? "dark-mode" : "light-mode"
       }`}
     >
-      <button onClick={toggleTheme}>Toggle Theme</button>
       <Navigation />
       {children}
     </div>
