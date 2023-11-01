@@ -5,8 +5,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const RecipePage = ({recipe, allergens}) => {
-  const router = useRouter();
-  const { recipeName } = router.query;
   // const [recipe, setRecipe] = useState();
   // const [allergens, setAllergens] = useState();
 
@@ -25,45 +23,45 @@ const RecipePage = ({recipe, allergens}) => {
 // console.log("RECIPE:", recipe)
 // console.log("Allergens:", allergens)
   if (!recipe) {
-    console.log(`Can't find Recipe for:`, JSON.stringify(recipeName));
+    console.log(`Can't find Recipe for:`, JSON.stringify(recipe));
   }
-  if (!allergens) {
-    console.log(`Can't find Allergens for:`, JSON.stringify(allergens));
-    return(
-      <div>
-        Loading...
-      </div>
-    )
-  }
+  // if (!allergens) {
+  //   console.log(`Can't find Allergens for:`, JSON.stringify(allergens));
+  //   return(
+  //     <div>
+  //       Loading...
+  //     </div>
+  //   )
+  // }
   console.log(recipe, allergens)
   return (
     <div>
-      {recipeName}
-      {recipeName}
-      {recipeName}
-      {recipeName}
-      {recipeName}
+      {recipe}
+      {recipe}
+      {recipe}
+      {recipe}
+      {recipe}
       {/* {allergens} */}
       {/* <Recipe recipe={recipe} description={recipe.description} Allergies={allergens} /> */}
     </div>
   );
 };
 
-export const getServerSideProps = async ({ params }) => {
-  const recipeName = params.recipeName;
-  const encodedRecipeName = encodeURIComponent(recipeName);
-  const response = await fetch(`api/${encodedRecipeName}`);
-  if (response.ok) {
-    const data = await response.json();
-    return {
-      props: { recipe: data.recipe, allergens: data.allergens },
-    };
-  } else {
-    return {
-      notFound: true, // Return a 404 page or handle the error accordingly
-    };
-  }
-};
+// export const getServerSideProps = async ({ params }) => {
+//   const recipeName = params.recipeName;
+//   const encodedRecipeName = encodeURIComponent(recipeName);
+//   const response = await fetch(`api/${encodedRecipeName}`);
+//   if (response.ok) {
+//     const data = await response.json();
+//     return {
+//       props: { recipe: data.recipe, allergens: data.allergens },
+//     };
+//   } else {
+//     return {
+//       notFound: true, // Return a 404 page or handle the error accordingly
+//     };
+//   }
+// };
 
 
 export default RecipePage;
@@ -96,21 +94,15 @@ export default RecipePage;
 //   );
 // };
 
-// export const getServerSideProps = async ({ params }) => {
-//   const recipeName = params.recipeName;
-//   const recipe = await fetchRecipeDataFromMongo(recipeName, "recipes");
-//   const allergens = await fetchAllergens();
-  
-//   if (!Array.isArray(allergens) || !recipe) {
-//     return {
-//       notFound: true, // Return a 404 page or handle the error accordingly
-//     };
-//   } else {
-//     return {
-//       props: { recipe, allergens },
-//     };
-//   }
-// };
+export const getServerSideProps = async ({ params }) => {
+  const recipeName = params.recipeName;
+  console.log(recipeName)
+  const response = await fetch(`api/recipes/${recipeName}`);
+  console.log(response)
+    return {
+      props: { recipe:recipeName },
+  }
+};
 
 // export default RecipePage;
 

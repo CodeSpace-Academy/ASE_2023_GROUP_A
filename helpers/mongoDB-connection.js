@@ -11,22 +11,14 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
-export const DBConnection = async () => {
-  try {
-    await client.connect();
-    console.log("Connected to MongoDB");
-    return client;
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-    throw error;
-  }
-};
+
 // Function to connect to the MongoDB server and return a collection
 export const connectToCollection=async(databaseName, collectionName) =>{
   try {
-      const client = await DBConnection();
+    await client.connect();
+    console.log("Connected to MongoDB");
     const db = client.db(databaseName);
-      const collection = db.collection(collectionName);
+    const collection = db.collection(collectionName);
     return collection;
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
