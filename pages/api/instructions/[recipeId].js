@@ -1,13 +1,7 @@
-const { MongoClient } = require("mongodb");
-
+import { connectToCollection, closeMongoDBConnection } from "@/helpers/mongoDB-connection";
 const updateInstructionsInDB = async (id, instructions) => {
-  const uri = `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
-  const client = new MongoClient(uri, { useUnifiedTopology: true });
-
   try {
-    await client.connect();
-    const database = client.db("devdb");
-    const collection = database.collection("recipes");
+    const collection = await connectToCollection('devdb','recipes')
 
     if (request.method === "PATCH") {
       const result = await collection.updateOne(
@@ -34,7 +28,7 @@ const updateInstructionsInDB = async (id, instructions) => {
   } catch (error) {
     console.error("Error updating instructions:", error);
   } finally {
-    await client.close();
+    await closeMongoDBConnection();
   }
 };
 

@@ -1,24 +1,26 @@
 import { useState, useEffect, use } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/components/Context/ThemeContext";
 
 //Faves
 import { useContext } from "react";
-import FavoritesContext from "@/Context/Favorites-context";
+import FavoritesContext from "@/components/Context/Favorites-context";
 import Badge from "@mui/material/Badge";
+//Icons
+import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 
 const Navigation = () => {
-  const { theme, setTheme } = useTheme();
+
+  const { toggleTheme, theme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const toggleTheme = () => {
-    if (theme === "light") {
-      setTheme("dark");
-    } else {
-      setTheme("light");
-    }
-  };
+  const toggleIcon =
+    theme === "light" ? (
+      <MoonIcon className="h-5 text-black w-5" />
+    ) : (
+      <SunIcon className="h-5 text-black w-5" />
+    );
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -78,7 +80,7 @@ const Navigation = () => {
             </button>
           </div>
           <div className="flex mr-10 flex-shrink-0 items-center">
-            <Link href={`/home`}>
+            <Link href={`/`}>
               <Image
                 src="/Images/logo3.png"
                 alt="Cooking Devs"
@@ -90,7 +92,7 @@ const Navigation = () => {
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
               <Link
-                href={`/recipeList`}
+                href={`/Recipe_List`}
                 className="text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium"
               >
                 Recipes
@@ -113,44 +115,10 @@ const Navigation = () => {
           {/* toggle */}
           <div className="absolute inset-y-0 right-0 flex items-center pr-5 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <button
-              type="button"
+              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
               onClick={toggleTheme}
-              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 focus:ring-offset-gray-800"
-              style={{ opacity: theme === "dark" ? 0.4 : 1 }}
             >
-              <span className="absolute -inset-1.5"></span>
-              <span className="sr-only">Toggle Theme</span>
-              {theme === "light" ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-4 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-4 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
-                  />
-                </svg>
-              )}
+              {toggleIcon}
             </button>
           </div>
 
@@ -177,7 +145,7 @@ const Navigation = () => {
               id="mobile-menu"
             >
               <Link
-                href={`/recipeList`}
+                href={`/Recipe_List`}
                 className="text-black-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
               >
                 Recipe

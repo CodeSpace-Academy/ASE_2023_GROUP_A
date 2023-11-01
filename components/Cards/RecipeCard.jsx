@@ -4,7 +4,7 @@ import theme from "./RecipeCard.module.css"
 import { CookTime,PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 //Fav Button
 import { useContext } from "react";
-import FavoritesContext from "@/Context/Favorites-context";
+import FavoritesContext from "@/components/Context/Favorites-context";
 import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRicepe"
 
 const RecipeCard = ({ recipe }) => {
@@ -19,21 +19,16 @@ const RecipeCard = ({ recipe }) => {
 
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id);
 
-  function toggleFavoriteButton() {
+const toggleFavoriteButton=()=> {
     if (recipeIsFavorite) {
       favoriteCtx.removeFavorite(recipe._id);
     } else {
-      favoriteCtx.addFavorite({
-        id: recipe._id,
-        title: recipe.title,
-        description: recipe.description,
-        images: recipe.images,
-      });
+     favoriteCtx.addFavorite(recipe);
     }
   }
+
   return (
     <div className="bg-white-400 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105">
-      {/* Make cards white */}
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
         <Image
           src={firstImage}

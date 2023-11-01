@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import{CookTime, PrepTime, Published, TotalTime}from "../TimeAndDate/TimeConvertor";
 import Tags from "../Tags/Tags";
-import Image from "next/image";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
 import DropDownSVG from "../IconsAndSvg's/DropDownSVG";
 import CoverImage from "../Images/CoverImage";
 import IngredientsList from "../Ingredients/IngredientsList";
+
+
 const Recipe = ({ recipe, Allergies }) => {
   const [showTags, setShowTags] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);

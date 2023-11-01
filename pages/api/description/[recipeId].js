@@ -1,8 +1,4 @@
-// pages/api/description/[recipeId].js
-
-// import { ObjectId } from "mongodb";
-import Description from "@/components/Description/Description";
-import { DBConnection } from "@/helpers/mongoDB-utils";
+import { connectToCollection } from "@/helpers/mongoDB-connection";
 // import Recipe from './../../../components/Recipes/Recipe';
 
 const handler = async (req, res) => {
@@ -10,9 +6,7 @@ const handler = async (req, res) => {
     const { description } = req.body;
     const recipeId = req.query.recipeId; // Access the recipeId from the dynamic route parameter
     try {
-      const client = await DBConnection();
-      const db = client.db("devdb");
-      const collection = db.collection("recipes");
+      const collection = await connectToCollection('devdb', 'recipes')
       
       const result = await collection.findOneAndUpdate(
         { _id: recipeId }, // Ensure recipeId is an ObjectId
@@ -34,9 +28,7 @@ const handler = async (req, res) => {
   } else if(req.method === "GET"){
     const recipeId = req.query.recipeId;
     try{
-        const client = await DBConnection();
-        const db = client.db("devdb");
-        const collection = db.collection("recipes");
+        const collection = await connectToCollection('devdb','recipes')
         const recipe = await collection.findOne({ _id: recipeId });
         if(recipe){
             //Here we return the newly updated description from mongoDB

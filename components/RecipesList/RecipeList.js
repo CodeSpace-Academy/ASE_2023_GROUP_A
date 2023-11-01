@@ -1,6 +1,12 @@
+/**
+ * The RecipeList component is a React component that fetches recipes from an API, displays them in a
+ * grid, and provides a button to load more recipes.
+ * @returns The RecipeList component is returning a JSX element.
+ */
 import React, { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
 import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
+import Loading from "../Loading/Loading";
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
@@ -20,7 +26,7 @@ const RecipeList = () => {
             ...fetchedRecipes.recipes,
           ]);
           setTotalRecipes(fetchedRecipes.totalRecipes);
-          setLoading(false); // Set loading to false when data is fetched
+          setLoading(false);
         } else {
           console.error("Failed to fetch recipes");
         }
@@ -32,20 +38,24 @@ const RecipeList = () => {
     fetchRecipes(currentPage);
   }, [currentPage]);
 
-  const handlePageChange = (pageDelta) => {
-    const newPage = currentPage + pageDelta;
-    if (newPage > 0 && newPage <= totalRecipes) {
-      setCurrentPage(newPage);
-    }
+  const handlePageChange = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
   };
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold font-mono mb-4">Recipes</h1>
+    <>
+      <div className="items-center justify-center place-content-center">
+        <h1 className="text-3xl font-bold font-dm_mono mb-4 items-center justify-center place-content-center">
+          Recipes
+        </h1>
+      </div>
       <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <>
           {recipes.map((recipe, index) => (
-            <div href={`/${encodeURIComponent(recipe.title)}`} key={index}>
+            <div key={index}>
               <RecipeCard
                 key={recipe._id}
                 recipe={recipe}
@@ -54,17 +64,16 @@ const RecipeList = () => {
             </div>
           ))}
         </>
-        {/* )} */}
       </div>
 
-      {recipes.length > 0 && (
+      <div className="items-center justify-center place-content-center">
         <LoadMoreButton
-          handlePageChange={() => handlePageChange(1)}
+          handlePageChange={handlePageChange}
           currentPage={currentPage}
           totalRecipes={totalRecipes}
         />
-      )}
-    </div>
+      </div>
+    </>
   );
 };
 

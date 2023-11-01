@@ -1,22 +1,20 @@
 import "../styles/globals.css";
-import { useRouter } from "next/router";
 import { Fragment } from "react";
-import Navigation from "@/components/LayOuts/Header/Navigation";
-import { ThemeProvider } from "next-themes";
-import { FavoritesContextProvider } from "@/Context/Favorites-context";
-
+import ThemeProvider from "@/components/Context/ThemeContext";
+import { FavoritesContextProvider } from "@/components/Context/Favorites-context";
+import Layout from "@/components/LayOuts/Header/Layout";
 function App({ Component, pageProps }) {
-  const router = useRouter();
 
   return (
     <FavoritesContextProvider>
       {" "}
-      <Fragment>
-        <ThemeProvider enableSystem={true} attribute="class">
-          {router.pathname !== "/" && <Navigation />}
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </Fragment>
+      <ThemeProvider>
+        <Fragment>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </Fragment>
+      </ThemeProvider>
     </FavoritesContextProvider>
   );
 }

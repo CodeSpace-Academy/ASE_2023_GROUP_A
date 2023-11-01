@@ -12,17 +12,28 @@ export function FavoritesContextProvider(props) {
 
   const [userFavorites, setUserFavorites] = useState([]);
 
-  function addFavoritesHandler(recipeId) {
+  const addFavoritesHandler =async (recipe) => {
+      try {
+        const response = await fetch(`api/recipes/Favourites`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify( recipe ),
+        });
+        return response;
+      } catch (error) {
+      }
+    
     setUserFavorites((prevUserFavorites) => {
-      return prevUserFavorites.concat(recipeId);
+      return prevUserFavorites.concat(recipe);
     });
   }
-  function removeFavoritesHandler(recipeId) {
-    setUserFavorites((prevUserFavorites) => {
-      return prevUserFavorites.filter((id) => id !== recipeId);
-    });
-  }
-  
+function removeFavoritesHandler(recipeId) {
+  setUserFavorites((prevUserFavorites) => {
+    return prevUserFavorites.filter((favorite) => favorite.id !== recipeId);
+  });
+}
 
   function recipeIsFavoriteHandler(recipeId) {
     return userFavorites.some((recipe) => recipe.id === recipeId);

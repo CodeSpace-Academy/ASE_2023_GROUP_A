@@ -1,55 +1,27 @@
-import { MongoClient, ServerApiVersion } from "mongodb";
-
+import { connectToCollection, closeMongoDBConnection } from "./mongoDB-connection";
+import { ObjectId } from "mongodb";
 // MongoDB connection URI, including authentication details
-const uri =`mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority
-`
 
-// Create a MongoDB client instance with specific server API version and options
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
-
-// Connect to the MongoDB server only once and store the client instance
-export async function DBConnection() {
-  try {
-    await client.connect();
-    console.log("Connected to MongoDB");
-    return client
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-    throw error;
-  }
-};
-
-// Call the connectToMongoDB function when your application starts
-// const client = await DBConnection(); 
 
 // Fetch all recipes with optional skip and limit parameters
-export const getAllRecipes = async (client, skip, limit, ) => {
-  const db = client.db('devdb');
-  let query = db.collection('recipes').find();
+export const getAllRecipes = async (limit) => {
+  const collection = await connectToCollection('devdb', 'recipes');
+  const query = collection.find();
   query.limit(limit);
-
   try {
     const recipes = await query.toArray();
     return recipes;
   } catch (error) {
-    console.error("Error fetching recipes:", error);
+    console.error('Error fetching recipes:', error);
     throw error;
   }
 };
 
 // Fetch recipe data from MongoDB based on the recipe title and collection
-export const fetchRecipeDataFromMongo = async (client, recipeName, collection) => {
+export const fetchRecipeDataFromMongo = async (collection,recipeName) => {
   try {
-    // const client = await DBConnection()
-    const db = client.db('devdb');
-    const collec = db.collection(collection);
-    const recipeData = collec.findOne({ title: recipeName });
+    const recipeData = await collection.findOne({ title: recipeName }); 
+    console.log(recipeData)
     return recipeData;
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
@@ -57,40 +29,12 @@ export const fetchRecipeDataFromMongo = async (client, recipeName, collection) =
   }
 };
 
-// Fetch recipe data from MongoDB based on the recipe ID and collection
-// export const fetchRecipeDataFromMongoById = async (client, recipeId) => {
-//   try {
-//     const db = client.db('devdb');
-//     const collec = db.collection('recipes');
-//     const recipeData = collec.findOne({ _id: recipeId });
-//     return recipeData;
-//   } catch (error) {
-//     console.error("Error fetching recipe data from MongoDB:", error);
-//     throw error;
-//   }
-// };
-
-// Generate dynamic paths for Next.js based on recipe titles
-export const generateDynamicPaths = async (client) => {
-  try {
-    const db = client.db('devdb');
-    const recipes = await getAllRecipes(client, 0, 5, 'recipes');
-    const dynamicPaths = recipes.map((recipe) => ({
-      params: { recipeName: recipe.title },
-    }));
-    console.log("Client Closed");
-    return dynamicPaths;
-  } catch (error) {
-    console.error("Error generating dynamic paths:", error);
-    throw error;
-  }
-};
 
 // Fetch all categories from MongoDB
 export const getAllCategories = async () => {
   try {
-    const db = client.db();
-    const categoriesDocument = db.collection("categories").findOne({});
+     const collection = await connectToCollection('devdb', 'categories');
+    const categoriesDocument = collection.findOne({});
     const categories = categoriesDocument.categories;
     return categories;
   } catch (error) {
@@ -101,8 +45,8 @@ export const getAllCategories = async () => {
 
 export const fetchAllergens = async () => {
   try {
-    const db = client.db('devdb');
-    const allergensDocument = await db.collection("allergens").findOne({});
+    const collection = await connectToCollection('devdb', 'allergens');
+    const allergensDocument = collection.findOne({});
     const allergens = allergensDocument.allergens;
     return allergens;
   } catch (error) {
@@ -111,13 +55,11 @@ export const fetchAllergens = async () => {
   }
 };
 
-
-export const getTotalRecipesCount = async (client) => {
+export const getTotalRecipesCount = async () => {
   try {
-    const db = client.db('devdb'); // Get the MongoDB database
-    const recipesCollection = db.collection('recipes'); // Change this to your actual collection name
+    const recipesCollection = await connectToCollection('devdb', 'recipes'); // Change this to your actual collection name
     // Use the aggregation framework to count the documents
-    const countResult = recipesCollection
+    const countResult = await recipesCollection
       .aggregate([
         {
           $group: {
@@ -137,3 +79,30 @@ export const getTotalRecipesCount = async (client) => {
     throw error;
   }
 };
+
+// Function to add a favorite recipe to MongoDB
+export const addFavoriteToMongoDB = async (recipe) => {
+
+  try {
+    const favoritesCollection = await connectToCollection('devdb', 'favorites'); // Create or use a 'favorites' collection
+    // Check if the user's favorite already exists
+    const existingFavorite = await favoritesCollection.findOne({ _id: recipe._id });
+    if (existingFavorite) {
+      // Handle the case where the favorite already exists
+      console.log("Favorite already exists.");
+      return;
+    } else {
+      // If the favorite doesn't exist, insert it into the collection
+      await favoritesCollection.insertOne({ _id: recipe._id, recipe });
+      console.log("Favorite added to MongoDB.");
+    }
+  } catch (error) {
+    console.error("Error adding favorite to MongoDB:", error);
+    throw error;
+  } finally {
+    client.close(); // Close the MongoDB connection
+  }
+};
+export const getFavouritesFromMongoDB = async (recipe) => {
+  const collection = await connectToCollection("devdb", "allergens");
+}
