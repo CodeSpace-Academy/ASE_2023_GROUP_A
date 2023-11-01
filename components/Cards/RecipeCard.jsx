@@ -4,7 +4,9 @@ import CookTime from "../TimeAndDate/TimeConvertor";
 import Link from "next/link"; 
 
 const RecipeCard = ({ recipe }) => {
+
   if (!recipe) {
+
     return <div>Loading...</div>;
     
   }
@@ -15,8 +17,9 @@ const RecipeCard = ({ recipe }) => {
   return (
     
     <div className="bg-white-400 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105">
-      {/* Make cards white */}
+      
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
+      
         <Image
           src={firstImage}
           alt={recipe.title}

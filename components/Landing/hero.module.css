@@ -1,0 +1,28 @@
+.heroImage {
+    
+    background-image: url(https://www.royco.co.za/cdn-cgi/image/width=1440,height=640,f=auto,quality=90/sites/g/files/fnmzdf1866/files/2023-04/Recipe%20BackgroundUpdate.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.heroContent {
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @media(min-width: 800px){
+
+        display: flex;
+        flex-direction: row;
+        gap: 50px;
+
+    }
+
+}
