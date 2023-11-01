@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
 import LoadMoreButton from "../Buttons/LoadMore";
 import fetchRecipes from "@/helpers/hook";
-import SearchBar from "../SearchBar";
+import SearchBar from "../Search/SearchBar";
 
 
 const RecipeList = () => {
