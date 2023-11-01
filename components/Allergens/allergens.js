@@ -24,7 +24,7 @@ function Allergens({ allergens }) {
               <span className="mr-1 ">
                 <img src={`/images/icons/${allergen}.png`} alt={allergen} width={24} height={24} />
               </span>
-              {all}
+              {allergen}
             </li>
           ))}
         </ul>

@@ -46,7 +46,7 @@ export const getAllCategories = async () => {
 export const fetchAllergens = async () => {
   try {
     const collection = await connectToCollection('devdb', 'allergens');
-    const allergensDocument = collection.findOne({});
+    const allergensDocument = await collection.findOne({});
     const allergens = allergensDocument.allergens;
     return allergens;
   } catch (error) {
