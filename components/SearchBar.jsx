@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 
-const SearchBar = ({ onSearch, searchHistory, setSearchHistory }) => {
+const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchHistory, setSearchHistory] = useState([]);
   const [selectedHistoryItem, setSelectedHistoryItem] = useState("");
   const [searchHistoryVisible, setSearchHistoryVisible] = useState(false);
+
+  useEffect(() => {
+    const history = localStorage.getItem("searchHistory");
+    if (history) {
+      setSearchHistory(JSON.parse(history));
+    }
+  }, []);
 
   const clearSearch = () => {
     setSearchTerm("");
