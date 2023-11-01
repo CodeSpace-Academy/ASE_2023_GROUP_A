@@ -1,97 +1,9 @@
 import React, { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
-import Link from "next/link";
 import LoadMoreButton from "../Buttons/LoadMore";
 import fetchRecipes from "@/helpers/hook";
+import SearchBar from "../SearchBar";
 
-export const SearchBar = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchHistory, setSearchHistory] = useState([]);
-  const [selectedHistoryItem, setSelectedHistoryItem] = useState(""); // New state to track the selected history item
-  const [searchHistoryVisible, setSearchHistoryVisible] = useState(false);
-
-  useEffect(() => {
-    const history = localStorage.getItem("searchHistory");
-    if (history) {
-      setSearchHistory(JSON.parse(history));
-    }
-  }, []);
-
-  const clearSearch = () => {
-    setSearchTerm("");
-    setSearchHistoryVisible(false);
-  
-  };
-
-  const handleSearchClick = () => {
-    if (searchTerm) {
-      onSearch(searchTerm);
-      setSearchHistory((prevHistory) => {
-        const updatedHistory = [searchTerm, ...prevHistory].slice(0, 5);
-        localStorage.setItem("searchHistory", JSON.stringify(updatedHistory));
-        return updatedHistory;
-      });
-      setSelectedHistoryItem(""); // Clear the selected history item
-      setSearchTerm("");
-      setSearchHistoryVisible(false);
-      
-    }
-  };
-
-  const handleHistoryItemClick = (item) => {
-    setSelectedHistoryItem(item); // Set the selected history item in the state
-    setSearchTerm(item); // Update the search bar with the clicked history item
-  };
-
-  return (
-    <div className="absolute p-5 flex top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2" style={{ zIndex: 1 }}>
-      <div>
-        <input
-          type="text"
-          placeholder="Search by title..."
-          value={searchTerm}
-          onClick={() => setSearchHistoryVisible(true)}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="px-2 py-2 border rounded-md border-gray-400 focus:outline-none focus:ring focus:border-blue-300 w-full max-w-xs"
-        />
-      </div>
-      <div>
-        <button
-          className="ml-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-          onClick={handleSearchClick}
-        >
-          Search
-        </button>
-      </div>
-      <div>
-        <button
-          className="ml-2 bg-blue-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-          onClick={clearSearch}
-        >
-          Clear
-        </button>
-      </div>
-      {searchHistoryVisible && searchHistory.length > 0 && (
-        <div className="bg-white p-1 border border-gray-300 rounded mt-1" style={{ maxHeight: "50px", maxWidth: "200px", overflowY: "auto" }}>
-          <p className="text-gray-600 text-sm">Previous Searches:</p>
-          <ul className="list-disc list-inside text-sm ml-2">
-            {searchHistory.map((item, index) => (
-              <span
-                className={`text-blue-500 hover:underline ${selectedHistoryItem === item ? "font-bold" : ""}`}
-                onClick={() => handleHistoryItemClick(item)}
-                key={index}
-              >
-                <li key={index} className="mt-1">
-                  {item}
-                </li>
-              </span>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
-};
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
@@ -99,6 +11,7 @@ const RecipeList = () => {
   const [loading, setLoading] = useState(true);
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [originalRecipes, setOriginalRecipes] = useState([]);
+  const [searchHistory, setSearchHistory] = useState([]);
 
   useEffect(() => {
     fetchRecipes({
@@ -132,7 +45,7 @@ const RecipeList = () => {
       </div>
 
       <div>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} searchHistory={searchHistory} setSearchHistory={setSearchHistory} />
       </div>
 
       <h1 className="text-3xl font-bold font-mono mb-4">Recipes</h1>
