@@ -6,45 +6,38 @@ const FavoritesContext = createContext({
   addFavorite: (recipeId) => {},
   removeFavorite: (recipeId) => {},
   recipeIsFavorite: (recipeId) => {},
+  updateFavorites: (recipe) => {},
 });
 
 export function FavoritesContextProvider(props) {
-
   const [userFavorites, setUserFavorites] = useState([]);
 
-  const addFavoritesHandler =async (recipe) => {
-      try {
-        const response = await fetch(`api/recipes/Favourites`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify( recipe ),
-        });
-        return response;
-      } catch (error) {
-      }
-    
-    setUserFavorites((prevUserFavorites) => {
-      return prevUserFavorites.concat(recipe);
-    });
-  }
-function removeFavoritesHandler(recipeId) {
+const addFavoritesHandler = (recipe) => {
+  setUserFavorites((prevUserFavorites) => [...prevUserFavorites, recipe]);
+};
+
+  const updateFavoritesHandler = (recipes) => {
+    setUserFavorites(recipes);
+  };
+
+const removeFavoritesHandler = (recipeId) => {
   setUserFavorites((prevUserFavorites) => {
-    return prevUserFavorites.filter((favorite) => favorite.id !== recipeId);
+    return prevUserFavorites.filter((favorite) => favorite._id !== recipeId);
   });
+};
+
+function isRecipeInFavorites(recipeId, userFavorites) {
+  return Array.from(userFavorites).some((recipe) => recipe && recipe._id === recipeId);
 }
 
-  function recipeIsFavoriteHandler(recipeId) {
-    return userFavorites.some((recipe) => recipe.id === recipeId);
-  }
 
   const context = {
     favorites: userFavorites,
     totalFavorites: userFavorites.length,
     addFavorite: addFavoritesHandler,
+    updateFavorites: updateFavoritesHandler,
     removeFavorite: removeFavoritesHandler,
-    recipeIsFavorite: recipeIsFavoriteHandler,
+    recipeIsFavorite: isRecipeInFavorites,
   };
 
   return (

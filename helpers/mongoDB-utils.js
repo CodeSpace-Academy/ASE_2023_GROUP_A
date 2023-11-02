@@ -103,6 +103,24 @@ export const addFavoriteToMongoDB = async (recipe) => {
     client.close(); // Close the MongoDB connection
   }
 };
-export const getFavouritesFromMongoDB = async (recipe) => {
-  const collection = await connectToCollection("devdb", "allergens");
+
+export const removeFavoriteFromDB = async (recipeId) => {
+  try {
+    const favoritesCollection = await connectToCollection("devdb", "favorites");
+    const deleteResult = await favoritesCollection.deleteOne({ _id: recipeId });
+    console.log("DELETED:",deleteResult)
+    return deleteResult;
+  } catch (err) { }
+};
+
+export const getFavouritesFromMongoDB = async () => {
+  const collection = await connectToCollection("devdb", "favorites");
+  const data = collection.find();
+    try {
+      const recipes = await data.toArray();
+      return recipes;
+    } catch (error) {
+      console.error("Error fetching favourites:", error);
+      throw error;
+    }
 }

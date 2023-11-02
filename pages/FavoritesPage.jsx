@@ -2,12 +2,17 @@ import { useContext } from "react";
 import FavoritesContext from "@/components/Context/Favorites-context";
 import RecipeCard from "../components/Cards/RecipeCard";
 import Link from "next/link";
+import Loading from "@/components/Loading/Loading";
 
 function FavoritesPage() {
   const favoriteCtx = useContext(FavoritesContext);
   const favoriteRecipes = favoriteCtx.favorites || [];
-
-  console.log(favoriteRecipes);
+  
+  if (!favoriteRecipes) {
+    return (
+    <Loading/>
+  )
+}
 
   return (
     <section>
@@ -20,7 +25,7 @@ function FavoritesPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {favoriteRecipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} />
+              <RecipeCard key={recipe.id} recipe={recipe.recipe} favorites={favoriteRecipes} />
             ))}
           </div>
         )}

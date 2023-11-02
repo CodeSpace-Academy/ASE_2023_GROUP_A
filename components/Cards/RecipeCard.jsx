@@ -1,34 +1,63 @@
 import React from "react";
 import Image from "next/image";
-import theme from "./RecipeCard.module.css"
-import { CookTime,PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
+import theme from "./RecipeCard.module.css";
+import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 //Fav Button
 import { useContext } from "react";
 import FavoritesContext from "@/components/Context/Favorites-context";
-import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRicepe"
+import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRicepe";
+// import { StarIcon } from "@heroicons/react/20/solid";
+// import { StarIcon as StarEmptyIcon } from "@heroicons/react/24/outlineoutline";
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = ({ recipe, favorites }) => {
   if (!recipe) {
     return <div>Loading...</div>;
   }
 
-  const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
-
+  const firstImage =
+    recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
 
   const favoriteCtx = useContext(FavoritesContext);
 
-  const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id);
+  const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
 
-const toggleFavoriteButton=()=> {
-    if (recipeIsFavorite) {
-      favoriteCtx.removeFavorite(recipe._id);
-    } else {
-     favoriteCtx.addFavorite(recipe);
+  const removeFavoriteHandler = (recipe) => async () => {
+    try {
+      const response = await fetch(`api/recipes/Favourites`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ recipeId: recipe._id }),
+      });
+
+      if (response.ok) {
+        favoriteCtx.removeFavorite(recipe);
+      }
+    } catch (error) {
+      console.error("Error removing favorite:", error);
     }
-  }
+  };
+
+  const addFavoritesHandler = async (recipe) => {
+    try {
+      const response = await fetch(`api/recipes/Favourites`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(recipe),
+      });
+      favoriteCtx.updateFavorites(favorites);
+      return response;
+    } catch (error) {}
+  };
 
   return (
-    <div className="bg-white-400 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105">
+    <div
+      key={recipe._id}
+      className="bg-white-400 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105"
+    >
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
         <Image
           src={firstImage}
@@ -44,19 +73,24 @@ const toggleFavoriteButton=()=> {
             {recipe.title}
           </h2>
           <div className="mb-2">
-            <PrepTime prepTime={recipe.prep}/>
+            <PrepTime prepTime={recipe.prep} />
           </div>
           <div className="mb-2">
-          <CookTime cookTime={recipe.cook} />
+            <CookTime cookTime={recipe.cook} />
           </div>
         </div>
         <div>
-          <button onClick={toggleFavoriteButton}>
-            {recipeIsFavorite ? "Remove from Faves" : "Add to Faves"}
-          </button>
-          {/* <FavoriteButton /> */}
+          {recipeIsFavorite ? (
+            <button onClick={removeFavoriteHandler(recipe)}>
+              <span>Remove from Favorites</span>
+            </button>
+          ) : (
+            <button onClick={() => addFavoritesHandler(recipe)}>
+              <span>Add to Favorites</span>
+            </button>
+          )}
         </div>
-      <ViewRecipeDetails recipe={recipe}/>
+        <ViewRecipeDetails recipe={recipe} />
       </div>
     </div>
   );

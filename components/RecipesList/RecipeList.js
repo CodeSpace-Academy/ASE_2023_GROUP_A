@@ -7,12 +7,17 @@ import React, { useEffect, useState } from "react";
 import RecipeCard from "../Cards/RecipeCard";
 import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
 import Loading from "../Loading/Loading";
+import { useContext } from "react";
+import FavoritesContext from "../Context/Favorites-context";
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [totalRecipes, setTotalRecipes] = useState(0);
+
+  const favoritesContext = useContext(FavoritesContext);
+  const favorites = favoritesContext.favorites || [];
 
   useEffect(() => {
     const fetchRecipes = async (page) => {
@@ -59,6 +64,7 @@ const RecipeList = () => {
               <RecipeCard
                 key={recipe._id}
                 recipe={recipe}
+                favorites={favorites}
                 description={recipe.description}
               />
             </div>

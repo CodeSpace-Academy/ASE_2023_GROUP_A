@@ -38,27 +38,4 @@ function Allergens({ allergens }) {
 export default Allergens;
 
 
-// // Import necessary libraries and components
-
-// function Allergens({ allergens, onAllergenSelect, selectedAllergen }) {
-//   return (
-//     <div className="allergens">
-//       <h2>Allergens:</h2>
-//       <div className="allergen-list">
-//         {allergens.map((allergen, index) => (
-//           <div
-//             key={index}
-//             className={`allergen-item ${selectedAllergen === allergen ? 'selected' : ''}`}
-//             onClick={() => onAllergenSelect(allergen)}
-//           >
-//             {allergen}
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Allergens;
-
 
