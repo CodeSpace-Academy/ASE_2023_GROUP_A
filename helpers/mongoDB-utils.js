@@ -11,9 +11,12 @@ export const getAllRecipes = async (limit) => {
   try {
     const recipes = await query.toArray();
     return recipes;
+    
   } catch (error) {
     console.error('Error fetching recipes:', error);
     throw error;
+  } finally {
+    closeMongoDBConnection();
   }
 };
 
@@ -26,6 +29,8 @@ export const fetchRecipeDataFromMongo = async (collection,recipeName) => {
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
     throw error;
+  } finally {
+    closeMongoDBConnection();
   }
 };
 
@@ -40,6 +45,8 @@ export const getAllCategories = async () => {
   } catch (error) {
     console.error("Error fetching categories:", error);
     throw error;
+  } finally {
+    closeMongoDBConnection();
   }
 };
 
@@ -52,6 +59,8 @@ export const fetchAllergens = async () => {
   } catch (error) {
     console.error("Error fetching allergens:", error);
     throw error;
+  } finally {
+    closeMongoDBConnection();
   }
 };
 
@@ -77,6 +86,8 @@ export const getTotalRecipesCount = async () => {
   } catch (error) {
     console.error("Error fetching total recipes count:", error);
     throw error;
+  } finally {
+    closeMongoDBConnection();
   }
 };
 
@@ -100,7 +111,7 @@ export const addFavoriteToMongoDB = async (recipe) => {
     console.error("Error adding favorite to MongoDB:", error);
     throw error;
   } finally {
-    client.close(); // Close the MongoDB connection
+   closeMongoDBConnection(); // Close the MongoDB connection
   }
 };
 
@@ -110,7 +121,7 @@ export const removeFavoriteFromDB = async (recipeId) => {
     const deleteResult = await favoritesCollection.deleteOne({ _id: recipeId });
     console.log("DELETED:",deleteResult)
     return deleteResult;
-  } catch (err) { }
+  } catch (err) { }finally{closeMongoDBConnection();}
 };
 
 export const getFavouritesFromMongoDB = async () => {
@@ -122,5 +133,7 @@ export const getFavouritesFromMongoDB = async () => {
     } catch (error) {
       console.error("Error fetching favourites:", error);
       throw error;
+    } finally {
+      closeMongoDBConnection();
     }
 }

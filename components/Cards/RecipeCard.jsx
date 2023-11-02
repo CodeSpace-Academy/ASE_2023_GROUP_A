@@ -32,7 +32,7 @@ const RecipeCard = ({ recipe, favorites }) => {
       });
 
       if (response.ok) {
-        favoriteCtx.removeFavorite(recipe);
+        favoriteCtx.removeFavorite(recipe._id);
       }
     } catch (error) {
       console.error("Error removing favorite:", error);
@@ -48,7 +48,7 @@ const RecipeCard = ({ recipe, favorites }) => {
         },
         body: JSON.stringify(recipe),
       });
-      favoriteCtx.updateFavorites(favorites);
+      favoriteCtx.addFavorite(recipe);
       return response;
     } catch (error) {}
   };

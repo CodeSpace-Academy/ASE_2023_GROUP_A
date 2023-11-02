@@ -1,31 +1,26 @@
 import { useRouter } from "next/router";
 import Recipe from "../components/Recipes/Recipe";
-// import Description from './../components/Description/Description';
-import { useEffect, useState } from "react";
+import useSWR from "swr";
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const RecipePage = () => {
   const router = useRouter();
   const { recipeName } = router.query;
-  const [recipe, setRecipe] = useState();
-  const [allergens, setAllergens] = useState();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(`/api/recipes/${recipeName}`);
-      if (response.ok) {
-        const data = await response.json();
-        setRecipe(data.recipe);
-        setAllergens(data.allergens);
-      }
-    };
-    fetchData();
-  }, []);
+  // Fetch recipe data and allergens using useSWR
+  const { data, error } = useSWR(`api/recipes/${recipeName}`, fetcher);
+
+  if (error || !data) {
+    return <div>Loading...</div>;
+  }
+
+  const { recipe, allergens } = data;
+
   if (!recipe || !recipe.description || !allergens) {
     console.log(`Can't find Recipe for:`, JSON.stringify(recipe));
   }
-  if (!recipe || !recipe.description || !allergens) {
-    return <div>Loading...</div>;
-  }
+
   return (
     <div>
       <Recipe

@@ -4,14 +4,21 @@ import classes from "./home.module.css";
 import { useContext } from "react";
 import Loading from "@/components/Loading/Loading";
 import FavoritesContext from "@/components/Context/Favorites-context";
+import useSWR from "swr";
 
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
 
-const Home = ({ favorites, isLoading }) => {
+const Home = () => {
   const favoriteContext = useContext(FavoritesContext);
-  favoriteContext.updateFavorites(favorites)
+  
+const fetcher =  (url) => fetch(url).then(res => res.json())
+  const { data: favoritesData, error } = useSWR(
+    "api/recipes/Favourites",
+    fetcher,
+  );
+
   if (
     process.env == {} ||
     !process.env.mongodb_password ||
@@ -19,11 +26,15 @@ const Home = ({ favorites, isLoading }) => {
   ) {
     return <EnvError />;
   }
-  if (!favorites) {
+
+  if (error || !favoritesData) {
     return (
     <Loading/>
   )
-}
+  }
+    console.log("FAVORITESDATA:", favoritesData.favorites)
+  const favorites = favoritesData.favorites || [];
+  favoriteContext.updateFavorites(favorites);
   return (
     <>
       <div className={classes.heroImage}>
@@ -45,7 +56,7 @@ const Home = ({ favorites, isLoading }) => {
       </div>
       <div>
         <h2>Favorite Recipes</h2>
-        {isLoading ? (
+        {!favorites ? (
           <p>Loading favorite recipes...</p>
         ) : favorites.length === 0 ? (
           <p>No favorite recipes yet.</p>
@@ -63,42 +74,42 @@ const Home = ({ favorites, isLoading }) => {
   );
 };
 
-export const getServerSideProps = async () => {
-  try {
-    const response = await fetch(
-      "http://localhost:3000/api/recipes/Favourites"
-    );
-    if (response.ok) {
-      const favoriteRecipes = await response.json();
-      const favorites = Array.from(favoriteRecipes.favorites) || [];
-      return {
-        props: {
-          favorites,
-          isLoading: false,
-        },
-      };
-    } else {
-      console.error(
-        "Failed to fetch favorite recipes. Status code: " + response.status
-      );
+// export const getServerSideProps = async () => {
+//   try {
+//     const response = await fetch(
+//       "http://localhost:3000/api/recipes/Favourites"
+//     );
+//     if (response.ok) {
+//       const favoriteRecipes = await response.json();
+//       const favorites = Array.from(favoriteRecipes.favorites) || [];
+//       return {
+//         props: {
+//           favorites,
+//           isLoading: false,
+//         },
+//       };
+//     } else {
+//       console.error(
+//         "Failed to fetch favorite recipes. Status code: " + response.status
+//       );
 
-      return {
-        props: {
-          favorites: [],
-          isLoading: false,
-        },
-      };
-    }
-  } catch (error) {
-    console.error("Error fetching favorite recipes:", error);
+//       return {
+//         props: {
+//           favorites: [],
+//           isLoading: false,
+//         },
+//       };
+//     }
+//   } catch (error) {
+//     console.error("Error fetching favorite recipes:", error);
 
-    return {
-      props: {
-        favorites: [],
-        isLoading: false,
-      },
-    };
-  }
-};
+//     return {
+//       props: {
+//         favorites: [],
+//         isLoading: false,
+//       },
+//     };
+//   }
+// };
 
 export default Home;
