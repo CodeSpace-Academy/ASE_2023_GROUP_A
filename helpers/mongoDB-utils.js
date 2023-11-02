@@ -1,7 +1,4 @@
 import { connectToCollection, closeMongoDBConnection } from "./mongoDB-connection";
-import { ObjectId } from "mongodb";
-// MongoDB connection URI, including authentication details
-
 
 // Fetch all recipes with optional skip and limit parameters
 export const getAllRecipes = async (limit) => {
