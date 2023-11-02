@@ -20,7 +20,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="w-full bg-red-500 fixed top-0 left-0 right-0 z-10 h-18">
+    <nav className="w-full bg-[#ff0000] fixed top-0 left-0 right-0 z-10 h-18">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
