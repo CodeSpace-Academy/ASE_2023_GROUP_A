@@ -16,6 +16,8 @@ function RecipeList() {
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([])
   const [searchResults, setSearchResults] = useState([]);
   const [filterResults, setFilterResults] = useState([]);
+  const [searchHistory, setSearchHistory] = useState([]);
+
 
 
   const loadRecipes = async (page) => {
@@ -97,27 +99,6 @@ function RecipeList() {
     }
 
   };
-
-  // const handleSort = (sortBy, sortOrder) => {
-  //   // Send a POST request to your API route with the sorting criteria and order
-  //   fetch('/api/sortRecipes', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ sortBy, sortOrder }),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setRecipes(data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error sorting recipes:', error);
-  //     });
-  // };
-
-  
-  
 
   const fetchAutocompleteSuggestions = async (searchQuery) => {
 
