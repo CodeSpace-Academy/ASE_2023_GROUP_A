@@ -48,7 +48,6 @@ const RecipeList = () => {
         <SearchBar onSearch={handleSearch} searchHistory={searchHistory} setSearchHistory={setSearchHistory} />
       </div>
 
-      <h1 className="text-3xl font-bold font-mono mb-4">Recipes</h1>
       <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {recipes.map((recipe, index) => (
           <div href={`/${encodeURIComponent(recipe.title)}`} key={index}>

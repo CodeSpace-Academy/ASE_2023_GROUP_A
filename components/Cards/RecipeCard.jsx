@@ -3,7 +3,7 @@ import Image from "next/image";
 import CookTime from "../TimeAndDate/TimeConvertor";
 import Link from "next/link";
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = ({ recipe, searchTerm  }) => {
   if (!recipe) {
     return <div>Loading...</div>;
   }
@@ -24,7 +24,16 @@ const RecipeCard = ({ recipe }) => {
       <div className="flex flex-col justify-between h-full">
         <div className="mb-4 recipe-title-container text-center">
           <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2">
-            {recipe.title}
+          {searchTerm ? ( // Conditionally highlight if searchTerm exists
+              <Highlighter
+                highlightClassName="YourHighlightClass"
+                searchWords={[searchTerm]}
+                autoEscape={true}
+                textToHighlight={recipe.title}
+              />
+            ) : (
+              recipe.title // Render as is if no searchTerm
+            )}
           </h2>
           <div className="mb-2">
             <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
