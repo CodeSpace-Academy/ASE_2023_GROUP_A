@@ -25,3 +25,25 @@ background-color: rgba(81, 132, 216, 0.5);
 .tags-button.active + .tags-content {
   display: block;
 }
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#__next {
+  flex: 1;
+}
+
+footer {
+  margin-top: auto;
+}
+
+.flexpage{
+  height: 80vh;
+}
+
+.mainBody{
+  min-height: 90vh;
+}
