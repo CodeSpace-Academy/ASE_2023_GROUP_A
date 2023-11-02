@@ -35,6 +35,7 @@ const SearchBar = ({ onSearch }) => {
   const handleHistoryItemClick = (item) => {
     setSelectedHistoryItem(item);
     setSearchTerm(item);
+    onSearch(item);
     setSearchHistoryVisible(false);
   };
 
