@@ -20,7 +20,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="w-full bg-red-500 fixed top-0 left-0 right-0 z-10 h-18">
+    <nav className="w-full bg-blue-500 bg-opacity-80 fixed top-0 left-0 right-0 z-10 h-18">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
@@ -69,20 +69,18 @@ const Navigation = () => {
               </svg>
             </button>
           </div>
-          <div className="flex mr-10 flex-shrink-0 items-center">
-            <Link href={`/home`}>
+          <div className="flex mr-10 flex-shrink-0 items-center">        
               <Image
                 src="/Images/logo3.png"
                 alt="Cooking Devs"
                 height={50}
                 width={70}
-              />
-            </Link>
+              />      
           </div>
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
               <Link
-                href={`/recipeList`}
+                href={`/`}
                 className="text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium"
               >
                 Recipes
