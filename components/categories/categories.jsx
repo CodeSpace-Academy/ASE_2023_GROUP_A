@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import classes from './categories.module.css'
+import Select from "react-select";
 
-function Categories({ handleDefault, setRecipes, }) {
+function Categories({setFilterResults, handleDefault, setRecipes }) {
 
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   useEffect(() => {
 
@@ -17,14 +17,13 @@ function Categories({ handleDefault, setRecipes, }) {
         if (response.ok) {
 
           const data = await response.json();
-          setCategories(data[0].categories);
-
+          setCategories(data[0].categories.map(category => ({ label: category, value: category })));
+          
         } else {
 
           console.error("Failed to fetch categories");
 
         }
-
       } catch (error) {
 
         console.error("Error fetching categories:", error);
@@ -34,85 +33,133 @@ function Categories({ handleDefault, setRecipes, }) {
     }
 
     fetchCategories();
-    
+
   }, []);
 
   useEffect(() => {
     
-    const fetchRecipesByCategory = async () => {
+    const fetchRecipesByCategories = async () => {
 
-      try {
+      if (selectedCategories.length === 0) {
 
-        const response = await fetch(`/api/filterbycategory`, {
+        setFilterResults([]);
 
-          method: "POST",
-          headers: {
+      } else {
 
-            "Content-Type": "application/json",
+        try {
 
-          },
-          body: JSON.stringify({ selectedCategory }),
+          const response = await fetch(`/api/filterbycategory`, {
 
-        });
+            method: "POST",
+            headers: {
 
-        if (response.ok) {
+              "Content-Type": "application/json",
 
-          const filterResult = await response.json();
-          setRecipes(filterResult.recipes);
-          setCount(filterResult.recipes.length);
+            },
+            body: JSON.stringify({ selectedCategories }),
 
-        } else {
+          });
 
-          console.error("Failed to fetch recipes by category");
+          if (response.ok) {
+
+            const filterResult = await response.json();
+            // setRecipes(filterResult.recipes);
+            setFilterResults(filterResult.recipes)
+            // setCount(filterResult.recipes.length);
+
+          } else {
+
+            console.error("Failed to fetch recipes by category");
+
+          }
+
+        } catch (error) {
+
+          console.error("Error fetching recipes by category:", error);
 
         }
 
-      } catch (error) {
-
-        console.error("Error fetching recipes by category:", error);
-
-      }
-
-    };
-
-    if (selectedCategory) {
-      
-      fetchRecipesByCategory(selectedCategory);
-
-    }else{
-
-        handleDefault()
+      };
 
     }
 
-  }, [selectedCategory, setRecipes]);
+    if (selectedCategories.length > 0) {
 
-  const handleCategoryChange = (e) => {
+      fetchRecipesByCategories(selectedCategories);
 
-    const selected = e.target.value;
-    setSelectedCategory(selected);
+    } else {
 
+      handleDefault();
+
+    }
+
+  }, [selectedCategories, setRecipes]);
+
+  const handleCategoryChange = (selectedOptions) => {
+
+    setSelectedCategories(selectedOptions.map(option => option.value));
+
+  };
+
+  const customStyles = {
+
+    multiValue: (base) => ({
+
+      ...base,
+      background: "red",
+      color: "white",
+      
+
+    }),
+
+    control: (base) => ({
+
+      ...base,
+      backgroundColor: "#999",
+      color: "white",
+      width: 'fitContent',
+
+    }),
+
+    multiValueLabel: (base) => ({
+      ...base,
+      color: "white",
+      fontWeight: "bold",
+    }),
+
+    placeholder: (base) => ({
+
+      ...base,
+      color: "black",
+      fontWeight: "600"
+
+    }),
+
+    menu: (base) => ({
+
+      ...base,
+      width: "12em",
+
+    }),
+
+    
   };
 
   return (
 
     <div>
 
-      <select value={selectedCategory} onChange={handleCategoryChange} className={classes.selecte}>
 
-        <option value="" className={classes.option}>Select a category</option>
-
-            {categories.map((category, index) => (
-
-            <option key={index} value={category} className={classes.option}>
-
-                {category}
-
-            </option>
-
-            ))}
-
-      </select>
+      <Select
+        isMulti
+        options={categories}
+        value={categories.filter(category => selectedCategories.includes(category.value))}
+        onChange={handleCategoryChange}
+        styles={customStyles}
+        blurInputOnSelect
+        placeholder="select category"
+        
+      />
 
     </div>
 

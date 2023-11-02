@@ -3,8 +3,16 @@ import classes from "./hero.module.css";
 import SearchBar from "../searchBar/searchBar";
 import Categories from "../categories/categories";
 
-export default function Hero({handleDefault,setRecipes, onSearch, onAutocomplete }) {
+export default function Hero({
 
+  setFilterResults,
+  handleDefaultFilter,
+  handleDefaultSearch,
+  setRecipes,
+  onSearch,
+  onAutocomplete,
+
+}) {
   return (
 
     <div className={classes.heroImage}>
@@ -13,16 +21,24 @@ export default function Hero({handleDefault,setRecipes, onSearch, onAutocomplete
 
         <div>
 
-          <SearchBar handleDefault={handleDefault} onSearch={onSearch} onAutocomplete={onAutocomplete} />
+          <SearchBar
+            handleDefault={handleDefaultSearch}
+            onSearch={onSearch}
+            onAutocomplete={onAutocomplete}
+          />
 
         </div>
 
-        <Categories setRecipes={setRecipes} handleDefault={handleDefault}/>
-
+        <Categories
+          setFilterResults={setFilterResults}
+          setRecipes={setRecipes}
+          handleDefault={handleDefaultFilter}
+        />
+       
       </div>
-
+      
     </div>
 
   );
-  
+
 }

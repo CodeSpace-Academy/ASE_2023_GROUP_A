@@ -166,42 +166,47 @@ export async function searchSuggestions(searchQuery){
     return autocompleteResults
 }
 
-export async function searching(searchQuery){
+export async function searching(searchQuery, selectedCategories) {
+  const db = client.db("devdb");
+  const recipesCollection = db.collection("recipes");
 
-const db = client.db("devdb");
-const recipesCollection = db.collection("recipes");
+  // Create a query that considers both search and categories
+  const query = {
+    $or: [{ title: { $regex: searchQuery, $options: "i" } }],
+  };
 
-const searchResult = recipesCollection
-  .find({
+  if (selectedCategories && selectedCategories.length > 0) {
+    query.category = { $in: selectedCategories };
+  }
 
-    $or: [
+  const searchResult = recipesCollection.find(query).limit(100).toArray();
 
-      { title: { $regex: searchQuery, $options: "i" } },
-
-    ],
-    
-  })
-  .limit(100)
-  .toArray();
-
-  return searchResult
+  return searchResult;
 }
-export async function filtering(selectedCategory){
 
-const db = client.db("devdb");
-const recipesCollection = db.collection("recipes");
 
-const filterResult = recipesCollection
-  .find({
+export async function filtering(selectedCategories, searchQuery,) {
 
-    category: selectedCategory 
-    
-  })
-  .limit(100)
-  .toArray();
+  const db = client.db("devdb");
+  const recipesCollection = db.collection("recipes");
 
-  return filterResult
+  const query = {};
+
+  if (selectedCategories && selectedCategories.length > 0) {
+    query.category = { $in: selectedCategories };
+  }
+
+
+  if (searchQuery) {
+    query.$or = [{ title: { $regex: searchQuery, $options: "i" } }];
+  }
+
+  const filterResult = recipesCollection.find(query).limit(100).toArray();
+
+  return filterResult;
 }
+
+
 
 export async function getCategories(){
 

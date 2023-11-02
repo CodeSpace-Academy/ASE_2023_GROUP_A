@@ -4,6 +4,7 @@ import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
 import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
 
+
 // const ITEMS_PER_PAGE = 100;
 
 function RecipeList() {
@@ -13,6 +14,9 @@ function RecipeList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([])
+  const [searchResults, setSearchResults] = useState([]);
+  const [filterResults, setFilterResults] = useState([]);
+
 
   const loadRecipes = async (page) => {
 
@@ -21,7 +25,7 @@ function RecipeList() {
     if (response.ok) {
 
       const data = await response.json();
-      setRecipes([...recipes, ...data.recipes]);
+      // setRecipes([...recipes, ...data.recipes]);
       setOriginalRecipes(data.recipes);
       setTotalRecipes(data.totalRecipes);
 
@@ -48,14 +52,12 @@ function RecipeList() {
   }, [currentPage]);
 
 
-
-
   const handleSearch = async (searchQuery) => {
 
     if (!searchQuery) {
 
-      setRecipes(originalRecipes);
-      setAutocompleteSuggestions([])
+      
+      handleDefaultSearch()
 
     } else {
 
@@ -76,8 +78,9 @@ function RecipeList() {
         if (response.ok) {
 
           const searchResult = await response.json();
-          setRecipes(searchResult.recipes);
-          setCount(searchResult.recipes.length)
+          
+          // setCount(searchResult.recipes.length)
+          setSearchResults(searchResult.recipes);
 
         } else {
 
@@ -95,20 +98,49 @@ function RecipeList() {
 
   };
 
+  // const handleSort = (sortBy, sortOrder) => {
+  //   // Send a POST request to your API route with the sorting criteria and order
+  //   fetch('/api/sortRecipes', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ sortBy, sortOrder }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setRecipes(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error sorting recipes:', error);
+  //     });
+  // };
+
+  
+  
+
   const fetchAutocompleteSuggestions = async (searchQuery) => {
 
     try {
 
-      const response = await fetch(`/api/autocomplete?searchQuery=${searchQuery}`);
-
-      if (response.ok) {
-
-        const data = await response.json();
-        setAutocompleteSuggestions(data.autocomplete);
+      if (searchQuery.length === 0) {
+        
+        setAutocompleteSuggestions([]);
 
       } else {
 
-        console.error("Autocomplete request failed");
+        const response = await fetch(`/api/autocomplete?searchQuery=${searchQuery}`);
+
+        if (response.ok) {
+
+          const data = await response.json();
+          setAutocompleteSuggestions(data.autocomplete);
+
+        } else {
+
+          console.error("Autocomplete request failed");
+
+        }
 
       }
 
@@ -117,24 +149,56 @@ function RecipeList() {
       console.error("Error fetching autocomplete suggestions:", error);
 
     }
+
   };
 
-  const handleDefault = () => {
+  function handleDefaultSearch(){
 
-    setRecipes(originalRecipes);
-    setAutocompleteSuggestions([])
+    setSearchResults([]);
+    setAutocompleteSuggestions([]);
+
+  };
+
+  function handleDefaultFilter(){
+   
+    setFilterResults([]);
+    
+  };
+
+  let combinedResults 
+
+  if(searchResults.length <1 && filterResults.length <1){
+
+    combinedResults = [...originalRecipes];
+
+  }else{
+
+    combinedResults = [...searchResults, ...filterResults];
 
   }
+  
 
-  const remainingRecipes = totalRecipes - recipes.length;
+  const remainingRecipes = totalRecipes - combinedResults.length;
 
   return (
 
     <div>
 
-      <button onClick={handleDefault}>All Recipes</button>
+      <Hero 
+        setFilterResults={setFilterResults}
+        handleDefaultFilter={handleDefaultFilter}
+        handleDefaultSearch = {handleDefaultSearch}
+        setRecipes={setRecipes}
+        onSearch={handleSearch}
+        onAutocomplete={fetchAutocompleteSuggestions}
 
-      <Hero handleDefault={handleDefault} setRecipes={setRecipes} onSearch={handleSearch} onAutocomplete={fetchAutocompleteSuggestions} />
+      />
+
+      <button onClick={handleDefaultSearch}>All Recipes</button>
+
+      <div className="total-count">
+        Total Recipes: {combinedResults.length}
+      </div>
 
       {autocompleteSuggestions.length > 0 && (
 
@@ -156,7 +220,7 @@ function RecipeList() {
 
       <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-        {recipes.map((recipe, index) => 
+        {combinedResults.map((recipe, index) => 
 
           <div key={index}>
 
@@ -168,7 +232,7 @@ function RecipeList() {
 
       </div>
 
-      {recipes.length < totalRecipes && (
+      {combinedResults.length < totalRecipes && (
 
         <div className="flex justify-center">
 
