@@ -1,3 +1,4 @@
+/* eslint-enable */
 import React from "react";
 import Image from "next/image";
 import theme from "./RecipeCard.module.css";
@@ -6,8 +7,8 @@ import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 import { useContext } from "react";
 import FavoritesContext from "@/components/Context/Favorites-context";
 import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRicepe";
-// import { StarIcon } from "@heroicons/react/20/solid";
-// import { StarIcon as StarEmptyIcon } from "@heroicons/react/24/outlineoutline";
+import { StarIcon as StarFilled} from "@heroicons/react/24/solid";
+import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
 
 const RecipeCard = ({ recipe, favorites }) => {
   if (!recipe) {
@@ -82,11 +83,11 @@ const RecipeCard = ({ recipe, favorites }) => {
         <div>
           {recipeIsFavorite ? (
             <button onClick={removeFavoriteHandler(recipe)}>
-              <span>Remove from Favorites</span>
+              <span><StarFilled className="w-6 h-6 text-blue-800" /></span>
             </button>
           ) : (
             <button onClick={() => addFavoritesHandler(recipe)}>
-              <span>Add to Favorites</span>
+              <span><StarEmpty className="w-6 h-6 text-green-700" /></span>
             </button>
           )}
         </div>

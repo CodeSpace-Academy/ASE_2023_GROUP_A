@@ -19,7 +19,6 @@ export const getAllRecipes = async (limit) => {
 export const fetchRecipeDataFromMongo = async (collection,recipeName) => {
   try {
     const recipeData = await collection.findOne({ title: recipeName }); 
-    console.log(recipeData)
     return recipeData;
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);

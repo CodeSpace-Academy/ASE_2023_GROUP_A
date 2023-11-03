@@ -7,11 +7,11 @@ const handler = async (req, res) => {
   }
   try {
     // const skip = (page - 1) * ITEMS_PER_PAGE;
-    const [recipesData, totalRecipes, recipeDetail] = await Promise.all([
+    const [recipesData, totalRecipes] = await Promise.all([
       getAllRecipes(ITEMS_PER_PAGE),
       await getTotalRecipesCount(), // Fetch the total number of recipes
     ]);
-    res.status(200).json({ recipes: recipesData, totalRecipes ,recipeDetail});
+    res.status(200).json({ recipes: recipesData, totalRecipes});
   } catch (error) {
     
     console.error("Error fetching recipes:", error);

@@ -30,7 +30,6 @@ const handler = async (request, response) => {
     }
   } else if (request.method === "DELETE") {
     const { recipeId } = request.body;
-    console.log("ID TO BE REMOVED:", recipeId);
     try {
       // Remove the recipeId from the user's favorites collection in MongoDB
       const result = await removeFavoriteFromDB(recipeId);

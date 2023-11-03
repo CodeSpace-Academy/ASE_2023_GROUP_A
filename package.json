@@ -16,7 +16,6 @@
     "@mui/icons-material": "^5.14.15",
     "@mui/material": "^5.14.15",
     "autoprefixer": "^10.4.16",
-    "eslint": "^8.52.0",
     "heroicons": "^2.0.18",
     "mongodb": "^6.1.0",
     "next": "13.5.4",
@@ -32,6 +31,12 @@
   "devDependencies": {
     "@types/node": "20.8.3",
     "@types/react": "18.2.25",
+    "eslint": "^8.52.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "typescript": "5.2.2"
   },
   "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
