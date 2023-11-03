@@ -237,3 +237,47 @@ export async function getCategories(){
   return categories
 }
 
+export async function getTags() {
+  const collection = await connectToCollection("devdb", "recipes");
+
+  try {
+    const tags = await collection
+      .aggregate([
+        { $unwind: "$tags" },
+        { $group: { _id: "$tags" } },
+        { $project: { _id: 0, tag: "$_id" } },
+      ])
+      .toArray();
+
+    return tags.map((tagObj) => tagObj.tag);
+  } catch (error) {
+    console.error("Error fetching unique tags:", error);
+    throw error;
+  }
+}
+
+export async function filteringByTags(
+  selectedCategories,
+  selectedTags,
+  searchQuery
+) {
+  const recipesCollection = await connectToCollection("devdb", "recipes");
+
+  const query = {};
+
+  if (selectedTags) {
+    query.tags = { $in: selectedTags };
+  }
+
+  if (selectedCategories && selectedCategories.length > 0) {
+    query.category = { $in: selectedCategories };
+  }
+
+  if (searchQuery) {
+    query.$or = [{ title: { $regex: searchQuery, $options: "i" } }];
+  }
+
+  const filterResult = await recipesCollection.find(query).limit(100).toArray();
+
+  return filterResult;
+}
