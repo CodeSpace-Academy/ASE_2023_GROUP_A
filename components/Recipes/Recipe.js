@@ -2,7 +2,7 @@ import { useState } from "react"; // Import useState from React
 import CookTime from "../TimeAndDate/TimeConvertor";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
 import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
-import Tags from "../Tags/Tags";
+import RecipeDetailTags from "../recipeDetailTags/recipeDetailTag";
 import Image from "next/image";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
@@ -76,7 +76,7 @@ const Recipe = ({ recipe, Allergies }) => {
             </button>
             {showTags && (
               <div>
-                <Tags recipe={recipe} />
+                <RecipeDetailTags recipe={recipe} />
               </div>
             )}
           </div>
