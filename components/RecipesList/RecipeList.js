@@ -172,13 +172,13 @@ const loadRecipes = async (page) => {
       {combinedResults.length < totalRecipes && (
         <>
           <div className="flex justify-center">
-            <LoadButton
+            <LoadMoreButton
               handleLoad={handleLoadLess}
               remainingRecipes={remainingRecipes}
               totalRecipes={totalRecipes}
               isLoadMore={false}
             />
-            <LoadButton
+            <LoadMoreButton
               handleLoad={handleLoadMore}
               remainingRecipes={remainingRecipes}
               totalRecipes={totalRecipes}
