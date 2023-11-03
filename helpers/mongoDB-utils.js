@@ -11,8 +11,6 @@ export const getAllRecipes = async (limit) => {
   } catch (error) {
     console.error("Error fetching recipes:", error);
     throw error;
-  } finally {
-    closeMongoDBConnection();
   }
 };
 
