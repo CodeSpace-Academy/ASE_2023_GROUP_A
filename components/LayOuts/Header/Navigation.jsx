@@ -91,12 +91,7 @@ const Navigation = () => {
           </div>
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
-              <Link
-                href={`/Recipe_List`}
-                className="text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium"
-              >
-                Recipes
-              </Link>
+           
               <Link
                 href={`/FavoritesPage`}
                 className="text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium"

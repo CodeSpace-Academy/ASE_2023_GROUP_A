@@ -29,7 +29,7 @@ function FavoritesPage() {
             ))}
           </div>
         )}
-        <Link href={`/recipeList`} className="py-10 px-5 mx-12">
+        <Link href={`/`} className="py-10 px-5 mx-12">
           <strong> Explore Recipes</strong>
         </Link>
       </section>

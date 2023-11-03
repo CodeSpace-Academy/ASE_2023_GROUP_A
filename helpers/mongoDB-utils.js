@@ -7,26 +7,26 @@ export const getAllRecipes = async (limit) => {
   query.limit(limit);
   try {
     const recipes = await query.toArray();
+    
     return recipes;
   } catch (error) {
     console.error("Error fetching recipes:", error);
     throw error;
   }
+  
 };
 
 // Fetch recipe data from MongoDB based on the recipe title and collection
 export const fetchRecipeDataFromMongo = async (collection,recipeName) => {
   try {
-    const recipeData = await collection.findOne({ title: recipeName }); 
+    const recipeData = await collection.findOne({ title: recipeName });
+    closeMongoDBConnection();
     return recipeData;
-
   } catch (error) {
-
+  closeMongoDBConnection();
     console.error("Error fetching recipe data from MongoDB:", error);
     throw error;
-  } finally {
-    closeMongoDBConnection();
-  }
+  } 
 };
 
 
@@ -36,40 +36,14 @@ export const getAllCategories = async () => {
      const collection = await connectToCollection('devdb', 'categories');
     const categoriesDocument = collection.findOne({});
     const categories = categoriesDocument.categories;
+    closeMongoDBConnection();
     return categories;
   } catch (error) {
+    closeMongoDBConnection();
     console.error("Error fetching categories:", error);
     throw error;
-  } finally {
-    closeMongoDBConnection();
-
-  }
+  } 
 };
-
-// export const generateDynamicPaths = async (client) => {
-
-//   try {
-
-//     const db = client.db('devdb');
-//     const recipes = await getAllRecipes(client, 0, 5, 'recipes');
-
-//     const dynamicPaths = recipes.map((recipe) => ({
-
-//       params: { recipeName: recipe.title },
-
-//     }));
-
-//     console.log("Client Closed");
-//     return dynamicPaths;
-
-//   } catch (error) {
-
-//     console.error("Error generating dynamic paths:", error);
-//     throw error;
-
-//   }
-
-// };
 
 export const fetchAllergens = async () => {
 
@@ -77,14 +51,12 @@ export const fetchAllergens = async () => {
     const collection = await connectToCollection('devdb', 'allergens');
     const allergensDocument = await collection.findOne({});
     const allergens = allergensDocument.allergens;
+    closeMongoDBConnection();
     return allergens;
-
   } catch (error) {
-
+    closeMongoDBConnection();
     console.error("Error fetching allergens:", error);
     throw error;
-  } finally {
-    closeMongoDBConnection();
   }
 
 };
@@ -111,9 +83,7 @@ export const getTotalRecipesCount = async () => {
   } catch (error) {
     console.error("Error fetching total recipes count:", error);
     throw error;
-  } finally {
-    closeMongoDBConnection();
-  }
+  } 
 };
 
 // Function to add a favorite recipe to MongoDB
@@ -135,16 +105,13 @@ export const addFavoriteToMongoDB = async (recipe) => {
   } catch (error) {
     console.error("Error adding favorite to MongoDB:", error);
     throw error;
-  } finally {
-   closeMongoDBConnection(); // Close the MongoDB connection
-  }
+  } 
 };
 
 export const removeFavoriteFromDB = async (recipeId) => {
   try {
     const favoritesCollection = await connectToCollection("devdb", "favorites");
     const deleteResult = await favoritesCollection.deleteOne({ _id: recipeId });
-    console.log("DELETED:",deleteResult)
     return deleteResult;
   } catch (err) { }finally{closeMongoDBConnection();}
 };
@@ -158,8 +125,6 @@ export const getFavouritesFromMongoDB = async () => {
     } catch (error) {
       console.error("Error fetching favourites:", error);
       throw error;
-    } finally {
-      closeMongoDBConnection();
     }
 }
 
@@ -199,7 +164,6 @@ export async function searching(searchQuery, selectedCategories) {
   }
 
   const searchResult = recipesCollection.find(query).limit(100).toArray();
-
   return searchResult;
 }
 
@@ -220,7 +184,6 @@ export async function filtering(selectedCategories, searchQuery,) {
   }
 
   const filterResult = recipesCollection.find(query).limit(100).toArray();
-
   return filterResult;
 }
 
@@ -231,7 +194,6 @@ export async function getCategories(){
   const categoriesCollection = await connectToCollection("devdb", "categories");
 
   const categories = categoriesCollection.find().toArray();
-
   return categories
 }
 
@@ -251,7 +213,7 @@ export async function getTags() {
   } catch (error) {
     console.error("Error fetching unique tags:", error);
     throw error;
-  }
+  } 
 }
 
 export async function filteringByTags(
@@ -276,6 +238,5 @@ export async function filteringByTags(
   }
 
   const filterResult = await recipesCollection.find(query).limit(100).toArray();
-
   return filterResult;
 }

@@ -6,9 +6,12 @@ import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
 import FavoritesContext from "../Context/Favorites-context";
 import Loading from "../Loading/Loading";
 import FloatingButton from "../Buttons/floatingButton/FloatingButton";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import { responsive } from "@/helpers/settings/settings";
 // const ITEMS_PER_PAGE = 100;
 
-function RecipeList() {
+function RecipeList({favorites}) {
  const [recipes, setRecipes] = useState([]);
  const [originalRecipes, setOriginalRecipes] = useState([]);
  const [currentPage, setCurrentPage] = useState(1);
@@ -22,9 +25,6 @@ function RecipeList() {
 
   const [loading, setLoading] = useState(true);
 
-
-  const favoritesContext = useContext(FavoritesContext);
-  const favorites = favoritesContext.favorites || [];
 
 const loadRecipes = async (page) => {
   const response = await fetchRecipes(page);
@@ -140,7 +140,19 @@ const loadRecipes = async (page) => {
       />
 
       <button onClick={handleDefaultSearch}>All Recipes</button>
-
+      {!favorites ? (
+        <p>Loading favorite recipes...</p>
+      ) : favorites.length === 0 ? (
+        <p>No favorite recipes yet.</p>
+      ) : (
+        <Carousel responsive={responsive} containerClass="carousel-container">
+          {favorites.map((recipe) => (
+            <div key={recipe.recipe._id}>
+              <RecipeCard recipe={recipe.recipe} favorites={favorites} />
+            </div>
+          ))}
+        </Carousel>
+      )}
       <div className="total-count">Total Recipes: {combinedResults.length}</div>
 
       {autocompleteSuggestions.length > 0 && (
