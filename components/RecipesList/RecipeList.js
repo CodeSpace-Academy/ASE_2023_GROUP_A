@@ -230,8 +230,7 @@ function RecipeList() {
         )}
 
       </div>
-      :
-      <p style={{textAlign:'center', fontSize: '4em', fontWeight: 'bold', color: 'white'}}>No recipes found</p>
+      
 
       
 
