@@ -1,6 +1,6 @@
 .floatingButton {
   position: fixed;
-  bottom: 150px;
+  bottom: 16%;
   right: 20px;
   background-color: #007bff;
   color: #fff;
@@ -23,7 +23,7 @@
 }
 .floatingButton2 {
   position: fixed;
-  bottom: 80px;
+  bottom: 10%;
   right: 20px;
   background-color: #007bff;
   color: #fff;

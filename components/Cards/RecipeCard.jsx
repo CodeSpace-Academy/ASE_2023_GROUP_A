@@ -4,13 +4,14 @@ import Image from "next/image";
 import theme from "./RecipeCard.module.css";
 import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 //Fav Button
+import Highlighter from "react-highlight-words";
 import { useContext } from "react";
 import FavoritesContext from "@/components/Context/Favorites-context";
 import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRicepe";
 import { StarIcon as StarFilled} from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
 import { useTheme } from "../Context/ThemeContext";
-const RecipeCard = ({ recipe, searchTerm, favorites }) => {
+const RecipeCard = ({ recipe, searchQuery, favorites }) => {
   const { theme } = useTheme()
 
   if (!recipe) {

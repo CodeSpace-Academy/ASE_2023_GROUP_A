@@ -5,10 +5,10 @@ import {
 } from "./mongoDB-connection";
 
 // Fetch all recipes with optional skip and limit parameters
-export const getAllRecipes = async (limit) => {
+export const getAllRecipes = async (skip, limit) => {
   const collection = await connectToCollection("devdb", "recipes");
   const query = collection.find();
-  query.limit(limit);
+  query.skip(skip).limit(limit);
   try {
     const recipes = await query.toArray();
 
@@ -117,8 +117,8 @@ export const removeFavoriteFromDB = async (recipeId) => {
 };
 
 export const getFavouritesFromMongoDB = async () => {
-  let clientt = client.connect();
-  const db = client.db("devdb");
+  let clientt = await client.connect();
+  const db = clientt.db("devdb");
   const collection = db.collection("favorites");
   const data = collection.find();
   try {
