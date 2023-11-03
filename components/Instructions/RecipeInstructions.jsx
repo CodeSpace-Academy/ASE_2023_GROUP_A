@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect } from "react";
 
 // RecipeInstructions component displays a list of instructions for a recipe
 const RecipeInstructions = ({ recipes }) => {
@@ -12,12 +12,14 @@ const RecipeInstructions = ({ recipes }) => {
   useEffect(() => {
     // Delay for simulating a loading state (e.g., 2 seconds)
     const delay = 2000;
-    
+
     // Set a timeout to fetch and process instructions
     const timeoutId = setTimeout(() => {
       try {
         // Sort the instructions based on their index
-        const sortedInstructions = recipes.instructions.map((instruction, index) => ({ index, instruction }));
+        const sortedInstructions = recipes.instructions.map(
+          (instruction, index) => ({ index, instruction })
+        );
         sortedInstructions.sort((a, b) => a.index - b.index);
 
         // Map the sorted instructions to list items

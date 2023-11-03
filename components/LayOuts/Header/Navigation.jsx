@@ -69,13 +69,13 @@ const Navigation = () => {
               </svg>
             </button>
           </div>
-          <div className="flex mr-10 flex-shrink-0 items-center">        
-              <Image
-                src="/Images/logo3.png"
-                alt="Cooking Devs"
-                height={50}
-                width={70}
-              />      
+          <div className="flex mr-10 flex-shrink-0 items-center">
+            <Image
+              src="/Images/logo3.png"
+              alt="Cooking Devs"
+              height={50}
+              width={70}
+            />
           </div>
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
@@ -106,28 +106,35 @@ const Navigation = () => {
               <span className="absolute -inset-1.5"></span>
               <span className="sr-only">Toggle Theme</span>
               {theme === "light" ? (
-                <svg xmlns="http://www.w3.org/2000/svg"
-                 fill="none" 
-                 viewBox="0 0 24 24" 
-                 strokeWidth="1.5" 
-                 stroke="currentColor" 
-                 className="w-4 h-6">
-                <path strokeLinecap="round"
-                 strokeLinejoin="round"
-                 d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-                 </svg>
-
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg"
-                 fill="none"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
                   viewBox="0 0 24 24"
-                   strokeWidth="1.5" 
-                   stroke="currentColor" className="w-4 h-6">
-                  <path strokeLinecap="round" 
-                  strokeLinejoin="round"
-                   d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-4 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                  />
                 </svg>
-
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-4 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
+                  />
+                </svg>
               )}
             </button>
           </div>
@@ -147,7 +154,11 @@ const Navigation = () => {
               </button>
             </div>
             <div
-              className={`absolute top-12 left-0 ${mobileMenuOpen ? "bg-red-500 w-full mt-5 text- mr-6 text-center " : "hidden"}`}
+              className={`absolute top-12 left-0 ${
+                mobileMenuOpen
+                  ? "bg-red-500 w-full mt-5 text- mr-6 text-center "
+                  : "hidden"
+              }`}
               id="mobile-menu"
             >
               <Link

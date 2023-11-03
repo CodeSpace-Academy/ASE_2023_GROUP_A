@@ -4,10 +4,8 @@
 
 /* global-styles.css */
 body {
-background-color: rgba(81, 132, 216, 0.5);
-;
-
-} 
+  background-color: rgba(81, 132, 216, 0.5);
+}
 
 /* h1{
   font-size: 25px;
@@ -40,10 +38,15 @@ footer {
   margin-top: auto;
 }
 
-.flexpage{
+.flexpage {
   height: 80vh;
 }
 
-.mainBody{
+.mainBody {
   min-height: 90vh;
+}
+
+.YourHighlightClass {
+  background-color: yellow;
+  font-weight: bold;
 }
