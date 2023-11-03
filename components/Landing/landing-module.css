@@ -1,15 +1,14 @@
-   /* components/Home.module.css */
-   .homeContainer {
-    background-image: url('https://www.royco.co.za/cdn-cgi/image/width=1440,height=640,f=auto,quality=90/sites/g/files/fnmzdf1866/files/2023-04/Recipe%20BackgroundUpdate.jpg');
-    background-size: cover; /* You can set the background size as needed */
-    background-position: center; /* You can adjust the background position */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-  }
-  
+/* components/Home.module.css */
+.homeContainer {
+  background-image: url("https://www.royco.co.za/cdn-cgi/image/width=1440,height=640,f=auto,quality=90/sites/g/files/fnmzdf1866/files/2023-04/Recipe%20BackgroundUpdate.jpg");
+  background-size: cover; /* You can set the background size as needed */
+  background-position: center; /* You can adjust the background position */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
 
 .logoContainer {
   margin-bottom: 20px;
@@ -33,7 +32,3 @@
   margin: 0 10px;
   text-decoration: none;
 }
-
-
-
-

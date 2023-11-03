@@ -24,7 +24,7 @@ const handler = async (req, res) => {
       console.error("Error updating description:", error);
       res.status(500).json({ error: "Failed to update description" });
     }
-  } else if(req.method === "GET"){
+  } else if (req.method === "GET") {
     const recipeId = req.query.recipeId;
     try{
         const collection = await connectToCollection('devdb','recipes')
@@ -40,8 +40,8 @@ const handler = async (req, res) => {
         console.error("Error Fetching Description:", err);
         res.status(505).json({ err: "Failed To Fecth Description"})
     }
-  }else{
-    res.status(607).json({err: "Method Not Allowed"})
+  } else {
+    res.status(607).json({ err: "Method Not Allowed" });
   }
 };
 

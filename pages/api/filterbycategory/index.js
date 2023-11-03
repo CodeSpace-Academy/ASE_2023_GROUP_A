@@ -1,14 +1,18 @@
-import { filtering } from "@/helpers/mongoDB-utils";
+import { filteringByCategory } from "@/helpers/mongoDB-utils";
 
 const handler = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { selectedCategories, searchQuery } = req.body;
+  const { selectedCategories, selectedTags, searchQuery } = req.body;
 
   try {
-    const filterResult = await filtering(selectedCategories, searchQuery);
+    const filterResult = await filteringByCategory(
+      selectedCategories,
+      selectedTags,
+      searchQuery
+    );
     res.status(200).json({ recipes: filterResult });
   } catch (error) {
     console.error("Error filtering recipes by category:", error);

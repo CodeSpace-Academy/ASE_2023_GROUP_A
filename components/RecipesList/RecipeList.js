@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import fetchRecipes from "@/helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
@@ -11,38 +11,36 @@ import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
 // const ITEMS_PER_PAGE = 100;
 
-function RecipeList({favorites}) {
- const [recipes, setRecipes] = useState([]);
- const [originalRecipes, setOriginalRecipes] = useState([]);
- const [currentPage, setCurrentPage] = useState(1);
- const [totalRecipes, setTotalRecipes] = useState(0);
- const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
- const [searchResults, setSearchResults] = useState([]);
- const [filterResults, setFilterCategoryResults] = useState([]);
- const [filterTagsResults, setFilterTagsResults] = useState([]);
- const [searchQuery, setSearchQuery] = useState("");
-
+function RecipeList({ favorites }) {
+  const [recipes, setRecipes] = useState([]);
+  const [originalRecipes, setOriginalRecipes] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecipes, setTotalRecipes] = useState(0);
+  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [filterResults, setFilterCategoryResults] = useState([]);
+  const [filterTagsResults, setFilterTagsResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [loading, setLoading] = useState(true);
 
+  const loadRecipes = async (page) => {
+    const response = await fetchRecipes(page);
 
-const loadRecipes = async (page) => {
-  const response = await fetchRecipes(page);
+    if (response.ok) {
+      const data = await response.json();
+      // setRecipes([...recipes, ...data.recipes]);
+      setOriginalRecipes(data.recipes);
+      setTotalRecipes(data.totalRecipes);
+    } else {
+      console.error("Failed to fetch recipes");
+    }
+  };
+  const handleLoadLess = () => {
+    setCurrentPage(currentPage - 1);
 
-  if (response.ok) {
-    const data = await response.json();
-    // setRecipes([...recipes, ...data.recipes]);
-    setOriginalRecipes(data.recipes);
-    setTotalRecipes(data.totalRecipes);
-  } else {
-    console.error("Failed to fetch recipes");
-  }
-};
- const handleLoadLess = () => {
-   setCurrentPage(currentPage - 1);
-
-   loadRecipes(currentPage - 1);
- };
+    loadRecipes(currentPage - 1);
+  };
   const handleLoadMore = () => {
     setCurrentPage(currentPage + 1);
 
@@ -122,8 +120,7 @@ const loadRecipes = async (page) => {
     combinedResults = [...searchResults, ...filterResults];
   }
 
-  const remainingRecipes =   totalRecipes - (currentPage * 100);
-
+  const remainingRecipes = totalRecipes - currentPage * 100;
 
   return (
     <div>
@@ -206,4 +203,3 @@ const loadRecipes = async (page) => {
 }
 
 export default RecipeList;
-

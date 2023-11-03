@@ -9,10 +9,13 @@ function Allergens({ recipeIngredients, allergens }) {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const allergensList = allergens.filter((allergen) =>
-    recipeIngredients && recipeIngredients.length > 0 && recipeIngredients.some((ingredient) =>
-      ingredient.toLowerCase().includes(allergen.toLowerCase())
-    )
+  const allergensList = allergens.filter(
+    (allergen) =>
+      recipeIngredients &&
+      recipeIngredients.length > 0 &&
+      recipeIngredients.some((ingredient) =>
+        ingredient.toLowerCase().includes(allergen.toLowerCase())
+      )
   );
 
   return (

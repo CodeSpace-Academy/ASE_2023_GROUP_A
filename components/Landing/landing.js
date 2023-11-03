@@ -7,7 +7,7 @@ const Landing = () => {
   return (
     <div className={styles.homeContainer}>
       <div className={styles.logoContainer}>
-        <Link href="/Recipe_List">
+        <Link href="/">
           <Image
             src="/Images/logo.png"
             alt="Your Logo"
