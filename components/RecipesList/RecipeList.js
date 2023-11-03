@@ -5,7 +5,7 @@ import Hero from "../Landing/hero";
 import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
 import FavoritesContext from "../Context/Favorites-context";
 import Loading from "../Loading/Loading";
-
+import FloatingButton from "../Buttons/floatingButton/floatingButton";
 // const ITEMS_PER_PAGE = 100;
 
 function RecipeList() {
@@ -216,6 +216,7 @@ function RecipeList() {
           />
         </div>
       )}
+      <FloatingButton />
     </div>
   );
 

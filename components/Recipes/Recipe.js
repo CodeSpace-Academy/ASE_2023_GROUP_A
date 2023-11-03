@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import{CookTime, PrepTime, Published, TotalTime}from "../TimeAndDate/TimeConvertor";
-import Tags from "../Tags/Tags";
+import RecipeDetailTags from "../Tags/RecipeDetailTags";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
 import DropDownSVG from "../IconsAndSvg's/DropDownSVG";
@@ -51,7 +51,7 @@ const Recipe = ({ recipe, Allergies }) => {
             </button>
             {showTags && (
               <div>
-                <Tags recipe={recipe} />
+                <RecipeDetailTags recipe={recipe} />
               </div>
             )}
           </div>
