@@ -5,7 +5,6 @@ import Categories from "../categories/categories";
 import Tags from "../Tags/Tags";
 
 export default function Hero({
-
   setFilterCategoryResults,
   setFilterTagsResults,
   handleDefaultCategoryFilter,
@@ -15,18 +14,12 @@ export default function Hero({
   onSearch,
   onAutocomplete,
   setSearchQuery,
-  searchQuery
-
+  searchQuery,
 }) {
-  
   return (
-
     <div className={classes.heroImage}>
-
       <div className={classes.heroContent}>
-
         <div>
-
           <SearchBar
             handleDefault={handleDefaultSearch}
             onSearch={onSearch}
@@ -34,7 +27,6 @@ export default function Hero({
             setSearchQuery={setSearchQuery}
             searchQuery={searchQuery}
           />
-
         </div>
 
         <Categories
@@ -43,17 +35,12 @@ export default function Hero({
           handleDefaultCategoryFilter={handleDefaultCategoryFilter}
         />
 
-        <Tags 
+        <Tags
           setFilterTagsResults={setFilterTagsResults}
           setRecipes={setRecipes}
           handleDefaultTagFilter={handleDefaultTagFilter}
-
         />
-       
       </div>
-      
     </div>
-
   );
-
 }

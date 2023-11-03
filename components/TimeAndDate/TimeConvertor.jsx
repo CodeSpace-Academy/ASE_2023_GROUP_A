@@ -1,20 +1,25 @@
 // CookTime component displays the cooking time and optionally preparation time for a recipe
-export default function CookTime({ cookTimeInMinutes, label, prepTimeInMinutes }) {
-
+export default function CookTime({
+  cookTimeInMinutes,
+  label,
+  prepTimeInMinutes,
+}) {
   // Function to format time in hours and minutes
   const formatTime = (minutes) => {
     if (minutes >= 60) {
       const hours = Math.floor(minutes / 60);
       const mins = minutes % 60;
       if (mins === 0) {
-        return `${hours} hour${hours > 1 ? 's' : ''}`;
+        return `${hours} hour${hours > 1 ? "s" : ""}`;
       } else if (hours === 0) {
-        return `${mins} minute${mins > 1 ? 's' : ''}`;
+        return `${mins} minute${mins > 1 ? "s" : ""}`;
       } else {
-        return `${hours} hour${hours > 1 ? 's' : ''} ${mins} minute${mins > 1 ? 's' : ''}`;
+        return `${hours} hour${hours > 1 ? "s" : ""} ${mins} minute${
+          mins > 1 ? "s" : ""
+        }`;
       }
     } else {
-      return `${minutes} minute${minutes > 1 ? 's' : ''}`;
+      return `${minutes} minute${minutes > 1 ? "s" : ""}`;
     }
   };
 
@@ -22,11 +27,14 @@ export default function CookTime({ cookTimeInMinutes, label, prepTimeInMinutes }
   const formattedLabel = label.toLowerCase();
 
   // Calculate the formatted time, considering preparation time if provided
-  const formattedTime = formattedLabel === 'total time' ? formatTime(cookTimeInMinutes + prepTimeInMinutes) : formatTime(cookTimeInMinutes);
+  const formattedTime =
+    formattedLabel === "total time"
+      ? formatTime(cookTimeInMinutes + prepTimeInMinutes)
+      : formatTime(cookTimeInMinutes);
 
   return (
     <h4>
       <b>{label}:</b> {formattedTime}
     </h4>
   );
-};
+}

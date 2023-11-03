@@ -8,7 +8,11 @@ const handler = async (req, res) => {
   const { searchQuery, selectedCategories, selectedTags } = req.body;
 
   try {
-    const searchResult = await searching(searchQuery, selectedCategories, selectedTags);
+    const searchResult = await searching(
+      searchQuery,
+      selectedCategories,
+      selectedTags
+    );
     res.status(200).json({ recipes: searchResult });
   } catch (error) {
     console.error("Error searching recipes:", error);

@@ -1,8 +1,6 @@
-/* FloatingButton.module.css */
-
 .floatingButton {
   position: fixed;
-  bottom: 20px; /* Adjust the desired vertical position */
+  bottom: 20px;
   right: 20px;
   background-color: #007bff;
   color: #fff;
@@ -23,5 +21,3 @@
 .floatingButton:hover {
   background-color: #0056b3;
 }
-
-  
