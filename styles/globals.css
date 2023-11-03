@@ -47,3 +47,11 @@ footer {
 .mainBody{
   min-height: 90vh;
 }
+
+
+.YourHighlightClass {
+
+  background-color: yellow;
+  font-weight: bold; 
+
+}

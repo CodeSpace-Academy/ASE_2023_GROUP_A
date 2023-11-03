@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
-function Categories({setFilterResults, handleDefault, setRecipes }) {
+function Categories({setFilterCategoryResults, handleDefaultCategoryFilter, setRecipes }) {
 
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -42,7 +42,7 @@ function Categories({setFilterResults, handleDefault, setRecipes }) {
 
       if (selectedCategories.length === 0) {
 
-        setFilterResults([]);
+        setFilterCategoryResults([]);
 
       } else {
 
@@ -64,7 +64,7 @@ function Categories({setFilterResults, handleDefault, setRecipes }) {
 
             const filterResult = await response.json();
             // setRecipes(filterResult.recipes);
-            setFilterResults(filterResult.recipes)
+            setFilterCategoryResults(filterResult.recipes)
             // setCount(filterResult.recipes.length);
 
           } else {
@@ -89,7 +89,7 @@ function Categories({setFilterResults, handleDefault, setRecipes }) {
 
     } else {
 
-      handleDefault();
+      handleDefaultCategoryFilter();
 
     }
 

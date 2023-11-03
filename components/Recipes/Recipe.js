@@ -81,7 +81,7 @@ const Recipe = ({ recipe, Allergies }) => {
             )}
           </div>
         </div>
-        <div className="lg:w-1/2 p-4">
+        <div className="lg:w-1/2 p-4 text-gray-600">
           <Description description={recipe.description} recipeId={recipe._id} />
           <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
           <CookTime cookTimeInMinutes={recipe.cook} label={"Cook Time"} />

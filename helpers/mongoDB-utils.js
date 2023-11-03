@@ -23,14 +23,52 @@ export async function DBConnection() {
   }
 };
 
-export const getAllRecipes = async (client, skip, limit) => {
+export async function getTags(){
+
+  const db = client.db('devdb');
+  const collection = db.collection('recipes');
+
+  try {
+
+    const tags = await collection
+      .aggregate([
+
+        { $unwind: '$tags' },
+        { $group: { _id: '$tags' } },
+        { $project: { _id: 0, tag: '$_id' } },
+
+      ])
+      .toArray();
+
+    return tags.map((tagObj) => tagObj.tag);
+
+  } catch (error) {
+
+    console.error('Error fetching unique tags:', error);
+    throw error;
+
+  }
+
+};
+
+export const getAllRecipes = async (client, skip, limit, selectedTags) => {
 
   const db = client.db('devdb');
   const collection = db.collection('recipes');
   
   try {
 
-    const recipes = await collection.find().skip(skip).limit(limit).toArray();
+    // let query = {};
+
+    // if (selectedTags && selectedTags.length > 0) {
+
+    //   query = { tags: { $in: selectedTags } };
+
+    // }
+
+
+
+    const recipes = await collection.find({}).skip(skip).limit(limit).toArray();
     return recipes;
 
   } catch (error) {
@@ -184,8 +222,7 @@ export async function searching(searchQuery, selectedCategories) {
   return searchResult;
 }
 
-
-export async function filtering(selectedCategories, searchQuery,) {
+export async function filteringByCategory(selectedCategories, searchQuery, selectedTags) {
 
   const db = client.db("devdb");
   const recipesCollection = db.collection("recipes");
@@ -193,19 +230,60 @@ export async function filtering(selectedCategories, searchQuery,) {
   const query = {};
 
   if (selectedCategories && selectedCategories.length > 0) {
+
     query.category = { $in: selectedCategories };
+
   }
 
+  if (selectedTags) {
+
+    query.tags = { $in: selectedTags };
+
+  }
 
   if (searchQuery) {
+ 
     query.$or = [{ title: { $regex: searchQuery, $options: "i" } }];
+   
   }
 
-  const filterResult = recipesCollection.find(query).limit(100).toArray();
+  
+
+  const filterResult = await recipesCollection.find(query).limit(100).toArray();
 
   return filterResult;
 }
 
+export async function filteringByTags(selectedCategories, selectedTags, searchQuery,) {
+
+  const db = client.db("devdb");
+  const recipesCollection = db.collection("recipes");
+
+  const query = {};
+
+  if (selectedTags) {
+
+    query.tags = { $in: selectedTags };
+
+  }
+
+  if (selectedCategories && selectedCategories.length > 0) {
+
+    query.category = { $in: selectedCategories };
+
+  }
+
+  if (searchQuery) {
+
+    query.$or = [{ title: { $regex: searchQuery, $options: "i" } }];
+
+  }
+  
+
+  const filterResult = await recipesCollection.find(query).limit(100).toArray();
+
+  return filterResult;
+}
 
 
 export async function getCategories(){

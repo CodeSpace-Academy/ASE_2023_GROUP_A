@@ -2,8 +2,10 @@ import React from "react";
 import Image from "next/image";
 import CookTime from "../TimeAndDate/TimeConvertor";
 import Link from "next/link";
+import Highlighter from "react-highlight-words";
 
-const RecipeCard = ({ recipe, searchTerm  }) => {
+const RecipeCard = ({ recipe, searchQuery  }) => {
+
   if (!recipe) {
 
     return <div>Loading...</div>;
@@ -26,15 +28,15 @@ const RecipeCard = ({ recipe, searchTerm  }) => {
       <div className="flex flex-col justify-between h-full">
         <div className="mb-4 recipe-title-container text-center">
           <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2">
-          {searchTerm ? ( // Conditionally highlight if searchTerm exists
+          {searchQuery ? ( 
               <Highlighter
                 highlightClassName="YourHighlightClass"
-                searchWords={[searchTerm]}
+                searchWords={[searchQuery]}
                 autoEscape={true}
                 textToHighlight={recipe.title}
               />
             ) : (
-              recipe.title // Render as is if no searchTerm
+              recipe.title
             )}
           </h2>
           <div className="mb-2">

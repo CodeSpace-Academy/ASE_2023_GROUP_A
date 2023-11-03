@@ -1,19 +1,27 @@
-// import { filtering } from "@/helpers/mongoDB-utils";
+import { filteringByTags } from "@/helpers/mongoDB-utils";
 
-// const handler = async (req, res) => {
-//   if (req.method !== "POST") {
-//     return res.status(405).json({ error: "Method not allowed" });
-//   }
+const handler = async (req, res) => {
 
-//   const { selectedCategories,selectedTags, searchQuery } = req.body;
+  if (req.method !== "POST") {
 
-//   try {
-//     const filterResult = await filtering(selectedCategories,selectedTags, searchQuery);
-//     res.status(200).json({ recipes: filterResult });
-//   } catch (error) {
-//     console.error("Error filtering recipes by category:", error);
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// };
+    return res.status(405).json({ error: "Method not allowed" });
 
-// export default handler;
+  }
+
+  const { selectedCategories,selectedTags, searchQuery } = req.body;
+
+  try {
+
+    const filterTagsResult = await filteringByTags(selectedCategories,selectedTags, searchQuery);
+    res.status(200).json({ recipes: filterTagsResult });
+
+  } catch (error) {
+
+    console.error("Error filtering recipes by category:", error);
+    res.status(500).json({ error: "Internal server error" });
+
+  }
+  
+};
+
+export default handler;

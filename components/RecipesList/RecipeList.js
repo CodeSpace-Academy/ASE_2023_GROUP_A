@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import fetchRecipes from "@/helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
-import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
-
-
-// const ITEMS_PER_PAGE = 100;
+import LoadButton from "../Buttons/LoadMore/LoadMore";
+import FloatingButton from "../Buttons/floatingButton/floatingButton";
 
 function RecipeList() {
 
@@ -15,10 +13,9 @@ function RecipeList() {
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([])
   const [searchResults, setSearchResults] = useState([]);
-  const [filterResults, setFilterResults] = useState([]);
-  const [searchHistory, setSearchHistory] = useState([]);
-
-
+  const [filterResults, setFilterCategoryResults] = useState([]);
+  const [filterTagsResults, setFilterTagsResults] = useState([])
+  const [searchQuery, setSearchQuery] = useState("");
 
   const loadRecipes = async (page) => {
 
@@ -39,6 +36,13 @@ function RecipeList() {
 
   };
 
+  const handleLoadLess = () => {
+    
+    setCurrentPage(currentPage - 1);
+   
+    loadRecipes(currentPage - 1);
+
+  };
   const handleLoadMore = () => {
     
     setCurrentPage(currentPage + 1);
@@ -137,48 +141,60 @@ function RecipeList() {
 
     setSearchResults([]);
     setAutocompleteSuggestions([]);
+    
 
   };
 
-  function handleDefaultFilter(){
+  function handleDefaultCategoryFilter(){
    
-    setFilterResults([]);
+    setFilterCategoryResults([]);
+    
+  };
+
+  function handleDefaultTagsFilter(){
+   
+    setFilterTagsResults([]);
     
   };
 
   let combinedResults 
 
-  if(searchResults.length <1 && filterResults.length <1){
+  if(searchResults.length <1 && filterResults.length <1 && filterTagsResults.length < 1){
 
     combinedResults = [...originalRecipes];
 
   }else{
 
-    combinedResults = [...searchResults, ...filterResults];
+    combinedResults = [...searchResults, ...filterResults, ...filterTagsResults];
 
   }
-  
 
-  const remainingRecipes = totalRecipes - combinedResults.length;
+  const remainingRecipes = totalRecipes - (100*currentPage)
 
   return (
 
     <div>
 
       <Hero 
-        setFilterResults={setFilterResults}
-        handleDefaultFilter={handleDefaultFilter}
+        setFilterCategoryResults={setFilterCategoryResults}
+        setFilterTagsResults={setFilterTagsResults}
+        handleDefaultCategoryFilter={handleDefaultCategoryFilter}
+        handleDefaultTagFilter={handleDefaultTagsFilter}
         handleDefaultSearch = {handleDefaultSearch}
         setRecipes={setRecipes}
         onSearch={handleSearch}
         onAutocomplete={fetchAutocompleteSuggestions}
+        searchQuery = {searchQuery}
+        setSearchQuery = {setSearchQuery}
 
       />
 
       <button onClick={handleDefaultSearch}>All Recipes</button>
 
       <div className="total-count">
+
         Total Recipes: {combinedResults.length}
+
       </div>
 
       {autocompleteSuggestions.length > 0 && (
@@ -199,29 +215,37 @@ function RecipeList() {
 
       )}
 
+      
+
       <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
         {combinedResults.map((recipe, index) => 
 
           <div key={index}>
 
-            <RecipeCard key={recipe._id} recipe={recipe} description={recipe.description} />
+            <RecipeCard key={recipe._id} recipe={recipe} searchQuery={searchQuery} description={recipe.description} />
 
           </div>
 
         )}
 
       </div>
+      :
+      <p style={{textAlign:'center', fontSize: '4em', fontWeight: 'bold', color: 'white'}}>No recipes found</p>
 
-      {combinedResults.length < totalRecipes && (
+      
 
-        <div className="flex justify-center">
 
-          <LoadMoreButton handleLoadMore={handleLoadMore} remainingRecipes={remainingRecipes} />
+      <div className="flex justify-center gap-10">
 
-        </div>
+        
+        <LoadButton handleLoad={handleLoadLess} remainingRecipes={remainingRecipes} totalRecipes={totalRecipes} isLoadMore={false} />
+        <LoadButton handleLoad={handleLoadMore} remainingRecipes={remainingRecipes} totalRecipes={totalRecipes} isLoadMore={true}/>
 
-      )}
+      </div>
+
+      <FloatingButton />
+      
 
     </div>
 

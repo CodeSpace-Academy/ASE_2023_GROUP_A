@@ -1,27 +1,175 @@
-const Tags = ({ recipe }) => {
-  try {
-    // If no recipe data is available, display a loading message
-    if (!recipe) {
-      return <div>Loading please wait...</div>;
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+
+function Tags({ setFilterTagsResults, handleDefaultTagFilter, setRecipes }) {
+
+  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  useEffect(() => {
+
+    async function fetchTags() {
+
+      try {
+        const response = await fetch("/api/tags");
+
+        if (response.ok) {
+
+            const data = await response.json();
+            
+            if (data) {
+
+              setTags(data.map((tag) => ({ label: tag, value: tag })));
+
+            } else {
+
+              console.error("Response data is missing tags.");
+
+            }
+
+          } else {
+
+            console.error("Failed to fetch tags");
+
+          }
+          
+      } catch (error) {
+
+        console.error("Error fetching tags:", error);
+
+      }
+
     }
 
-    // Display tags for the recipe
-    return (
-      <>
-        <ul className="list-disc list-inside">
-          {recipe.tags.map((tag, index) => (
-            <li key={index} className="text-gray-600">
-              {tag}
-            </li>
-          ))}
-        </ul>
-      </>
-    );
-  } catch (error) {
-    // Handle and log errors that occur during tag rendering
-    console.error("An error occurred:", error);
-    return <div>Failed to load tags!</div>;
-  }
-};
+    fetchTags();
+
+  }, []);
+
+  useEffect(() => {
+
+    const fetchRecipesByTags = async () => {
+
+      if (selectedTags.length === 0) {
+
+        setFilterTagsResults([]);
+
+      } else {
+
+        try {
+
+          const response = await fetch(`/api/filterbytags`, {
+
+            method: "POST",
+            headers: {
+
+              "Content-Type": "application/json",
+
+            },
+            body: JSON.stringify({ selectedTags }),
+
+          });
+
+          if (response.ok) {
+
+            const filterTagsResult = await response.json();
+            setFilterTagsResults(filterTagsResult.recipes);
+
+          } else {
+
+            console.error("Failed to fetch tags by category");
+
+          }
+
+        } catch (error) {
+
+          console.error("Error fetching recipes by tags:", error);
+
+        }
+        
+      }
+
+    };
+    
+    if (selectedTags.length > 0) {
+
+      fetchRecipesByTags(selectedTags);
+
+    } else {
+
+      handleDefaultTagFilter();
+
+    }
+
+  }, [selectedTags, setRecipes]);
+
+  const handleTagChange = (selectedOptions) => {
+    
+    setSelectedTags(selectedOptions.map((option) => option.value));
+
+  };
+
+  const customStyles = {
+
+    multiValue: (base) => ({
+
+      ...base,
+      background: "red",
+      color: "white",
+      
+
+    }),
+
+    control: (base) => ({
+
+      ...base,
+      backgroundColor: "#999",
+      color: "white",
+      width: 'fitContent',
+
+    }),
+
+    multiValueLabel: (base) => ({
+      ...base,
+      color: "white",
+      fontWeight: "bold",
+    }),
+
+    placeholder: (base) => ({
+
+      ...base,
+      color: "black",
+      fontWeight: "600"
+
+    }),
+
+    menu: (base) => ({
+
+      ...base,
+      width: "12em",
+
+    }),
+
+    
+  };
+
+  return (
+
+    <div>
+
+      <Select
+        isMulti
+        options={tags}
+        value={tags.filter((tag) => selectedTags.includes(tag.value))}
+        onChange={handleTagChange}
+        styles={customStyles}
+        blurInputOnSelect
+        placeholder="Select tag"
+      />
+
+    </div>
+
+  );
+  
+}
 
 export default Tags;
