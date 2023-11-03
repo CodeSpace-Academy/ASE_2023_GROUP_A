@@ -122,7 +122,8 @@ const loadRecipes = async (page) => {
     combinedResults = [...searchResults, ...filterResults];
   }
 
-  const remainingRecipes = totalRecipes - combinedResults.length;
+  const remainingRecipes =   totalRecipes - (currentPage * 100);
+
 
   return (
     <div>
