@@ -1,5 +1,4 @@
-import React from "react";
-import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+import React from "react";import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import classes from "./floatingButton.module.css";
 
 export default function FloatingButton() {
