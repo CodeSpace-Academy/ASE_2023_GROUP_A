@@ -9,8 +9,10 @@ import FavoritesContext from "@/components/Context/Favorites-context";
 import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRicepe";
 import { StarIcon as StarFilled} from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
+import { useTheme } from "../Context/ThemeContext";
+const RecipeCard = ({ recipe, searchTerm, favorites }) => {
+  const { theme } = useTheme()
 
-const RecipeCard = ({ recipe, searchTerm ,favorites  }) => {
   if (!recipe) {
 
     return <div>Loading...</div>;
@@ -58,7 +60,7 @@ const RecipeCard = ({ recipe, searchTerm ,favorites  }) => {
   return (
     <div
       key={recipe._id}
-      className="bg-white-400 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105"
+      className={`${theme === "dark"? "text-white" : "text-black"} bg-white-400 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
     >
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
       

@@ -1,4 +1,4 @@
-import { connectToCollection, closeMongoDBConnection } from "./mongoDB-connection";
+import { connectToCollection, closeMongoDBConnection, client } from "./mongoDB-connection";
 
 // Fetch all recipes with optional skip and limit parameters
 export const getAllRecipes = async (limit) => {
@@ -20,10 +20,8 @@ export const getAllRecipes = async (limit) => {
 export const fetchRecipeDataFromMongo = async (collection,recipeName) => {
   try {
     const recipeData = await collection.findOne({ title: recipeName });
-    closeMongoDBConnection();
     return recipeData;
   } catch (error) {
-  closeMongoDBConnection();
     console.error("Error fetching recipe data from MongoDB:", error);
     throw error;
   } 
@@ -33,10 +31,10 @@ export const fetchRecipeDataFromMongo = async (collection,recipeName) => {
 // Fetch all categories from MongoDB
 export const getAllCategories = async () => {
   try {
-     const collection = await connectToCollection('devdb', 'categories');
+    const db = client.db("devdb");
+     const collection = db.collection("categories");
     const categoriesDocument = collection.findOne({});
     const categories = categoriesDocument.categories;
-    closeMongoDBConnection();
     return categories;
   } catch (error) {
     closeMongoDBConnection();
@@ -46,25 +44,23 @@ export const getAllCategories = async () => {
 };
 
 export const fetchAllergens = async () => {
-
   try {
-    const collection = await connectToCollection('devdb', 'allergens');
-    const allergensDocument = await collection.findOne({});
+    const db = client.db("devdb");
+    const allergensDocument = await db.collection("allergens").findOne({});
     const allergens = allergensDocument.allergens;
-    closeMongoDBConnection();
     return allergens;
   } catch (error) {
-    closeMongoDBConnection();
     console.error("Error fetching allergens:", error);
     throw error;
   }
-
 };
+
 
 export const getTotalRecipesCount = async () => {
   try {
-    const recipesCollection = await connectToCollection("devdb", "recipes"); // Change this to your actual collection name
-    // Use the aggregation framework to count the documents
+    const db = client.db("devdb");
+    const recipesCollection = db.collection("recipes");
+
     const countResult = await recipesCollection
       .aggregate([
         {
@@ -75,6 +71,7 @@ export const getTotalRecipesCount = async () => {
         },
       ])
       .toArray();
+
     if (countResult.length > 0) {
       return countResult[0].count;
     } else {
@@ -83,14 +80,16 @@ export const getTotalRecipesCount = async () => {
   } catch (error) {
     console.error("Error fetching total recipes count:", error);
     throw error;
-  } 
+  }
 };
+
 
 // Function to add a favorite recipe to MongoDB
 export const addFavoriteToMongoDB = async (recipe) => {
 
   try {
-    const favoritesCollection = await connectToCollection('devdb', 'favorites'); // Create or use a 'favorites' collection
+    const db = client.db("devdb");
+    const favoritesCollection = db.collection("favorites"); // Create or use a 'favorites' collection
     // Check if the user's favorite already exists
     const existingFavorite = await favoritesCollection.findOne({ _id: recipe._id });
     if (existingFavorite) {
@@ -110,14 +109,19 @@ export const addFavoriteToMongoDB = async (recipe) => {
 
 export const removeFavoriteFromDB = async (recipeId) => {
   try {
-    const favoritesCollection = await connectToCollection("devdb", "favorites");
+      const favoritesCollection = await connectToCollection(
+        "devdb",
+        "favorites"
+      );
     const deleteResult = await favoritesCollection.deleteOne({ _id: recipeId });
     return deleteResult;
-  } catch (err) { }finally{closeMongoDBConnection();}
+  } catch (err) { }
 };
 
 export const getFavouritesFromMongoDB = async () => {
-  const collection = await connectToCollection("devdb", "favorites");
+  let clientt = await client.connect();
+    const db = clientt.db("devdb");
+    const collection = db.collection("favorites");
   const data = collection.find();
     try {
       const recipes = await data.toArray();
@@ -132,7 +136,8 @@ export const getFavouritesFromMongoDB = async () => {
 
 export async function searchSuggestions(searchQuery){
 
-  const recipesCollection = await connectToCollection("devdb", "recipes");
+    const db = client.db("devdb");
+    const recipesCollection = db.collection("recipes");
 
   const autocompleteResults = recipesCollection
     .find({
@@ -152,7 +157,8 @@ export async function searchSuggestions(searchQuery){
 }
 
 export async function searching(searchQuery, selectedCategories) {
-  const recipesCollection = await connectToCollection("devdb", "recipes");
+    const db = client.db("devdb");
+    const recipesCollection = db.collection("recipes");
 
   // Create a query that considers both search and categories
   const query = {
@@ -170,7 +176,8 @@ export async function searching(searchQuery, selectedCategories) {
 
 export async function filtering(selectedCategories, searchQuery,) {
 
-  const recipesCollection = await connectToCollection("devdb", "recipes");
+    const db = client.db("devdb");
+    const recipesCollection = db.collection("recipes");
 
   const query = {};
 
@@ -190,8 +197,8 @@ export async function filtering(selectedCategories, searchQuery,) {
 
 
 export async function getCategories(){
-
-  const categoriesCollection = await connectToCollection("devdb", "categories");
+    const db = client.db("devdb");
+    const categoriesCollection = db.collection("categories");
 
   const categories = categoriesCollection.find().toArray();
   return categories
@@ -221,7 +228,8 @@ export async function filteringByTags(
   selectedTags,
   searchQuery
 ) {
-  const recipesCollection = await connectToCollection("devdb", "recipes");
+      const db = client.db("devdb");
+      const recipesCollection = db.collection("recipes");
 
   const query = {};
 

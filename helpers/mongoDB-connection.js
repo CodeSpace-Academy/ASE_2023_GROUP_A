@@ -4,7 +4,7 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 const uri = `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoDB client instance with specific server API version and options
-const client = new MongoClient(uri, {
+export const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
