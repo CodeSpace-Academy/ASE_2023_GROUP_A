@@ -2,12 +2,18 @@ import { useState } from "react";
 import classes from "./allergens.module.css";
 import DropDownSVG from "../IconsAndSvg's/DropDownSVG";
 
-function Allergens({ allergens }) {
+function Allergens({ recipeIngredients, allergens }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const allergensList = allergens.filter((allergen) =>
+    recipeIngredients && recipeIngredients.length > 0 && recipeIngredients.some((ingredient) =>
+      ingredient.toLowerCase().includes(allergen.toLowerCase())
+    )
+  );
 
   return (
     <>

@@ -79,9 +79,11 @@ body {
 >>>>>>> Stashed changes
 
 /* global-styles.css */
-/* body {
-  background-color: #ead9d9;;
-} */
+body {
+background-color: rgba(81, 132, 216, 0.5);
+;
+
+} 
 
 /* h1{
   font-size: 25px;
@@ -98,4 +100,26 @@ body {
 .servings-button.active + .servings-content,
 .tags-button.active + .tags-content {
   display: block;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#__next {
+  flex: 1;
+}
+
+footer {
+  margin-top: auto;
+}
+
+.flexpage{
+  height: 80vh;
+}
+
+.mainBody{
+  min-height: 90vh;
 }

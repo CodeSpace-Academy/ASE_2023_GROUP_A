@@ -14,7 +14,6 @@ const handler = async (req, res) => {
         { returnOriginal: false } // Set to false to return the updated document
       );
 
-      console.log("MongoDB Update Result:", result.description);
 
       if (result.ok && result.value) {
         res.status(200).json({ message: "Description updated successfully" });

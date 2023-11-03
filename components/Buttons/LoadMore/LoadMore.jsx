@@ -1,23 +1,26 @@
-import { useEffect, useState } from "react";
+import classes from './loadMore.module.css'
 
-const LoadMoreButton = ({ handlePageChange, currentPage, totalRecipes }) => {
-  const [totalPages, setTotalPages] = useState(0);
-  useEffect(() => {
-    setTotalPages(Math.ceil(totalRecipes / 100)); // Calculate total pages correctly
-  }, [totalRecipes]);
-  return (
-    <div className="flex justify-between mt-4">
-      <button
-        onClick={handlePageChange}
-        disabled={currentPage >= totalPages}
-        className={`bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded ${
-          currentPage >= totalPages ? "opacity-50 cursor-not-allowed" : ""
-        }`}
-      >
-        Load More ({totalPages - currentPage * 100})
-      </button>
-    </div>
-  );
+const LoadMoreButton = ({handleLoadMore, remainingRecipes  }) => {
+   
+    return (
+
+        <div className="rounded bg-red-500 text-white p-2 mt-2 mb-4 transition-transform hover:scale-105 duration-300 ease-in-out">
+
+            <button
+                onClick={handleLoadMore}
+                disabled={remainingRecipes<=0}
+                className={`${classes.viewRecipeButton} w-full text-center ${
+                    remainingRecipes<=0 ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+            >
+                Load More ({remainingRecipes})
+
+            </button>
+
+        </div>
+
+    );
+
 };
 
 export default LoadMoreButton;

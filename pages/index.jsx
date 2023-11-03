@@ -32,7 +32,6 @@ const fetcher =  (url) => fetch(url).then(res => res.json())
     <Loading/>
   )
   }
-    console.log("FAVORITESDATA:", favoritesData.favorites)
   const favorites = favoritesData.favorites || [];
   favoriteContext.updateFavorites(favorites);
   return (
@@ -73,43 +72,5 @@ const fetcher =  (url) => fetch(url).then(res => res.json())
     </>
   );
 };
-
-// export const getServerSideProps = async () => {
-//   try {
-//     const response = await fetch(
-//       "http://localhost:3000/api/recipes/Favourites"
-//     );
-//     if (response.ok) {
-//       const favoriteRecipes = await response.json();
-//       const favorites = Array.from(favoriteRecipes.favorites) || [];
-//       return {
-//         props: {
-//           favorites,
-//           isLoading: false,
-//         },
-//       };
-//     } else {
-//       console.error(
-//         "Failed to fetch favorite recipes. Status code: " + response.status
-//       );
-
-//       return {
-//         props: {
-//           favorites: [],
-//           isLoading: false,
-//         },
-//       };
-//     }
-//   } catch (error) {
-//     console.error("Error fetching favorite recipes:", error);
-
-//     return {
-//       props: {
-//         favorites: [],
-//         isLoading: false,
-//       },
-//     };
-//   }
-// };
 
 export default Home;

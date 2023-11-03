@@ -10,8 +10,9 @@ import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRicepe";
 import { StarIcon as StarFilled} from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
 
-const RecipeCard = ({ recipe, favorites }) => {
+const RecipeCard = ({ recipe, searchTerm ,favorites  }) => {
   if (!recipe) {
+
     return <div>Loading...</div>;
   }
 
@@ -60,6 +61,7 @@ const RecipeCard = ({ recipe, favorites }) => {
       className="bg-white-400 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105"
     >
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
+      
         <Image
           src={firstImage}
           alt={recipe.title}
@@ -71,7 +73,16 @@ const RecipeCard = ({ recipe, favorites }) => {
       <div className="flex flex-col justify-between h-full">
         <div className={`mb-4 ${theme.recipeTitleContainer} text-center`}>
           <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2">
-            {recipe.title}
+          {searchTerm ? ( // Conditionally highlight if searchTerm exists
+              <Highlighter
+                highlightClassName="YourHighlightClass"
+                searchWords={[searchTerm]}
+                autoEscape={true}
+                textToHighlight={recipe.title}
+              />
+            ) : (
+              recipe.title // Render as is if no searchTerm
+            )}
           </h2>
           <div className="mb-2">
             <PrepTime prepTime={recipe.prep} />

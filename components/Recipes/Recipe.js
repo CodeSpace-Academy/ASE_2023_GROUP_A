@@ -6,7 +6,10 @@ import Allergens from "../Allergens/allergens";
 import DropDownSVG from "../IconsAndSvg's/DropDownSVG";
 import CoverImage from "../Images/CoverImage";
 import IngredientsList from "../Ingredients/IngredientsList";
-
+import RecipeInstructions from "../Instructions/RecipeInstructions";
+import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
+import Link from "next/link"; // Import Link
+import { FaArrowLeft } from "react-icons/fa"; // Import FaArrowLeft
 
 const Recipe = ({ recipe, Allergies }) => {
   const [showTags, setShowTags] = useState(false);
@@ -19,6 +22,11 @@ const Recipe = ({ recipe, Allergies }) => {
 
   return (
     <div className="container mx-auto mt-24 p-4">
+      <Link href="/">
+        <span className="text-gray-600 text-xl">
+          <FaArrowLeft />
+        </span>
+      </Link>
       <div className="bg-white p-4 rounded shadow mb-4 lg:flex">
         <div className="lg:w-1/2">
           <h1 className="text-2xl font-bold">{recipe.title}</h1>
@@ -72,6 +80,8 @@ const Recipe = ({ recipe, Allergies }) => {
           <div className="text-gray-600 mt-4">
             <Published published={recipe.published} />
           </div>
+          {showInstructions && <RecipeInstructions recipes={recipe} />}
+          <UpdateRecipeInstructions />
         </div>
       </div>
     </div>
