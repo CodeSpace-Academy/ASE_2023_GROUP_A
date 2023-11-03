@@ -10,13 +10,14 @@ import RecipeInstructions from "../Instructions/RecipeInstructions";
 import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 import Link from "next/link"; // Import Link
 import { FaArrowLeft } from "react-icons/fa"; // Import FaArrowLeft
+import Loading from "../Loading/Loading";
 
 const Recipe = ({ recipe, Allergies }) => {
   const [showTags, setShowTags] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
 
   if (!recipe) {
-    return <div>Loading...</div>;
+    return <div><Loading/></div>;
   }
 
 
