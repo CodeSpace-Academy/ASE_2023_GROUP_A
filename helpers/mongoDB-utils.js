@@ -1,10 +1,10 @@
 import { connectToCollection, closeMongoDBConnection, client } from "./mongoDB-connection";
 
 // Fetch all recipes with optional skip and limit parameters
-export const getAllRecipes = async (limit) => {
+export const getAllRecipes = async (skip,limit) => {
   const collection = await connectToCollection("devdb", "recipes");
   const query = collection.find();
-  query.limit(limit);
+  query.skip(skip).limit(limit);
   try {
     const recipes = await query.toArray();
     
