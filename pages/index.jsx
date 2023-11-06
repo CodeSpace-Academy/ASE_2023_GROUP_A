@@ -9,7 +9,7 @@ const Home = () => {
   const favoriteContext = useContext(FavoritesContext);
 
   const fetcher = (url) => fetch(url).then((res) => res.json());
-  const { data: favoritesData, error } = useSWR(
+  const { data: favoritesData, error, isLoading } = useSWR(
     "api/recipes/Favourites",
     fetcher
   );
@@ -33,6 +33,7 @@ const Home = () => {
   ) {
     return <EnvError />;
   }
+  console.log("is Loading:", isLoading);
 
   if (error || !favoritesData) {
     return <Loading />;

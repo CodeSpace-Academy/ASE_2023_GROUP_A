@@ -46,6 +46,8 @@ const loadRecipes = async (page) => {
 
     loadRecipes(currentPage + 1);
   };
+
+  
   useEffect(() => {
     loadRecipes(currentPage);
     setLoading(false);
