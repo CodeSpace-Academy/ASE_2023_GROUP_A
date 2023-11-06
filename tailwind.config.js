@@ -13,6 +13,16 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        // Configure your color palette here
+        "custom-color-mixed": {
+          10: "e8ffd4",
+          20: "#d2dbd1",
+        },
+        "custom-blue": {
+          10: "#4888b1",
+        },
+      },
       fontFamily: {
         alkatra: ["Alkatra", "sans"],
         dm_mono: ["DM Mono", "italic"],

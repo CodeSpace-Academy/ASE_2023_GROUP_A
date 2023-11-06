@@ -151,14 +151,17 @@ const loadRecipes = async (page) => {
         <p><Loading/></p>
       ) : favorites.length === 0 ? (
         <p>No favorite recipes yet.</p>
-      ) : (
-        <Carousel responsive={responsive} containerClass="carousel-container">
+        ) : (
+            <div className={`h-3/5`}>
+               <Carousel responsive={responsive} containerClass="carousel-container">
           {favorites.map((recipe) => (
             <div key={recipe.recipe._id}>
               <RecipeCard recipe={recipe.recipe} favorites={favorites} />
             </div>
           ))}
         </Carousel>
+            </div>
+       
       )}
       <div className="total-count">Total Recipes: {combinedResults.length}</div>
       {autocompleteSuggestions.length > 0 && (

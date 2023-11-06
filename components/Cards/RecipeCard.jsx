@@ -62,7 +62,7 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
     <div
       key={recipe._id}
       className={`${
-        theme === "dark" ? "text-white" : "text-black"
+        theme === "light" ? " text-black" : "text-"
       } bg-blue-300 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
     >
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
@@ -76,7 +76,7 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
       </div>
       <div className="flex flex-col justify-between h-full">
         <div className={`mb-4 ${theme.recipeTitleContainer} text-center`}>
-          <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2">
+          <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2 font-alkatra">
             {searchQuery ? (
               <Highlighter
                 highlightClassName="YourHighlightClass"
@@ -99,13 +99,21 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
           {recipeIsFavorite ? (
             <button onClick={removeFavoriteHandler(recipe)}>
               <span>
-                <StarFilled className="w-6 h-6 text-blue-800" />
+                <StarFilled
+                  className={`w-6 h-6 ${
+                    theme === "light" ? "text-blue-800" : "text-custom-blue-10"
+                  }`}
+                />
               </span>
             </button>
           ) : (
             <button onClick={() => addFavoritesHandler(recipe)}>
               <span>
-                <StarEmpty className="w-6 h-6 text-blue-700" />
+                <StarEmpty
+                  className={`w-6 h-6 ${
+                    theme === "light" ? "text-blue-800" : "text-custom-blue-10"
+                  }`}
+                />
               </span>
             </button>
           )}

@@ -1,7 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import RecipeCard from "@/components/Cards/RecipeCard";
 import EnvError from "./error";
-import classes from "./home.module.css";
 import Loading from "@/components/Loading/Loading";
 import FavoritesContext from "@/components/Context/Favorites-context";
 import useSWR, { mutate } from "swr";
@@ -46,7 +44,7 @@ const Home = () => {
   return (
     <>
       <div>
-        <h2>Welcome back to your Favorite place, the Kitchen</h2>
+        <h2 className="pt-14 font-eduNswActFoundation font-bold text-custom-color-mixed-10">Welcome back to your Favorite place, the Kitchen</h2>
       </div>
       <div>
         <h2>Favorite Recipes</h2>
