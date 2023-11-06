@@ -165,7 +165,7 @@ export async function searching(searchQuery, selectedCategories) {
   return searchResult;
 }
 
-export async function filtering(selectedCategories, searchQuery) {
+export async function filtering(selectedCategories,selectedTags, searchQuery) {
   const db = client.db("devdb");
   const recipesCollection = db.collection("recipes");
 
@@ -173,6 +173,9 @@ export async function filtering(selectedCategories, searchQuery) {
 
   if (selectedCategories && selectedCategories.length > 0) {
     query.category = { $in: selectedCategories };
+  }
+  if (selectedTags && selectedTags.length > 0) {
+    query.tags = { $in: selectedTags };
   }
 
   if (searchQuery) {
