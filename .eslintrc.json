@@ -1,0 +1,16 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": ["next/core-web-vitals", "airbnb", "airbnb/hooks"],
+  "eslint":{
+    "dirs": ["components","pages"]
+  },
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "rules": {
+    }
+}

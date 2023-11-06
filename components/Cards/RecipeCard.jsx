@@ -1,18 +1,70 @@
+/* eslint-enable */
 import React from "react";
 import Image from "next/image";
-import CookTime from "../TimeAndDate/TimeConvertor";
-import Link from "next/link";
+import theme from "./RecipeCard.module.css";
+import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
+//Fav Button
 import Highlighter from "react-highlight-words";
+import { useContext } from "react";
+import FavoritesContext from "@/components/Context/Favorites-context";
+import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRicepe";
+import { StarIcon as StarFilled} from "@heroicons/react/24/solid";
+import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
+import { useTheme } from "../Context/ThemeContext";
+import Loading from "../Loading/Loading";
+const RecipeCard = ({ recipe, searchQuery, favorites }) => {
+  const { theme } = useTheme()
 
-const RecipeCard = ({ recipe, searchQuery }) => {
   if (!recipe) {
-    return <div>Loading...</div>;
+    return <div><Loading/></div>;
   }
 
-  const firstImage = recipe.images[0];
+  const firstImage =
+    recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
+
+  const favoriteCtx = useContext(FavoritesContext);
+
+  const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
+
+  const removeFavoriteHandler = (recipe) => async () => {
+    try {
+      const response = await fetch(`api/recipes/Favourites`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ recipeId: recipe._id }),
+      });
+
+      if (response.ok) {
+        favoriteCtx.removeFavorite(recipe._id);
+      }
+    } catch (error) {
+      console.error("Error removing favorite:", error);
+    }
+  };
+
+  const addFavoritesHandler = async (recipe) => {
+    try {
+      const response = await fetch(`api/recipes/Favourites`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(recipe),
+      });
+      favoriteCtx.addFavorite(recipe);
+      return response;
+    } catch (error) {}
+  };
 
   return (
-    <div className=" bg-blue-300 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105">
+    <div
+      key={recipe._id}
+      className={`${
+        theme === "light" ? " text-black" : "text-"
+      } bg-blue-300 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
+    >
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
         <Image
           src={firstImage}
@@ -23,8 +75,8 @@ const RecipeCard = ({ recipe, searchQuery }) => {
         />
       </div>
       <div className="flex flex-col justify-between h-full">
-        <div className="mb-4 recipe-title-container text-center">
-          <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2">
+        <div className={`mb-4 ${theme.recipeTitleContainer} text-center`}>
+          <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2 font-alkatra">
             {searchQuery ? (
               <Highlighter
                 highlightClassName="YourHighlightClass"
@@ -37,47 +89,37 @@ const RecipeCard = ({ recipe, searchQuery }) => {
             )}
           </h2>
           <div className="mb-2">
-            <CookTime cookTimeInMinutes={recipe.prep} label={"Prep Time"} />
+            <PrepTime prepTime={recipe.prep} />
           </div>
           <div className="mb-2">
-            <CookTime cookTimeInMinutes={recipe.cook} label={"Cook Time"} />
+            <CookTime cookTime={recipe.cook} />
           </div>
         </div>
-        <div className="text-center text-black-600 mt-4">
-          <b>Published:</b>
-          <p>{new Date(recipe.published).toLocaleDateString()}</p>
-        </div>
-        <div className="rounded bg-blue-500 text-white p-2 mt-2 transition-transform hover:scale-105 duration-300 ease-in-out">
-          <Link href={`/${encodeURIComponent(recipe.title)}`}>
-            <button className="w-full text-center view-recipe-button">
-              View Recipe
+        <div>
+          {recipeIsFavorite ? (
+            <button onClick={removeFavoriteHandler(recipe)}>
+              <span>
+                <StarFilled
+                  className={`w-6 h-6 ${
+                    theme === "light" ? "text-blue-800" : "text-custom-blue-10"
+                  }`}
+                />
+              </span>
             </button>
-          </Link>
+          ) : (
+            <button onClick={() => addFavoritesHandler(recipe)}>
+              <span>
+                <StarEmpty
+                  className={`w-6 h-6 ${
+                    theme === "light" ? "text-blue-800" : "text-custom-blue-10"
+                  }`}
+                />
+              </span>
+            </button>
+          )}
         </div>
+        <ViewRecipeDetails recipe={recipe} />
       </div>
-      <style jsx>{`
-        .view-recipe-button {
-          background: linear-gradient(135deg, white 50%, grey 50%);
-          background-size: 200% 100%;
-          background-position: 100% 0;
-          transition: background-position 2s,
-            color 0.6s cubic-bezier(0.75, 0, 0.25, 0);
-          color: white;
-        }
-
-        .view-recipe-button:hover {
-          background-position: 0 0;
-          color: black;
-        }
-
-        .recipe-title-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          min-height: 3rem; /* Adjust the minimum height as needed */
-        }
-      `}</style>
     </div>
   );
 };

@@ -1,23 +1,27 @@
 import { useRouter } from "next/router";
-import {
-  DBConnection,
-  fetchAllergens,
-  fetchRecipeDataFromMongo,
-} from "@/helpers/mongoDB-utils";
 import Recipe from "../components/Recipes/Recipe";
-import Description from "./../components/Description/Description";
+import useSWR from "swr";
+import Loading from "@/components/Loading/Loading";
 
-const RecipePage = ({ recipe, allergens }) => {
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+const RecipePage = () => {
   const router = useRouter();
   const { recipeName } = router.query;
 
-  if (!recipe) {
-    console.log(`Can't find Recipe for:`, JSON.stringify(recipeName));
+  // Fetch recipe data and allergens using useSWR
+  const { data, error } = useSWR(`api/recipes/${recipeName}`, fetcher);
+
+  if (error || !data) {
+    return <div><Loading/></div>;
   }
-  if (!allergens) {
-    console.log(`Can't find Allergens for:`, JSON.stringify(allergens));
-    return <div>Loading...</div>;
+
+  const { recipe, allergens } = data;
+
+  if (!recipe || !recipe.description || !allergens) {
+    console.log(`Can't find Recipe for:`, JSON.stringify(recipe));
   }
+
   return (
     <div>
       <Recipe
@@ -27,24 +31,6 @@ const RecipePage = ({ recipe, allergens }) => {
       />
     </div>
   );
-};
-
-export const getServerSideProps = async ({ params }) => {
-  const recipeName = params.recipeName;
-  const client = await DBConnection();
-  const recipe = await fetchRecipeDataFromMongo(client, recipeName, "recipes");
-
-  const allergens = await fetchAllergens();
-
-  if (!allergens || !recipe) {
-    return {
-      notFound: true, // Return a 404 page or handle the error accordingly
-    };
-  } else {
-    return {
-      props: { recipe, allergens },
-    };
-  }
 };
 
 export default RecipePage;

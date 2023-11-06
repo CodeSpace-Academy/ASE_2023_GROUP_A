@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
+import Loading from "../Loading/Loading";
 
 // RecipeInstructions component displays a list of instructions for a recipe
 const RecipeInstructions = ({ recipes }) => {
@@ -48,7 +49,7 @@ const RecipeInstructions = ({ recipes }) => {
       <h3 className="mt-2 text-lg font-semibold"></h3>
       {loading ? (
         // Display a loading message while instructions are being processed
-        <p>Loading...</p>
+        <p><Loading/></p>
       ) : error ? (
         // Display an error message if an error occurs
         <p>{error}</p>
