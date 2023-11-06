@@ -6,12 +6,12 @@ export default function FloatingButton() {
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  const handleScrollToBottom = () => {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth",
-    });
-  };
+const handleScrollToBottom = () => {
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior: "smooth",
+  });
+};
   return (
     <>
       <div className={classes.floatingButton} onClick={handleScrollToTop}>
