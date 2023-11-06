@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState ,useContext } from "react";
 import fetchRecipes from "@/helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
@@ -8,6 +8,7 @@ import FloatingButton from "../Buttons/floatingButton/FloatingButton";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
+import useSWR,{mutate} from "swr";
 // const ITEMS_PER_PAGE = 100;
 
 function RecipeList({favorites}) {
@@ -21,39 +22,38 @@ function RecipeList({favorites}) {
  const [filterTagsResults, setFilterTagsResults] = useState([]);
  const [searchQuery, setSearchQuery] = useState("");
 
+const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
+  `/api/recipes?page=${currentPage}`,
+  fetchRecipes
+);
 
-  const [loading, setLoading] = useState(true);
-
-const loadRecipes = async (page) => {
-  const response = await fetchRecipes(page);
-
-  if (response.ok) {
-    const data = await response.json();
-    // setRecipes([...recipes, ...data.recipes]);
-    setOriginalRecipes(data.recipes);
-    setTotalRecipes(data.totalRecipes);
-  } else {
-    console.error("Failed to fetch recipes");
+  useEffect(() => {
+  if (!isLoading && recipesData) {
+    // Check if recipesData is defined before updating the state
+    setOriginalRecipes(recipesData.recipes);
+    setTotalRecipes(recipesData.totalRecipes);
+    // Use mutate to update the state as soon as you fetch the new data
+    mutate(`/api/recipes?page=${currentPage}`);
   }
-};
+}, [currentPage, recipesData]);
+  
+  let combinedResults;
+
+
  const handleLoadLess = () => {
    setCurrentPage(currentPage - 1);
 
-   loadRecipes(currentPage - 1);
+  //  loadRecipes(currentPage - 1);
  };
   const handleLoadMore = () => {
     setCurrentPage(currentPage + 1);
 
-    loadRecipes(currentPage + 1);
+    // loadRecipes(currentPage + 1);
   };
 
   
-  useEffect(() => {
-    loadRecipes(currentPage);
-    setLoading(false);
-  }, [currentPage]);
 
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   }
   const handleSearch = async (searchQuery) => {
@@ -116,7 +116,7 @@ const loadRecipes = async (page) => {
     setFilterTagsResults([]);
   }
 
-  let combinedResults;
+
 
   if (
     searchResults.length < 1 &&
@@ -150,22 +150,24 @@ const loadRecipes = async (page) => {
       />
       <button onClick={handleDefaultSearch}>All Recipes</button>
       {!favorites ? (
-        <p><Loading/></p>
+        <p>
+          <Loading />
+        </p>
       ) : favorites.length === 0 ? (
         <p>No favorite recipes yet.</p>
-        ) : (
-            <div className={`h-3/5`}>
-               <Carousel responsive={responsive} containerClass="carousel-container">
-          {favorites.map((recipe) => (
-            <div key={recipe.recipe._id}>
-              <RecipeCard recipe={recipe.recipe} favorites={favorites} />
-            </div>
-          ))}
-        </Carousel>
-            </div>
-       
+      ) : (
+        <div className={`h-3/5`}>
+          <Carousel responsive={responsive} containerClass="carousel-container">
+            {favorites.map((recipe) => (
+              <div key={recipe.recipe._id}>
+                <RecipeCard recipe={recipe.recipe} favorites={favorites} />
+              </div>
+            ))}
+          </Carousel>
+        </div>
       )}
       <div className="total-count">Total Recipes: {combinedResults.length}</div>
+      
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
           {autocompleteSuggestions.map((suggestion, index) => (
@@ -178,6 +180,9 @@ const loadRecipes = async (page) => {
           ))}
         </ul>
       )}
+      {isLoading ? (
+        <Loading />
+      ) : (
         <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {combinedResults.map((recipe, index) => (
             <div key={index}>
@@ -185,31 +190,32 @@ const loadRecipes = async (page) => {
                 key={recipe._id}
                 favorites={favorites}
                 recipe={recipe}
-
                 searchQuery={searchQuery}
                 description={recipe.description}
               />
             </div>
-          ))}</div>
-          {combinedResults.length < totalRecipes && (
-            <>
-              <div className="flex justify-center gap-10">
-                <LoadMoreButton
-                  handleLoad={handleLoadLess}
-                  remainingRecipes={remainingRecipes}
-                  totalRecipes={totalRecipes}
-                  isLoadMore={false}
-                />
-                <LoadMoreButton
-                  handleLoad={handleLoadMore}
-                  remainingRecipes={remainingRecipes}
-                  totalRecipes={totalRecipes}
-                  isLoadMore={true}
-                />
-              </div>
-              <FloatingButton />
-            </>
-          )}
+          ))}
+        </div>
+      )}
+      {combinedResults.length < totalRecipes && (
+        <>
+          <div className="flex justify-center gap-10">
+            <LoadMoreButton
+              handleLoad={handleLoadLess}
+              remainingRecipes={remainingRecipes}
+              totalRecipes={totalRecipes}
+              isLoadMore={false}
+            />
+            <LoadMoreButton
+              handleLoad={handleLoadMore}
+              remainingRecipes={remainingRecipes}
+              totalRecipes={totalRecipes}
+              isLoadMore={true}
+            />
+          </div>
+          <FloatingButton />
+        </>
+      )}
     </div>
   );
 }

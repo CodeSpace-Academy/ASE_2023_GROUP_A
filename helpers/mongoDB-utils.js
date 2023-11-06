@@ -59,7 +59,8 @@ export const fetchAllergens = async () => {
 
 export const getTotalRecipesCount = async () => {
   try {
-    const db = client.db("devdb");
+    const cl = await client.connect()
+    const db = cl.db("devdb");
     const recipesCollection = db.collection("recipes");
 
     const countResult = await recipesCollection

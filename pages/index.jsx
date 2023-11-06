@@ -33,7 +33,6 @@ const Home = () => {
   ) {
     return <EnvError />;
   }
-  console.log("is Loading:", isLoading);
 
   if (error || !favoritesData) {
     return <Loading />;
