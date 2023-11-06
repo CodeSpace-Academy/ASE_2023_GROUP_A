@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
   return (
     <div
       className={`header-layout ${
-        theme === "dark" ? "bg-black" : "bg-slate-300"
+        theme === "dark" ? "" : ""
       }`}
     >
       <Navigation />

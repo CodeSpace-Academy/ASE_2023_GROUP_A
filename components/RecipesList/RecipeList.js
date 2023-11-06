@@ -148,7 +148,7 @@ const loadRecipes = async (page) => {
       />
       <button onClick={handleDefaultSearch}>All Recipes</button>
       {!favorites ? (
-        <p>Loading favorite recipes...</p>
+        <p><Loading/></p>
       ) : favorites.length === 0 ? (
         <p>No favorite recipes yet.</p>
       ) : (
@@ -185,7 +185,7 @@ const loadRecipes = async (page) => {
                 description={recipe.description}
               />
             </div>
-          ))}
+          ))}</div>
           {combinedResults.length < totalRecipes && (
             <>
               <div className="flex justify-center gap-10">
@@ -204,7 +204,7 @@ const loadRecipes = async (page) => {
               </div>
               <FloatingButton />
             </>
-          )}</div>
+          )}
     </div>
   );
 }

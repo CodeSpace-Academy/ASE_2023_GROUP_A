@@ -1,8 +1,6 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-<<<<<<< Updated upstream
-=======
 :root {
   --foreground-rgb: rgb(99, 99, 218);
   --background-start-rgb: rgb(223, 172, 181);
@@ -76,7 +74,6 @@ body {
 .dropdown.is-open .dropdown-menu {
   display: block;
 } */
->>>>>>> Stashed changes
 
 /* global-styles.css */
 body {

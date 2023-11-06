@@ -3,7 +3,6 @@ import { getAllRecipes, getTotalRecipesCount } from "@/helpers/mongoDB-utils";
 const ITEMS_PER_PAGE = 100; //Recipies to be rendered on each page
 const handler = async (req, res) => {
   const page = req.query.page ? parseInt(req.query.page) : 1;
-  console.log("page:", page);
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }

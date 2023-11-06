@@ -1,13 +1,13 @@
 .viewRecipeButton {
-  background: linear-gradient(135deg, rgb(255, 255, 255) 50%, red 50%);
-  width: 7em;
-  background-size: 200% 100%;
-  background-position: 100% 0;
-  transition: background-position 2s, color 0.6s cubic-bezier(0.75, 0, 0.25, 0);
-  color: white;
+background: linear-gradient(135deg, white 50%, grey 50%);
+          background-size: 200% 100%;
+          background-position: 100% 0;
+          transition: background-position 2s,
+            color 0.6s cubic-bezier(0.75, 0, 0.25, 0);
+          color: white;
 }
 
 .viewRecipeButton:hover {
   background-position: 0 0;
-  color: red;
+  color: blue;
 }

@@ -11,11 +11,12 @@ import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRicepe";
 import { StarIcon as StarFilled} from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
 import { useTheme } from "../Context/ThemeContext";
+import Loading from "../Loading/Loading";
 const RecipeCard = ({ recipe, searchQuery, favorites }) => {
   const { theme } = useTheme()
 
   if (!recipe) {
-    return <div>Loading...</div>;
+    return <div><Loading/></div>;
   }
 
   const firstImage =
@@ -60,7 +61,9 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
   return (
     <div
       key={recipe._id}
-      className={`${theme === "dark"? "text-white" : "text-black"} bg-white-400 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
+      className={`${
+        theme === "dark" ? "text-white" : "text-black"
+      } bg-blue-300 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
     >
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
         <Image
@@ -95,11 +98,15 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
         <div>
           {recipeIsFavorite ? (
             <button onClick={removeFavoriteHandler(recipe)}>
-              <span><StarFilled className="w-6 h-6 text-blue-800" /></span>
+              <span>
+                <StarFilled className="w-6 h-6 text-blue-800" />
+              </span>
             </button>
           ) : (
             <button onClick={() => addFavoritesHandler(recipe)}>
-              <span><StarEmpty className="w-6 h-6 text-green-700" /></span>
+              <span>
+                <StarEmpty className="w-6 h-6 text-blue-700" />
+              </span>
             </button>
           )}
         </div>
