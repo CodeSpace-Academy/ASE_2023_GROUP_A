@@ -1,8 +1,4 @@
-import {
-  getAllRecipes,
-  DBConnection,
-  getTotalRecipesCount,
-} from "@/helpers/mongoDB-utils";
+import { getAllRecipes, getTotalRecipesCount } from "@/helpers/mongoDB-utils";
 
 const ITEMS_PER_PAGE = 100;
 
@@ -12,13 +8,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const client = await DBConnection();
-    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const page =
+      req.query.page && req.query.page > 0 ? parseInt(req.query.page) : 1;
     const skip = (page - 1) * ITEMS_PER_PAGE;
 
     const [recipesData, totalRecipes] = await Promise.all([
-      getAllRecipes(client, skip, ITEMS_PER_PAGE),
-      getTotalRecipesCount(client),
+      getAllRecipes(skip, ITEMS_PER_PAGE),
+      getTotalRecipesCount(),
     ]);
 
     res.status(200).json({ recipes: recipesData, totalRecipes });

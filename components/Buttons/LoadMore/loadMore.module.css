@@ -1,5 +1,5 @@
 .viewRecipeButton {
-  background: linear-gradient(135deg, rgb(255, 255, 255) 50%, red 50%);
+  background: linear-gradient(135deg, rgb(255, 255, 255) 50%, blue 50%);
   width: 7em;
   background-size: 200% 100%;
   background-position: 100% 0;
@@ -9,5 +9,5 @@
 
 .viewRecipeButton:hover {
   background-position: 0 0;
-  color: red;
+  color: black;
 }

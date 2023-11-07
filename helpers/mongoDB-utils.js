@@ -1,3 +1,4 @@
+import ingredients from "@/pages/api/ingredients";
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 const uri = `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority
@@ -42,7 +43,57 @@ export async function getTags() {
   }
 }
 
-export const getAllRecipes = async (client, skip, limit) => {
+export async function getIngredients() {
+  const db = client.db("devdb");
+  const collection = db.collection("recipes");
+
+  try {
+    const ingredients = await collection
+      .aggregate([
+        {
+          $project: {
+            ingredients: {
+              $objectToArray: "$ingredients",
+            },
+          },
+        },
+        {
+          $unwind: "$ingredients",
+        },
+        {
+          $group: {
+            _id: null,
+            uniqueIngredients: {
+              $addToSet: "$ingredients.k",
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            uniqueIngredients: 1,
+          },
+        },
+      ])
+      .toArray();
+
+    return ingredients[0].uniqueIngredients;
+  } catch (error) {
+    console.error("Error fetching unique ingredients:", error);
+    throw error;
+  }
+}
+
+export async function getCategories() {
+  const db = client.db("devdb");
+  const categoriesCollection = db.collection("categories");
+
+  const categories = categoriesCollection.find().toArray();
+
+  return categories;
+}
+
+export const getAllRecipes = async (skip, limit) => {
   const db = client.db("devdb");
   const collection = db.collection("recipes");
 
@@ -71,22 +122,22 @@ export const fetchRecipeDataFromMongo = async (
   }
 };
 
-export const generateDynamicPaths = async (client) => {
-  try {
-    const db = client.db("devdb");
-    const recipes = await getAllRecipes(client, 0, 5, "recipes");
+// export const generateDynamicPaths = async (client) => {
+//   try {
+//     const db = client.db("devdb");
+//     const recipes = await getAllRecipes(client, 0, 5, "recipes");
 
-    const dynamicPaths = recipes.map((recipe) => ({
-      params: { recipeName: recipe.title },
-    }));
+//     const dynamicPaths = recipes.map((recipe) => ({
+//       params: { recipeName: recipe.title },
+//     }));
 
-    console.log("Client Closed");
-    return dynamicPaths;
-  } catch (error) {
-    console.error("Error generating dynamic paths:", error);
-    throw error;
-  }
-};
+//     console.log("Client Closed");
+//     return dynamicPaths;
+//   } catch (error) {
+//     console.error("Error generating dynamic paths:", error);
+//     throw error;
+//   }
+// };
 
 export const fetchAllergens = async () => {
   try {
@@ -100,7 +151,7 @@ export const fetchAllergens = async () => {
   }
 };
 
-export const getTotalRecipesCount = async (client) => {
+export const getTotalRecipesCount = async () => {
   try {
     const db = client.db("devdb");
     const recipesCollection = db.collection("recipes");
@@ -145,29 +196,38 @@ export async function searchSuggestions(searchQuery) {
   return autocompleteResults;
 }
 
-export async function searching(searchQuery, selectedCategories) {
+export async function searching(searchQuery) {
   const db = client.db("devdb");
   const recipesCollection = db.collection("recipes");
 
-  // Create a query that considers both search and categories
   const query = {
     $or: [{ title: { $regex: searchQuery, $options: "i" } }],
   };
-
-  if (selectedCategories && selectedCategories.length > 0) {
-    query.category = { $in: selectedCategories };
-  }
 
   const searchResult = recipesCollection.find(query).limit(100).toArray();
 
   return searchResult;
 }
 
-export async function filteringByCategory(
-  selectedCategories,
-  searchQuery,
-  selectedTags
-) {
+export async function filteringByInstructions(selectedInstructions) {
+
+  try {
+    const db = client.db('devdb');
+    const collection = db.collection("recipes");
+
+   
+    const query = { instructions: { $size: selectedInstructions } };
+
+    const filterInstructionsResults = await collection.find(query).limit(100).toArray();
+
+    return filterInstructionsResults
+  } catch (error) {
+    console.error("Error filtering recipes by instructions:", error);
+    throw error;
+  } 
+}
+
+export async function filteringByCategory(selectedCategories) {
   const db = client.db("devdb");
   const recipesCollection = db.collection("recipes");
 
@@ -177,51 +237,47 @@ export async function filteringByCategory(
     query.category = { $in: selectedCategories };
   }
 
-  if (selectedTags) {
-    query.tags = { $in: selectedTags };
-  }
-
-  if (searchQuery) {
-    query.$or = [{ title: { $regex: searchQuery, $options: "i" } }];
-  }
-
   const filterResult = await recipesCollection.find(query).limit(100).toArray();
 
   return filterResult;
 }
 
-export async function filteringByTags(
-  selectedCategories,
-  selectedTags,
-  searchQuery
-) {
+export async function filteringByIngredient(selectedIngredients) {
+  const db = client.db("devdb");
+  const recipesCollection = db.collection("recipes");
+
+  const query = {};
+
+  if (selectedIngredients && selectedIngredients.length > 0) {
+    query.$or = selectedIngredients.map((ingredient) => ({
+      [`ingredients.${ingredient}`]: { $exists: true },
+    }));
+  }
+
+  try {
+    const filterIngredientsResult = await recipesCollection
+      .find(query)
+      .limit(100)
+      .toArray();
+
+    return filterIngredientsResult;
+  } catch (error) {
+    console.error("Error filtering recipes by ingredients:", error);
+    throw error;
+  }
+}
+
+export async function filteringByTags(selectedTags) {
   const db = client.db("devdb");
   const recipesCollection = db.collection("recipes");
 
   const query = {};
 
   if (selectedTags) {
-    query.tags = { $in: selectedTags };
-  }
-
-  if (selectedCategories && selectedCategories.length > 0) {
-    query.category = { $in: selectedCategories };
-  }
-
-  if (searchQuery) {
-    query.$or = [{ title: { $regex: searchQuery, $options: "i" } }];
+    query.tags = { $all: selectedTags };
   }
 
   const filterResult = await recipesCollection.find(query).limit(100).toArray();
 
   return filterResult;
-}
-
-export async function getCategories() {
-  const db = client.db("devdb");
-  const categoriesCollection = db.collection("categories");
-
-  const categories = categoriesCollection.find().toArray();
-
-  return categories;
 }

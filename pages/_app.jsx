@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import Head from 'next/head'
 import { useRouter } from "next/router";
 import { Fragment } from "react";
 import Footer from "@/components/LayOuts/footer/Footer";
@@ -11,6 +12,9 @@ function App({ Component, pageProps }) {
   return (
     <>
       <div className="mainBody">
+      <Head>
+        <title>Cooking Devs</title>
+      </Head>
         <Fragment>
           <ThemeProvider enableSystem={true} attribute="class">
             {router.pathname !== "/" && <Navigation />}

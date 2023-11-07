@@ -3,6 +3,11 @@
 @import "tailwindcss/utilities";
 
 /* global-styles.css */
+
+*{
+
+  box-sizing: border-box;
+}
 body {
   background-color: rgba(81, 132, 216, 0.5);
 }

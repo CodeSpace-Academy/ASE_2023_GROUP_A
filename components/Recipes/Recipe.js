@@ -1,13 +1,13 @@
-import { useState } from "react"; // Import useState from React
+import { useState } from "react";
 import CookTime from "../TimeAndDate/TimeConvertor";
-import RecipeInstructions from "../Instructions/RecipeInstructions";
-import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
+import RecipeInstructions from "../instructions/RecipeInstructions";
+import UpdateRecipeInstructions from "../instructions/editRecipeInstructions";
 import RecipeDetailTags from "../recipeDetailTags/recipeDetailTag";
 import Image from "next/image";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
-import Link from "next/link"; // Import Link
-import { FaArrowLeft } from "react-icons/fa"; // Import FaArrowLeft
+import Link from "next/link";
+import { FaArrowLeft } from "react-icons/fa";
 
 const Recipe = ({ recipe, Allergies }) => {
   const [showTags, setShowTags] = useState(false);
@@ -17,7 +17,11 @@ const Recipe = ({ recipe, Allergies }) => {
     return <div>Loading...</div>;
   }
 
-  const ingredientsList = Object.entries(recipe.ingredients);
+  const ingredientsList = Object.entries(recipe.ingredients).map(
+    ([ingredient, amount]) => `${ingredient}: ${amount}`
+  );
+
+
   const firstImage = recipe.images[0];
 
   return (
@@ -90,12 +94,12 @@ const Recipe = ({ recipe, Allergies }) => {
             prepTimeInMinutes={recipe.prep}
             label="Total Time"
           />
-          <Allergens allergens={Allergies} />
+           <Allergens allergens={Allergies} recipeIngredients={ingredientsList} />
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
           <ul className="list-disc list-inside">
-            {ingredientsList.map(([ingredient, amount], index) => (
+            {ingredientsList.map((ingredient, index) => (
               <li key={index} className="text-gray-600">
-                {ingredient}: {amount}
+                {ingredient}
               </li>
             ))}
           </ul>

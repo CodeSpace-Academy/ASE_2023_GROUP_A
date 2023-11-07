@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Select from "react-select";
 
 function Categories({
   setFilterCategoryResults,
   handleDefaultCategoryFilter,
   setRecipes,
+  selectedCategories,
+  setSelectedCategories,
 }) {
   const [categories, setCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -81,7 +82,7 @@ function Categories({
 
     control: (base) => ({
       ...base,
-      backgroundColor: "#999",
+      backgroundColor: "blue",
       color: "white",
       width: "fitContent",
     }),
@@ -94,8 +95,7 @@ function Categories({
 
     placeholder: (base) => ({
       ...base,
-      color: "black",
-      fontWeight: "600",
+      color: "white",
     }),
 
     menu: (base) => ({
