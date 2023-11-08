@@ -1,8 +1,8 @@
 import React from "react";
 import { FaArrowUp,FaArrowDown } from "react-icons/fa";
-import classes from "./FloatingButton.module.css";
+import classes from "./floatingButton.module.css";
 
-export default function FloatingButton() {
+export default function floatingButton() {
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
