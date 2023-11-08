@@ -10,6 +10,9 @@
     "build:css": "tailwindcss build path/to/your/styles.css -o path/to/your/output.css"
   },
   "dependencies": {
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.16",
+    "@mui/material": "^5.14.17",
     "autoprefixer": "^10.4.16",
     "cookies-next": "^4.0.0",
     "mongodb": "^6.1.0",
