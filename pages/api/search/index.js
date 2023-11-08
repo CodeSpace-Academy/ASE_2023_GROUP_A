@@ -5,14 +5,10 @@ const handler = async (req, res) => {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { searchQuery, selectedCategories, selectedTags } = req.body;
+  const { searchQuery } = req.body;
 
   try {
-    const searchResult = await searching(
-      searchQuery,
-      selectedCategories,
-      selectedTags
-    );
+    const searchResult = await searching(searchQuery);
     res.status(200).json({ recipes: searchResult });
   } catch (error) {
     console.error("Error searching recipes:", error);

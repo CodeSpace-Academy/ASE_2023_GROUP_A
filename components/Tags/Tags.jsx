@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Select from "react-select";
 
-function Tags({ setFilterTagsResults, handleDefaultTagFilter, setRecipes }) {
+function Tags({
+  setFilterTagsResults,
+  handleDefaultTagFilter,
+  setRecipes,
+  setSelectedTags,
+  selectedTags,
+}) {
   const [tags, setTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
 
   useEffect(() => {
     async function fetchTags() {
@@ -46,6 +51,7 @@ function Tags({ setFilterTagsResults, handleDefaultTagFilter, setRecipes }) {
           if (response.ok) {
             const filterTagsResult = await response.json();
             setFilterTagsResults(filterTagsResult.recipes);
+            
           } else {
             console.error("Failed to fetch tags by category");
           }
@@ -75,7 +81,7 @@ function Tags({ setFilterTagsResults, handleDefaultTagFilter, setRecipes }) {
 
     control: (base) => ({
       ...base,
-      backgroundColor: "#999",
+      backgroundColor: "blue",
       color: "white",
       width: "fitContent",
     }),
@@ -88,8 +94,7 @@ function Tags({ setFilterTagsResults, handleDefaultTagFilter, setRecipes }) {
 
     placeholder: (base) => ({
       ...base,
-      color: "black",
-      fontWeight: "600",
+      color: "white",
     }),
 
     menu: (base) => ({

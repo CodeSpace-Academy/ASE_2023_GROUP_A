@@ -5,8 +5,8 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-blue-500 bottom-0 left-0 right-0 z-10 h-18 ">
-      <div className="text-lg flex space-x-10 items-center justify-center mb-auto">
+    <footer className="bg-blue-500 bottom-0 left-0 right-0 z-10 py-6">
+      <div className="text-lg flex flex-wrap space-x-0 space-y-4 md:space-y-0 md:space-x-10 items-center justify-center mb-4 md:mb-0">
         <Link
           target="_blank"
           href="https://www.privacypolicies.com/live/f3493839-9aed-4582-8b43-74340eb8295f"

@@ -8,15 +8,19 @@ import Highlighter from "react-highlight-words";
 import { useContext } from "react";
 import FavoritesContext from "@/components/Context/Favorites-context";
 import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRicepe";
-import { StarIcon as StarFilled} from "@heroicons/react/24/solid";
+import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
 import { useTheme } from "../Context/ThemeContext";
 import Loading from "../Loading/Loading";
 const RecipeCard = ({ recipe, searchQuery, favorites }) => {
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
   if (!recipe) {
-    return <div><Loading/></div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
 
   const firstImage =

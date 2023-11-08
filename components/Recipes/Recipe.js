@@ -5,7 +5,7 @@ import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
 import DropDownSVG from "../IconsAndSvg's/DropDownSVG";
 import CoverImage from "../Images/CoverImage";
-import IngredientsList from "../Ingredients/IngredientsList";
+import IngredientsList from "../ingredients/IngredientsList";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
 import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 import Link from "next/link"; // Import Link
