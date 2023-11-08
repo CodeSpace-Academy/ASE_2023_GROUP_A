@@ -13,7 +13,11 @@ const RecipePage = () => {
   const { data, error } = useSWR(`api/recipes/${recipeName}`, fetcher);
 
   if (error || !data) {
-    return <div><Loading/></div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
 
   const { recipe, allergens } = data;
@@ -26,7 +30,7 @@ const RecipePage = () => {
     <div>
       <Recipe
         recipe={recipe}
-        description={recipe.description}
+        // description={recipe.description}
         Allergies={allergens}
       />
     </div>

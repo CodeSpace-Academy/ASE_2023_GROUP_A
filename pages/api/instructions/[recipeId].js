@@ -1,12 +1,17 @@
-import { connectToCollection, closeMongoDBConnection } from "@/helpers/mongoDB-connection";
-const updateInstructionsInDB = async (id, instructions) => {
+import {
+  connectToCollection,
+  closeMongoDBConnection,
+} from "@/helpers/mongoDB-connection";
+const updateInstructionsInDB = async (request, id, instructions) => {
   try {
-    const collection = await connectToCollection('devdb','recipes')
+    const collection = await connectToCollection("devdb", "recipes");
 
     if (request.method === "PATCH") {
+      console.log("Testing :", _id, instructions);
+
       const result = await collection.updateOne(
-        { _id: id }, // Your identifier for the recipe document
-        { $set: { instructions: instructions } } // Update instructions field
+        { _id: id },
+        { $set: { instructions: instructions } }
       );
 
       if (result.matchedCount > 0) {
