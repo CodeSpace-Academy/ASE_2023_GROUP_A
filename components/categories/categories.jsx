@@ -115,7 +115,7 @@ function Categories({
         onChange={handleCategoryChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="select category"
+        placeholder="Select Category"
       />
     </div>
   );

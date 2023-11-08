@@ -21,20 +21,17 @@
 
   @media (min-width: 800px) {
     display: flex;
-    
+
     gap: 50px;
   }
 }
 
-.search{
-
+.search {
   margin: auto;
 }
 
-.filters{
-
+.filters {
   display: flex;
   gap: 20px;
   justify-content: center;
-  
 }
