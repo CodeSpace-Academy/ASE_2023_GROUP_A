@@ -1,13 +1,89 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+:root {
+  --foreground-rgb: rgb(99, 99, 218);
+  --background-start-rgb: rgb(223, 172, 181);
+  --background-end-rgb: purple;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: pink;
+    --background-start-rgb: brown;
+    --background-end-rgb: yellow;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* Light mode styles */
+.light-mode {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Dark mode styles */
+.dark-mode {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.messages {
+  display: block;
+}
+
+/* Styling for the allergens button */
+
+/* .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  background-color: #926d22;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 5px 0;
+  list-style: none;
+  margin: 0;
+}
+
+.dropdown-menu .dropdown-item {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.dropdown.is-open .dropdown-menu {
+  display: block;
+} */
 
 /* global-styles.css */
-body {
-background-color: rgba(81, 132, 216, 0.5);
-;
 
-} 
+*{
+
+  box-sizing: border-box;
+}
+body {
+  background-color: rgba(6, 83, 206, 0.5);
+}
 
 /* h1{
   font-size: 25px;
@@ -40,10 +116,15 @@ footer {
   margin-top: auto;
 }
 
-.flexpage{
+.flexpage {
   height: 80vh;
 }
 
-.mainBody{
+.mainBody {
   min-height: 90vh;
+}
+
+.YourHighlightClass {
+  background-color: yellow;
+  font-weight: bold;
 }

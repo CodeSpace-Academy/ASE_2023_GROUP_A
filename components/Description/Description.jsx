@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import DescriptionEdit from "./DescriptionEdit";
 import DescriptionError from "../error-messages/DescriptionError";
 
-
 const Description = ({ description, recipeId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description);
@@ -27,7 +26,7 @@ const Description = ({ description, recipeId }) => {
       });
       if (response) {
         setEditedDescription(newDescription);
-        setIsEditing(false); 
+        setIsEditing(false);
       } else {
         console.error("Failed to update description.");
       }
@@ -43,10 +42,10 @@ const Description = ({ description, recipeId }) => {
         <DescriptionError />
       ) : (
         <div>
-          {!isEditing && <p>{editedDescription}</p>} 
+          {!isEditing && <p>{editedDescription}</p>}
           {isEditing ? (
             <DescriptionEdit
-              initialDescription={editedDescription} 
+              initialDescription={editedDescription}
               onSave={handleDescriptionSave}
               toggleEditing={toggleEditing}
             />
