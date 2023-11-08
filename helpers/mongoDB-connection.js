@@ -16,7 +16,7 @@ export const client = new MongoClient(uri, {
 export const connectToCollection=async(databaseName, collectionName) =>{
   try {
     await client.connect();
-    console.log("Connected to MongoDB");
+    
     const db = client.db(databaseName);
     const collection = db.collection(collectionName);
     return collection;
@@ -29,5 +29,5 @@ export const connectToCollection=async(databaseName, collectionName) =>{
 // Function to close the MongoDB connection
 export async function closeMongoDBConnection() {
   await client.close();
-  console.log("MongoDB connection closed");
+  
 }

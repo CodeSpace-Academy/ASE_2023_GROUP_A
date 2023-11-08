@@ -18,11 +18,16 @@
 }
 
 .searchInput:focus {
-  border: 2px solid red;
+  border: 2px solid darkblue;
 }
 
 .searchContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.searchInput::placeholder {
+  color: black;
+  font-style: italic;
 }
