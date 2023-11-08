@@ -1,4 +1,4 @@
-import { filtering } from "@/helpers/mongoDB-utils";
+import { filteringByCategory } from "@/helpers/mongoDB-utils";
 
 const handler = async (req, res) => {
   if (req.method !== "POST") {
@@ -8,10 +8,8 @@ const handler = async (req, res) => {
   const { selectedCategories } = req.body;
 
   try {
-    const filterResult = await filtering(
+    const filterResult = await filteringByCategory(
       selectedCategories,
-      selectedTags,
-      searchQuery
     );
     res.status(200).json({ recipes: filterResult });
   } catch (error) {

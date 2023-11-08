@@ -6,7 +6,7 @@ import {
 
 // Fetch all recipes with optional skip and limit parameters
 export const getAllRecipes = async (skip, limit) => {
-  const collection = await connectToCollection("devdb", "recipes");
+  const collection = client.db("devdb").collection("recipes")
   const query = collection.find();
   query.skip(skip).limit(limit);
   try {
@@ -19,8 +19,8 @@ export const getAllRecipes = async (skip, limit) => {
 };
 
 export async function getTags() {
-  const db = client.db("devdb");
-  const collection = db.collection("recipes");
+  
+  const collection = client.db("devdb").collection("recipes")
 
   try {
     const tags = await collection
@@ -39,8 +39,8 @@ export async function getTags() {
 }
 
 export async function getIngredients() {
-  const db = client.db("devdb");
-  const collection = db.collection("recipes");
+  
+  const collection = client.db("devdb").collection("recipes")
 
   try {
     const ingredients = await collection
@@ -80,49 +80,22 @@ export async function getIngredients() {
 }
 
 export async function getCategories() {
-  const db = client.db("devdb");
-  const categoriesCollection = db.collection("categories");
+  
+  const categoriesCollection = client.db("devdb").collection("categories")
 
   const categories = categoriesCollection.find().toArray();
 
   return categories;
 }
 
-// export const getAllRecipes = async (skip, limit) => {
-//   const db = client.db("devdb");
-//   const collection = db.collection("recipes");
-
-//   try {
-//     const recipes = await collection.find({}).skip(skip).limit(limit).toArray();
-//     return recipes;
-//   } catch (error) {
-//     console.error("Error fetching recipes:", error);
-//     throw error;
-//   }
-// };
-
 // Fetch recipe data from MongoDB based on the recipe title and collection
-export const fetchRecipeDataFromMongo = async (collection, recipeName) => {
+export const fetchRecipeDataFromMongo = async (recipeName) => {
   try {
-    const recipeData = await collection.findOne({ title: recipeName });
+    const collection = client.db('devdb').collection('recipes')
+    const recipeData = collection.findOne({ title: recipeName });
     return recipeData;
   } catch (error) {
     console.error("Error fetching recipe data from MongoDB:", error);
-    throw error;
-  }
-};
-
-// Fetch all categories from MongoDB
-export const getAllCategories = async () => {
-  try {
-    const db = client.db("devdb");
-    const collection = db.collection("categories");
-    const categoriesDocument = collection.findOne({});
-    const categories = categoriesDocument.categories;
-    return categories;
-  } catch (error) {
-    closeMongoDBConnection();
-    console.error("Error fetching categories:", error);
     throw error;
   }
 };
@@ -141,9 +114,8 @@ export const fetchAllergens = async () => {
 
 export const getTotalRecipesCount = async () => {
   try {
-    const cl = await client.connect()
-    const db = cl.db("devdb");
-    const recipesCollection = db.collection("recipes");
+    
+    const recipesCollection = client.db("devdb").collection("recipes")
 
     const countResult = await recipesCollection
       .aggregate([
@@ -170,8 +142,8 @@ export const getTotalRecipesCount = async () => {
 // Function to add a favorite recipe to MongoDB
 export const addFavoriteToMongoDB = async (recipe) => {
   try {
-    const db = client.db("devdb");
-    const favoritesCollection = db.collection("favorites"); // Create or use a 'favorites' collection
+    
+    const favoritesCollection = client.db("devdb").collection("favorites") // Create or use a 'favorites' collection
     // Check if the user's favorite already exists
     const existingFavorite = await favoritesCollection.findOne({
       _id: recipe._id,
@@ -193,16 +165,15 @@ export const addFavoriteToMongoDB = async (recipe) => {
 
 export const removeFavoriteFromDB = async (recipeId) => {
   try {
-    const favoritesCollection = await connectToCollection("devdb", "favorites");
+    const favoritesCollection = client.db("devdb").collection("favorites")
     const deleteResult = await favoritesCollection.deleteOne({ _id: recipeId });
     return deleteResult;
   } catch (err) {}
 };
 
 export const getFavouritesFromMongoDB = async () => {
-  let clientt = await client.connect();
-  const db = clientt.db("devdb");
-  const collection = db.collection("favorites");
+ 
+  const collection = client.db("devdb").collection("favorites")
   const data = collection.find();
   try {
     const recipes = await data.toArray();
@@ -214,8 +185,8 @@ export const getFavouritesFromMongoDB = async () => {
 };
 
 export async function searchSuggestions(searchQuery) {
-  const db = client.db("devdb");
-  const recipesCollection = db.collection("recipes");
+  
+  const recipesCollection =client.db("devdb").collection("recipes")
 
   const autocompleteResults = recipesCollection
     .find({
@@ -232,8 +203,8 @@ export async function searchSuggestions(searchQuery) {
 }
 
 export async function searching(searchQuery) {
-  const db = client.db("devdb");
-  const recipesCollection = db.collection("recipes");
+  
+  const recipesCollection = client.db("devdb").collection("recipes")
 
   const query = {
     $or: [{ title: { $regex: searchQuery, $options: "i" } }],
@@ -246,8 +217,8 @@ export async function searching(searchQuery) {
 export async function filteringByInstructions(selectedInstructions) {
 
   try {
-    const db = client.db('devdb');
-    const collection = db.collection("recipes");
+    
+    const collection = client.db("devdb").collection("recipes")
 
    
     const query = { instructions: { $size: selectedInstructions } };
@@ -262,8 +233,8 @@ export async function filteringByInstructions(selectedInstructions) {
 }
 
 export async function filteringByCategory(selectedCategories) {
-  const db = client.db("devdb");
-  const recipesCollection = db.collection("recipes");
+  
+  const recipesCollection = client.db("devdb").collection("recipes")
 
   const query = {};
 
@@ -277,8 +248,8 @@ export async function filteringByCategory(selectedCategories) {
 }
 
 export async function filteringByIngredient(selectedIngredients) {
-  const db = client.db("devdb");
-  const recipesCollection = db.collection("recipes");
+  
+  const recipesCollection = client.db("devdb").collection("recipes")
 
   const query = {};
 
@@ -302,8 +273,8 @@ export async function filteringByIngredient(selectedIngredients) {
 }
 
 export async function filteringByTags(selectedTags) {
-  const db = client.db("devdb");
-  const recipesCollection = db.collection("recipes");
+  
+  const recipesCollection = client.db("devdb").collection("recipes")
 
   const query = {};
 

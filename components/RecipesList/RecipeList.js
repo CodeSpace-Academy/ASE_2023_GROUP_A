@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useContext } from "react";
+import { useEffect, useState } from "react";
 import fetchRecipes from "@/helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
@@ -8,50 +8,63 @@ import FloatingButton from "../Buttons/floatingButton/FloatingButton";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
-import useSWR,{mutate} from "swr";
+import useSWR, { mutate } from "swr";
 // const ITEMS_PER_PAGE = 100;
 
-function RecipeList({favorites}) {
- const [recipes, setRecipes] = useState([]);
- const [originalRecipes, setOriginalRecipes] = useState([]);
- const [currentPage, setCurrentPage] = useState(1);
- const [totalRecipes, setTotalRecipes] = useState(0);
- const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
- const [searchResults, setSearchResults] = useState([]);
- const [filterResults, setFilterCategoryResults] = useState([]);
- const [filterTagsResults, setFilterTagsResults] = useState([]);
- const [searchQuery, setSearchQuery] = useState("");
+function RecipeList({ favorites }) {
+  const [recipes, setRecipes] = useState([]);
+  const [originalRecipes, setOriginalRecipes] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecipes, setTotalRecipes] = useState(0);
+  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [filterResults, setFilterCategoryResults] = useState([]);
+  const [filterTagsResults, setFilterTagsResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [numberOfFilters, setNumberOfFilters] = useState(0)
+  const [filterIngredientResults, setFilterIngredientResults] = useState([]);
+  const [filterInstructionsResults, setFilterInstructionsResults] = useState(
+    []
+  );
 
-const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
-  `/api/recipes?page=${currentPage}`,
-  fetchRecipes
-);
+  // const [loading, setLoading] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedInstructions, setSelectedInstructions] = useState(0);
+  const [sortOrder, setSortOrder] = useState(null);
+
+  const [noRecipesFoundMessage, setNoRecipesFoundMessage] = useState(null);
+  // const [numberOfFilters, setNumberOfFilters] = useState(0);
+
+  const {
+    data: recipesData,
+    error: recipesError,
+    loading: isLoading,
+  } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
   useEffect(() => {
-  if (!isLoading && recipesData) {
-    // Check if recipesData is defined before updating the state
-    setOriginalRecipes(recipesData.recipes);
-    setTotalRecipes(recipesData.totalRecipes);
-    // Use mutate to update the state as soon as you fetch the new data
-    mutate(`/api/recipes?page=${currentPage}`);
-  }
-}, [currentPage, recipesData]);
-  
-  let combinedResults;
+    if (!isLoading && recipesData) {
+      // Check if recipesData is defined before updating the state
+      setOriginalRecipes(recipesData.recipes);
+      setTotalRecipes(recipesData.totalRecipes);
+      // Use mutate to update the state as soon as you fetch the new data
+      mutate(`/api/recipes?page=${currentPage}`);
+    }
+  }, [currentPage, recipesData]);
 
+  // let combinedResults;
 
- const handleLoadLess = () => {
-   setCurrentPage(currentPage - 1);
+  const handleLoadLess = () => {
+    setCurrentPage(currentPage - 1);
 
-  //  loadRecipes(currentPage - 1);
- };
+    //  loadRecipes(currentPage - 1);
+  };
   const handleLoadMore = () => {
     setCurrentPage(currentPage + 1);
 
     // loadRecipes(currentPage + 1);
   };
-
-  
 
   if (isLoading) {
     return <Loading />;
@@ -140,6 +153,46 @@ const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
   function handleDefaultTagsFilter() {
     setFilterTagsResults([]);
   }
+
+  useEffect(() => {
+    const fetchRecipesByInstructions = async (selectedInstructions) => {
+      if (
+        parseInt(selectedInstructions) == "" ||
+        parseInt(selectedInstructions) < 0
+      ) {
+        setFilterCategoryResults([]);
+      } else {
+        try {
+          const response = await fetch(`/api/filterbyinstructions`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              selectedInstructions: parseInt(selectedInstructions),
+            }),
+          });
+
+          if (response.ok) {
+            const filterInstructionsResults = await response.json();
+            setFilterInstructionsResults(filterInstructionsResults.recipes);
+
+            console.log(filterInstructionsResults);
+          } else {
+            console.error("Failed to fetch recipes by instruction");
+          }
+        } catch (error) {
+          console.error("Error fetching recipes by instruction:", error);
+        }
+      }
+    };
+
+    if (selectedInstructions != "") {
+      fetchRecipesByInstructions(selectedInstructions);
+    } else {
+      setFilterInstructionsResults([]);
+    }
+  }, [selectedInstructions]);
 
   const handleSort = (sortOrder) => {
     setSortOrder(sortOrder);
@@ -343,7 +396,18 @@ const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
         setSearchQuery={setSearchQuery}
         handleSort={handleSort}
       />
-      <button onClick={handleDefaultSearch}>All Recipes</button>
+      <button onClick={handleDefault}>All Recipes</button>
+
+      <div style={{textAlign: 'center'}}>
+      <p >Filter by number of instructions:</p>
+      <input
+        type="number"
+        placeholder="Enter number of instructions.."
+        value={parseInt(selectedInstructions)}
+        onChange={handleChange}
+        className="border border-gray-300 rounded-1-md px-4 py-2"
+      />
+      </div>
       {!favorites ? (
         <p>
           <Loading />
@@ -361,8 +425,8 @@ const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
           </Carousel>
         </div>
       )}
-      <div className="total-count">Total Recipes: {combinedResults.length}</div>
-      
+      <div className="total-count">Total Recipes: {recipes.length}</div>
+
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
           {autocompleteSuggestions.map((suggestion, index) => (
@@ -375,11 +439,12 @@ const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
           ))}
         </ul>
       )}
+      
       {isLoading ? (
         <Loading />
       ) : (
         <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {combinedResults.map((recipe, index) => (
+          {recipes.map((recipe, index) => (
             <div key={index}>
               <RecipeCard
                 key={recipe._id}
@@ -392,7 +457,7 @@ const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
           ))}
         </div>
       )}
-      {combinedResults.length < totalRecipes && (
+      {recipes.length < totalRecipes && (
         <>
           <div className="flex justify-center gap-10">
             <LoadMoreButton

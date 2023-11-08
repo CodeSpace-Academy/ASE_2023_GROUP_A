@@ -47,4 +47,3 @@ function Allergens({ recipeIngredients, allergens }) {
 export default Allergens;
 
 
-
