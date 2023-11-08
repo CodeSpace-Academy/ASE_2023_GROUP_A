@@ -8,7 +8,7 @@ const LoadMoreButton = ({
   currentPage,
 }) => {
   return (
-    <div className="rounded bg-gray-500 text-white p-2 mt-2 mb-4 transition-transform hover:scale-105 duration-300 ease-in-out">
+    <div className="rounded items-center justify-center bg-blue-500 text-white p-2 mt-2 transition-transform hover:scale-105 duration-300 ease-in-out">
       <button
         onClick={handleLoad}
         disabled={

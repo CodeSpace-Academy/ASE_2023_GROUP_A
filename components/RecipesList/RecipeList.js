@@ -1,68 +1,61 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useContext } from "react";
 import fetchRecipes from "@/helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
-import LoadButton from "../Buttons/LoadMore/LoadMore";
-import FloatingButton from "../Buttons/floatingButton/floatingButton";
-import Skeleton from "@mui/material/Skeleton";
-import Badge from "@mui/material/Badge";
-import { FaTrash } from "react-icons/fa";
+import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
+import Loading from "../Loading/Loading";
+import FloatingButton from "../Buttons/floatingButton/FloatingButton";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import { responsive } from "@/helpers/settings/settings";
+import useSWR,{mutate} from "swr";
+// const ITEMS_PER_PAGE = 100;
 
-function RecipeList() {
-  const [originalRecipes, setOriginalRecipes] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalRecipes, setTotalRecipes] = useState(0);
-  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
-  const [filterResults, setFilterCategoryResults] = useState([]);
-  const [filterTagsResults, setFilterTagsResults] = useState([]);
-  const [filterIngredientResults, setFilterIngredientResults] = useState([]);
-  const [filterInstructionsResults, setFilterInstructionsResults] = useState(
-    []
-  );
-  const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedInstructions, setSelectedInstructions] = useState(0);
-  const [sortOrder, setSortOrder] = useState(null);
-  const [recipes, setRecipes] = useState([]);
-  const [noRecipesFoundMessage, setNoRecipesFoundMessage] = useState(null);
-  const [numberOfFilters, setNumberOfFilters] = useState(0);
+function RecipeList({favorites}) {
+ const [recipes, setRecipes] = useState([]);
+ const [originalRecipes, setOriginalRecipes] = useState([]);
+ const [currentPage, setCurrentPage] = useState(1);
+ const [totalRecipes, setTotalRecipes] = useState(0);
+ const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
+ const [searchResults, setSearchResults] = useState([]);
+ const [filterResults, setFilterCategoryResults] = useState([]);
+ const [filterTagsResults, setFilterTagsResults] = useState([]);
+ const [searchQuery, setSearchQuery] = useState("");
 
-  const loadRecipes = async (page) => {
-    setLoading(true);
-    const response = await fetchRecipes(page);
+const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
+  `/api/recipes?page=${currentPage}`,
+  fetchRecipes
+);
 
-    if (response.ok) {
-      const data = await response.json();
+  useEffect(() => {
+  if (!isLoading && recipesData) {
+    // Check if recipesData is defined before updating the state
+    setOriginalRecipes(recipesData.recipes);
+    setTotalRecipes(recipesData.totalRecipes);
+    // Use mutate to update the state as soon as you fetch the new data
+    mutate(`/api/recipes?page=${currentPage}`);
+  }
+}, [currentPage, recipesData]);
+  
+  let combinedResults;
 
-      setOriginalRecipes(data.recipes);
-      setTotalRecipes(data.totalRecipes);
-      setLoading(false);
-      setNumberOfFilters("0");
-    } else {
-      console.error("Failed to fetch recipes");
-    }
-  };
 
-  const handleLoadLess = () => {
-    setCurrentPage(currentPage - 1);
+ const handleLoadLess = () => {
+   setCurrentPage(currentPage - 1);
 
-    loadRecipes(currentPage - 1);
-  };
-
+  //  loadRecipes(currentPage - 1);
+ };
   const handleLoadMore = () => {
     setCurrentPage(currentPage + 1);
 
-    loadRecipes(currentPage + 1);
+    // loadRecipes(currentPage + 1);
   };
 
-  useEffect(() => {
-    loadRecipes(currentPage);
-  }, [currentPage]);
+  
 
+  if (isLoading) {
+    return <Loading />;
+  }
   const handleSearch = async (searchQuery) => {
     setNoRecipesFoundMessage("");
 
@@ -99,7 +92,6 @@ function RecipeList() {
       }
     }
   };
-
   const fetchAutocompleteSuggestions = async (searchQuery) => {
     try {
       if (searchQuery.length === 0) {
@@ -344,46 +336,33 @@ function RecipeList() {
         selectedTags={selectedTags}
         setSelectedTags={setSelectedTags}
         handleDefaultSearch={handleDefaultSearch}
+        setRecipes={setRecipes}
         onSearch={handleSearch}
         onAutocomplete={fetchAutocompleteSuggestions}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         handleSort={handleSort}
       />
-
-      <div className="flex">
-        <input
-          type="number"
-          placeholder="Enter number of instructions..."
-          value={parseInt(selectedInstructions)}
-          onChange={handleChange}
-          className="border border-gray-300 rounded-l-md px-4 py-2"
-        />
-
-        <Badge
-          badgeContent={numberOfFilters}
-          color="primary"
-          style={{ margin: "auto", fontWeight: "bold", zIndex: "-1" }}
-        >
-          FILTERS
-        </Badge>
-
-        <button onClick={handleDefault}>
-          <span style={{ display: "inline-flex", gap: "0.2em" }}>
-            Filters
-            <FaTrash style={{ color: "blue", opacity: "0.5" }} />
-          </span>
-        </button>
-
-        <Badge
-          badgeContent={recipes.length}
-          color="primary"
-          style={{ margin: "auto", fontWeight: "bold", zIndex: "-1" }}
-        >
-          Recipes
-        </Badge>
-      </div>
-
+      <button onClick={handleDefaultSearch}>All Recipes</button>
+      {!favorites ? (
+        <p>
+          <Loading />
+        </p>
+      ) : favorites.length === 0 ? (
+        <p>No favorite recipes yet.</p>
+      ) : (
+        <div className={`h-3/5`}>
+          <Carousel responsive={responsive} containerClass="carousel-container">
+            {favorites.map((recipe) => (
+              <div key={recipe.recipe._id}>
+                <RecipeCard recipe={recipe.recipe} favorites={favorites} />
+              </div>
+            ))}
+          </Carousel>
+        </div>
+      )}
+      <div className="total-count">Total Recipes: {combinedResults.length}</div>
+      
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
           {autocompleteSuggestions.map((suggestion, index) => (
@@ -396,65 +375,39 @@ function RecipeList() {
           ))}
         </ul>
       )}
-
-      {loading ? (
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {[1, 2, 3, 4].map((index) => (
-            <div key={index} style={{ width: 300, margin: "auto" }}>
-              <Skeleton animation="wave" variant="rect" height={300} />
-              <Skeleton animation="wave" height={20} />
-              <Skeleton animation="wave" height={20} />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {combinedResults.map((recipe, index) => (
+            <div key={index}>
+              <RecipeCard
+                key={recipe._id}
+                favorites={favorites}
+                recipe={recipe}
+                searchQuery={searchQuery}
+                description={recipe.description}
+              />
             </div>
           ))}
         </div>
-      ) : recipes.length < 1 ? (
-        <p style={{ textAlign: "center", fontSize: "5em", fontWeight: "bold" }}>
-          {noRecipesFoundMessage}
-        </p>
-      ) : (
+      )}
+      {combinedResults.length < totalRecipes && (
         <>
-          <div className="container m-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {recipes.map((recipe, index) => (
-              <div key={index}>
-                <RecipeCard
-                  key={recipe._id}
-                  recipe={recipe}
-                  searchQuery={searchQuery}
-                  description={recipe.description}
-                />
-              </div>
-            ))}
+          <div className="flex justify-center gap-10">
+            <LoadMoreButton
+              handleLoad={handleLoadLess}
+              remainingRecipes={remainingRecipes}
+              totalRecipes={totalRecipes}
+              isLoadMore={false}
+            />
+            <LoadMoreButton
+              handleLoad={handleLoadMore}
+              remainingRecipes={remainingRecipes}
+              totalRecipes={totalRecipes}
+              isLoadMore={true}
+            />
           </div>
-
-          {!(
-            searchResults.length > 0 ||
-            filterResults.length > 0 ||
-            filterTagsResults.length > 0 ||
-            filterInstructionsResults.length > 0
-          ) && (
-            <>
-              <p style={{ textAlign: "center" }}>
-                <span style={{ fontWeight: "bold" }}>{remainingRecipes} </span>
-                recipes remaining
-              </p>
-              <div className="flex justify-center gap-10">
-                <LoadButton
-                  handleLoad={handleLoadLess}
-                  remainingRecipes={remainingRecipes}
-                  totalRecipes={totalRecipes}
-                  isLoadMore={false}
-                  currentPage
-                />
-                <LoadButton
-                  handleLoad={handleLoadMore}
-                  remainingRecipes={remainingRecipes}
-                  totalRecipes={totalRecipes}
-                  isLoadMore={true}
-                  currentPage
-                />
-              </div>
-            </>
-          )}
           <FloatingButton />
         </>
       )}

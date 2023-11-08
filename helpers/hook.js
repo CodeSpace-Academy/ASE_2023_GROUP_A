@@ -1,7 +1,19 @@
-const fetchRecipes = async (page) => {
-  const response = await fetch(`/api/recipes?page=${page}`);
+// const fetchRecipes = async (page) => {
+//   const response = await fetch(`/api/recipes?page=${page}`);
+//   return response;
+// };
 
-  return response;
+// export default fetchRecipes;
+
+
+const fetchRecipes = async (url) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch recipes");
+  }
+  console.log("Response:",response)
+  return response.json();
 };
 
 export default fetchRecipes;
+
