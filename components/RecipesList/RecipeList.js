@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import fetchRecipes from "@/helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
@@ -13,7 +13,11 @@ function RecipeList() {
   const [searchResults, setSearchResults] = useState([]);
   const [filterResults, setFilterCategoryResults] = useState([]);
   const [filterTagsResults, setFilterTagsResults] = useState([]);
+  const [filterIngridientsResults, setFilterIngridientsResults] = useState([])
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
+  
+
 
   const loadRecipes = async (page) => {
     const response = await fetchRecipes(page);
@@ -104,12 +108,29 @@ function RecipeList() {
     setFilterTagsResults([]);
   }
 
+  function handleDefaultIngridientFilter() {
+    setFilterIngridientsResults([]);
+  }
+
+
+  const sortRecipesBySteps = (recipes, sortOrder) => {
+    return [...recipes].sort((a, b) => {
+
+      if (sortOrder === "asc") {
+        return a.instructions.length - b.instructions.length;
+      } else {
+        return b.instructions.length - a.instructions.length;
+      }
+    });
+  };
+
   let combinedResults;
 
   if (
     searchResults.length < 1 &&
     filterResults.length < 1 &&
-    filterTagsResults.length < 1
+    filterTagsResults.length < 1 &&
+    filterIngridientsResults.length < 1
   ) {
     combinedResults = [...originalRecipes];
   } else {
@@ -117,8 +138,15 @@ function RecipeList() {
       ...searchResults,
       ...filterResults,
       ...filterTagsResults,
+      ...filterIngridientsResults,
     ];
   }
+
+// Sort the combinedResults based on the selected sorting order
+ combinedResults = sortRecipesBySteps(combinedResults, sortOrder);
+
+ 
+
 
   const remainingRecipes = totalRecipes - 100 * currentPage;
 
@@ -127,15 +155,19 @@ function RecipeList() {
       <Hero
         setFilterCategoryResults={setFilterCategoryResults}
         setFilterTagsResults={setFilterTagsResults}
+        setFilterIngridientsResults={setFilterIngridientsResults}
         handleDefaultCategoryFilter={handleDefaultCategoryFilter}
         handleDefaultTagFilter={handleDefaultTagsFilter}
         handleDefaultSearch={handleDefaultSearch}
+        handleDefaultIngredientFilter={handleDefaultIngridientFilter}
         onSearch={handleSearch}
         onAutocomplete={fetchAutocompleteSuggestions}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
       />
-
+    
       <button onClick={handleDefaultSearch}>All Recipes</button>
 
       <div className="total-count">Total Recipes: {combinedResults.length}</div>

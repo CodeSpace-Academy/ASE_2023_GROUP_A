@@ -220,8 +220,45 @@ export async function filteringByTags(
 export async function getCategories() {
   const db = client.db("devdb");
   const categoriesCollection = db.collection("categories");
-
   const categories = categoriesCollection.find().toArray();
-
   return categories;
 }
+
+// export async function getNumberOfSteps() {
+//   const db = client.db("devdb");
+//   const stepsCollection = db.collection("instructions")
+//   const steps = stepsCollection.find().toArray();
+//   return steps;
+// }
+
+//  export async function filteringBySteps(
+//   selectedCategories,
+//   searchQuery,
+//   selectedTags,
+//   enteredNumber,
+// ) {
+//   const db = client.db("devdb");
+//   const recipesCollection = db.collection("recipes");
+
+//   const query = {};
+
+//   if (enteredNumber) {
+//     query.instructions = { $in: enteredNumber}
+//   }
+
+//   if (selectedCategories && selectedCategories.length > 0) {
+//     query.category = { $in: selectedCategories };
+//   }
+
+//   if (selectedTags) {
+//     query.tags = { $in: selectedTags };
+//   }
+
+//   if (searchQuery) {
+//     query.$or = [{ title: { $regex: searchQuery, $options: "i" } }];
+//   }
+
+//   const filterResult = await recipesCollection.find(query).limit(100).toArray();
+
+//   return filterResult;
+// }

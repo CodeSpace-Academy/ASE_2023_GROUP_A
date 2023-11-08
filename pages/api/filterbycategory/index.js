@@ -5,13 +5,15 @@ const handler = async (req, res) => {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { selectedCategories, selectedTags, searchQuery } = req.body;
+  const { selectedCategories, selectedTags, searchQuery, enteredNumber } = req.body;
 
   try {
     const filterResult = await filteringByCategory(
       selectedCategories,
       selectedTags,
-      searchQuery
+      searchQuery,
+      enteredNumber
+
     );
     res.status(200).json({ recipes: filterResult });
   } catch (error) {
