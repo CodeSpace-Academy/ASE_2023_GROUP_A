@@ -19,7 +19,7 @@ const Navigation = () => {
     theme === "light" ? (
       <MoonIcon className="h-5 text-black w-5" />
     ) : (
-      <SunIcon className="h-5 text-black w-5" />
+      <SunIcon className="h-5 text-white w-5" />
     );
 
   const toggleMobileMenu = () => {
@@ -30,7 +30,7 @@ const Navigation = () => {
   const favoriteCtx = useContext(FavoritesContext);
 
   return (
-    <nav className="w-full bg-blue-500 bg-opacity-80 fixed top-0 left-0 right-0 z-10 h-18">
+    <nav className={`w-full ${theme === "dark" ? "bg-gray-900" : "bg-blue-500"}  bg-opacity-80 fixed top-0 left-0 right-0 z-10 h-18`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
@@ -79,7 +79,7 @@ const Navigation = () => {
               </svg>
             </button>
           </div>
-          <div className="flex mr-10 flex-shrink-0 items-center">
+          <div className="flex mr- flex-shrink-0 items-center">
             <Link href={`/`}>
               <Image
                 src="/Images/logo3.png"
@@ -92,9 +92,11 @@ const Navigation = () => {
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
            
-              <Link
+             <Link
                 href={`/FavoritesPage`}
-                className="text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium"
+                className={`${
+                  theme === "dark" ? "text-white" : "text-black"
+                } hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium`}
               >
                 Favorites{" "}
                 <Badge
@@ -159,7 +161,7 @@ const Navigation = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>    
     </nav>
   );
 };

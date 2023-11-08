@@ -1,7 +1,8 @@
 import React from "react";
-import { useTheme } from "../Context/ThemeContext"; // Update the import path as needed
+import { useTheme } from "../Context/ThemeContext"; 
 import Navigation from "./Header/Navigation";
 import Footer from "../footer/Footer";
+
 const Layout = ({ children }) => {
   const { theme } = useTheme();
 
