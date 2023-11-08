@@ -1,15 +1,20 @@
+/**
+ * The RecipeList component is a React component that displays a list of recipes, allows for filtering
+ * and sorting, and includes pagination functionality.
+ * @returns The RecipeList component is being returned.
+ */
 import { useEffect, useState, useContext } from "react";
+import useSWR, { mutate } from "swr";
+import Carousel from "react-multi-carousel";
 import fetchRecipes from "@/helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
 import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
 import Loading from "../Loading/Loading";
 import FloatingButton from "../Buttons/floatingButton/FloatingButton";
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
-import useSWR, { mutate } from "swr";
-// const ITEMS_PER_PAGE = 100;
+
 import FavoritesContext from "../Context/Favorites-context";
 
 function RecipeList({ favorites }) {
