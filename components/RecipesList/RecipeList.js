@@ -56,11 +56,10 @@ function RecipeList({ favorites }) {
     // Check if recipesData is defined before updating the state
     setOriginalRecipes(recipesData.recipes);
     setTotalRecipes(recipesData.totalRecipes);
-    
     // Use mutate to update the state as soon as you fetch the new data
     mutate(`/api/recipes?page=${currentPage}`);
   }
-}, [currentPage, recipesData]);
+}, [currentPage, recipesData, favorites]);
   
 
   // let combinedResults;

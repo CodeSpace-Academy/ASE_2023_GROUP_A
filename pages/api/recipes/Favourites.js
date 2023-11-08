@@ -19,7 +19,7 @@ const handler = async (request, response) => {
     try {
       // Add a favorite recipe to MongoDB
       const results = await addFavoriteToMongoDB(recipe);
-      if (results) {
+      if (results.acknowledged === true) {
         response.status(201).json({ message: "Recipe added to favorites" });
       } else {
         response.status(500).json({ error: "Internal Server Error" });
