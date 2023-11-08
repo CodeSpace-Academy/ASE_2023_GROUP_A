@@ -51,7 +51,6 @@ function Tags({
           if (response.ok) {
             const filterTagsResult = await response.json();
             setFilterTagsResults(filterTagsResult.recipes);
-            
           } else {
             console.error("Failed to fetch tags by category");
           }
