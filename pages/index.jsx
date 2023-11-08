@@ -9,10 +9,11 @@ const Home = () => {
   const favoriteContext = useContext(FavoritesContext);
 
   const fetcher = (url) => fetch(url).then((res) => res.json());
-  const { data: favoritesData, error, isLoading } = useSWR(
-    "api/recipes/Favourites",
-    fetcher
-  );
+  const {
+    data: favoritesData,
+    error,
+    isLoading,
+  } = useSWR("api/recipes/Favourites", fetcher);
 
   // A function to manually refresh the favorites data
   const refreshFavorites = async () => {
@@ -43,13 +44,7 @@ const Home = () => {
 
   return (
     <>
-      <div>
-        <h2 className="pt-14 font-eduNswActFoundation font-bold text-custom-color-mixed-10">Welcome back to your Favorite place, the Kitchen</h2>
-      </div>
-      <div>
-        <h2>Favorite Recipes</h2>
-        <RecipeList favorites={favorites} />
-      </div>
+      <RecipeList favorites={favorites} />
     </>
   );
 };

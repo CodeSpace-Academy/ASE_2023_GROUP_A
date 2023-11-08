@@ -1,32 +1,29 @@
 import { connectToCollection, closeMongoDBConnection } from "@/helpers/mongoDB-connection";
-const updateInstructionsInDB = async (id, instructions) => {
+
+const updateInstructionsInDB = async (id, instructions, request) => {
   try {
-    const collection = await connectToCollection('devdb','recipes')
+    const collection = await connectToCollection('devdb', 'recipes');
 
     if (request.method === "PATCH") {
       const result = await collection.updateOne(
-        { _id: id }, // Your identifier for the recipe document
-        { $set: { instructions: instructions } } // Update instructions field
+        { _id: id },
+        { $set: { instructions: instructions } }
       );
 
       if (result.matchedCount > 0) {
-        console.log(`Instructions for '${id}' were successfully updated.`);
-      } else {
-        console.log(`No document found with ID '${id}'.`);
+        return { success: true, message: `Instructions for '${id}' were successfully updated.` };
       }
     } else if (request.method === "DELETE") {
       const result = await collection.deleteOne({ _id: id });
 
       if (result.deletedCount > 0) {
-        console.log(`Document with ID '${id}' was successfully deleted.`);
-      } else {
-        console.log(`No document found with ID '${id}'.`);
+        return { success: true, message: `Document with ID '${id}' was successfully deleted.` };
       }
     } else {
-      console.log("Method not allowed.");
+      return { success: false, message: "Method not allowed." };
     }
   } catch (error) {
-    console.error("Error updating instructions:", error);
+    return { success: false, message: `Error updating instructions: ${error.message}` };
   } finally {
     await closeMongoDBConnection();
   }

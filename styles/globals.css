@@ -76,6 +76,11 @@ body {
 } */
 
 /* global-styles.css */
+
+*{
+
+  box-sizing: border-box;
+}
 body {
   background-color: rgba(6, 83, 206, 0.5);
 }
