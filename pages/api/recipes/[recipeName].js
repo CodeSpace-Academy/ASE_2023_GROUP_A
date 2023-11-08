@@ -14,7 +14,6 @@ const handler = async (req, res) => {
     const recipeData = await fetchRecipeDataFromMongo( recipeName);
     const allergens = await fetchAllergens();
     // await closeMongoDBConnection();
-    console.log(allergens)
     if (!recipeData) {
       res.status(404).json({ error: "Recipe not found" });
     } else {

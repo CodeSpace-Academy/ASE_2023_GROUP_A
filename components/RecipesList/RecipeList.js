@@ -177,7 +177,6 @@ function RecipeList({ favorites }) {
             const filterInstructionsResults = await response.json();
             setFilterInstructionsResults(filterInstructionsResults.recipes);
 
-            console.log(filterInstructionsResults);
           } else {
             console.error("Failed to fetch recipes by instruction");
           }
@@ -257,7 +256,7 @@ function RecipeList({ favorites }) {
             const filterInstructionsResults = await response.json();
             setFilterInstructionsResults(filterInstructionsResults.recipes);
 
-            console.log(filterInstructionsResults);
+            
           } else {
             console.error("Failed to fetch recipes by instruction");
           }
