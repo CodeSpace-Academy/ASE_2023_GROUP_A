@@ -2,11 +2,10 @@ import React from "react";
 import classes from "./hero.module.css";
 import SearchBar from "../searchBar/searchBar";
 import Categories from "../categories/categories";
-import Tags from "../tags/tags";
+import Tags from "../Tags/Tags";
 import Ingredients from "../ingredients/ingredients";
 import DropdownMenu from "../sort/sort";
-// import handleFilterInstruction from '../Instructions/filterInstructions'
-import InstructionF from "../instructions/instructions";
+
 
 export default function Hero({
   setFilterCategoryResults,
