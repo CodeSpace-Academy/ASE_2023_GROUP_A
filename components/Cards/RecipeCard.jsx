@@ -62,7 +62,7 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
     <div
       key={recipe._id}
       className={`${
-        theme === "light" ? " text-black" : "text-"
+        theme === "light" ? " text-black" : "text-white"
       } bg-blue-300 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
     >
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">

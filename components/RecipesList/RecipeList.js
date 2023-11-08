@@ -10,6 +10,7 @@ import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
 import useSWR,{mutate} from "swr";
 // const ITEMS_PER_PAGE = 100;
+import FavoritesContext from "../Context/Favorites-context";
 
 function RecipeList({favorites}) {
  const [recipes, setRecipes] = useState([]);
@@ -22,16 +23,20 @@ function RecipeList({favorites}) {
  const [filterTagsResults, setFilterTagsResults] = useState([]);
  const [searchQuery, setSearchQuery] = useState("");
 
+ const favoriteContext = useContext(FavoritesContext);
+ 
 const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
   `/api/recipes?page=${currentPage}`,
   fetchRecipes
 );
 
   useEffect(() => {
+    favoriteContext.updateFavorites(favorites);
   if (!isLoading && recipesData) {
     // Check if recipesData is defined before updating the state
     setOriginalRecipes(recipesData.recipes);
     setTotalRecipes(recipesData.totalRecipes);
+    
     // Use mutate to update the state as soon as you fetch the new data
     mutate(`/api/recipes?page=${currentPage}`);
   }

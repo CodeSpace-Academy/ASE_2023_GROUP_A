@@ -93,8 +93,9 @@ const Navigation = () => {
             <div className="flex space-x-4 justify-start">
            
               <Link
-                href={`/FavoritesPage`}
+                href={`/FavoritesPage`} as='/favourite-page'
                 className="text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium"
+               
               >
                 Favorites{" "}
                 <Badge

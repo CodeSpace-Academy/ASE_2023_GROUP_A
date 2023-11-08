@@ -39,7 +39,7 @@ const Home = () => {
   }
 
   const favorites = favoritesData.favorites || [];
-  favoriteContext.updateFavorites(favorites);
+  
 
   return (
     <>
