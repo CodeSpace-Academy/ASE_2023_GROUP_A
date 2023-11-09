@@ -25,7 +25,7 @@ function FavoritesPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {favoriteRecipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe.recipe} favorites={favoriteRecipes} />
+              <RecipeCard Key={recipe.recipe._id} key={recipe.recipe._id} recipe={recipe.recipe} favorites={favoriteRecipes} />
             ))}
           </div>
         )}

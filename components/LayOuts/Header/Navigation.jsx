@@ -93,7 +93,7 @@ const Navigation = () => {
             <div className="flex space-x-4 justify-start">
            
               <Link
-                href={`/FavoritesPage`} as='/favourite-page'
+                href={`/FavoritesPage`} as='/favourites'
                 className="text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium"
                
               >
