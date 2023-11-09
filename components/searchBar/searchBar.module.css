@@ -15,6 +15,11 @@
     width: 20em;
     height: 2.5em;
   }
+
+  @media (max-width: 799px) {
+    color: white;
+    border-color: yellow;
+  }
 }
 
 .searchInput:focus {
@@ -30,4 +35,10 @@
 .searchInput::placeholder {
   color: rgb(0, 0, 0);
   font-style: italic;
+}
+
+@media (max-width: 799px) {
+  .searchInput::placeholder {
+    color: yellow;
+  }
 }

@@ -26,6 +26,7 @@
   gap: 20px;
   padding: 2em;
   border: 2px solid grey;
+  background-color: rgba(0, 140, 255, 0.456);
 
   @media (min-width: 800px) {
     display: flex;
@@ -41,6 +42,7 @@
 
 .search {
   margin: auto;
+  color: white;
 }
 
 .filters {
