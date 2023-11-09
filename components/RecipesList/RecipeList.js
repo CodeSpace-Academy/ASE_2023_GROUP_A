@@ -1,15 +1,22 @@
-import React, { useEffect, useState, useContext } from "react";
-import fetchRecipes from "@/helpers/hook";
+/**
+ * displays a list of recipes, allows for filtering
+ * & sorting, and includes pagination functionality.
+ * @returns The RecipeList component is being returned.
+ */
+
+import { useEffect, useState, useContext } from "react";
+import useSWR, { mutate } from "swr";
+import Carousel from "react-multi-carousel";
+import fetchRecipes from "../../helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
 import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
 import Loading from "../Loading/Loading";
 import FloatingButton from "../Buttons/floatingButton/FloatingButton";
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { responsive } from "@/helpers/settings/settings";
-import useSWR, { mutate } from "swr";
-// const ITEMS_PER_PAGE = 100;
+import { responsive } from "../../helpers/settings/settings.js";
+
+import FavoritesContext from "../Context/Favorites-context";
 
 function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
@@ -21,6 +28,22 @@ function RecipeList({ favorites }) {
   const [filterResults, setFilterCategoryResults] = useState([]);
   const [filterTagsResults, setFilterTagsResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [numberOfFilters, setNumberOfFilters] = useState(0);
+  const [filterIngredientResults, setFilterIngredientResults] = useState([]);
+  const [filterInstructionsResults, setFilterInstructionsResults] = useState(
+    []
+  );
+
+  // const [loading, setLoading] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedInstructions, setSelectedInstructions] = useState(0);
+  const [sortOrder, setSortOrder] = useState(null);
+
+  const [noRecipesFoundMessage, setNoRecipesFoundMessage] = useState(null);
+  // const [numberOfFilters, setNumberOfFilters] = useState(0);
+  const favoriteContext = useContext(FavoritesContext);
 
   const {
     data: recipesData,
@@ -29,6 +52,7 @@ function RecipeList({ favorites }) {
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
   useEffect(() => {
+    favoriteContext.updateFavorites(favorites);
     if (!isLoading && recipesData) {
       // Check if recipesData is defined before updating the state
       setOriginalRecipes(recipesData.recipes);
@@ -36,12 +60,14 @@ function RecipeList({ favorites }) {
       // Use mutate to update the state as soon as you fetch the new data
       mutate(`/api/recipes?page=${currentPage}`);
     }
-  }, [currentPage, recipesData]);
+  }, [currentPage, recipesData, favorites, favoriteContext, isLoading]);
 
-  let combinedResults;
+  // let combinedResults;
 
   const handleLoadLess = () => {
     setCurrentPage(currentPage - 1);
+
+    //  loadRecipes(currentPage - 1);
   };
   const handleLoadMore = () => {
     setCurrentPage(currentPage + 1);
@@ -51,6 +77,8 @@ function RecipeList({ favorites }) {
     return <Loading />;
   }
   const handleSearch = async (searchQuery) => {
+    setNoRecipesFoundMessage("");
+
     if (!searchQuery) {
       handleDefaultSearch();
     } else {
@@ -65,6 +93,15 @@ function RecipeList({ favorites }) {
 
         if (response.ok) {
           const searchResult = await response.json();
+          if (searchResult.recipes.length === 0) {
+            setTimeout(() => {
+              setNoRecipesFoundMessage(`No Recipes Found for ${searchQuery}`);
+            }, 900);
+          } else {
+            setTimeout(() => {
+              setNoRecipesFoundMessage("No recipes found");
+            }, 1100);
+          }
 
           setSearchResults(searchResult.recipes);
         } else {
@@ -97,49 +134,283 @@ function RecipeList({ favorites }) {
   };
 
   function handleDefaultSearch() {
-    setSearchResults([]);
+    setSearchQuery("");
     setAutocompleteSuggestions([]);
+  }
+
+  function handleDefault() {
+    setSearchQuery("");
+    setSelectedCategories([]);
+    setSelectedIngredients([]);
+    setSelectedTags([]);
+    setSelectedInstructions(0);
+    setAutocompleteSuggestions([]);
+    setCurrentPage(1);
+    setNumberOfFilters("0");
   }
 
   function handleDefaultCategoryFilter() {
     setFilterCategoryResults([]);
   }
 
+  function handleDefaultIngredientFilter() {
+    setFilterIngredientResults([]);
+  }
+
   function handleDefaultTagsFilter() {
     setFilterTagsResults([]);
   }
 
-  if (
-    searchResults.length < 1 &&
-    filterResults.length < 1 &&
-    filterTagsResults.length < 1
-  ) {
-    combinedResults = [...originalRecipes];
-  } else {
-    combinedResults = [
-      ...searchResults,
-      ...filterResults,
-      ...filterTagsResults,
-    ];
+  useEffect(() => {
+    const fetchRecipesByInstructions = async (selectedInstructions) => {
+      if (
+        parseInt(selectedInstructions) == "" ||
+        parseInt(selectedInstructions) < 0
+      ) {
+        setFilterCategoryResults([]);
+      } else {
+        try {
+          const response = await fetch(`/api/filterbyinstructions`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              selectedInstructions: parseInt(selectedInstructions),
+            }),
+          });
+
+          if (response.ok) {
+            const filterInstructionsResults = await response.json();
+            setFilterInstructionsResults(filterInstructionsResults.recipes);
+          } else {
+            console.error("Failed to fetch recipes by instruction");
+          }
+        } catch (error) {
+          console.error("Error fetching recipes by instruction:", error);
+        }
+      }
+    };
+
+    if (selectedInstructions != "") {
+      fetchRecipesByInstructions(selectedInstructions);
+    } else {
+      setFilterInstructionsResults([]);
+    }
+  }, [selectedInstructions]);
+
+  const handleSort = (sortOrder) => {
+    setSortOrder(sortOrder);
+
+    if (sortOrder === "[A-Z]") {
+      setRecipes([...recipes].sort((a, b) => a.title.localeCompare(b.title)));
+    } else if (sortOrder === "[Z-A]") {
+      setRecipes([...recipes].sort((a, b) => b.title.localeCompare(a.title)));
+    } else if (sortOrder === "Oldest") {
+      setRecipes(
+        [...recipes].sort((a, b) => a.published.localeCompare(b.published))
+      );
+    } else if (sortOrder === "Recent") {
+      setRecipes(
+        [...recipes].sort((a, b) => b.published.localeCompare(a.published))
+      );
+    } else if (sortOrder === "cooktime(asc)") {
+      setRecipes([...recipes].sort((a, b) => a.cook - b.cook));
+    } else if (sortOrder === "cooktime(desc)") {
+      setRecipes([...recipes].sort((a, b) => b.cook - a.cook));
+    } else if (sortOrder === "steps(asc)") {
+      setRecipes(
+        [...recipes].sort(
+          (a, b) => a.instructions.length - b.instructions.length
+        )
+      );
+    } else if (sortOrder == "preptime(asc)") {
+      setRecipes([...recipes].sort((a, b) => a.prep - b.prep));
+    } else if (sortOrder == "preptime(desc)") {
+      setRecipes([...recipes].sort((a, b) => b.prep - a.prep));
+    } else if (sortOrder === "steps(desc)") {
+      setRecipes(
+        [...recipes].sort(
+          (a, b) => b.instructions.length - a.instructions.length
+        )
+      );
+    } else {
+      setRecipes([...recipes]);
+    }
+  };
+
+  useEffect(() => {
+    const fetchRecipesByInstructions = async (selectedInstructions) => {
+      if (
+        parseInt(selectedInstructions) == "" ||
+        parseInt(selectedInstructions) < 0
+      ) {
+        setFilterCategoryResults([]);
+      } else {
+        try {
+          const response = await fetch(`/api/filterbyinstructions`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              selectedInstructions: parseInt(selectedInstructions),
+            }),
+          });
+
+          if (response.ok) {
+            const filterInstructionsResults = await response.json();
+            setFilterInstructionsResults(filterInstructionsResults.recipes);
+          } else {
+            console.error("Failed to fetch recipes by instruction");
+          }
+        } catch (error) {
+          console.error("Error fetching recipes by instruction:", error);
+        }
+      }
+    };
+
+    if (selectedInstructions != "") {
+      fetchRecipesByInstructions(selectedInstructions);
+    } else {
+      setFilterInstructionsResults([]);
+    }
+  }, [selectedInstructions]);
+
+  function handleChange(event) {
+    setSelectedInstructions(event.target.value);
   }
+
+  function handleNumberOfFilters() {
+    let num;
+    if (filterResults > 0) {
+      num = +1;
+    } else {
+      num = num;
+    }
+
+    if (filterIngredientResults > 0) {
+      num = +1;
+    } else {
+      num = num;
+    }
+
+    if (filterInstructionsResults) {
+      num = +1;
+    } else {
+      num = num;
+    }
+
+    if (filterTagsResults > 0) {
+      num = +1;
+    } else {
+      num = num;
+    }
+
+    setNumberOfFilters(parseInt(num));
+  }
+
+  useEffect(() => {
+    handleNumberOfFilters();
+  }, [
+    filterResults,
+    filterTagsResults,
+    filterIngredientResults,
+    filterInstructionsResults,
+  ]);
+
+  useEffect(() => {
+    let combinedResults = [];
+
+    if (searchQuery.length === 0) {
+      combinedResults = [...originalRecipes];
+    } else {
+      combinedResults = [...searchResults];
+    }
+
+    if (selectedCategories.length > 0) {
+      combinedResults = [...searchResults, ...filterResults];
+    }
+
+    if (selectedTags.length > 0) {
+      combinedResults = [
+        ...searchResults,
+        ...filterResults,
+        ...filterTagsResults,
+      ];
+    }
+
+    if (selectedIngredients.length > 0) {
+      combinedResults = [
+        ...searchResults,
+        ...filterResults,
+        ...filterTagsResults,
+        ...filterIngredientResults,
+      ];
+    }
+
+    if (selectedInstructions != 0 && selectedInstructions >= 0) {
+      combinedResults = [
+        ...searchResults,
+        ...filterResults,
+        ...filterTagsResults,
+        ...filterIngredientResults,
+        ...filterInstructionsResults,
+      ];
+    }
+
+    setRecipes(combinedResults);
+  }, [
+    searchQuery,
+    selectedCategories,
+    selectedTags,
+    selectedIngredients,
+    selectedInstructions,
+    searchResults,
+    filterResults,
+    filterTagsResults,
+    filterIngredientResults,
+    filterInstructionsResults,
+    originalRecipes,
+  ]);
 
   const remainingRecipes = totalRecipes - 100 * currentPage;
 
   return (
     <div>
       <Hero
+        setSelectedCategories={setSelectedCategories}
+        selectedCategories={selectedCategories}
         setFilterCategoryResults={setFilterCategoryResults}
-        setFilterTagsResults={setFilterTagsResults}
         handleDefaultCategoryFilter={handleDefaultCategoryFilter}
+        selectedIngredients={selectedIngredients}
+        setFilterIngredientResults={setFilterIngredientResults}
+        handleDefaultIngredientFilter={handleDefaultIngredientFilter}
+        setSelectedIngredients={setSelectedIngredients}
+        setFilterTagsResults={setFilterTagsResults}
         handleDefaultTagFilter={handleDefaultTagsFilter}
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
         handleDefaultSearch={handleDefaultSearch}
         setRecipes={setRecipes}
         onSearch={handleSearch}
         onAutocomplete={fetchAutocompleteSuggestions}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        handleSort={handleSort}
       />
-      <button onClick={handleDefaultSearch}>All Recipes</button>
+      <button onClick={handleDefault}>All Recipes</button>
+
+      <div style={{ textAlign: "center" }}>
+        <p>Filter by number of instructions:</p>
+        <input
+          type='number'
+          placeholder='Enter number of instructions..'
+          value={parseInt(selectedInstructions)}
+          onChange={handleChange}
+          className='border border-gray-300 rounded-1-md px-4 py-2'
+        />
+      </div>
       {!favorites ? (
         <p>
           <Loading />
@@ -147,7 +418,7 @@ function RecipeList({ favorites }) {
       ) : favorites.length === 0 ? (
         <p>No favorite recipes yet.</p>
       ) : (
-        <div className={`h-3/5`}>
+        <div className='h-3/5'>
           <Carousel responsive={responsive} containerClass='carousel-container'>
             {favorites.map((recipe) => (
               <div key={recipe.recipe._id}>
@@ -157,7 +428,7 @@ function RecipeList({ favorites }) {
           </Carousel>
         </div>
       )}
-      <div className='total-count'>Total Recipes: {combinedResults.length}</div>
+      <div className='total-count'>Total Recipes: {recipes.length}</div>
 
       {autocompleteSuggestions.length > 0 && (
         <ul className='autocomplete-list'>
@@ -171,11 +442,12 @@ function RecipeList({ favorites }) {
           ))}
         </ul>
       )}
+
       {isLoading ? (
         <Loading />
       ) : (
         <div className='container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
-          {combinedResults.map((recipe, index) => (
+          {recipes.map((recipe, index) => (
             <div key={index}>
               <RecipeCard
                 key={recipe._id}
@@ -188,7 +460,7 @@ function RecipeList({ favorites }) {
           ))}
         </div>
       )}
-      {combinedResults.length < totalRecipes && (
+      {recipes.length < totalRecipes && (
         <>
           <div className='flex justify-center gap-10'>
             <LoadMoreButton
@@ -201,7 +473,7 @@ function RecipeList({ favorites }) {
               handleLoad={handleLoadMore}
               remainingRecipes={remainingRecipes}
               totalRecipes={totalRecipes}
-              isLoadMore={true}
+              isLoadMore
             />
           </div>
           <FloatingButton />

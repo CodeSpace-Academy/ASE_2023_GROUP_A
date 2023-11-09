@@ -23,7 +23,7 @@ const RecipePage = () => {
   const { recipe, allergens } = data;
 
   if (!recipe || !recipe.description || !allergens) {
-    console.log(`Can't find Recipe for:`, JSON.stringify(recipe));
+    <p>Can't find recipes for ${recipeName}</p>
   }
 
   return (

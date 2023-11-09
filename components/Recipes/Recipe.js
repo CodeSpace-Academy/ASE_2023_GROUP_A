@@ -10,7 +10,7 @@ import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
 import DropDownSVG from "../IconsAndSvg's/DropDownSVG";
 import CoverImage from "../Images/CoverImage";
-import IngredientsList from "../Ingredients/IngredientsList";
+import IngredientsList from "../ingredients/IngredientsList";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
@@ -27,6 +27,12 @@ const Recipe = ({ recipe, Allergies }) => {
     );
   }
 
+  const ingredientsList = Object.entries(recipe.ingredients).map(
+    (ingredient) => `${ingredient}`
+  );
+
+  const firstImage = recipe.images[0];
+
   return (
     <div className='container mx-auto mt-24 p-4'>
       <Link href='/'>
@@ -40,7 +46,7 @@ const Recipe = ({ recipe, Allergies }) => {
           <CoverImage images={recipe.images} title={recipe.title} />
           <div className='mt-4 text-gray-600'>
             <p>
-              <b>Servings</b>: {recipe.servings}
+              <b>Servings</b>: {recipe.servings} people
             </p>
           </div>
           <div className='mt-4 text-gray-600'>
@@ -49,18 +55,18 @@ const Recipe = ({ recipe, Allergies }) => {
             </p>
           </div>
           <div className='mt-4 text-gray-600'>
-            <button
+            {/* <button
               onClick={() => setShowTags(!showTags)}
-              className='bg-yellow-500 hover:bg-yellow-600 flex flex-row text-white font-bold py-2 px-4 rounded mb-4'
-            >
-              <b>Tags</b>
-              <DropDownSVG />
-            </button>
-            {showTags && (
-              <div>
-                <RecipeDetailTags recipe={recipe} />
-              </div>
-            )}
+              className="bg-yellow-500 hover:bg-yellow-600 flex flex-row text-white font-bold py-2 px-4 rounded mb-4"
+            > */}
+            {/* <b>
+            {/* </button> */}
+            {/* {showTags && (
+              <div> */}
+            <b>Tags</b>
+            <RecipeDetailTags recipe={recipe} />
+            {/* </div>
+            )} */}
           </div>
         </div>
         <div className='lg:w-1/2 p-4 text-gray-600'>
@@ -68,7 +74,10 @@ const Recipe = ({ recipe, Allergies }) => {
           <PrepTime prepTime={recipe.prep} />
           <CookTime cookTime={recipe.cook} />
           <TotalTime totalTime={recipe} />
-          <Allergens allergens={Allergies} />
+          <Allergens
+            allergens={Allergies}
+            recipeIngredients={ingredientsList}
+          />
           <h3 className='mt-2 text-lg font-semibold'>Ingredients:</h3>
           <IngredientsList ingredients={Object.entries(recipe.ingredients)} />
           <CookTime

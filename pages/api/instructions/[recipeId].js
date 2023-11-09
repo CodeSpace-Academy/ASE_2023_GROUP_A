@@ -1,29 +1,42 @@
-import { handleUpdateInstructions } from "../../../helpers/mongoDB-utils";
+import {
+  connectToCollection,
+  closeMongoDBConnection,
+} from "@/helpers/mongoDB-connection";
 
-async function handler(req, res) {
-  if (req.method === "POST") {
-    try {
-      const { recipeId, instructions } = req.body;
+const updateInstructionsInDB = async (id, instructions, request) => {
+  try {
+    const collection = await connectToCollection("devdb", "recipes");
 
-      if (!instructions) {
-        return res.status(400).json({ message: "Invalid instructions format" });
+    if (request.method === "PATCH") {
+      const result = await collection.updateOne(
+        { _id: id },
+        { $set: { instructions: instructions } }
+      );
+
+      if (result.matchedCount > 0) {
+        return {
+          success: true,
+          message: `Instructions for '${id}' were successfully updated.`,
+        };
       }
 
-      const result = await handleUpdateInstructions(recipeId, instructions);
-      console.log(result);
-
-      if (result.success) {
-        return res.status(200).json({ message: result.message });
-      } else {
-        return res.status(500).json({ message: "Internal server error" });
+      if (result.deletedCount > 0) {
+        return {
+          success: true,
+          message: `Document with ID '${id}' was successfully deleted.`,
+        };
       }
-    } catch (error) {
-      console.error("Request handling error:", error);
-      return res.status(500).json({ message: "Internal server error" });
+    } else {
+      return { success: false, message: "Method not allowed." };
     }
-  } else {
-    return res.status(405).json({ message: "Method not allowed" });
+  } catch (error) {
+    return {
+      success: false,
+      message: `Error updating instructions: ${error.message}`,
+    };
+  } finally {
+    await closeMongoDBConnection();
   }
-}
+};
 
 export default handler;
