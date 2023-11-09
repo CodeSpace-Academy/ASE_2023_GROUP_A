@@ -9,6 +9,7 @@ function App({ Component, pageProps }) {
     <FavoritesContextProvider>
       {" "}
       <ThemeProvider>
+        <title>Cooking Devs</title>
         <Fragment>
           <Layout>
             <Component {...pageProps} />

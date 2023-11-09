@@ -11,7 +11,6 @@ const fetchRecipes = async (url) => {
   if (!response.ok) {
     throw new Error("Failed to fetch recipes");
   }
-  
   return response.json();
 };
 

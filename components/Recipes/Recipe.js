@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import{CookTime, PrepTime, Published, TotalTime}from "../TimeAndDate/TimeConvertor";
+import {
+  CookTime,
+  PrepTime,
+  Published,
+  TotalTime,
+} from "../TimeAndDate/TimeConvertor";
 import RecipeDetailTags from "../Tags/RecipeDetailTags";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
@@ -19,10 +24,19 @@ const Recipe = ({ recipe, Allergies }) => {
   const { theme } = useTheme();
 
   if (!recipe) {
-    return <div><Loading/></div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
 
   const textClass = theme === "dark" ? "text-white" : "text-black";
+  const ingredientsList = Object.entries(recipe.ingredients).map(
+    (ingredient) => `${ingredient}`
+  );
+
+  const firstImage = recipe.images[0];
 
   return (
     <div className={`container mx-auto mt-24 p-4 ${textClass}`}>
@@ -37,7 +51,7 @@ const Recipe = ({ recipe, Allergies }) => {
           <CoverImage images={recipe.images} title={recipe.title} />
           <div className={`mt-4 ${textClass}`}>
             <p>
-              <b>Servings</b>: {recipe.servings}
+              <b>Servings</b>: {recipe.servings} people
             </p>
           </div>
           <div className={`mt-4 ${textClass}`}>
@@ -46,18 +60,18 @@ const Recipe = ({ recipe, Allergies }) => {
             </p>
           </div>
           <div className={`mt-4 ${textClass}`}>
-            <button
+            {/* <button
               onClick={() => setShowTags(!showTags)}
               className={`bg-yellow-500 hover:bg-yellow-600 flex flex-row ${textClass} font-bold py-2 px-4 rounded mb-4`}
-            >
-              <b>Tags</b>
-              <DropDownSVG />
-            </button>
-            {showTags && (
-              <div>
+            > */}
+            {/* <b>
+            {/* </button> */}
+            {/* {showTags && (
+              <div> */} 
+             <b>Tags</b> 
                 <RecipeDetailTags recipe={recipe} />
-              </div>
-            )}
+              {/* </div>
+            )} */}
           </div>
         </div>
         <div className="lg-w-1/2 p-4 ${textClass}">
@@ -65,9 +79,12 @@ const Recipe = ({ recipe, Allergies }) => {
           <PrepTime prepTime={recipe.prep} />
           <CookTime cookTime={recipe.cook} />
           <TotalTime totalTime={recipe} />
-          <Allergens allergens={Allergies} />
-          <h3 className={`mt-3 text-lg font-semibold ${textClass}`}>Ingredients:</h3>
-          <IngredientsList  ingredients={Object.entries(recipe.ingredients)}  />
+          <Allergens
+            allergens={Allergies}
+            recipeIngredients={ingredientsList}
+          />
+          <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
+          <IngredientsList ingredients={Object.entries(recipe.ingredients)} />
           <CookTime
             cookTimeInMinutes={recipe.cook}
             label={"Total Cooking Time"}

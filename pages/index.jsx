@@ -1,3 +1,9 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable import/extensions */
+/* eslint-disable import/order */
+/* eslint-disable operator-linebreak */
+/* eslint-disable eqeqeq */
+/* eslint-disable import/no-unresolved */
 import React, { useContext, useEffect } from "react";
 import EnvError from "./error";
 import Loading from "@/components/Loading/Loading";
@@ -6,14 +12,13 @@ import useSWR, { mutate } from "swr";
 import RecipeList from "@/components/RecipesList/RecipeList";
 import { ClassNames } from "@emotion/react";
 
-const Home = () => {
+function Home() {
   const favoriteContext = useContext(FavoritesContext);
 
   const fetcher = (url) => fetch(url).then((res) => res.json());
   const {
     data: favoritesData,
     error,
-    isLoading,
   } = useSWR("api/recipes/Favourites", fetcher);
 
   // A function to manually refresh the favorites data
@@ -29,6 +34,7 @@ const Home = () => {
   }, []);
 
   if (
+    // eslint-disable-next-line operator-linebreak
     process.env == {} ||
     !process.env.mongodb_password ||
     !process.env.mongodb_username
@@ -41,13 +47,9 @@ const Home = () => {
   }
 
   const favorites = favoritesData.favorites || [];
-  favoriteContext.updateFavorites(favorites);
-
   return (
-    < div>
-      <RecipeList favorites={favorites} />
-    </div>
+    <RecipeList favorites={favorites} />
   );
-};
+}
 
 export default Home;
