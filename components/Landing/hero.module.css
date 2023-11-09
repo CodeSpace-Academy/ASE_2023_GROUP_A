@@ -4,11 +4,19 @@
   background-repeat: no-repeat;
   background-position: center;
   width: 100vw;
-  height: 60vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin-top: 3%; */
+
+  @media (min-width: 800px) {
+    height: 60vh;
+  }
+
+  @media (max-width: 799px) {
+    background-position: left center;
+    background-size: cover;
+  }
 }
 
 .heroContent {
@@ -22,8 +30,13 @@
 
   @media (min-width: 800px) {
     display: flex;
-
     gap: 50px;
+  }
+
+  @media (max-width: 799px) {
+    align-items: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 }
 

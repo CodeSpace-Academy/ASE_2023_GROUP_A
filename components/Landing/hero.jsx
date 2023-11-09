@@ -33,8 +33,8 @@ export default function Hero({
   sortOrder,
 }) {
   return (
-    <div className={classes.heroImage}>
-      <div className={classes.heroContent}>
+    <div className={`sm:portrait:h-screen ${classes.heroImage}`}>
+      <div className={`sm:mt-20 sm:block sm: ${classes.heroContent}`}>
         <div className={classes.search}>
           <SearchBar
             handleDefault={handleDefaultSearch}
