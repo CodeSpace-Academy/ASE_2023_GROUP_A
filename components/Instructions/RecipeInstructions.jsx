@@ -1,57 +1,104 @@
-/*  It imports necessary dependencies from
-the React library, such as `Fragment`, `useState`, and `useEffect`. It also imports a component
-called `Loading` from a file located in the "../Loading/Loading" directory. */
+import React, { useState, useEffect } from "react";
 
-import { Fragment, useState, useEffect } from "react";
-import Loading from "../Loading/Loading";
+function RecipeInstructions({ instruction }) {
+  const [isEditingInstructions, setIsEditingInstructions] = useState(false);
+  const [editedInstructions, setEditedInstructions] = useState([
+    ...instruction,
+  ]);
 
-const RecipeInstructions = ({ recipes }) => {
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const handleEditInstructions = () => {
+    setIsEditingInstructions(true);
+  };
 
-  const [instructions, setInstructions] = useState([]);
+  const handleSave = () => {
+    setIsEditingInstructions(false);
+    saveInstructions();
+  };
 
-  useEffect(() => {
-    // const delay = 2000;
+  const handleCancel = () => {
+    setIsEditingInstructions(false);
+    setEditedInstructions([...instruction]);
+  };
 
-    const timeoutId = setTimeout(() => {
-      try {
-        const sortedInstructions = recipes.instructions.map(
-          (instruction, index) => ({ index, instruction })
-        );
-        sortedInstructions.sort((a, b) => a.index - b.index);
+  const handleInstructionChange = (index, newValue) => {
+    const updatedInstructions = [...editedInstructions];
+    updatedInstructions[index] = newValue;
+    setEditedInstructions(updatedInstructions);
+  };
 
-        const reorderedInstructions = sortedInstructions.map((instruction) => (
-          <li key={instruction.index} className='text-gray-600'>
-            {instruction.instruction}
-          </li>
-        ));
+  const saveInstructions = async (updatedInstructions) => {
+    try {
+      const requestBody = JSON.stringify({
+        recipe_Id: recipeId,
+        instructions: updatedInstructions,
+      });
+      const response = await fetch(`/api/Instructions/${recipe._Id}`, {
+        method: "POST",
+        body: requestBody,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-        setInstructions(reorderedInstructions);
-        setLoading(false);
-      } catch (error) {
-        setError("An error occurred while fetching instructions.");
-        setLoading(false);
+      if (response.ok) {
+        console.log("Instructions saved successfully.");
+      } else {
+        console.error("Failed to save instructions.");
       }
-    }, delay);
-
-    return () => clearTimeout(timeoutId);
-  }, [recipes.instructions]);
+    } catch (error) {
+      console.error("An error occurred while saving instructions:", error);
+    }
+  };
 
   return (
-    <Fragment>
-      <h3 className='mt-2 text-lg font-semibold'></h3>
-      {loading ? (
-        <p>
-          <Loading />
-        </p>
-      ) : error ? (
-        <p>{error}</p>
+    <div>
+      {isEditingInstructions ? (
+        <div>
+          <ol className='list-decimal list-inside '>
+            {editedInstructions.map((instruction, index) => (
+              <li key={index}>
+                <input
+                  value={instruction}
+                  onChange={(e) =>
+                    handleInstructionChange(index, e.target.value)
+                  }
+                  style={{ width: "95%" }}
+                />
+              </li>
+            ))}
+          </ol>
+          <div>
+            <button
+              className='bg-red-300 px-2 mx-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+              onClick={handleSave}
+            >
+              Save
+            </button>
+            <button
+              className='bg-green-300 px-2 mx-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
       ) : (
-        <ol className='list-decimal list-inside'>{instructions}</ol>
+        <div>
+          <ol className='list-decimal list-inside'>
+            {editedInstructions.map((instruction, index) => (
+              <li key={index}>{instruction}</li>
+            ))}
+          </ol>
+          <button
+            className='bg-pink-200 my-2  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+            onClick={handleEditInstructions}
+          >
+            Edit Instructions
+          </button>
+        </div>
       )}
-    </Fragment>
+    </div>
   );
-};
+}
 
 export default RecipeInstructions;

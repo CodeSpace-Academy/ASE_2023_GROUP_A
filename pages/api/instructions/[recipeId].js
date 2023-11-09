@@ -1,40 +1,29 @@
-import {
-  connectToCollection,
-  closeMongoDBConnection,
-} from "@/helpers/mongoDB-connection";
-const updateInstructionsInDB = async (request, id, instructions) => {
-  try {
-    const collection = await connectToCollection("devdb", "recipes");
+import { handleUpdateInstructions } from "../../../helpers/mongoDB-utils";
 
-    if (request.method === "PATCH") {
-      console.log("Testing :", _id, instructions);
+async function handler(req, res) {
+  if (req.method === "POST") {
+    try {
+      const { recipeId, instructions } = req.body;
 
-      const result = await collection.updateOne(
-        { _id: id },
-        { $set: { instructions: instructions } }
-      );
-
-      if (result.matchedCount > 0) {
-        console.log(`Instructions for '${id}' were successfully updated.`);
-      } else {
-        console.log(`No document found with ID '${id}'.`);
+      if (!instructions) {
+        return res.status(400).json({ message: "Invalid instructions format" });
       }
-    } else if (request.method === "DELETE") {
-      const result = await collection.deleteOne({ _id: id });
 
-      if (result.deletedCount > 0) {
-        console.log(`Document with ID '${id}' was successfully deleted.`);
+      const result = await handleUpdateInstructions(recipeId, instructions);
+      console.log(result);
+
+      if (result.success) {
+        return res.status(200).json({ message: result.message });
       } else {
-        console.log(`No document found with ID '${id}'.`);
+        return res.status(500).json({ message: "Internal server error" });
       }
-    } else {
-      console.log("Method not allowed.");
+    } catch (error) {
+      console.error("Request handling error:", error);
+      return res.status(500).json({ message: "Internal server error" });
     }
-  } catch (error) {
-    console.error("Error updating instructions:", error);
-  } finally {
-    await closeMongoDBConnection();
+  } else {
+    return res.status(405).json({ message: "Method not allowed" });
   }
-};
+}
 
-module.exports = { updateInstructionsInDB };
+export default handler;

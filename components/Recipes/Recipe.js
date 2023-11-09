@@ -12,15 +12,13 @@ import DropDownSVG from "../IconsAndSvg's/DropDownSVG";
 import CoverImage from "../Images/CoverImage";
 import IngredientsList from "../Ingredients/IngredientsList";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
-import UpdateRecipeInstructions from "../Instructions/UpdateRecipeInstructions";
-import Link from "next/link"; // Import Link
-import { FaArrowLeft } from "react-icons/fa"; // Import FaArrowLeft
+import Link from "next/link";
+import { FaArrowLeft } from "react-icons/fa";
 import Loading from "../Loading/Loading";
 
 const Recipe = ({ recipe, Allergies }) => {
   const [showTags, setShowTags] = useState(false);
-  const [showInstructions, setShowInstructions] = useState(false);
-
+  console.log("By KEO again:", recipe && recipe.instructions);
   if (!recipe) {
     return (
       <div>
@@ -77,20 +75,18 @@ const Recipe = ({ recipe, Allergies }) => {
             cookTimeInMinutes={recipe.cook}
             label={"Total Cooking Time"}
           />
-          <button
-            onClick={() => setShowInstructions(!showInstructions)}
-            className='bg-indigo-500 hover:bg-indigo-600 text-white flex flex-row font-bold py-2 px-4 rounded mb-4'
-          >
-            <h3 className='text-lg font-semibold'>Instructions</h3>
-            <DropDownSVG />
-          </button>
-          {/* {showInstructions && <RecipeInstructions recipes={recipe} />}
-          <UpdateRecipeInstructions /> */}
+
+          <h3 className='text-lg font-semibold'>Instructions</h3>
+
+          {recipe && (
+            <RecipeInstructions
+              instruction={recipe.instructions}
+              recipeId={recipe._id}
+            />
+          )}
           <div className='text-gray-600 mt-4'>
             <Published published={recipe.published} />
           </div>
-          {showInstructions && <RecipeInstructions recipes={recipe} />}
-          <UpdateRecipeInstructions />
         </div>
       </div>
     </div>

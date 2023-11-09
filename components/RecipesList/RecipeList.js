@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import fetchRecipes from "@/helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
@@ -8,50 +8,44 @@ import FloatingButton from "../Buttons/floatingButton/FloatingButton";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
-import useSWR,{mutate} from "swr";
+import useSWR, { mutate } from "swr";
 // const ITEMS_PER_PAGE = 100;
 
-function RecipeList({favorites}) {
- const [recipes, setRecipes] = useState([]);
- const [originalRecipes, setOriginalRecipes] = useState([]);
- const [currentPage, setCurrentPage] = useState(1);
- const [totalRecipes, setTotalRecipes] = useState(0);
- const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
- const [searchResults, setSearchResults] = useState([]);
- const [filterResults, setFilterCategoryResults] = useState([]);
- const [filterTagsResults, setFilterTagsResults] = useState([]);
- const [searchQuery, setSearchQuery] = useState("");
+function RecipeList({ favorites }) {
+  const [recipes, setRecipes] = useState([]);
+  const [originalRecipes, setOriginalRecipes] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecipes, setTotalRecipes] = useState(0);
+  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [filterResults, setFilterCategoryResults] = useState([]);
+  const [filterTagsResults, setFilterTagsResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
-const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
-  `/api/recipes?page=${currentPage}`,
-  fetchRecipes
-);
+  const {
+    data: recipesData,
+    error: recipesError,
+    loading: isLoading,
+  } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
   useEffect(() => {
-  if (!isLoading && recipesData) {
-    // Check if recipesData is defined before updating the state
-    setOriginalRecipes(recipesData.recipes);
-    setTotalRecipes(recipesData.totalRecipes);
-    // Use mutate to update the state as soon as you fetch the new data
-    mutate(`/api/recipes?page=${currentPage}`);
-  }
-}, [currentPage, recipesData]);
-  
+    if (!isLoading && recipesData) {
+      // Check if recipesData is defined before updating the state
+      setOriginalRecipes(recipesData.recipes);
+      setTotalRecipes(recipesData.totalRecipes);
+      // Use mutate to update the state as soon as you fetch the new data
+      mutate(`/api/recipes?page=${currentPage}`);
+    }
+  }, [currentPage, recipesData]);
+
   let combinedResults;
 
-
- const handleLoadLess = () => {
-   setCurrentPage(currentPage - 1);
-
-  //  loadRecipes(currentPage - 1);
- };
+  const handleLoadLess = () => {
+    setCurrentPage(currentPage - 1);
+  };
   const handleLoadMore = () => {
     setCurrentPage(currentPage + 1);
-
-    // loadRecipes(currentPage + 1);
   };
-
-  
 
   if (isLoading) {
     return <Loading />;
@@ -72,7 +66,6 @@ const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
         if (response.ok) {
           const searchResult = await response.json();
 
-          // setCount(searchResult.recipes.length)
           setSearchResults(searchResult.recipes);
         } else {
           console.error("Search request failed");
@@ -116,8 +109,6 @@ const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
     setFilterTagsResults([]);
   }
 
-
-
   if (
     searchResults.length < 1 &&
     filterResults.length < 1 &&
@@ -157,7 +148,7 @@ const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
         <p>No favorite recipes yet.</p>
       ) : (
         <div className={`h-3/5`}>
-          <Carousel responsive={responsive} containerClass="carousel-container">
+          <Carousel responsive={responsive} containerClass='carousel-container'>
             {favorites.map((recipe) => (
               <div key={recipe.recipe._id}>
                 <RecipeCard recipe={recipe.recipe} favorites={favorites} />
@@ -166,10 +157,10 @@ const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
           </Carousel>
         </div>
       )}
-      <div className="total-count">Total Recipes: {combinedResults.length}</div>
-      
+      <div className='total-count'>Total Recipes: {combinedResults.length}</div>
+
       {autocompleteSuggestions.length > 0 && (
-        <ul className="autocomplete-list">
+        <ul className='autocomplete-list'>
           {autocompleteSuggestions.map((suggestion, index) => (
             <li
               key={index}
@@ -183,7 +174,7 @@ const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className='container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
           {combinedResults.map((recipe, index) => (
             <div key={index}>
               <RecipeCard
@@ -199,7 +190,7 @@ const { data: recipesData, error: recipesError,loading: isLoading } = useSWR(
       )}
       {combinedResults.length < totalRecipes && (
         <>
-          <div className="flex justify-center gap-10">
+          <div className='flex justify-center gap-10'>
             <LoadMoreButton
               handleLoad={handleLoadLess}
               remainingRecipes={remainingRecipes}

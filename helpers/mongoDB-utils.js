@@ -59,7 +59,7 @@ export const fetchAllergens = async () => {
 
 export const getTotalRecipesCount = async () => {
   try {
-    const cl = await client.connect()
+    const cl = await client.connect();
     const db = cl.db("devdb");
     const recipesCollection = db.collection("recipes");
 
@@ -153,7 +153,6 @@ export async function searching(searchQuery, selectedCategories) {
   const db = client.db("devdb");
   const recipesCollection = db.collection("recipes");
 
-  // Create a query that considers both search and categories
   const query = {
     $or: [{ title: { $regex: searchQuery, $options: "i" } }],
   };
@@ -166,7 +165,7 @@ export async function searching(searchQuery, selectedCategories) {
   return searchResult;
 }
 
-export async function filtering(selectedCategories,selectedTags, searchQuery) {
+export async function filtering(selectedCategories, selectedTags, searchQuery) {
   const db = client.db("devdb");
   const recipesCollection = db.collection("recipes");
 
@@ -238,4 +237,23 @@ export async function filteringByTags(
 
   const filterResult = await recipesCollection.find(query).limit(100).toArray();
   return filterResult;
+}
+
+export async function handleUpdateInstructions(recipeId, updatedInstruction) {
+  const db = client.db("devdb");
+  const collection = db.collection("recipes");
+
+  try {
+    await collection.updateOne(
+      { _id: recipeId },
+      {
+        $set: { instructions: updatedInstruction },
+      }
+    );
+
+    return { success: true, message: "Instruction updated successfully" };
+  } catch (error) {
+    console.error("Database update error:", error);
+    throw error;
+  }
 }
