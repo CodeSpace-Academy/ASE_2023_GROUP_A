@@ -16,6 +16,8 @@ import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
 
 import FavoritesContext from "../Context/Favorites-context";
+import { useTheme } from "@/components/Context/ThemeContext";
+// const ITEMS_PER_PAGE = 100;
 
 function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
@@ -29,6 +31,8 @@ function RecipeList({ favorites }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [numberOfFilters, setNumberOfFilters] = useState(0);
   const [filterIngredientResults, setFilterIngredientResults] = useState([]);
+  const { theme } = useTheme();
+  const isDarkTheme = theme === "dark";
   const [filterInstructionsResults, setFilterInstructionsResults] = useState(
     []
   );
@@ -401,24 +405,38 @@ function RecipeList({ favorites }) {
         setSearchQuery={setSearchQuery}
         handleSort={handleSort}
       />
-      <button onClick={handleDefault}>All Recipes</button>
+      <button
+        onClick={handleDefault}
+        className={isDarkTheme ? "text-white" : ""}
+      >
+        All Recipes
+      </button>
 
+  
+      
       <div style={{ textAlign: "center" }}>
-        <p>Filter by number of instructions:</p>
+        <p className={isDarkTheme ? "text-white" : ""}>
+          Filter by number of instructions:
+        </p>
         <input
           type="number"
           placeholder="Enter number of instructions.."
           value={parseInt(selectedInstructions)}
           onChange={handleChange}
-          className="border border-gray-300 rounded-1-md px-4 py-2"
+          className={`border border-gray-300 rounded-1-md px-4 py-2 ${
+            isDarkTheme ? "text-black" : ""
+          }`}
         />
       </div>
+      
       {!favorites ? (
         <p>
           <Loading />
         </p>
       ) : favorites.length === 0 ? (
-        <p>No favorite recipes yet.</p>
+        <p className={isDarkTheme ? "text-white" : ""}>
+          No favorite recipes yet.
+        </p>
       ) : (
         <div className={`h-3/5`}>
           <Carousel responsive={responsive} containerClass="carousel-container">
@@ -430,7 +448,9 @@ function RecipeList({ favorites }) {
           </Carousel>
         </div>
       )}
-      <div className="total-count">Total Recipes: {recipes.length}</div>
+      <div className={`total-count ${isDarkTheme ? "text-white" : ""}`}>
+        Total Recipes: {recipes.length}
+      </div>
 
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
@@ -481,7 +501,8 @@ function RecipeList({ favorites }) {
           <FloatingButton />
         </>
       )}
-    </div>
+      </div>
+ 
   );
 }
 
