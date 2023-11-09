@@ -1,12 +1,13 @@
 import React from "react";
-import { useTheme } from "../Context/ThemeContext"; // Update the import path as needed
+import { useTheme } from "../Context/ThemeContext";
 import Navigation from "./Header/Navigation";
 import Footer from "../footer/Footer";
+
 const Layout = ({ children }) => {
   const { theme } = useTheme();
 
   return (
-    <div className={`header-layout ${theme === "light" ? "" : ""}`}>
+    <div className={`header-layout ${theme === "light" ? "light-mode" : "dark-mode"}`}>
       <Navigation />
       {children}
       <Footer />

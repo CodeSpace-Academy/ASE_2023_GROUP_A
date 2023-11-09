@@ -25,7 +25,7 @@ const RecipeInstructions = ({ recipes }) => {
 
         // Map the sorted instructions to list items
         const reorderedInstructions = sortedInstructions.map((instruction) => (
-          <li key={instruction.index} className="text-gray-600">
+          <li key={instruction.index} className="text-gray-1000">
             {instruction.instruction}
           </li>
         ));

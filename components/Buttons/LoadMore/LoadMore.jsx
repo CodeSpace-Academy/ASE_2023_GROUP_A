@@ -1,4 +1,5 @@
 import classes from "./loadMore.module.css";
+import { useTheme } from "@/components/Context/ThemeContext";
 
 const LoadMoreButton = ({
   handleLoad,
@@ -7,8 +8,11 @@ const LoadMoreButton = ({
   isLoadMore,
   currentPage,
 }) => {
+  const { theme } = useTheme();
   return (
-    <div className="rounded items-center justify-center bg-blue-500 text-white p-2 mt-2 transition-transform hover:scale-105 duration-300 ease-in-out">
+    <div className={`${
+      theme === "light" ? "text-black bg-blue-300" : "text-white bg-gray-700"
+    } p-4 rounded shadow mt-8 mb-4 md:flex flex-col transform transition-transform hover:scale-105 items-center justify-center`}>
       <button
         onClick={handleLoad}
         disabled={

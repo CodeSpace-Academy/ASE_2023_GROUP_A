@@ -5,12 +5,12 @@ import Categories from "../categories/categories";
 import Tags from "../Tags/Tags";
 import Ingredients from "../ingredients/ingredients";
 import DropdownMenu from "../sort/sort";
+import { useTheme } from "../Context/ThemeContext";
 
 export default function Hero({
   setFilterCategoryResults,
   setFilterTagsResults,
   setFilterIngredientResults,
-  setFilterInstructionsResults,
   handleDefaultCategoryFilter,
   handleDefaultIngredientFilter,
   handleDefaultTagFilter,
@@ -32,6 +32,7 @@ export default function Hero({
   handleSort,
   sortOrder,
 }) {
+  const { theme } = useTheme();
   return (
     <div className={`sm:portrait:h-screen ${classes.heroImage}`}>
       <div className={`sm:mt-20 sm:block sm: ${classes.heroContent}`}>
@@ -70,15 +71,6 @@ export default function Hero({
             selectedIngredients={selectedIngredients}
             setSelectedIngredients={setSelectedIngredients}
           />
-
-          {/* <InstructionF
-            ff={ff}
-            setFilterInstructionsResults={setFilterInstructionsResults}
-            setRecipes={setRecipes}
-            
-            selectedInstructions={selectedInstructions}
-            setI={setI}
-           /> */}
 
           <DropdownMenu handleSort={handleSort} sortOrder={sortOrder} />
         </div>
