@@ -98,6 +98,7 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
           <div className="mb-2">
             <CookTime cookTime={recipe.cook} />
           </div>
+          <TotalTime totalTime={recipe} />
         </div>
         <div>
           {recipeIsFavorite ? (
