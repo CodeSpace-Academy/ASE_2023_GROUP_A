@@ -30,7 +30,7 @@ function Home() {
   useEffect(() => {
     favoriteContext.addChangeListener(refreshFavorites);
     return () => favoriteContext.removeChangeListener(refreshFavorites);
-  }, [favoriteContext]);
+  }, []);
 
   if (
     // eslint-disable-next-line operator-linebreak

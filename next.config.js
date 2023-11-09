@@ -2,7 +2,7 @@
 
 module.exports = {
   eslint: {
-    dirs: ['/pages/FavoritesPage', '/components/Context/Favorites-context'],
+    dirs: ['pages/FavoritesPage', 'components/Context/Favorites-context'],
     // ignoreDuringBuilds: true,
   },
   env: {
