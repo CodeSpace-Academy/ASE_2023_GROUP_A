@@ -8,10 +8,13 @@ function Allergens({ recipeIngredients, allergens }) {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const allergensList = allergens.filter((allergen) =>
-    recipeIngredients && recipeIngredients.length > 0 && recipeIngredients.some((ingredient) =>
-      ingredient.toLowerCase().includes(allergen.toLowerCase())
-    )
+  const allergensList = allergens.filter(
+    (allergen) =>
+      recipeIngredients &&
+      recipeIngredients.length > 0 &&
+      recipeIngredients.some((ingredient) =>
+        ingredient.toLowerCase().includes(allergen.toLowerCase())
+      )
   );
 
   return (
@@ -37,14 +40,24 @@ function Allergens({ recipeIngredients, allergens }) {
         {isDropdownOpen && (
           <div className="flex flex-wrap justify-start ">
             {allergensList.length > 0 ? (
-              <ul className={`flex flex-wrap justify-evenly sm:justify-center md:justify-between ${classes["align-left"]}`}>
+              <ul
+                className={`flex flex-wrap justify-evenly sm:justify-center md:justify-between ${classes["align-left"]}`}
+              >
                 {allergensList.map((allergen, index) => {
                   // Check if the allergen is "egg" and handle pluralization
-                  const ingredientAmount = recipeIngredients.find(ingredient => ingredient.toLowerCase().includes(allergen.toLowerCase()));
-                  const isPlural = ingredientAmount && ingredientAmount.toLowerCase().includes("eggs");
+                  const ingredientAmount = recipeIngredients.find(
+                    (ingredient) =>
+                      ingredient.toLowerCase().includes(allergen.toLowerCase())
+                  );
+                  const isPlural =
+                    ingredientAmount &&
+                    ingredientAmount.toLowerCase().includes("eggs");
 
                   return (
-                    <li key={index} className={`mr-4 p-2 mb-2 sm:mb-0 md:mb-0 sm:mr-1 md:mr-4 ${classes["dropdown-item"]}`}>
+                    <li
+                      key={index}
+                      className={`mr-4 p-2 mb-2 sm:mb-0 md:mb-0 sm:mr-1 md:mr-4 ${classes["dropdown-item"]}`}
+                    >
                       <div className="flex items-center">
                         <span className="mr-2">
                           <img
@@ -71,6 +84,4 @@ function Allergens({ recipeIngredients, allergens }) {
   );
 }
 
-export default Allergens;
-
-
+export default Allergens;

@@ -21,7 +21,7 @@ function RecipeList({ favorites }) {
   const [filterResults, setFilterCategoryResults] = useState([]);
   const [filterTagsResults, setFilterTagsResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [numberOfFilters, setNumberOfFilters] = useState(0)
+  const [numberOfFilters, setNumberOfFilters] = useState(0);
   const [filterIngredientResults, setFilterIngredientResults] = useState([]);
   const [filterInstructionsResults, setFilterInstructionsResults] = useState(
     []
@@ -176,7 +176,6 @@ function RecipeList({ favorites }) {
           if (response.ok) {
             const filterInstructionsResults = await response.json();
             setFilterInstructionsResults(filterInstructionsResults.recipes);
-
           } else {
             console.error("Failed to fetch recipes by instruction");
           }
@@ -255,8 +254,6 @@ function RecipeList({ favorites }) {
           if (response.ok) {
             const filterInstructionsResults = await response.json();
             setFilterInstructionsResults(filterInstructionsResults.recipes);
-
-            
           } else {
             console.error("Failed to fetch recipes by instruction");
           }
@@ -397,15 +394,15 @@ function RecipeList({ favorites }) {
       />
       <button onClick={handleDefault}>All Recipes</button>
 
-      <div style={{textAlign: 'center'}}>
-      <p >Filter by number of instructions:</p>
-      <input
-        type="number"
-        placeholder="Enter number of instructions.."
-        value={parseInt(selectedInstructions)}
-        onChange={handleChange}
-        className="border border-gray-300 rounded-1-md px-4 py-2"
-      />
+      <div style={{ textAlign: "center" }}>
+        <p>Filter by number of instructions:</p>
+        <input
+          type="number"
+          placeholder="Enter number of instructions.."
+          value={parseInt(selectedInstructions)}
+          onChange={handleChange}
+          className="border border-gray-300 rounded-1-md px-4 py-2"
+        />
       </div>
       {!favorites ? (
         <p>
@@ -438,7 +435,7 @@ function RecipeList({ favorites }) {
           ))}
         </ul>
       )}
-      
+
       {isLoading ? (
         <Loading />
       ) : (
