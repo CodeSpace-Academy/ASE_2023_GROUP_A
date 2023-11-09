@@ -83,6 +83,7 @@ body {
 }
 body {
   background-color: rgba(6, 83, 206, 0.5);
+  min-height: 100vh;
 }
 
 /* h1{

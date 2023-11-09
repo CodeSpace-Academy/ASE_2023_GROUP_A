@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
     <div
       className={`header-layout ${
         theme === "dark" ? "" : ""
-      }`}
+      } h-screen w-screen bg-cover bg-center `}
     >
       <Navigation />
       {children}

@@ -43,9 +43,7 @@ const Home = () => {
   favoriteContext.updateFavorites(favorites);
 
   return (
-    <>
       <RecipeList favorites={favorites} />
-    </>
   );
 };
 

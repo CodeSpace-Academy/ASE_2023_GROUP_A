@@ -83,7 +83,7 @@ function Ingredients({
 
     control: (base) => ({
       ...base,
-      backgroundColor: "#6ca9f0",
+      backgroundColor: "#007bff",
       color: "white",
       width: "fitContent",
     }),

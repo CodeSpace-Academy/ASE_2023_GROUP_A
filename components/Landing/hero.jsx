@@ -6,7 +6,6 @@ import Tags from "../Tags/Tags";
 import Ingredients from "../ingredients/ingredients";
 import DropdownMenu from "../sort/sort";
 
-
 export default function Hero({
   setFilterCategoryResults,
   setFilterTagsResults,
@@ -45,7 +44,7 @@ export default function Hero({
             searchQuery={searchQuery}
           />
         </div>
-        <div className={classes.filters}>
+        <div className={`flex flex-col md:flex-row sm:block ${classes.filters}`}>
           <Categories
             setFilterCategoryResults={setFilterCategoryResults}
             setRecipes={setRecipes}
