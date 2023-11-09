@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 module.exports = {
-  eslint: {
-    dirs: ['pages/FavoritesPage', 'components/Context/Favorites-context'],
-    // ignoreDuringBuilds: true,
-  },
+
   env: {
     mongodb_password: process.env.mongodb_password,
     mongodb_username: process.env.mongodb_username,
@@ -13,4 +10,7 @@ module.exports = {
     domains: ['img.sndimg.com'],
   },
   reactStrictMode: true,
+  eslint: {
+    dirs: ["pages/FavoritesPage", "components/Context/Favorites-context"],
+  },
 };
