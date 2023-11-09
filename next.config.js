@@ -2,15 +2,15 @@
 
 module.exports = {
   eslint: {
-    dirs: ["components", "pages/FavoritesPage"],
+    dirs: ['/pages/FavoritesPage', '/components/Context/Favorites-context'],
+    // ignoreDuringBuilds: true,
   },
   env: {
     mongodb_password: process.env.mongodb_password,
     mongodb_username: process.env.mongodb_username,
   },
-  
   images: {
-    domains: ["img.sndimg.com"],
+    domains: ['img.sndimg.com'],
   },
   reactStrictMode: true,
 };

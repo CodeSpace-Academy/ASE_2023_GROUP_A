@@ -1,18 +1,20 @@
-import { useContext } from "react";
-import FavoritesContext from "@/components/Context/Favorites-context";
-import RecipeCard from "../components/Cards/RecipeCard";
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable react/jsx-no-duplicate-props */
+import { useContext } from 'react';
 import Link from "next/link";
-import Loading from "@/components/Loading/Loading";
+import FavoritesContext from '../components/Context/Favorites-context';
+import RecipeCard from '../components/Cards/RecipeCard';
+import Loading from "../components/Loading/Loading";
 
 function FavoritesPage() {
   const favoriteCtx = useContext(FavoritesContext);
   const favoriteRecipes = favoriteCtx.favorites || [];
-  
+
   if (!favoriteRecipes) {
     return (
-    <Loading/>
-  )
-}
+      <Loading />
+    );
+  }
 
   return (
     <section>
@@ -25,11 +27,15 @@ function FavoritesPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {favoriteRecipes.map((recipe) => (
-              <RecipeCard Key={recipe.recipe._id} key={recipe.recipe._id} recipe={recipe.recipe} favorites={favoriteRecipes} />
+              <RecipeCard
+                Key={recipe.recipe._id}
+                key={recipe.recipe._id}
+                recipe={recipe.recipe}
+                favorites={favoriteRecipes} />
             ))}
           </div>
         )}
-        <Link href={`/`} className="py-10 px-5 mx-12">
+        <Link href="/" className="py-10 px-5 mx-12">
           <strong> Explore Recipes</strong>
         </Link>
       </section>
