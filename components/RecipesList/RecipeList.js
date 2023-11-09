@@ -16,7 +16,6 @@ import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
 
 import FavoritesContext from "../Context/Favorites-context";
-import useSWR, { mutate } from "swr";
 import { useTheme } from "@/components/Context/ThemeContext";
 // const ITEMS_PER_PAGE = 100;
 
@@ -413,15 +412,8 @@ function RecipeList({ favorites }) {
         All Recipes
       </button>
 
-      <div style={{ textAlign: "center" }}>
-        <p>Filter by number of instructions:</p>
-        <input
-          type="number"
-          placeholder="Enter number of instructions.."
-          value={parseInt(selectedInstructions)}
-          onChange={handleChange}
-          className="border border-gray-300 rounded-1-md px-4 py-2"
-        />
+  
+      
       <div style={{ textAlign: "center" }}>
         <p className={isDarkTheme ? "text-white" : ""}>
           Filter by number of instructions:
@@ -509,7 +501,8 @@ function RecipeList({ favorites }) {
           <FloatingButton />
         </>
       )}
-    </div>
+      </div>
+ 
   );
 }
 

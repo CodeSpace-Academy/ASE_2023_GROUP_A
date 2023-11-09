@@ -1,6 +1,3 @@
-
-
-
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,8 +12,6 @@ import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 const Navigation = () => {
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -91,13 +86,10 @@ const Navigation = () => {
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
               <Link
-<<<<<<< HEAD
                 href={`/FavoritesPage`}
                 className={`${
                   theme === "dark" ? "text-white" : "text-black"
-                } hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium`}
-=======
-               e23
+           } hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium`}
               >
                 Favorites{" "}
                 <Badge
