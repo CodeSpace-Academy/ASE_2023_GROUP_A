@@ -37,7 +37,7 @@ const Description = ({ description, recipeId }) => {
 
   return (
     <div>
-      <h3 className="font-bold text-black">Description</h3>
+      <h3 className="className=" bold text-gray-1000>Description</h3>
       {!description ? (
         <DescriptionError />
       ) : (

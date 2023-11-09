@@ -31,7 +31,7 @@ const Recipe = ({ recipe, Allergies }) => {
           <FaArrowLeft />
         </span>
       </Link>
-      <div className={`bg-${theme === "dark" ? "gray-800" : "white"} p-4 rounded shadow mb-4 lg:flex`}>
+      <div className={`bg-${theme === "dark" ? "gray-700" : "white"} p-4 rounded shadow mb-4 lg:flex`}>
         <div className="lg:w-1/2">
         <h1 className={`text-2xl font-bold ${textClass}`}>{recipe.title}</h1>
           <CoverImage images={recipe.images} title={recipe.title} />
@@ -66,8 +66,8 @@ const Recipe = ({ recipe, Allergies }) => {
           <CookTime cookTime={recipe.cook} />
           <TotalTime totalTime={recipe} />
           <Allergens allergens={Allergies} />
-          <h3 className={`mt-2 text-lg font-semibold ${textClass}`}>Ingredients:</h3>
-          <IngredientsList ingredients={Object.entries(recipe.ingredients)} />
+          <h3 className={`mt-3 text-lg font-semibold ${textClass}`}>Ingredients:</h3>
+          <IngredientsList  ingredients={Object.entries(recipe.ingredients)}  />
           <CookTime
             cookTimeInMinutes={recipe.cook}
             label={"Total Cooking Time"}

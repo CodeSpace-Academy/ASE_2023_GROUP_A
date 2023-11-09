@@ -1,22 +1,22 @@
+/* Import Tailwind CSS base, components, and utilities */
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-
-/* globals.css */
-body {
-  box-sizing: border-box;
-  background-color: rgba(6, 83, 206, 0.5); /* Default background color */
+/* Global styles */
+.dark-mode {
+  background-color: rgba(13, 32, 62, 0.637);
+}
+.light-mode {
+  background-color: rgba(5, 91, 229, 0.5);
 }
 
-/* Add your dark mode styles here */
-body.dark {
-  background-color: rgb(32, 23, 23); /* Dark mode background color */
-  /* Add any other styles for dark mode here */
+/* Header 1 styles */
+h1 {
+  font-size: 25px;
 }
 
-
-/* styles.css */
+/* Hide and show content based on active buttons */
 .category-content,
 .servings-content,
 .tags-content {
@@ -29,28 +29,7 @@ body.dark {
   display: block;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-#__next {
-  flex: 1;
-}
-
-footer {
-  margin-top: auto;
-}
-
-.flexpage {
-  height: 80vh;
-}
-
-.mainBody {
-  min-height: 90vh;
-}
-
+/* Highlight class for search term */
 .YourHighlightClass {
   background-color: yellow;
   font-weight: bold;

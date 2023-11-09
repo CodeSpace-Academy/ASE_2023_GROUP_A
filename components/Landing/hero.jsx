@@ -11,7 +11,6 @@ export default function Hero({
   setFilterCategoryResults,
   setFilterTagsResults,
   setFilterIngredientResults,
-  setFilterInstructionsResults,
   handleDefaultCategoryFilter,
   handleDefaultIngredientFilter,
   handleDefaultTagFilter,
@@ -69,15 +68,6 @@ export default function Hero({
             selectedIngredients={selectedIngredients}
             setSelectedIngredients={setSelectedIngredients}
           />
-
-          {/* <InstructionF
-            ff={ff}
-            setFilterInstructionsResults={setFilterInstructionsResults}
-            setRecipes={setRecipes}
-            
-            selectedInstructions={selectedInstructions}
-            setI={setI}
-           /> */}
 
           <DropdownMenu handleSort={handleSort} sortOrder={sortOrder} />
         </div>
