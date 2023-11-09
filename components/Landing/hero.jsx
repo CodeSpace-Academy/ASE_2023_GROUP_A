@@ -5,7 +5,7 @@ import Categories from "../categories/categories";
 import Tags from "../Tags/Tags";
 import Ingredients from "../ingredients/ingredients";
 import DropdownMenu from "../sort/sort";
-
+import { useTheme } from "../Context/ThemeContext";
 
 export default function Hero({
   setFilterCategoryResults,
@@ -32,9 +32,10 @@ export default function Hero({
   handleSort,
   sortOrder,
 }) {
+  const { theme } = useTheme();
   return (
-    <div className={classes.heroImage}>
-      <div className={classes.heroContent}>
+    <div className={`${classes.heroImage} `}>
+      <div className={`${classes.heroContent} ${ theme==="light"? " bg-blue-400":" bg-gray-500"}`}>
         <div className={classes.search}>
           <SearchBar
             handleDefault={handleDefaultSearch}

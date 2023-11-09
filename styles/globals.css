@@ -34,3 +34,13 @@ h1 {
   background-color: yellow;
   font-weight: bold;
 }
+/* Light mode styles */
+.heroContent.light-mode {
+  background-color: #f7f7f7;
+  color: #333;
+  /* Add more light mode styles here */
+}
+
+
+
+
