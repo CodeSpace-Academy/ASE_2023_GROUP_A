@@ -11,6 +11,7 @@ import Badge from "@mui/material/Badge";
 import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 
 const Navigation = () => {
+
   const { toggleTheme, theme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -36,7 +37,7 @@ const Navigation = () => {
             <button
               type="button"
               onClick={toggleMobileMenu}
-              className="block sm:hidden relative items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              className={`block sm:hidden relative items-center justify-center rounded-md p-2  hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white ${theme === 'light' ? 'text-black' : 'text-grey-400'}`}
               aria-controls="mobile-menu"
               aria-expanded={mobileMenuOpen ? "true" : "false"}
             >
@@ -85,15 +86,16 @@ const Navigation = () => {
                 alt="Cooking Devs"
                 height={50}
                 width={70}
-              />
-            </Link>
+              />  
+              </Link>
           </div>
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
+           
               <Link
-                href={`/FavoritesPage`}
-                as="/favourites"
+                href={`/FavoritesPage`} as='/favourites'
                 className="text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium"
+               
               >
                 Favorites{" "}
                 <Badge
