@@ -11,7 +11,6 @@ import Badge from "@mui/material/Badge";
 import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 
 const Navigation = () => {
-
   const { toggleTheme, theme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -86,14 +85,14 @@ const Navigation = () => {
                 alt="Cooking Devs"
                 height={50}
                 width={70}
-              />  
-              </Link>
+              />
+            </Link>
           </div>
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
-           
               <Link
                 href={`/FavoritesPage`}
+                as="/favourites"
                 className="text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium"
               >
                 Favorites{" "}

@@ -6,14 +6,10 @@ const Layout = ({ children }) => {
   const { theme } = useTheme();
 
   return (
-    <div
-      className={`header-layout ${
-        theme === "dark" ? "" : ""
-      } h-screen w-screen bg-cover bg-center `}
-    >
+    <div className={`header-layout ${theme === "light" ? "" : ""}`}>
       <Navigation />
       {children}
-      <Footer/>
+      <Footer />
     </div>
   );
 };

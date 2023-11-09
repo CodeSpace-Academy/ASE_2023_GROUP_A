@@ -12,7 +12,7 @@ import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
 import { useTheme } from "../Context/ThemeContext";
 import Loading from "../Loading/Loading";
-const RecipeCard = ({ recipe, searchQuery, favorites }) => {
+const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
   const { theme } = useTheme();
 
   if (!recipe) {
@@ -64,9 +64,9 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
 
   return (
     <div
-      key={recipe._id}
+      key={Key}
       className={`${
-        theme === "light" ? " text-black" : "text-"
+        theme === "light" ? " text-black" : "text-white"
       } bg-blue-300 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
     >
       <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
