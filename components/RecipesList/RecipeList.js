@@ -1,15 +1,21 @@
-import { useEffect, useState } from "react";
+/**
+ * The RecipeList component is a React component that displays a list of recipes, allows for filtering
+ * and sorting, and includes pagination functionality.
+ * @returns The RecipeList component is being returned.
+ */
+import { useEffect, useState, useContext } from "react";
+import useSWR, { mutate } from "swr";
+import Carousel from "react-multi-carousel";
 import fetchRecipes from "@/helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
 import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
 import Loading from "../Loading/Loading";
 import FloatingButton from "../Buttons/floatingButton/FloatingButton";
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
-import useSWR, { mutate } from "swr";
-// const ITEMS_PER_PAGE = 100;
+
+import FavoritesContext from "../Context/Favorites-context";
 
 function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
@@ -36,6 +42,7 @@ function RecipeList({ favorites }) {
 
   const [noRecipesFoundMessage, setNoRecipesFoundMessage] = useState(null);
   // const [numberOfFilters, setNumberOfFilters] = useState(0);
+  const favoriteContext = useContext(FavoritesContext);
 
   const {
     data: recipesData,
@@ -44,14 +51,16 @@ function RecipeList({ favorites }) {
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
   useEffect(() => {
-    if (!isLoading && recipesData) {
-      // Check if recipesData is defined before updating the state
-      setOriginalRecipes(recipesData.recipes);
-      setTotalRecipes(recipesData.totalRecipes);
-      // Use mutate to update the state as soon as you fetch the new data
-      mutate(`/api/recipes?page=${currentPage}`);
-    }
-  }, [currentPage, recipesData]);
+    favoriteContext.updateFavorites(favorites);
+  if (!isLoading && recipesData) {
+    // Check if recipesData is defined before updating the state
+    setOriginalRecipes(recipesData.recipes);
+    setTotalRecipes(recipesData.totalRecipes);
+    // Use mutate to update the state as soon as you fetch the new data
+    mutate(`/api/recipes?page=${currentPage}`);
+  }
+}, [currentPage, recipesData, favorites]);
+  
 
   // let combinedResults;
 
