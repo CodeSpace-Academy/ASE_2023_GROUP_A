@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import{CookTime, PrepTime, Published, TotalTime}from "../TimeAndDate/TimeConvertor";
+import {
+  CookTime,
+  PrepTime,
+  Published,
+  TotalTime,
+} from "../TimeAndDate/TimeConvertor";
 import RecipeDetailTags from "../Tags/RecipeDetailTags";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
@@ -17,9 +22,18 @@ const Recipe = ({ recipe, Allergies }) => {
   const [showInstructions, setShowInstructions] = useState(false);
 
   if (!recipe) {
-    return <div><Loading/></div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
 
+  const ingredientsList = Object.entries(recipe.ingredients).map(
+    (ingredient) => `${ingredient}`
+  );
+
+  const firstImage = recipe.images[0];
 
   return (
     <div className="container mx-auto mt-24 p-4">
@@ -62,7 +76,10 @@ const Recipe = ({ recipe, Allergies }) => {
           <PrepTime prepTime={recipe.prep} />
           <CookTime cookTime={recipe.cook} />
           <TotalTime totalTime={recipe} />
-          <Allergens allergens={Allergies} />
+          <Allergens
+            allergens={Allergies}
+            recipeIngredients={ingredientsList}
+          />
           <h3 className="mt-2 text-lg font-semibold">Ingredients:</h3>
           <IngredientsList ingredients={Object.entries(recipe.ingredients)} />
           <CookTime
