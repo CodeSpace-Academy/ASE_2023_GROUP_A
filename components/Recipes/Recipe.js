@@ -48,7 +48,7 @@ const Recipe = ({ recipe, Allergies }) => {
           <CoverImage images={recipe.images} title={recipe.title} />
           <div className="mt-4 text-gray-600">
             <p>
-              <b>Servings</b>: {recipe.servings}
+              <b>Servings</b>: {recipe.servings} people
             </p>
           </div>
           <div className="mt-4 text-gray-600">
@@ -57,18 +57,18 @@ const Recipe = ({ recipe, Allergies }) => {
             </p>
           </div>
           <div className="mt-4 text-gray-600">
-            <button
+            {/* <button
               onClick={() => setShowTags(!showTags)}
               className="bg-yellow-500 hover:bg-yellow-600 flex flex-row text-white font-bold py-2 px-4 rounded mb-4"
-            >
-              <b>Tags</b>
-              <DropDownSVG />
-            </button>
-            {showTags && (
-              <div>
+            > */}
+            {/* <b>
+            {/* </button> */}
+            {/* {showTags && (
+              <div> */} 
+             <b>Tags</b> 
                 <RecipeDetailTags recipe={recipe} />
-              </div>
-            )}
+              {/* </div>
+            )} */}
           </div>
         </div>
         <div className="lg:w-1/2 p-4 text-gray-600">
