@@ -8,10 +8,9 @@ module.exports = {
 
   images: {
     domains: ["img.sndimg.com"],
-    unoptimized: true, 
+  
   },
   reactStrictMode: true,
 };
 
 
-// module.exports = {   images: {     unoptimized: true,   }, }
