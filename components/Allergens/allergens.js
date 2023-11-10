@@ -61,7 +61,7 @@ function Allergens({ recipeIngredients, allergens }) {
                       <div className="flex items-center">
                         <span className="mr-2">
                           <img
-                            src={`/images/icons/${allergen}.png`}
+                            src={`/images/${allergen}.png`}
                             alt={allergen}
                             width={24}
                             height={24}
