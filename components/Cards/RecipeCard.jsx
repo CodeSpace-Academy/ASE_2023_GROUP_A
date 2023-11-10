@@ -1,7 +1,6 @@
 /* eslint-enable */
 import React from "react";
-import Image from "next/image";
-import theme from "./RecipeCard.module.css";
+import Image from 'next/legacy/image'
 import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 //Fav Button
 import Highlighter from "react-highlight-words";
@@ -69,13 +68,14 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
         theme === "light" ? " text-black" : "text-"
       } bg-blue-300 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
     >
-      <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
+      <div className="md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
         <Image
           src={firstImage}
           alt={recipe.title}
-          layout="fill"
-          objectFit="cover"
-          className="rounded-lg"
+          // layout="responsive"
+          width={300}
+          height={130}
+          className="relative w-44 h-24"
         />
       </div>
       <div className="flex flex-col justify-between h-full">
