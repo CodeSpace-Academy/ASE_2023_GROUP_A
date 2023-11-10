@@ -6,12 +6,12 @@ import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 import Highlighter from "react-highlight-words";
 import { useContext } from "react";
 import FavoritesContext from "@/components/Context/Favorites-context";
-import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRicepe";
+import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRecipe";
 import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
 import { useTheme } from "../Context/ThemeContext";
 import Loading from "../Loading/Loading";
-const RecipeCard = ({ recipe, searchQuery, favorites }) => {
+const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
   const { theme } = useTheme();
 
   if (!recipe) {
@@ -63,10 +63,10 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
 
   return (
     <div
-      key={recipe._id}
+      key={Key}
       className={`${
-        theme === "light" ? " text-black" : "text-"
-      } bg-blue-300 p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
+        theme === "light" ? "text-black bg-blue-300" : "text-white bg-gray-700"
+      } p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
     >
       <div className="md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
         <Image
@@ -79,7 +79,7 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
         />
       </div>
       <div className="flex flex-col justify-between h-full">
-        <div className={`mb-4 ${theme.recipeTitleContainer} text-center`}>
+      <div className={`mb-4 text-center ${theme === "dark" ? "text-white" : ""}`}>
           <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2 font-alkatra">
             {searchQuery ? (
               <Highlighter
@@ -98,6 +98,7 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
           <div className="mb-2">
             <CookTime cookTime={recipe.cook} />
           </div>
+          <TotalTime totalTime={recipe} />
         </div>
         <div>
           {recipeIsFavorite ? (
@@ -105,7 +106,7 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
               <span>
                 <StarFilled
                   className={`w-6 h-6 ${
-                    theme === "light" ? "text-blue-800" : "text-custom-blue-10"
+                    theme === "light" ? "text-blue-900" : "text-custom-blue-10"
                   }`}
                 />
               </span>
@@ -115,7 +116,7 @@ const RecipeCard = ({ recipe, searchQuery, favorites }) => {
               <span>
                 <StarEmpty
                   className={`w-6 h-6 ${
-                    theme === "light" ? "text-blue-800" : "text-custom-blue-10"
+                    theme === "dark" ? "text-white" : "text-custom-blue-10"
                   }`}
                 />
               </span>

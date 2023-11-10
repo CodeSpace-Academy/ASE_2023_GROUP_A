@@ -154,8 +154,8 @@ export const addFavoriteToMongoDB = async (recipe) => {
       return;
     } else {
       // If the favorite doesn't exist, insert it into the collection
-      await favoritesCollection.insertOne({ _id: recipe._id, recipe });
-      
+     const result = await favoritesCollection.insertOne({ _id: recipe._id, recipe });
+      return result
     }
   } catch (error) {
     console.error("Error adding favorite to MongoDB:", error);

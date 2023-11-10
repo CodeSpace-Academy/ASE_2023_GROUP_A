@@ -1,14 +1,22 @@
-import { useEffect, useState } from "react";
+/**
+ * The RecipeList component is a React component that displays a list of recipes, allows for filtering
+ * and sorting, and includes pagination functionality.
+ * @returns The RecipeList component is being returned.
+ */
+import { useEffect, useState, useContext } from "react";
+import useSWR, { mutate } from "swr";
+import Carousel from "react-multi-carousel";
 import fetchRecipes from "@/helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
 import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
 import Loading from "../Loading/Loading";
 import FloatingButton from "../Buttons/floatingButton/FloatingButton";
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
-import useSWR, { mutate } from "swr";
+
+import FavoritesContext from "../Context/Favorites-context";
+import { useTheme } from "@/components/Context/ThemeContext";
 // const ITEMS_PER_PAGE = 100;
 
 function RecipeList({ favorites }) {
@@ -21,8 +29,10 @@ function RecipeList({ favorites }) {
   const [filterResults, setFilterCategoryResults] = useState([]);
   const [filterTagsResults, setFilterTagsResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [numberOfFilters, setNumberOfFilters] = useState(0)
+  const [numberOfFilters, setNumberOfFilters] = useState(0);
   const [filterIngredientResults, setFilterIngredientResults] = useState([]);
+  const { theme } = useTheme();
+  const isDarkTheme = theme === "dark";
   const [filterInstructionsResults, setFilterInstructionsResults] = useState(
     []
   );
@@ -36,6 +46,7 @@ function RecipeList({ favorites }) {
 
   const [noRecipesFoundMessage, setNoRecipesFoundMessage] = useState(null);
   // const [numberOfFilters, setNumberOfFilters] = useState(0);
+  const favoriteContext = useContext(FavoritesContext);
 
   const {
     data: recipesData,
@@ -44,14 +55,16 @@ function RecipeList({ favorites }) {
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
   useEffect(() => {
-    if (!isLoading && recipesData) {
-      // Check if recipesData is defined before updating the state
-      setOriginalRecipes(recipesData.recipes);
-      setTotalRecipes(recipesData.totalRecipes);
-      // Use mutate to update the state as soon as you fetch the new data
-      mutate(`/api/recipes?page=${currentPage}`);
-    }
-  }, [currentPage, recipesData]);
+    favoriteContext.updateFavorites(favorites);
+  if (!isLoading && recipesData) {
+    // Check if recipesData is defined before updating the state
+    setOriginalRecipes(recipesData.recipes);
+    setTotalRecipes(recipesData.totalRecipes);
+    // Use mutate to update the state as soon as you fetch the new data
+    mutate(`/api/recipes?page=${currentPage}`);
+  }
+}, [currentPage, recipesData, favorites]);
+  
 
   // let combinedResults;
 
@@ -176,7 +189,6 @@ function RecipeList({ favorites }) {
           if (response.ok) {
             const filterInstructionsResults = await response.json();
             setFilterInstructionsResults(filterInstructionsResults.recipes);
-
           } else {
             console.error("Failed to fetch recipes by instruction");
           }
@@ -255,8 +267,6 @@ function RecipeList({ favorites }) {
           if (response.ok) {
             const filterInstructionsResults = await response.json();
             setFilterInstructionsResults(filterInstructionsResults.recipes);
-
-            
           } else {
             console.error("Failed to fetch recipes by instruction");
           }
@@ -395,24 +405,38 @@ function RecipeList({ favorites }) {
         setSearchQuery={setSearchQuery}
         handleSort={handleSort}
       />
-      <button onClick={handleDefault}>All Recipes</button>
+      <button
+        onClick={handleDefault}
+        className={isDarkTheme ? "text-white" : ""}
+      >
+        All Recipes
+      </button>
 
-      <div style={{textAlign: 'center'}}>
-      <p >Filter by number of instructions:</p>
-      <input
-        type="number"
-        placeholder="Enter number of instructions.."
-        value={parseInt(selectedInstructions)}
-        onChange={handleChange}
-        className="border border-gray-300 rounded-1-md px-4 py-2"
-      />
+  
+      
+      <div style={{ textAlign: "center" }}>
+        <p className={isDarkTheme ? "text-white" : ""}>
+          Filter by number of instructions:
+        </p>
+        <input
+          type="number"
+          placeholder="Enter number of instructions.."
+          value={parseInt(selectedInstructions)}
+          onChange={handleChange}
+          className={`border border-gray-300 rounded-1-md px-4 py-2 ${
+            isDarkTheme ? "text-black" : ""
+          }`}
+        />
       </div>
+      
       {!favorites ? (
         <p>
           <Loading />
         </p>
       ) : favorites.length === 0 ? (
-        <p>No favorite recipes yet.</p>
+        <p className={isDarkTheme ? "text-white" : ""}>
+          No favorite recipes yet.
+        </p>
       ) : (
         <div className={`h-3/5`}>
           <Carousel responsive={responsive} containerClass="carousel-container">
@@ -424,7 +448,9 @@ function RecipeList({ favorites }) {
           </Carousel>
         </div>
       )}
-      <div className="total-count">Total Recipes: {recipes.length}</div>
+      <div className={`total-count ${isDarkTheme ? "text-white" : ""}`}>
+        Total Recipes: {recipes.length}
+      </div>
 
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
@@ -438,7 +464,7 @@ function RecipeList({ favorites }) {
           ))}
         </ul>
       )}
-      
+
       {isLoading ? (
         <Loading />
       ) : (
@@ -475,7 +501,8 @@ function RecipeList({ favorites }) {
           <FloatingButton />
         </>
       )}
-    </div>
+      </div>
+ 
   );
 }
 
