@@ -72,7 +72,6 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
         <Image
           src={firstImage}
           alt={recipe.title}
-          // layout="responsive"
           width={300}
           height={130}
           className="relative w-44 h-24"
