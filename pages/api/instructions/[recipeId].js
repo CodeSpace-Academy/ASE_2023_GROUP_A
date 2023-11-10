@@ -38,5 +38,4 @@ const updateInstructionsInDB = async (id, instructions, request) => {
     await closeMongoDBConnection();
   }
 };
-
 export default handler;
