@@ -19,14 +19,14 @@ function FavoritesPage({ theme }) {
   }
 
   return (
-    <section>
+    <section  className="mt-0 flex-grow h-screen pt-10">
       <strong>
         <h1 className="py-10 px-5 mx-20 my-10">My Favorites</h1>
       </strong>
       <section className="mx-5">
         {favoriteRecipes.length === 0 ? (
           <div>
-            <img src={noFavoritesImg} alt="No Likes" />
+            <img src={noFavoritesImg} alt="No Likes" className="justify-center" />
             <p>
               Sorry, you don't have any favorites yet. Tap the star icon to
               favorite a recipe
