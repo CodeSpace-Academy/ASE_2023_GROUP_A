@@ -499,9 +499,6 @@ const remainingRecipes = Math.max(0, totalRecipes - 100 * currentPage);
       )}
       {recipes.length < totalRecipes && (
         <>
-        <p>TotalRecipes</p>{totalRecipes}
-        <p>Remaining Recipes:</p>{remainingRecipes}
-        
        
           <div className="flex justify-center gap-10">
             <LoadMoreButton
