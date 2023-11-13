@@ -1,8 +1,4 @@
-/**
- * The RecipeList component is a React component that displays a list of recipes, allows for filtering
- * and sorting, and includes pagination functionality.
- * @returns The RecipeList component is being returned.
- */
+/* eslint-disable */
 import { useEffect, useState, useContext } from "react";
 import useSWR, { mutate } from "swr";
 import Carousel from "react-multi-carousel";
@@ -17,7 +13,11 @@ import { responsive } from "@/helpers/settings/settings";
 
 import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "@/components/Context/ThemeContext";
-// const ITEMS_PER_PAGE = 100;
+
+import Skeleton from "@mui/material/Skeleton";
+
+import Badges from "../badges/badges";
+import { eslint } from "@/next.config";
 
 function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
@@ -25,99 +25,158 @@ function RecipeList({ favorites }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
-  const [filterResults, setFilterCategoryResults] = useState([]);
-  const [filterTagsResults, setFilterTagsResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [numberOfFilters, setNumberOfFilters] = useState(0);
-  const [filterIngredientResults, setFilterIngredientResults] = useState([]);
-  const { theme } = useTheme();
-  const isDarkTheme = theme === "dark";
-  const [filterInstructionsResults, setFilterInstructionsResults] = useState(
-    []
-  );
-
-  // const [loading, setLoading] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedInstructions, setSelectedInstructions] = useState(0);
+  const [selectedInstructions, setSelectedInstructions] = useState(null);
   const [sortOrder, setSortOrder] = useState(null);
-
   const [noRecipesFoundMessage, setNoRecipesFoundMessage] = useState(null);
-  // const [numberOfFilters, setNumberOfFilters] = useState(0);
   const favoriteContext = useContext(FavoritesContext);
+  const [filterCount, setFilterCount] = useState(0);
+  const { theme } = useTheme();
+  const isDarkTheme = theme === "dark";
 
   const {
     data: recipesData,
     error: recipesError,
-    loading: isLoading,
+    isLoading: isLoading,
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
   useEffect(() => {
     favoriteContext.updateFavorites(favorites);
-  if (!isLoading && recipesData) {
-    // Check if recipesData is defined before updating the state
-    setOriginalRecipes(recipesData.recipes);
-    setTotalRecipes(recipesData.totalRecipes);
-    // Use mutate to update the state as soon as you fetch the new data
-    mutate(`/api/recipes?page=${currentPage}`);
-  }
-}, [currentPage, recipesData, favorites]);
-  
-
-  // let combinedResults;
+    if (!isLoading && recipesData) {
+      // Check if recipesData is defined before updating the state
+      setRecipes(recipesData.recipes);
+      setTotalRecipes(recipesData.totalRecipes);
+      // Use mutate to update the state as soon as you fetch the new data
+      mutate(`/api/recipes?page=${currentPage}`);
+    }
+  }, [currentPage, recipesData, favorites]);
 
   const handleLoadLess = () => {
     setCurrentPage(currentPage - 1);
-
-    //  loadRecipes(currentPage - 1);
   };
+
   const handleLoadMore = () => {
     setCurrentPage(currentPage + 1);
-
-    // loadRecipes(currentPage + 1);
   };
 
-  if (isLoading) {
-    return <Loading />;
+  function countAppliedFilters(
+    selectedCategories,
+    selectedIngredients,
+    selectedTags,
+    selectedInstructions
+  ) {
+    let count = 0;
+
+    if (selectedCategories.length > 0) {
+      count++;
+    }
+
+    if (selectedIngredients.length > 0) {
+      count++;
+    }
+
+    if (selectedTags.length > 0) {
+      count++;
+    }
+
+    if (selectedInstructions > 0) {
+      count++;
+    }
+
+    return count;
   }
-  const handleSearch = async (searchQuery) => {
-    setNoRecipesFoundMessage("");
 
-    if (!searchQuery) {
-      handleDefaultSearch();
-    } else {
-      try {
-        const response = await fetch("/api/search", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ searchQuery }),
-        });
+  useEffect(() => {
+    const counts = countAppliedFilters(
+      selectedCategories,
+      selectedIngredients,
+      selectedTags,
+      selectedInstructions
+    );
+    setFilterCount(counts);
+  }, [
+    selectedTags,
+    selectedIngredients,
+    selectedCategories,
+    selectedInstructions,
+  ]);
 
-        if (response.ok) {
-          const searchResult = await response.json();
-          if (searchResult.recipes.length === 0) {
-            setTimeout(() => {
-              setNoRecipesFoundMessage(`No Recipes Found for ${searchQuery}`);
-            }, 900);
+  const fetchRecipesByFilters = async (filters) => {
+    try {
+      const response = await fetch(`/api/combined`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          filters,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+
+        if ("recipes" in result) {
+          setRecipes(result.recipes);
+
+          if (result.recipes.length === 0) {
+            setNoRecipesFoundMessage(
+              `No Recipes Found for ${
+                searchQuery.length > 0 ? searchQuery : "chosen filters"
+              }`
+            );
           } else {
-            setTimeout(() => {
-              setNoRecipesFoundMessage("No recipes found");
-            }, 1100);
+            setNoRecipesFoundMessage(null);
           }
-
-          setSearchResults(searchResult.recipes);
         } else {
-          console.error("Search request failed");
+          console.error("No recipes found in the response data.");
         }
-      } catch (error) {
-        console.error("Error searching recipes:", error);
+      } else {
+        console.error("Failed to fetch recipes by filters");
       }
+    } catch (error) {
+      console.error("Error fetching recipes by filters:", error);
     }
   };
+
+  useEffect(() => {
+    let typingTimeout;
+
+    if (
+      searchQuery.length <= 4 ||
+      selectedTags.length > 0 ||
+      selectedIngredients.length > 0 ||
+      selectedCategories.length > 0 ||
+      selectedInstructions
+    ) {
+      clearTimeout(typingTimeout);
+
+      typingTimeout = setTimeout(() => {
+        const filters = {
+          tags: selectedTags,
+          searchQuery,
+          ingredients: selectedIngredients,
+          categories: selectedCategories,
+          instructions: parseInt(selectedInstructions),
+        };
+        fetchRecipesByFilters(filters);
+      }, 500);
+    }
+
+    return () => {
+      clearTimeout(typingTimeout);
+    };
+  }, [
+    searchQuery,
+    selectedTags,
+    selectedIngredients,
+    selectedCategories,
+    selectedInstructions,
+  ]);
+
   const fetchAutocompleteSuggestions = async (searchQuery) => {
     try {
       if (searchQuery.length === 0) {
@@ -149,61 +208,23 @@ function RecipeList({ favorites }) {
     setSelectedCategories([]);
     setSelectedIngredients([]);
     setSelectedTags([]);
-    setSelectedInstructions(0);
+    setSelectedInstructions(null);
     setAutocompleteSuggestions([]);
-    setCurrentPage(1);
-    setNumberOfFilters("0");
+    setFilterCount(0);
   }
 
-  function handleDefaultCategoryFilter() {
-    setFilterCategoryResults([]);
-  }
-
-  function handleDefaultIngredientFilter() {
-    setFilterIngredientResults([]);
-  }
-
-  function handleDefaultTagsFilter() {
-    setFilterTagsResults([]);
-  }
-
-  useEffect(() => {
-    const fetchRecipesByInstructions = async (selectedInstructions) => {
-      if (
-        parseInt(selectedInstructions) == "" ||
-        parseInt(selectedInstructions) < 0
-      ) {
-        setFilterCategoryResults([]);
-      } else {
-        try {
-          const response = await fetch(`/api/filterbyinstructions`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              selectedInstructions: parseInt(selectedInstructions),
-            }),
-          });
-
-          if (response.ok) {
-            const filterInstructionsResults = await response.json();
-            setFilterInstructionsResults(filterInstructionsResults.recipes);
-          } else {
-            console.error("Failed to fetch recipes by instruction");
-          }
-        } catch (error) {
-          console.error("Error fetching recipes by instruction:", error);
-        }
-      }
-    };
-
-    if (selectedInstructions != "") {
-      fetchRecipesByInstructions(selectedInstructions);
-    } else {
-      setFilterInstructionsResults([]);
+  const handleSearchButton = () => {
+    if (searchQuery.length >= 4) {
+      const filters = {
+        searchQuery,
+        tags: selectedTags,
+        ingredients: selectedIngredients,
+        categories: selectedCategories,
+        instructions: parseInt(selectedInstructions),
+      };
+      fetchRecipesByFilters(filters);
     }
-  }, [selectedInstructions]);
+  };
 
   const handleSort = (sortOrder) => {
     setSortOrder(sortOrder);
@@ -245,140 +266,9 @@ function RecipeList({ favorites }) {
     }
   };
 
-  useEffect(() => {
-    const fetchRecipesByInstructions = async (selectedInstructions) => {
-      if (
-        parseInt(selectedInstructions) == "" ||
-        parseInt(selectedInstructions) < 0
-      ) {
-        setFilterCategoryResults([]);
-      } else {
-        try {
-          const response = await fetch(`/api/filterbyinstructions`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              selectedInstructions: parseInt(selectedInstructions),
-            }),
-          });
-
-          if (response.ok) {
-            const filterInstructionsResults = await response.json();
-            setFilterInstructionsResults(filterInstructionsResults.recipes);
-          } else {
-            console.error("Failed to fetch recipes by instruction");
-          }
-        } catch (error) {
-          console.error("Error fetching recipes by instruction:", error);
-        }
-      }
-    };
-
-    if (selectedInstructions != "") {
-      fetchRecipesByInstructions(selectedInstructions);
-    } else {
-      setFilterInstructionsResults([]);
-    }
-  }, [selectedInstructions]);
-
   function handleChange(event) {
     setSelectedInstructions(event.target.value);
   }
-
-  function handleNumberOfFilters() {
-    let num;
-    if (filterResults > 0) {
-      num = +1;
-    } else {
-      num = num;
-    }
-
-    if (filterIngredientResults > 0) {
-      num = +1;
-    } else {
-      num = num;
-    }
-
-    if (filterInstructionsResults) {
-      num = +1;
-    } else {
-      num = num;
-    }
-
-    if (filterTagsResults > 0) {
-      num = +1;
-    } else {
-      num = num;
-    }
-
-    setNumberOfFilters(parseInt(num));
-  }
-
-  useEffect(() => {
-    handleNumberOfFilters();
-  }, [
-    filterResults,
-    filterTagsResults,
-    filterIngredientResults,
-    filterInstructionsResults,
-  ]);
-
-  useEffect(() => {
-    let combinedResults = [];
-
-    if (searchQuery.length === 0) {
-      combinedResults = [...originalRecipes];
-    } else {
-      combinedResults = [...searchResults];
-    }
-
-    if (selectedCategories.length > 0) {
-      combinedResults = [...searchResults, ...filterResults];
-    }
-
-    if (selectedTags.length > 0) {
-      combinedResults = [
-        ...searchResults,
-        ...filterResults,
-        ...filterTagsResults,
-      ];
-    }
-
-    if (selectedIngredients.length > 0) {
-      combinedResults = [
-        ...searchResults,
-        ...filterResults,
-        ...filterTagsResults,
-        ...filterIngredientResults,
-      ];
-    }
-
-    if (selectedInstructions != 0 && selectedInstructions >= 0) {
-      combinedResults = [
-        ...searchResults,
-        ...filterResults,
-        ...filterTagsResults,
-        ...filterIngredientResults,
-        ...filterInstructionsResults,
-      ];
-    }
-
-    setRecipes(combinedResults);
-  }, [
-    searchQuery,
-    selectedCategories,
-    selectedTags,
-    selectedIngredients,
-    selectedInstructions,
-    searchResults,
-    filterResults,
-    filterTagsResults,
-    filterIngredientResults,
-    filterInstructionsResults,
-    originalRecipes,
-  ]);
 
   const remainingRecipes = totalRecipes - 100 * currentPage;
 
@@ -387,49 +277,28 @@ function RecipeList({ favorites }) {
       <Hero
         setSelectedCategories={setSelectedCategories}
         selectedCategories={selectedCategories}
-        setFilterCategoryResults={setFilterCategoryResults}
-        handleDefaultCategoryFilter={handleDefaultCategoryFilter}
         selectedIngredients={selectedIngredients}
-        setFilterIngredientResults={setFilterIngredientResults}
-        handleDefaultIngredientFilter={handleDefaultIngredientFilter}
         setSelectedIngredients={setSelectedIngredients}
-        setFilterTagsResults={setFilterTagsResults}
-        handleDefaultTagFilter={handleDefaultTagsFilter}
         selectedTags={selectedTags}
         setSelectedTags={setSelectedTags}
-        handleDefaultSearch={handleDefaultSearch}
-        setRecipes={setRecipes}
-        onSearch={handleSearch}
-        onAutocomplete={fetchAutocompleteSuggestions}
+        selectedInstructions={selectedInstructions}
+        setSelectedInstructions={setSelectedInstructions}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        handleDefaultSearch={handleDefaultSearch}
+        onSearch={handleSearchButton}
+        onAutocomplete={fetchAutocompleteSuggestions}
+        handleChange={handleChange}
         handleSort={handleSort}
       />
-      <button
-        onClick={handleDefault}
-        className={isDarkTheme ? "text-white" : ""}
-      >
-        All Recipes
-      </button>
 
-  
-      
-      <div style={{ textAlign: "center" }}>
-        <p className={isDarkTheme ? "text-white" : ""}>
-          Filter by number of instructions:
-        </p>
-        <input
-          type="number"
-          placeholder="Enter number of instructions.."
-          value={parseInt(selectedInstructions)}
-          onChange={handleChange}
-          className={`border border-gray-300 rounded-1-md px-4 py-2 ${
-            isDarkTheme ? "text-black" : ""
-          }`}
-        />
-      </div>
-      
-      {!favorites ? (
+      <Badges
+        numberOfRecipes={recipes.length}
+        handleDefault={handleDefault}
+        filterCount={filterCount}
+      />
+
+      {/* {!favorites ? (
         <p>
           <Loading />
         </p>
@@ -447,10 +316,7 @@ function RecipeList({ favorites }) {
             ))}
           </Carousel>
         </div>
-      )}
-      <div className={`total-count ${isDarkTheme ? "text-white" : ""}`}>
-        Total Recipes: {recipes.length}
-      </div>
+      )} */}
 
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
@@ -465,8 +331,9 @@ function RecipeList({ favorites }) {
         </ul>
       )}
 
-      {isLoading ? (
-        <Loading />
+      {noRecipesFoundMessage !=null ? (
+       
+        <p style={{fontWeight: 'bold', fontSize: '2em', textAlign: 'center'}}>{noRecipesFoundMessage}</p>
       ) : (
         <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {recipes.map((recipe, index) => (
@@ -482,8 +349,12 @@ function RecipeList({ favorites }) {
           ))}
         </div>
       )}
-      {recipes.length < totalRecipes && (
+      {!(filterCount != 0 || recipes.length == 0) && (
         <>
+          <p style={{ textAlign: "center" }}>
+            <span style={{ fontWeight: "bold" }}>{remainingRecipes} </span>
+            recipes remaining
+          </p>
           <div className="flex justify-center gap-10">
             <LoadMoreButton
               handleLoad={handleLoadLess}
@@ -501,8 +372,7 @@ function RecipeList({ favorites }) {
           <FloatingButton />
         </>
       )}
-      </div>
- 
+    </div>
   );
 }
 

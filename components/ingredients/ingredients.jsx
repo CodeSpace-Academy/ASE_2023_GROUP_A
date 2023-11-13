@@ -1,19 +1,13 @@
-import { useEffect, useState } from "react";
-import Select from "react-select";
+import { useEffect, useState } from 'react';
+import Select from 'react-select';
 
-function Ingredients({
-  setFilterIngredientResults,
-  handleDefaultIngredientFilter,
-  setRecipes,
-  selectedIngredients,
-  setSelectedIngredients,
-}) {
+function Ingredients({ selectedIngredients, setSelectedIngredients }) {
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
     async function fetchIngredients() {
       try {
-        const response = await fetch("/api/ingredients");
+        const response = await fetch('/api/ingredients');
 
         if (response.ok) {
           const data = await response.json();
@@ -25,50 +19,15 @@ function Ingredients({
             }))
           );
         } else {
-          console.error("Failed to fetch ingredients");
+          console.error('Failed to fetch ingredients');
         }
       } catch (error) {
-        console.error("Error fetching ingredients:", error);
+        console.error('Error fetching ingredients:', error);
       }
     }
 
     fetchIngredients();
   }, []);
-
-  useEffect(() => {
-    const fetchRecipesByIngredients = async () => {
-      if (selectedIngredients.length === 0) {
-        setFilterIngredientResults([]);
-      } else {
-        try {
-          const response = await fetch(`/api/filterbyingredient`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ selectedIngredients }),
-          });
-
-          if (response.ok) {
-            const filterIngredientsResult = await response.json();
-            // setRecipes(filterResult.recipes);
-            setFilterIngredientResults(filterIngredientsResult.recipes);
-            // setCount(filterResult.recipes.length);
-          } else {
-            console.error("Failed to fetch recipes by ingredients");
-          }
-        } catch (error) {
-          console.error("Error fetching recipes by ingredients:", error);
-        }
-      }
-    };
-
-    if (selectedIngredients.length > 0) {
-      fetchRecipesByIngredients(selectedIngredients);
-    } else {
-      handleDefaultIngredientFilter();
-    }
-  }, [selectedIngredients, setRecipes]);
 
   const handleIngredientChange = (selectedOptions) => {
     setSelectedIngredients(selectedOptions.map((option) => option.value));
@@ -77,31 +36,37 @@ function Ingredients({
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
-      color: "white",
+      background: 'red',
+      color: 'white',
+      
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "blue",
-      color: "white",
-      width: "fitContent",
+      backgroundColor: '#007bff',
+      color: 'white',
+      width: 'fitContent',
+      cursor: 'pointer',
+
+      "&:hover": { background: "lightBlue"}
     }),
 
     multiValueLabel: (base) => ({
       ...base,
-      color: "white",
-      fontWeight: "bold",
+      color: 'white',
+      fontWeight: 'bold',
     }),
 
     placeholder: (base) => ({
       ...base,
-      color: "white",
+      color: 'white',
+      
     }),
 
     menu: (base) => ({
       ...base,
-      width: "12em",
+      width: '12em',
+     
     }),
   };
 
@@ -116,7 +81,7 @@ function Ingredients({
         onChange={handleIngredientChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="select ingredient"
+        placeholder="Select ingredient"
       />
     </div>
   );

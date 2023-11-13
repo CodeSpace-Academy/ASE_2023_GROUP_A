@@ -5,7 +5,7 @@ import {
   Published,
   TotalTime,
 } from "../TimeAndDate/TimeConvertor";
-import RecipeDetailTags from "../Tags/RecipeDetailTags";
+import RecipeDetailTags from "../tags/RecipeDetailTags";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
 import DropDownSVG from "../IconsAndSvg's/DropDownSVG";
@@ -13,8 +13,8 @@ import CoverImage from "../Images/CoverImage";
 import IngredientsList from "../ingredients/IngredientsList";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
 import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
-import Link from "next/link"; // Import Link
-import { FaArrowLeft } from "react-icons/fa"; // Import FaArrowLeft
+import Link from "next/link";
+import { FaArrowLeft } from "react-icons/fa";
 import Loading from "../Loading/Loading";
 import { useTheme } from "../Context/ThemeContext";
 

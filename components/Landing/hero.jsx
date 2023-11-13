@@ -1,22 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
+import { FaFilter, FaTimes } from "react-icons/fa";
 import classes from "./hero.module.css";
 import SearchBar from "../searchBar/searchBar";
 import Categories from "../categories/categories";
-import Tags from "../Tags/Tags";
+import Tags from "../tags/Tags";
 import Ingredients from "../ingredients/ingredients";
 import DropdownMenu from "../sort/sort";
-import { useTheme } from "../Context/ThemeContext";
+import InstructionF from "../instructions/instructions";
 
 export default function Hero({
-  setFilterCategoryResults,
-  setFilterTagsResults,
-  setFilterIngredientResults,
-  handleDefaultCategoryFilter,
-  handleDefaultIngredientFilter,
-  handleDefaultTagFilter,
   handleDefaultSearch,
-  ff,
-  setRecipes,
   onSearch,
   onAutocomplete,
   setSearchQuery,
@@ -28,15 +21,20 @@ export default function Hero({
   selectedIngredients,
   setSelectedIngredients,
   selectedInstructions,
-  setI,
+  handleChange,
   handleSort,
   sortOrder,
 }) {
-  const { theme } = useTheme();
+  const [filtersVisible, setFiltersVisible] = useState(true);
+
+  const toggleFilters = () => {
+    setFiltersVisible(!filtersVisible);
+  };
+
   return (
     <div className={classes.heroImage}>
-      <div className={`${classes.heroContent} ${ theme==="light"? " bg-blue-400":" bg-gray-500"}`}>
-        <div className={classes.search}  >
+      <div className={classes.heroContent}>
+        <div className={classes.search}>
           <SearchBar
             handleDefault={handleDefaultSearch}
             onSearch={onSearch}
@@ -46,31 +44,25 @@ export default function Hero({
           />
         </div>
         <div className={classes.filters}>
-          <Categories
-            setFilterCategoryResults={setFilterCategoryResults}
-            setRecipes={setRecipes}
-            handleDefaultCategoryFilter={handleDefaultCategoryFilter}
-            selectedCategories={selectedCategories}
-            setSelectedCategories={setSelectedCategories}
-          />
-
-          <Tags
-            setFilterTagsResults={setFilterTagsResults}
-            setRecipes={setRecipes}
-            handleDefaultTagFilter={handleDefaultTagFilter}
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
-          />
-
-          <Ingredients
-            setFilterIngredientResults={setFilterIngredientResults}
-            setRecipes={setRecipes}
-            handleDefaultIngredientFilter={handleDefaultIngredientFilter}
-            selectedIngredients={selectedIngredients}
-            setSelectedIngredients={setSelectedIngredients}
-          />
-
-          <DropdownMenu handleSort={handleSort} sortOrder={sortOrder} />
+          <>
+            <Categories
+              selectedCategories={selectedCategories}
+              setSelectedCategories={setSelectedCategories}
+            />
+            <Tags
+              selectedTags={selectedTags}
+              setSelectedTags={setSelectedTags}
+            />
+            <Ingredients
+              selectedIngredients={selectedIngredients}
+              setSelectedIngredients={setSelectedIngredients}
+            />
+            <InstructionF
+              selectedInstructions={selectedInstructions}
+              handleChange={handleChange}
+            />
+            <DropdownMenu handleSort={handleSort} sortOrder={sortOrder} />
+          </>
         </div>
       </div>
     </div>

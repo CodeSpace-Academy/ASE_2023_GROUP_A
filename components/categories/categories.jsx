@@ -1,19 +1,13 @@
-import { useEffect, useState } from "react";
-import Select from "react-select";
+import { useState, useEffect } from 'react';
+import Select from 'react-select';
 
-function Categories({
-  setFilterCategoryResults,
-  handleDefaultCategoryFilter,
-  setRecipes,
-  selectedCategories,
-  setSelectedCategories,
-}) {
+function Categories({ selectedCategories, setSelectedCategories }) {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await fetch("/api/categories");
+        const response = await fetch('/api/categories');
 
         if (response.ok) {
           const data = await response.json();
@@ -24,50 +18,15 @@ function Categories({
             }))
           );
         } else {
-          console.error("Failed to fetch categories");
+          console.error('Failed to fetch categories');
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error('Error fetching categories:', error);
       }
     }
 
     fetchCategories();
   }, []);
-
-  useEffect(() => {
-    const fetchRecipesByCategories = async () => {
-      if (selectedCategories.length === 0) {
-        setFilterCategoryResults([]);
-      } else {
-        try {
-          const response = await fetch(`/api/filterbycategory`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ selectedCategories }),
-          });
-
-          if (response.ok) {
-            const filterResult = await response.json();
-            // setRecipes(filterResult.recipes);
-            setFilterCategoryResults(filterResult.recipes);
-            // setCount(filterResult.recipes.length);
-          } else {
-            console.error("Failed to fetch recipes by category");
-          }
-        } catch (error) {
-          console.error("Error fetching recipes by category:", error);
-        }
-      }
-    };
-
-    if (selectedCategories.length > 0) {
-      fetchRecipesByCategories(selectedCategories);
-    } else {
-      handleDefaultCategoryFilter();
-    }
-  }, [selectedCategories, setRecipes]);
 
   const handleCategoryChange = (selectedOptions) => {
     setSelectedCategories(selectedOptions.map((option) => option.value));
@@ -76,31 +35,34 @@ function Categories({
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
-      color: "white",
+      background: 'red',
+      color: 'white',
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "blue",
-      color: "white",
-      width: "fitContent",
+      backgroundColor: '#007bff',
+      color: 'black',
+      width: 'fitContent',
+      cursor: 'pointer',
+
+      "&:hover": { background: "lightBlue" }
     }),
 
     multiValueLabel: (base) => ({
       ...base,
-      color: "white",
-      fontWeight: "bold",
+      color: 'white',
+      fontWeight: 'bold',
     }),
 
     placeholder: (base) => ({
       ...base,
-      color: "white",
+      color: 'white',
     }),
 
     menu: (base) => ({
       ...base,
-      width: "12em",
+      width: '12em',
     }),
   };
 
@@ -115,7 +77,7 @@ function Categories({
         onChange={handleCategoryChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="select category"
+        placeholder="Select category"
       />
     </div>
   );

@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import classes from "./searchBar.module.css";
 
 const SearchBar = ({
   onSearch,
   onAutocomplete,
-  handleDefault,
   searchQuery,
   setSearchQuery,
 }) => {
@@ -48,7 +47,6 @@ const SearchBar = ({
       setShowSearchButton(false);
 
       const newTimeout = setTimeout(() => {
-        onSearch(text);
         onAutocomplete(text);
       }, 500);
 
@@ -68,14 +66,12 @@ const SearchBar = ({
     setSearchQuery(historyItem);
 
     setShowSearchButton(false);
-
-    onSearch(historyItem);
   };
-
+  console.log(searchQuery);
   const clearSearch = () => {
     setSearchQuery("");
     setShowSearchButton(false);
-    handleDefault();
+    setAutocompleteResults([]);
   };
 
   return (

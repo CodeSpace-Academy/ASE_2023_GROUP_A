@@ -1,19 +1,13 @@
-import { useEffect, useState } from "react";
-import Select from "react-select";
+import  { useEffect, useState } from 'react';
+import Select from 'react-select';
 
-function Tags({
-  setFilterTagsResults,
-  handleDefaultTagFilter,
-  setRecipes,
-  setSelectedTags,
-  selectedTags,
-}) {
+function Tags({ setSelectedTags, selectedTags }) {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
     async function fetchTags() {
       try {
-        const response = await fetch("/api/tags");
+        const response = await fetch('/api/tags');
 
         if (response.ok) {
           const data = await response.json();
@@ -21,52 +15,18 @@ function Tags({
           if (data) {
             setTags(data.map((tag) => ({ label: tag, value: tag })));
           } else {
-            console.error("Response data is missing tags.");
+            console.error('Response data is missing tags.');
           }
         } else {
-          console.error("Failed to fetch tags");
+          console.error('Failed to fetch tags');
         }
       } catch (error) {
-        console.error("Error fetching tags:", error);
+        console.error('Error fetching tags:', error);
       }
     }
 
     fetchTags();
   }, []);
-
-  useEffect(() => {
-    const fetchRecipesByTags = async () => {
-      if (selectedTags.length === 0) {
-        setFilterTagsResults([]);
-      } else {
-        try {
-          const response = await fetch(`/api/filterbytags`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ selectedTags }),
-          });
-
-          if (response.ok) {
-            const filterTagsResult = await response.json();
-            setFilterTagsResults(filterTagsResult.recipes);
-            
-          } else {
-            console.error("Failed to fetch tags by category");
-          }
-        } catch (error) {
-          console.error("Error fetching recipes by tags:", error);
-        }
-      }
-    };
-
-    if (selectedTags.length > 0) {
-      fetchRecipesByTags(selectedTags);
-    } else {
-      handleDefaultTagFilter();
-    }
-  }, [selectedTags, setRecipes]);
 
   const handleTagChange = (selectedOptions) => {
     setSelectedTags(selectedOptions.map((option) => option.value));
@@ -75,31 +35,34 @@ function Tags({
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
-      color: "white",
+      background: 'red',
+      color: 'white',
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "blue",
-      color: "white",
-      width: "fitContent",
+      backgroundColor: '#007bff',
+      color: 'white',
+      width: 'fitContent',
+      cursor: 'pointer',
+
+      "&:hover": { background: "lightBlue" }
     }),
 
     multiValueLabel: (base) => ({
       ...base,
-      color: "white",
-      fontWeight: "bold",
+      color: 'white',
+      fontWeight: 'bold',
     }),
 
     placeholder: (base) => ({
       ...base,
-      color: "white",
+      color: 'white',
     }),
 
     menu: (base) => ({
       ...base,
-      width: "12em",
+      width: '12em',
     }),
   };
 
