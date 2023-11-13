@@ -14,7 +14,7 @@ import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
 import Loading from "../Loading/Loading";
 import FloatingButton from "../Buttons/floatingButton/FloatingButton";
 import "react-multi-carousel/lib/styles.css";
-import { responsive } from "../../helpers/settings/settings.js";
+import { responsive } from "../../helpers/settings/settings";
 
 import FavoritesContext from "../Context/Favorites-context";
 
