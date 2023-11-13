@@ -17,7 +17,6 @@ function Allergens({ recipeIngredients, allergens }) {
       )
   );
 
-
   const hasAllergens = allergensList.length > 0;
 
   if (!hasAllergens) {
