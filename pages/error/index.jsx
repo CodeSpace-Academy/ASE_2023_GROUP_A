@@ -1,0 +1,15 @@
+/* eslint-disable linebreak-style */
+
+import React from "react";
+
+export default function EnvError() {
+  return (
+    <div className="flex-grow min-h-screen">
+      <div className="bg-fuchsia-200 justify-items-center flex-grow">
+        <h1 className="text-red-800 p-10 font-bold text-3xl align-middle justify-items-center bg-inherit">
+          Something went wrong! Please try again
+        </h1>
+      </div>
+    </div>
+  );
+}
