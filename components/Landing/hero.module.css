@@ -20,21 +20,46 @@
 
   @media (min-width: 800px) {
     display: flex;
-    
     gap: 50px;
   }
 }
 
-
-.search{
-
+.search {
   margin: auto;
 }
 
-.filters{
-
+.filters {
   display: flex;
   gap: 20px;
   justify-content: center;
-  
+}
+
+/* Add mobile responsiveness */
+@media (max-width: 320px) {
+  .heroContent {
+    margin: auto;
+    padding: 5%;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroContent {
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-bottom: 5%;
+    padding-top: 5%;
+  }
+}
+
+@media (max-width: 767px) {
+  .search {
+    margin: auto;
+    margin-top: 30%;
+  }
+}
+
+@media (max-width: 767px) {
+  .filters {
+    flex-direction: column;
+  }
 }

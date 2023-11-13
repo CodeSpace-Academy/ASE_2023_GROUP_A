@@ -35,8 +35,12 @@ export default function Hero({
   const { theme } = useTheme();
   return (
     <div className={classes.heroImage}>
-      <div className={`${classes.heroContent} ${ theme==="light"? " bg-blue-400":" bg-gray-500"}`}>
-        <div className={classes.search}  >
+      <div
+        className={`${classes.heroContent} ${
+          theme === "light" ? " bg-blue-400" : " bg-gray-500"
+        }`}
+      >
+        <div className={classes.search}>
           <SearchBar
             handleDefault={handleDefaultSearch}
             onSearch={onSearch}
@@ -53,7 +57,6 @@ export default function Hero({
             selectedCategories={selectedCategories}
             setSelectedCategories={setSelectedCategories}
           />
-
           <Tags
             setFilterTagsResults={setFilterTagsResults}
             setRecipes={setRecipes}
@@ -69,7 +72,6 @@ export default function Hero({
             selectedIngredients={selectedIngredients}
             setSelectedIngredients={setSelectedIngredients}
           />
-
           <DropdownMenu handleSort={handleSort} sortOrder={sortOrder} />
         </div>
       </div>
