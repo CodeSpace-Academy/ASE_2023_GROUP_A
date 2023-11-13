@@ -349,7 +349,7 @@ function RecipeList({ favorites }) {
           ))}
         </div>
       )}
-      {!(filterCount != 0 || recipes.length == 0) && (
+      {!(filterCount == 0 || recipes.length == 0) && (
         <>
           <p style={{ textAlign: "center" }}>
             <span style={{ fontWeight: "bold" }}>{remainingRecipes} </span>
