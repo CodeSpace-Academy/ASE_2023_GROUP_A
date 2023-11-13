@@ -69,7 +69,7 @@ function RecipeInstructions({ instruction }) {
           </ol>
           <div>
             <button
-              className='bg-red-300 px-2 mx-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+              className='bg-red-400 px-2 mx-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
               onClick={handleSave}
             >
               Save
