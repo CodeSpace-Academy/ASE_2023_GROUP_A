@@ -10,6 +10,6 @@ module.exports = {
   },
   reactStrictMode: true,
   eslint: {
-    dirs: ["/pages/FavoritesPage", "/components/Context/Favorites-context"],
+    dirs: ["/pages/FavoritesPage.jsx", "/components/Context/Favorites-context.js", "/components/Buttons/LoadMore/LoadMore.jsx"],
   },
 };

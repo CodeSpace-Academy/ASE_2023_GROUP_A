@@ -14,7 +14,9 @@ import Loading from "../Loading/Loading";
 import FloatingButton from "../Buttons/floatingButton/FloatingButton";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
-
+// import Pagination from "../Buttons/LoadMore/pagination/Pagination";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "@/components/Context/ThemeContext";
 // const ITEMS_PER_PAGE = 100;
@@ -65,19 +67,31 @@ function RecipeList({ favorites }) {
   }
 }, [currentPage, recipesData, favorites]);
   
-
+const remainingRecipes = Math.max(0, totalRecipes - 100 * currentPage);
   // let combinedResults;
 
   const handleLoadLess = () => {
-    setCurrentPage(currentPage - 1);
-
-    //  loadRecipes(currentPage - 1);
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    } else {
+      setCurrentPage(1);
+    }
   };
+
   const handleLoadMore = () => {
-    setCurrentPage(currentPage + 1);
-
-    // loadRecipes(currentPage + 1);
+    if(remainingRecipes<=100){
+    
+    }else{
+    setCurrentPage(currentPage + 1); 
+    }
   };
+
+  const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
+
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
+  };
+  
 
   if (isLoading) {
     return <Loading />;
@@ -380,7 +394,8 @@ function RecipeList({ favorites }) {
     originalRecipes,
   ]);
 
-  const remainingRecipes = totalRecipes - 100 * currentPage;
+
+
 
   return (
     <div>
@@ -484,6 +499,10 @@ function RecipeList({ favorites }) {
       )}
       {recipes.length < totalRecipes && (
         <>
+        <p>TotalRecipes</p>{totalRecipes}
+        <p>Remaining Recipes:</p>{remainingRecipes}
+        
+       
           <div className="flex justify-center gap-10">
             <LoadMoreButton
               handleLoad={handleLoadLess}
@@ -491,6 +510,15 @@ function RecipeList({ favorites }) {
               totalRecipes={totalRecipes}
               isLoadMore={false}
             />
+            <Stack spacing={2} justifyContent="center" alignItems="center">
+                {/* Material-UI Pagination Component */}
+                <Pagination
+                  count={pageNumbers}
+                  page={currentPage}
+                  onChange={handlePageChange}
+                  color="primary"
+                />
+            </Stack>
             <LoadMoreButton
               handleLoad={handleLoadMore}
               remainingRecipes={remainingRecipes}
