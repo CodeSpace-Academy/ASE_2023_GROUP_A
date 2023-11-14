@@ -94,13 +94,15 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
             )}
           </h2>
           <div>
-            <PrepTime prepTime={recipe.prep} />
-          </div>
-          <div className='mb-1'>
-            <CookTime cookTime={recipe.cook} />
-          </div>
+            <div>
+              <PrepTime prepTime={recipe.prep} />
+            </div>
+            <div className='mb-1'>
+              <CookTime cookTime={recipe.cook} />
+            </div>
 
-          <TotalTime totalTime={recipe} />
+            <TotalTime totalTime={recipe} />
+          </div>
         </div>
         <div>
           {recipeIsFavorite ? (
