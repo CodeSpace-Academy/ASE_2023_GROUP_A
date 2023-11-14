@@ -81,7 +81,7 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
         <div
           className={`mb-4 text-center ${theme === "dark" ? "text-white" : ""}`}
         >
-          <h2 className='bg-white text-sm sm:text-md font-semibold font-alkatra'>
+          <h2 className='text-sm sm:text-md font-semibold font-alkatra'>
             {searchQuery ? (
               <Highlighter
                 highlightClassName='YourHighlightClass'
