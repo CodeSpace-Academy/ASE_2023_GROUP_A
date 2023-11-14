@@ -29,8 +29,10 @@ export default function Time({ cookTimeInMinutes, label, prepTimeInMinutes }) {
       : formatTime(cookTimeInMinutes);
 
   return (
-    <h5>
-      <b>{label}:</b> {formattedTime}
-    </h5>
+    <p>
+      <aside className='flex flex-col'>
+        {label} : {formattedTime}
+      </aside>
+    </p>
   );
 }
