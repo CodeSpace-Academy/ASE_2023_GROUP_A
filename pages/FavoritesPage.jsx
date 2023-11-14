@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/jsx-no-duplicate-props */
-import { useContext } from 'react';
+import React, { useContext } from "react";
 import Link from "next/link";
-import FavoritesContext from '../components/Context/Favorites-context';
-import RecipeCard from '../components/Cards/RecipeCard';
+import FavoritesContext from "../components/Context/Favorites-context";
+import RecipeCard from "../components/Cards/RecipeCard";
 import Loading from "../components/Loading/Loading";
 
 function FavoritesPage() {
@@ -11,9 +11,7 @@ function FavoritesPage() {
   const favoriteRecipes = favoriteCtx.favorites || [];
 
   if (!favoriteRecipes) {
-    return (
-      <Loading />
-    );
+    return <Loading />;
   }
 
   return (
@@ -31,7 +29,8 @@ function FavoritesPage() {
                 Key={recipe.recipe._id}
                 key={recipe.recipe._id}
                 recipe={recipe.recipe}
-                favorites={favoriteRecipes} />
+                favorites={favoriteRecipes}
+              />
             ))}
           </div>
         )}

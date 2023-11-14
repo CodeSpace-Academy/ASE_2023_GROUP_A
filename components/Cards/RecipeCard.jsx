@@ -1,17 +1,27 @@
-/* eslint-enable */
-import React from "react";
-import Image from 'next/legacy/image'
-import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
-//Fav Button
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import Image from "next/legacy/image";
 import Highlighter from "react-highlight-words";
-import { useContext } from "react";
-import FavoritesContext from "@/components/Context/Favorites-context";
-import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRecipe";
+import React, { useContext } from "react";
 import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
+import FavoritesContext from "../Context/Favorites-context";
+import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRecipe";
+import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 import { useTheme } from "../Context/ThemeContext";
+
 import Loading from "../Loading/Loading";
-const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
+
+// eslint-disable-next-line react/function-component-definition
+const RecipeCard = ({
+  // eslint-disable-next-line react/prop-types
+  recipe,
+  // eslint-disable-next-line react/prop-types
+  searchQuery,
+  // eslint-disable-next-line react/prop-types
+  favorites,
+  // eslint-disable-next-line react/prop-types
+  Key,
+}) => {
   const { theme } = useTheme();
 
   if (!recipe) {
@@ -22,13 +32,14 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
     );
   }
 
-  const firstImage =
-    recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
-
+  // eslint-disable-next-line no-underscore-dangle, react/prop-types
+  const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const favoriteCtx = useContext(FavoritesContext);
-
+  // eslint-disable-next-line no-underscore-dangle, react/prop-types
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
 
+  // eslint-disable-next-line no-shadow
   const removeFavoriteHandler = (recipe) => async () => {
     try {
       const response = await fetch(`api/recipes/Favourites`, {
@@ -36,17 +47,21 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
         headers: {
           "Content-Type": "application/json",
         },
+        // eslint-disable-next-line no-underscore-dangle, react/prop-types
         body: JSON.stringify({ recipeId: recipe._id }),
       });
 
       if (response.ok) {
+        // eslint-disable-next-line no-underscore-dangle, react/prop-types
         favoriteCtx.removeFavorite(recipe._id);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Error removing favorite:", error);
     }
   };
 
+  // eslint-disable-next-line consistent-return, no-shadow
   const addFavoritesHandler = async (recipe) => {
     try {
       const response = await fetch(`api/recipes/Favourites`, {
@@ -58,6 +73,7 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
       });
       favoriteCtx.addFavorite(recipe);
       return response;
+      // eslint-disable-next-line no-empty
     } catch (error) {}
   };
 
@@ -65,44 +81,53 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
     <div
       key={Key}
       className={`${
-        theme === "light" ? "text-black bg-blue-300" : "text-white bg-gray-700"
-      } p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
+        theme === "light" ? "text-black bg-blue-400" : "text-white"
+      } p-4 rounded  shadow mt-20 mb-5 md:h-100 flex flex-col transform transition-transform hover:scale-105`}
     >
-      <div className="md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
+      <div className="w-full h-60 md:h-92 mb-4 relative aspect-w-16 aspect-h-9">
         <Image
           src={firstImage}
+          // eslint-disable-next-line react/prop-types
           alt={recipe.title}
-          width={300}
-          height={130}
-          className="relative w-44 h-24"
+          layout="fill"
+          objectFit="cover"
+          className="rounded-lg"
         />
       </div>
-      <div className="flex flex-col justify-between h-full">
-      <div className={`mb-4 text-center ${theme === "dark" ? "text-white" : ""}`}>
+      <div className="flex flex-col justify-between h-22 pb-5">
+        <div
+          className={`mb-4 text-center ${
+            theme === "dark" ? "text-white" : ""
+          } `}
+        >
           <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2 font-alkatra">
             {searchQuery ? (
               <Highlighter
                 highlightClassName="YourHighlightClass"
                 searchWords={[searchQuery]}
-                autoEscape={true}
+                autoEscape
+                // eslint-disable-next-line react/prop-types
                 textToHighlight={recipe.title}
               />
             ) : (
+              // eslint-disable-next-line react/prop-types
               recipe.title
             )}
           </h2>
-          <div className="mb-2">
+          <div className="mb-1">
+            {/* eslint-disable-next-line react/prop-types */}
             <PrepTime prepTime={recipe.prep} />
           </div>
-          <div className="mb-2">
+          <div className="mb-">
+            {/* eslint-disable-next-line react/prop-types */}
             <CookTime cookTime={recipe.cook} />
           </div>
           <TotalTime totalTime={recipe} />
         </div>
         <div>
           {recipeIsFavorite ? (
-            <button onClick={removeFavoriteHandler(recipe)}>
-              <span>
+            <button type="button" onClick={removeFavoriteHandler(recipe)}>
+              <span aria-label="Remove from favorites">
                 <StarFilled
                   className={`w-6 h-6 ${
                     theme === "light" ? "text-blue-900" : "text-custom-blue-10"
@@ -111,8 +136,8 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
               </span>
             </button>
           ) : (
-            <button onClick={() => addFavoritesHandler(recipe)}>
-              <span>
+            <button type="button" onClick={() => addFavoritesHandler(recipe)}>
+              <span aria-label="Add to favorites">
                 <StarEmpty
                   className={`w-6 h-6 ${
                     theme === "dark" ? "text-white" : "text-custom-blue-10"

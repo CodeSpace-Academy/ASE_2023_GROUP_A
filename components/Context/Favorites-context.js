@@ -11,12 +11,12 @@ import { useState, createContext } from "react";
 const FavoritesContext = createContext({
   userFavorites: [],
   totalFavorites: 0,
-  addFavorite: (recipeId) => {},
-  removeFavorite: (recipeId) => {},
-  recipeIsFavorite: (recipeId) => {},
-  updateFavorites: (recipe) => {},
-  addChangeListener: (listener) => {},
-  removeChangeListener: (listener) => {},
+  addFavorite: (recipeId) => { },
+  removeFavorite: (recipeId) => { },
+  recipeIsFavorite: (recipeId) => { },
+  updateFavorites: (recipe) => { },
+  addChangeListener: (listener) => { },
+  removeChangeListener: (listener) => { },
 });
 
 export function FavoritesContextProvider(props) {
@@ -54,8 +54,7 @@ export function FavoritesContextProvider(props) {
 
   const removeChangeListener = (listener) => {
     setChangeListeners((prevListeners) =>
-      prevListeners.filter((l) => l !== listener),
-    );
+      prevListeners.filter((l) => l !== listener));
   };
 
   const context = {
