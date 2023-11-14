@@ -298,7 +298,7 @@ function RecipeList({ favorites }) {
         filterCount={filterCount}
       />
 
-      {/* {!favorites ? (
+      {!favorites ? (
         <p>
           <Loading />
         </p>
@@ -316,7 +316,7 @@ function RecipeList({ favorites }) {
             ))}
           </Carousel>
         </div>
-      )} */}
+      )}
 
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
@@ -349,7 +349,7 @@ function RecipeList({ favorites }) {
           ))}
         </div>
       )}
-      {!(filterCount == 0 || recipes.length == 0) && (
+      {!(!filterCount == 0 || recipes.length == 0) && (
         <>
           <p style={{ textAlign: "center" }}>
             <span style={{ fontWeight: "bold" }}>{remainingRecipes} </span>
