@@ -15,7 +15,6 @@ import "react-multi-carousel/lib/styles.css";
 import FloatingButton from "../Buttons/floatingButton/FloatingButton";
 import Hero from "../Landing/hero";
 import Loading from "../Loading/Loading";
-import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
 import RecipeCard from "../Cards/RecipeCard";
 
 // import Pagination from "../Buttons/LoadMore/pagination/Pagination";
