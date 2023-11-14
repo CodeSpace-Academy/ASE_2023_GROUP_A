@@ -1,5 +1,5 @@
 /**
- * The RecipeList component is a React component that displays a list of recipes, allows for filtering
+ * The RecipeList component is a React component that displays list of recipes, allows for filtering
  * and sorting, and includes pagination functionality.
  * @returns The RecipeList component is being returned.
  */
