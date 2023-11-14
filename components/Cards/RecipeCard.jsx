@@ -66,23 +66,25 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
       key={Key}
       className={`${
         theme === "light" ? "text-black bg-blue-300" : "text-white bg-gray-700"
-      } p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
+      } p-4 rounded shadow mt-8 mb-4 md:h-100 flex flex-col transform transition-transform hover:scale-105`}
     >
-      <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
+      <div className='w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9'>
         <Image
           src={firstImage}
           alt={recipe.title}
-          layout="fill"
-          objectFit="cover"
-          className="rounded-lg"
+          layout='fill'
+          objectFit='cover'
+          className='rounded-lg'
         />
       </div>
-      <div className="flex flex-col justify-between h-full">
-      <div className={`mb-4 text-center ${theme === "dark" ? "text-white" : ""}`}>
-          <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2 font-alkatra">
+      <div className='flex flex-col justify-between h-full'>
+        <div
+          className={`mb-4 text-center ${theme === "dark" ? "text-white" : ""}`}
+        >
+          <h2 className='bg-white text-sm sm:text-md font-semibold font-alkatra'>
             {searchQuery ? (
               <Highlighter
-                highlightClassName="YourHighlightClass"
+                highlightClassName='YourHighlightClass'
                 searchWords={[searchQuery]}
                 autoEscape={true}
                 textToHighlight={recipe.title}
@@ -91,10 +93,10 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
               recipe.title
             )}
           </h2>
-          <div className="mb-2">
+          <div>
             <PrepTime prepTime={recipe.prep} />
           </div>
-          <div className="mb-2">
+          <div className='mb-1'>
             <CookTime cookTime={recipe.cook} />
           </div>
           <TotalTime totalTime={recipe} />
