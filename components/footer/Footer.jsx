@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useTheme } from "@/components/Context/ThemeContext";
-import classes from './Footer.module.css'
+import classes from "./Footer.module.css";
 
 export default function Footer() {
   const pageName = "< Cooking Devs />";
@@ -11,14 +11,10 @@ export default function Footer() {
   return (
     <footer
       className={`py-6 ${
-        theme === "light" ? "bg-blue-500" : "bg-gray-900"
+        theme === "light" ? "bg-zinc-400" : "bg-gray-900"
       } bottom-0 left-0 right-0 z-10 sm:block `}
     >
-      <div
-        className={`${classes.footer} ${
-          isDarkTheme ? "text-white" : ""
-        }`}
-      >
+      <div className={`${classes.footer} ${isDarkTheme ? "text-white" : ""}`}>
         <Link
           target="_blank"
           href="https://www.privacypolicies.com/live/f3493839-9aed-4582-8b43-74340eb8295f"
@@ -59,9 +55,7 @@ export default function Footer() {
         </Link>
       </div>
       <small
-        className={`${classes.copyright}  ${
-          isDarkTheme ? "text-white" : ""
-        }`}
+        className={`${classes.copyright}  ${isDarkTheme ? "text-white" : ""}`}
       >
         Copyright © {currentYear} {pageName} Pty Ltd | All rights reserved
       </small>

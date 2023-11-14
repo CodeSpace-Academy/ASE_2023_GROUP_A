@@ -34,7 +34,7 @@ export default function Hero({
 }) {
   const { theme } = useTheme();
   return (
-    <div className={`sm:portrait:h-screen ${classes.heroImage}`}>
+    <div className={`sm:portrait:h-screen max-w-full ${classes.heroImage}`}>
       <div className={`sm:mt-20 sm:block sm: ${classes.heroContent}`}>
         <div className={classes.search}>
           <SearchBar
