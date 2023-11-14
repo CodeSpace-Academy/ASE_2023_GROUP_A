@@ -1,6 +1,8 @@
+/*eslint-disable*/
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import Image from 'next/legacy/image'
+
 import { useTheme } from "@/components/Context/ThemeContext";
 
 // Faves
@@ -78,10 +80,10 @@ const Navigation = () => {
               <Image
                 src="/Images/logo3.png"
                 alt="Cooking Devs"
-                height={50}
-                width={70}
-              />
-            </Link>
+                height={80}
+                width={80}
+              />  
+              </Link>
           </div>
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
