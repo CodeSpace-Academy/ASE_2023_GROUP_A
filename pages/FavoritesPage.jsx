@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/jsx-no-duplicate-props */
 import React, { useContext } from "react";
@@ -9,17 +10,16 @@ import Loading from "../components/Loading/Loading";
 function FavoritesPage({ theme }) {
   const favoriteCtx = useContext(FavoritesContext);
   const favoriteRecipes = favoriteCtx.favorites || [];
-  const noFavoritesImg =
-    theme === "dark"
-      ? "/Images/no-favorites-dark.png"
-      : "Images/no-favorites-light.png";
+  const noFavoritesImg = theme === "dark"
+    ? "/Images/no-favorites-dark.png"
+    : "Images/no-favorites-light.png";
 
   if (!favoriteRecipes) {
     return <Loading />;
   }
 
   return (
-    <section  className="mt-0 flex-grow h-screen pt-10">
+    <section className="mt-0 flex-grow h-screen pt-10">
       <strong>
         <h1 className="py-10 px-5 mx-20 my-10">My Favorites</h1>
       </strong>
@@ -28,7 +28,7 @@ function FavoritesPage({ theme }) {
           <div>
             <img src={noFavoritesImg} alt="No Likes" className="justify-center" />
             <p>
-              Sorry, you don't have any favorites yet. Tap the star icon to
+              Sorry, you don&apos;t have any favorites yet. Tap the star icon to
               favorite a recipe
             </p>
           </div>
