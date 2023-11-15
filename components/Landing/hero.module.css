@@ -3,11 +3,21 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  width: 100%;
-  height: 50vh;
+  width: 100vw;
+  /* height: 50vh; */
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (min-width: 800px) {
+    height: 60vh;
+  }
+
+  @media (max-width: 799px) {
+    height: 100vh;
+    background-position: left center;
+    background-size: cover;
+  }
 }
 
 .heroContent {
@@ -17,24 +27,28 @@
   gap: 20px;
   padding: 2em;
   border: 2px solid grey;
+  background-color: rgba(0, 140, 255, 0.456);
 
   @media (min-width: 800px) {
     display: flex;
-    
+
     gap: 50px;
+  }
+
+  @media (max-width:799px) {
+    align-items: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 }
 
-
-.search{
-
+.search {
   margin: auto;
+  color: white;
 }
 
-.filters{
-
+.filters {
   display: flex;
   gap: 20px;
   justify-content: center;
-  
 }
