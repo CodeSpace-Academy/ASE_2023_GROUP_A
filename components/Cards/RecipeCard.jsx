@@ -1,6 +1,8 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import Image from "next/legacy/image";
-import Highlighter from "react-highlight-words";
+
 import React, { useContext } from "react";
 import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
@@ -8,7 +10,7 @@ import FavoritesContext from "../Context/Favorites-context";
 import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRecipe";
 import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 import { useTheme } from "../Context/ThemeContext";
-
+import Title from "./Title";
 import Loading from "../Loading/Loading";
 
 // eslint-disable-next-line react/function-component-definition
@@ -100,20 +102,13 @@ const RecipeCard = ({
             theme === "dark" ? "text-white" : ""
           } `}
         >
-          <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2 font-alkatra">
-            {searchQuery ? (
-              <Highlighter
-                highlightClassName="YourHighlightClass"
-                searchWords={[searchQuery]}
-                autoEscape
-                // eslint-disable-next-line react/prop-types
-                textToHighlight={recipe.title}
-              />
-            ) : (
-              // eslint-disable-next-line react/prop-types
-              recipe.title
-            )}
-          </h2>
+
+          <Title
+            key={`${recipe._id}${recipe.title}`}
+            title={recipe.title}
+            searchQuery={[searchQuery]}
+          />
+
           <div className="mb-1">
             {/* eslint-disable-next-line react/prop-types */}
             <PrepTime prepTime={recipe.prep} />

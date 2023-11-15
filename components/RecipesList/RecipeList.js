@@ -485,14 +485,14 @@ if(recipesError){
       )}
       {recipes.length < totalRecipes && (
         <>
-          <div className="flex justify-center gap-10">
+          <div className="flex justify-center pb-8 gap-10">
             <Stack spacing={2} justifyContent="center" alignItems="center">
-                <Pagination
-                  count={pageNumbers}
-                  page={currentPage}
-                  onChange={handlePageChange}
-                  color="primary"
-                />
+              <Pagination
+                count={pageNumbers}
+                page={currentPage}
+                onChange={handlePageChange}
+                color="primary"
+              />
             </Stack>
           </div>
           <FloatingButton />

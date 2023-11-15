@@ -1,6 +1,18 @@
-import { getAllRecipes, getTotalRecipesCount } from "@/helpers/mongoDB-utils";
+/* eslint-disable consistent-return */
+/* eslint-disable import/extensions */
+/* eslint-disable radix */
 
-const ITEMS_PER_PAGE = 100; //Recipies to be rendered on each page
+/*
+The code you provided is a JavaScript
+module that exports a handler function.
+This handler function
+is used to handle a GET request and fetch a
+list of recipes from a MongoDB database. */
+import { getAllRecipes, getTotalRecipesCount } from "../../../helpers/mongoDB-utils";
+
+/* Recipies to be rendered on each page */
+const ITEMS_PER_PAGE = 100;
+
 const handler = async (req, res) => {
   const page = req.query.page ? parseInt(req.query.page) : 1;
   if (req.method !== "GET") {
