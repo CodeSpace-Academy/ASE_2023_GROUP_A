@@ -1,18 +1,17 @@
 /* Title.module.css */
 
 .textSmall {
-    font-size: 0%; /* Adjust the percentage as needed */
-  }
+  font-size: 100%; /* Adjust the percentage as needed */
+}
   
-  .textMedium {
-    font-size: 50%;
-  }
-  
-  .textLarge {
-    font-size: 60%;
-  }
-  
-  .textExtraLarge {
-    font-size: 120%;
-  }
-  
+.textMedium {
+  font-size: 50%;
+}
+
+.textLarge {
+  font-size: 60%;
+}
+
+.textExtraLarge {
+  font-size: 120%;
+} 

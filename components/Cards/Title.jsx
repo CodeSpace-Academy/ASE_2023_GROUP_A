@@ -1,12 +1,18 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import Highlighter from "react-highlight-words";
-
+import styles from "./Title.module.css"
 function Title({ title, searchQuery }) {
- const titleClass =
-   title.length > 10
-      ? "text-sm sm:text- md:text-sm lg:text-md" // Use smaller font for longer titles
-      : "text-md sm:text-lg md:text-xl lg:text-2xl"; // Use larger font for shorter titles
+  const wordCount = title.split(/\s+/).length;
+
+  // Calculate font size based on the number of words in the title
+  const calculateFontSize = (wordCount) => {
+    if (wordCount > 3) {
+      return styles.textSmall; // Use smaller font for longer titles
+    }
+  };
+
+  const titleClass = calculateFontSize(wordCount);
 
   return (
     <h2 className={`${titleClass} font-semibold mb-2 font-alkatra`}>
@@ -17,7 +23,9 @@ function Title({ title, searchQuery }) {
           textToHighlight={title}
           autoEscape
         />
-      ) : ({ title })}
+      ) : (
+        title
+      )}
     </h2>
   );
 }
