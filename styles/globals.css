@@ -11,6 +11,24 @@
   background-color: rgba(5, 91, 229, 0.5);
 }
 
+.dropdown-menu .dropdown-item {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.dropdown.is-open .dropdown-menu {
+  display: block;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  /* background-color: rgba(6, 83, 206, 0.5); */
+  min-height: 100vh;
+}
+
 /* Header 1 styles */
 h1 {
   font-size: 25px;
