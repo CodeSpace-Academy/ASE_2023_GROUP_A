@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
-//Fav Button
+
 import Highlighter from "react-highlight-words";
 import { useContext } from "react";
 import FavoritesContext from "@/components/Context/Favorites-context";
@@ -66,9 +66,9 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
       key={Key}
       className={`${
         theme === "light" ? "text-black bg-blue-300" : "text-white bg-gray-700"
-      } p-4 rounded shadow mt-8 mb-4 md:h-100 flex flex-col transform transition-transform hover:scale-105`}
+      }  rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
     >
-      <div className='w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9'>
+      <div className='w-full h-80 md:h-92 mb-4 relative aspect-w-16 aspect-h-9'>
         <Image
           src={firstImage}
           alt={recipe.title}

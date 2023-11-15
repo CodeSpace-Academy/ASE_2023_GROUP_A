@@ -56,15 +56,14 @@ function RecipeList({ favorites }) {
 
   useEffect(() => {
     favoriteContext.updateFavorites(favorites);
-  if (!isLoading && recipesData) {
-    // Check if recipesData is defined before updating the state
-    setOriginalRecipes(recipesData.recipes);
-    setTotalRecipes(recipesData.totalRecipes);
-    // Use mutate to update the state as soon as you fetch the new data
-    mutate(`/api/recipes?page=${currentPage}`);
-  }
-}, [currentPage, recipesData, favorites]);
-  
+    if (!isLoading && recipesData) {
+      // Check if recipesData is defined before updating the state
+      setOriginalRecipes(recipesData.recipes);
+      setTotalRecipes(recipesData.totalRecipes);
+      // Use mutate to update the state as soon as you fetch the new data
+      mutate(`/api/recipes?page=${currentPage}`);
+    }
+  }, [currentPage, recipesData, favorites]);
 
   // let combinedResults;
 
@@ -412,15 +411,13 @@ function RecipeList({ favorites }) {
         All Recipes
       </button>
 
-  
-      
       <div style={{ textAlign: "center" }}>
         <p className={isDarkTheme ? "text-white" : ""}>
           Filter by number of instructions:
         </p>
         <input
-          type="number"
-          placeholder="Enter number of instructions.."
+          type='number'
+          placeholder='Enter number of instructions..'
           value={parseInt(selectedInstructions)}
           onChange={handleChange}
           className={`border border-gray-300 rounded-1-md px-4 py-2 ${
@@ -428,7 +425,7 @@ function RecipeList({ favorites }) {
           }`}
         />
       </div>
-      
+
       {!favorites ? (
         <p>
           <Loading />
@@ -439,7 +436,7 @@ function RecipeList({ favorites }) {
         </p>
       ) : (
         <div className={`h-3/5`}>
-          <Carousel responsive={responsive} containerClass="carousel-container">
+          <Carousel responsive={responsive} containerClass='carousel-container'>
             {favorites.map((recipe) => (
               <div key={recipe.recipe._id}>
                 <RecipeCard recipe={recipe.recipe} favorites={favorites} />
@@ -453,7 +450,7 @@ function RecipeList({ favorites }) {
       </div>
 
       {autocompleteSuggestions.length > 0 && (
-        <ul className="autocomplete-list">
+        <ul className='autocomplete-list'>
           {autocompleteSuggestions.map((suggestion, index) => (
             <li
               key={index}
@@ -468,7 +465,7 @@ function RecipeList({ favorites }) {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className='container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
           {recipes.map((recipe, index) => (
             <div key={index}>
               <RecipeCard
@@ -484,7 +481,7 @@ function RecipeList({ favorites }) {
       )}
       {recipes.length < totalRecipes && (
         <>
-          <div className="flex justify-center gap-10">
+          <div className='flex justify-center gap-10'>
             <LoadMoreButton
               handleLoad={handleLoadLess}
               remainingRecipes={remainingRecipes}
@@ -501,8 +498,7 @@ function RecipeList({ favorites }) {
           <FloatingButton />
         </>
       )}
-      </div>
- 
+    </div>
   );
 }
 
