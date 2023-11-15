@@ -2,8 +2,8 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 import React, { useContext } from 'react';
 import Link from "next/link";
-import FavoritesContext from '../components/Context/Favorites-context';
-import RecipeCard from '../components/Cards/RecipeCard';
+import FavoritesContext from "../components/Context/Favorites-context";
+import RecipeCard from "../components/Cards/RecipeCard";
 import Loading from "../components/Loading/Loading";
 
 function FavoritesPage() {

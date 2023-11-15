@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-
 module.exports = {
   env: {
     mongodb_password: process.env.mongodb_password,
@@ -10,6 +9,7 @@ module.exports = {
   },
   reactStrictMode: true,
   eslint: {
-    dirs: ["/pages/FavoritesPage.jsx", "/components/Context/Favorites-context.js", "/components/Buttons/LoadMore/LoadMore.jsx"],
+    dirs: ["/pages/FavoritesPage.jsx", "/components/Context/Favorites-context.js", "/components/Cards/RecipeCard.jsx", "/components/LayOuts/Header/Navigation.jsx"],
+
   },
 };
