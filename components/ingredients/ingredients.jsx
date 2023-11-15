@@ -77,13 +77,13 @@ function Ingredients({
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
+      background: "#3496c7",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "blue",
+      backgroundColor: "#007bff",
       color: "white",
       width: "fitContent",
     }),
@@ -116,7 +116,7 @@ function Ingredients({
         onChange={handleIngredientChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="select ingredient"
+        placeholder="Select Ingredient"
       />
     </div>
   );

@@ -76,13 +76,13 @@ function Categories({
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
+      background: "#3496c7",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "blue",
+      backgroundColor: "#007bff",
       color: "white",
       width: "fitContent",
     }),
@@ -115,7 +115,7 @@ function Categories({
         onChange={handleCategoryChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="select category"
+        placeholder="Select Category"
       />
     </div>
   );
