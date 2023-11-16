@@ -35,7 +35,8 @@ function Home() {
   if (
     // eslint-disable-next-line operator-linebreak
     process.env == {} ||
-    !process.env.mongodb_uri
+    !process.env.mongodb_password ||
+    !process.env.mongodb_username
   ) {
     return <EnvError />;
   }
