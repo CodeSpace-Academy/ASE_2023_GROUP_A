@@ -7,18 +7,20 @@ import DescriptionError from "../error-messages/DescriptionError";
 function Description({ description, recipeId }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   };
 
-  // const handleEditComplete = (editedDescription) => {
+  // const handleEditComplete = () => {
   //   setEditedDescription(editedDescription);
   //   toggleEditing(false);
   // };
 
   const handleDescriptionSave = async (newDescription) => {
     try {
+      setIsLoading(true);
       const response = await fetch(`/api/description/${recipeId}`, {
         method: "PUT",
         headers: {
@@ -34,14 +36,14 @@ function Description({ description, recipeId }) {
       }
     } catch (error) {
       console.error("Error updating description:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div>
-      <h3 className="bold text-gray-1000">
-        Description
-      </h3>
+      <h3 className="bold text-gray-1000">Description</h3>
       {!description ? (
         <DescriptionError />
       ) : (
@@ -54,7 +56,11 @@ function Description({ description, recipeId }) {
               toggleEditing={toggleEditing}
             />
           ) : (
-            <button type="button" className="flex items-center" onClick={toggleEditing}>
+            <button
+              type="button"
+              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={toggleEditing}
+            >
               <p className="mr-2">Edit Description</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

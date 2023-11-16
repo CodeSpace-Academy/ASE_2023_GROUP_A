@@ -6,6 +6,7 @@ function DescriptionEdit({
   initialDescription, 
   onSave, 
   toggleEditing, 
+  isLoading,
 }) {
   const [newDescription, setNewDescription] = useState(initialDescription);
   const newTextRef = useRef();
@@ -27,9 +28,10 @@ function DescriptionEdit({
         onChange={handleDescriptionChange}
         rows={5}
         cols={50}
+        disabled={isLoading}
       />
-      <button type="button" className="bg-orange-300 rounded-sm-3" onClick={handleSave}>
-        <p className="text-black">Save</p>
+      <button type="button" className="bg-orange-300 rounded-sm-3" onClick={handleSave} disabled={isLoading}>
+        <p className="text-black">{isLoading ? "Saving..." : "Save"}</p>
       </button>
     </div>
   );
