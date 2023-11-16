@@ -1,30 +1,20 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import Image from "next/legacy/image";
-
 import React, { useContext } from "react";
+import Image from "next/legacy/image";
 import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
+import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 import FavoritesContext from "../Context/Favorites-context";
 import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRecipe";
-import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 import { useTheme } from "../Context/ThemeContext";
-import Title from "./Title";
 import Loading from "../Loading/Loading";
+import Title from "./Title";
 
-// eslint-disable-next-line react/function-component-definition
-const RecipeCard = ({
-  // eslint-disable-next-line react/prop-types
-  recipe,
-  // eslint-disable-next-line react/prop-types
-  searchQuery,
-  // eslint-disable-next-line react/prop-types
-  favorites,
-  // eslint-disable-next-line react/prop-types
-  Key,
-}) => {
+function RecipeCard({
+  recipe, searchQuery, favorites, Key,
+}) {
   const { theme } = useTheme();
 
   if (!recipe) {
@@ -40,23 +30,19 @@ const RecipeCard = ({
     recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const favoriteCtx = useContext(FavoritesContext);
-  // eslint-disable-next-line no-underscore-dangle, react/prop-types
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
 
-  // eslint-disable-next-line no-shadow
-  const removeFavoriteHandler = (recipe) => async () => {
+  const removeFavoriteHandler = async () => {
     try {
       const response = await fetch(`api/recipes/Favourites`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        // eslint-disable-next-line no-underscore-dangle, react/prop-types
         body: JSON.stringify({ recipeId: recipe._id }),
       });
 
       if (response.ok) {
-        // eslint-disable-next-line no-underscore-dangle, react/prop-types
         favoriteCtx.removeFavorite(recipe._id);
       }
     } catch (error) {
@@ -65,8 +51,8 @@ const RecipeCard = ({
     }
   };
 
-  // eslint-disable-next-line consistent-return, no-shadow
-  const addFavoritesHandler = async (recipe) => {
+  // eslint-disable-next-line consistent-return
+  const addFavoritesHandler = async () => {
     try {
       const response = await fetch(`api/recipes/Favourites`, {
         method: "POST",
@@ -77,28 +63,29 @@ const RecipeCard = ({
       });
       favoriteCtx.addFavorite(recipe);
       return response;
-      // eslint-disable-next-line no-empty
-    } catch (error) {}
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error adding favorite:", error);
+    }
   };
 
   return (
     <div
       key={Key}
       className={`${
-        theme === "light" ? "text-black bg-blue-400" : "text-white bg-gray-900"
-      } p-4 rounded  shadow mt-20 mb-5 md:h-100 flex flex-col transform transition-transform hover:scale-105`}
+        theme === "light" ? "text-black bg-blue-300" : "text-white bg-gray-700"
+      } rounded shadow mt-8 mb-4 flex flex-col transform transition-transform hover:scale-105`}
     >
-      <div className="w-full h-60 md:h-92 mb-4 relative aspect-w-16 aspect-h-9">
+      <div className="w-full h-56 md:h-92 mb-4 relative aspect-h-9">
         <Image
           src={firstImage}
-          // eslint-disable-next-line react/prop-types
           alt={recipe.title}
           layout="fill"
           objectFit="cover"
-          className="rounded-lg"
         />
       </div>
-      <div className="flex flex-col justify-between h-22 pb-5">
+      <div className="flex flex-col justify-between h-22 pb-2">
+
         <div
           className={`mb-4 text-center ${
             theme === "dark" ? "text-white" : ""
@@ -109,20 +96,17 @@ const RecipeCard = ({
             title={recipe.title}
             searchQuery={[searchQuery]}
           />
-
           <div className="mb-1">
-            {/* eslint-disable-next-line react/prop-types */}
             <PrepTime prepTime={recipe.prep} />
           </div>
           <div className="mb-">
-            {/* eslint-disable-next-line react/prop-types */}
             <CookTime cookTime={recipe.cook} />
           </div>
           <TotalTime totalTime={recipe} />
         </div>
         <div>
           {recipeIsFavorite ? (
-            <button type="button" onClick={removeFavoriteHandler(recipe)}>
+            <button type="button" onClick={removeFavoriteHandler}>
               <span aria-label="Remove from favorites">
                 <StarFilled
                   className={`w-6 h-6 ${
@@ -132,8 +116,8 @@ const RecipeCard = ({
               </span>
             </button>
           ) : (
-            <button type="button" onClick={() => addFavoritesHandler(recipe)}>
-              <span aria-label="Add to favorites">
+            <button onClick={addFavoritesHandler}>
+              <span>
                 <StarEmpty
                   className={`w-6 h-6 ${
                     theme === "dark" ? "text-white" : "text-custom-blue-10"
@@ -147,6 +131,6 @@ const RecipeCard = ({
       </div>
     </div>
   );
-};
+}
 
 export default RecipeCard;

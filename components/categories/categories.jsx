@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
+import { useTheme } from "../Context/ThemeContext";
 
 function Categories({
   setFilterCategoryResults,
@@ -9,6 +10,7 @@ function Categories({
   setSelectedCategories,
 }) {
   const [categories, setCategories] = useState([]);
+  const { theme } = useTheme();
 
   useEffect(() => {
     async function fetchCategories() {
@@ -82,7 +84,7 @@ function Categories({
 
     control: (base) => ({
       ...base,
-      backgroundColor: "#007bff",
+      backgroundColor: theme === "dark" ? "gray" : "bg-blue-500",
       color: "white",
       width: "fitContent",
     }),
