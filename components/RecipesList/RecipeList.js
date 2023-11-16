@@ -11,29 +11,22 @@ const RecipeList = () => {
   const [totalRecipes, setTotalRecipes] = useState(0); // Add totalRecipes state
 
   useEffect(() => {
-    
-    fetchRecipes({setRecipes, setOriginalRecipes, setTotalRecipes, setLoading})
-
+    fetchRecipes({ setRecipes, setTotalRecipes, setLoading });
   }, []);
 
   const handlePageChange = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
+
   return (
     <div>
       <h1 className="text-3xl font-bold font-mono mb-4">Recipes</h1>
       <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <>
-            {recipes.map((recipe, index) => (
-              <Link
-                href={`/${encodeURIComponent(recipe.title)}`}
-                key={index}
-              >
-                <RecipeCard key={recipe._id} recipe={recipe} description={recipe.description} />
-              </Link>
-            ))}
-          </>
-        )}
+        {recipes.map((recipe, index) => (
+          <Link href={`/${encodeURIComponent(recipe.title)}`} key={index}>
+            <RecipeCard key={recipe._id} recipe={recipe} description={recipe.description} />
+          </Link>
+        ))}
       </div>
 
       {recipes.length > 0 && (
@@ -46,6 +39,5 @@ const RecipeList = () => {
     </div>
   );
 };
-
 
 export default RecipeList;
