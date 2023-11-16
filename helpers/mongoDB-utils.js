@@ -225,7 +225,7 @@ export async function searchSuggestions(searchQuery) {
   return autocompleteResults;
 }
 
-export async function filtering(filters) {
+export async function filtering(filters, sortOrder) {
   const { searchQuery, tags, ingredients, categories, instructions } = filters;
 
   const db = client.db("devdb");
@@ -256,7 +256,35 @@ export async function filtering(filters) {
     query.instructions = { $size: instructions };
   }
 
-  const result = await collection.find(query).limit(100).toArray();
+  let sortCriteria = {};
+
+  if (sortOrder === "[A-Z]") {
+    sortCriteria = { title: 1 };
+  } else if (sortOrder === "[Z-A]") {
+    sortCriteria = { title: -1 };
+  } else if (sortOrder === "Oldest") {
+    sortCriteria = { published: 1 };
+  } else if (sortOrder === "Recent") {
+    sortCriteria = { published: -1 };
+  } else if (sortOrder === "cooktime(asc)") {
+    sortCriteria = { cook: 1 };
+  } else if (sortOrder === "cooktime(desc)") {
+    sortCriteria = { cook: -1 };
+  } else if (sortOrder === "steps(asc)") {
+    sortCriteria = { "instructions.length": 1 };
+  } else if (sortOrder === "preptime(asc)") {
+    sortCriteria = { prep: 1 };
+  } else if (sortOrder === "preptime(desc)") {
+    sortCriteria = { prep: -1 };
+  } else if (sortOrder === "steps(desc)") {
+    sortCriteria = { "instructions.length": -1 };
+  }
+
+  const result = await collection
+    .find(query)
+    .sort(sortCriteria)
+    .limit(100)
+    .toArray();
 
   return result;
 }

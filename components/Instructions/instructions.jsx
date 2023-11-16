@@ -10,5 +10,5 @@ export default function InstructionF({ handleChange, selectedInstructions }) {
         className="border border-gray-300 rounded-l-md px-4 py-2"
       />
     </div>
-  )
+  );
 }

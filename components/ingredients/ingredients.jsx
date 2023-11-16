@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import Select from 'react-select';
+import { useEffect, useState } from "react";
+import Select from "react-select";
 
 function Ingredients({ selectedIngredients, setSelectedIngredients }) {
   const [ingredients, setIngredients] = useState([]);
@@ -7,7 +7,7 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
   useEffect(() => {
     async function fetchIngredients() {
       try {
-        const response = await fetch('/api/ingredients');
+        const response = await fetch("/api/ingredients");
 
         if (response.ok) {
           const data = await response.json();
@@ -19,10 +19,10 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
             }))
           );
         } else {
-          console.error('Failed to fetch ingredients');
+          console.error("Failed to fetch ingredients");
         }
       } catch (error) {
-        console.error('Error fetching ingredients:', error);
+        console.error("Error fetching ingredients:", error);
       }
     }
 
@@ -36,37 +36,34 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: 'red',
-      color: 'white',
-      
+      background: "red",
+      color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: '#007bff',
-      color: 'white',
-      width: 'fitContent',
-      cursor: 'pointer',
+      backgroundColor: "#007bff",
+      color: "white",
+      width: "fitContent",
+      cursor: "pointer",
 
-      "&:hover": { background: "lightBlue"}
+      "&:hover": { background: "lightBlue" },
     }),
 
     multiValueLabel: (base) => ({
       ...base,
-      color: 'white',
-      fontWeight: 'bold',
+      color: "white",
+      fontWeight: "bold",
     }),
 
     placeholder: (base) => ({
       ...base,
-      color: 'white',
-      
+      color: "white",
     }),
 
     menu: (base) => ({
       ...base,
-      width: '12em',
-     
+      width: "12em",
     }),
   };
 
@@ -76,7 +73,7 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
         isMulti
         options={ingredients}
         value={ingredients.filter((ingredient) =>
-          selectedIngredients.includes(ingredient.value)
+          selectedIngredients?.includes(ingredient.value)
         )}
         onChange={handleIngredientChange}
         styles={customStyles}

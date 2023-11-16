@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import Select from 'react-select';
+import { useState, useEffect } from "react";
+import Select from "react-select";
 
 function Categories({ selectedCategories, setSelectedCategories }) {
   const [categories, setCategories] = useState([]);
@@ -7,7 +7,7 @@ function Categories({ selectedCategories, setSelectedCategories }) {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await fetch('/api/categories');
+        const response = await fetch("/api/categories");
 
         if (response.ok) {
           const data = await response.json();
@@ -18,10 +18,10 @@ function Categories({ selectedCategories, setSelectedCategories }) {
             }))
           );
         } else {
-          console.error('Failed to fetch categories');
+          console.error("Failed to fetch categories");
         }
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error("Error fetching categories:", error);
       }
     }
 
@@ -35,34 +35,34 @@ function Categories({ selectedCategories, setSelectedCategories }) {
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: 'red',
-      color: 'white',
+      background: "red",
+      color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: '#007bff',
-      color: 'black',
-      width: 'fitContent',
-      cursor: 'pointer',
+      backgroundColor: "#007bff",
+      color: "black",
+      width: "fitContent",
+      cursor: "pointer",
 
-      "&:hover": { background: "lightBlue" }
+      "&:hover": { background: "lightBlue" },
     }),
 
     multiValueLabel: (base) => ({
       ...base,
-      color: 'white',
-      fontWeight: 'bold',
+      color: "white",
+      fontWeight: "bold",
     }),
 
     placeholder: (base) => ({
       ...base,
-      color: 'white',
+      color: "white",
     }),
 
     menu: (base) => ({
       ...base,
-      width: '12em',
+      width: "12em",
     }),
   };
 
@@ -72,12 +72,12 @@ function Categories({ selectedCategories, setSelectedCategories }) {
         isMulti
         options={categories}
         value={categories.filter((category) =>
-          selectedCategories.includes(category.value)
+          selectedCategories?.includes(category.value)
         )}
         onChange={handleCategoryChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="Select category"
+        placeholder="Select tag"
       />
     </div>
   );

@@ -4,7 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 
-const DropdownMenu = ({ handleSort, sortOrder }) => {
+const DropdownMenu = ({ sortOrder, setSortOrder }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -16,7 +16,7 @@ const DropdownMenu = ({ handleSort, sortOrder }) => {
   };
 
   const handleSortOption = (sortOrder) => {
-    handleSort(sortOrder);
+    setSortOrder(sortOrder);
     handleClose();
   };
 
@@ -63,12 +63,12 @@ const DropdownMenu = ({ handleSort, sortOrder }) => {
       >
         <MenuItem onClick={() => handleSortOption("[A-Z]")}>
           {" "}
-          Name (asc){" "}
+          Title (asc){" "}
         </MenuItem>
 
         <MenuItem onClick={() => handleSortOption("[Z-A]")}>
           {" "}
-          Name (desc)
+          Title (desc)
         </MenuItem>
 
         <MenuItem onClick={() => handleSortOption("Recent")}> Recent </MenuItem>

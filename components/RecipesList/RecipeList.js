@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useEffect, useState, useContext } from "react";
 import useSWR, { mutate } from "swr";
 import Carousel from "react-multi-carousel";
@@ -10,18 +9,13 @@ import Loading from "../Loading/Loading";
 import FloatingButton from "../Buttons/floatingButton/FloatingButton";
 import "react-multi-carousel/lib/styles.css";
 import { responsive } from "@/helpers/settings/settings";
-
 import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "@/components/Context/ThemeContext";
-
-import Skeleton from "@mui/material/Skeleton";
-
 import Badges from "../badges/badges";
-import { eslint } from "@/next.config";
+import { useRouter } from "next/router";
 
 function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
-  const [originalRecipes, setOriginalRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
@@ -32,10 +26,11 @@ function RecipeList({ favorites }) {
   const [selectedInstructions, setSelectedInstructions] = useState(null);
   const [sortOrder, setSortOrder] = useState(null);
   const [noRecipesFoundMessage, setNoRecipesFoundMessage] = useState(null);
-  const favoriteContext = useContext(FavoritesContext);
   const [filterCount, setFilterCount] = useState(0);
+  const favoriteContext = useContext(FavoritesContext);
   const { theme } = useTheme();
   const isDarkTheme = theme === "dark";
+  const router = useRouter();
 
   const {
     data: recipesData,
@@ -46,21 +41,11 @@ function RecipeList({ favorites }) {
   useEffect(() => {
     favoriteContext.updateFavorites(favorites);
     if (!isLoading && recipesData) {
-      // Check if recipesData is defined before updating the state
       setRecipes(recipesData.recipes);
       setTotalRecipes(recipesData.totalRecipes);
-      // Use mutate to update the state as soon as you fetch the new data
       mutate(`/api/recipes?page=${currentPage}`);
     }
-  }, [currentPage, recipesData, favorites]);
-
-  const handleLoadLess = () => {
-    setCurrentPage(currentPage - 1);
-  };
-
-  const handleLoadMore = () => {
-    setCurrentPage(currentPage + 1);
-  };
+  }, [currentPage, favorites, isLoading, recipesData]);
 
   function countAppliedFilters(
     selectedCategories,
@@ -104,7 +89,7 @@ function RecipeList({ favorites }) {
     selectedInstructions,
   ]);
 
-  const fetchRecipesByFilters = async (filters) => {
+  const fetchRecipesByFilters = async (filters, sortOrder) => {
     try {
       const response = await fetch(`/api/combined`, {
         method: "POST",
@@ -113,6 +98,7 @@ function RecipeList({ favorites }) {
         },
         body: JSON.stringify({
           filters,
+          sortOrder,
         }),
       });
 
@@ -137,10 +123,33 @@ function RecipeList({ favorites }) {
       } else {
         console.error("Failed to fetch recipes by filters");
       }
+
+      const queryParams = new URLSearchParams(filters);
+      router.push(`/?${queryParams.toString()}`);
     } catch (error) {
       console.error("Error fetching recipes by filters:", error);
     }
   };
+
+  useEffect(() => {
+    const {
+      page,
+      tags,
+      ingredients,
+      categories,
+      instructions,
+      searchQuery,
+      sortOrder,
+    } = router.query;
+
+    setCurrentPage(page || 1);
+    setSelectedTags(tags ? tags.split(",") : []);
+    setSelectedIngredients(ingredients ? ingredients.split(",") : []);
+    setSelectedCategories(categories ? categories.split(",") : []);
+    setSelectedInstructions(instructions ? parseInt(instructions) : null);
+    setSearchQuery(searchQuery || "");
+    setSortOrder(sortOrder || null);
+  }, []);
 
   useEffect(() => {
     let typingTimeout;
@@ -162,7 +171,8 @@ function RecipeList({ favorites }) {
           categories: selectedCategories,
           instructions: parseInt(selectedInstructions),
         };
-        fetchRecipesByFilters(filters);
+
+        fetchRecipesByFilters(filters, sortOrder);
       }, 500);
     }
 
@@ -175,7 +185,16 @@ function RecipeList({ favorites }) {
     selectedIngredients,
     selectedCategories,
     selectedInstructions,
+    sortOrder,
   ]);
+
+  const handleLoadLess = () => {
+    setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : 1));
+  };
+
+  const handleLoadMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
 
   const fetchAutocompleteSuggestions = async (searchQuery) => {
     try {
@@ -211,6 +230,8 @@ function RecipeList({ favorites }) {
     setSelectedInstructions(null);
     setAutocompleteSuggestions([]);
     setFilterCount(0);
+    setCurrentPage((prevPage) => prevPage);
+    router.push("/");
   }
 
   const handleSearchButton = () => {
@@ -223,46 +244,6 @@ function RecipeList({ favorites }) {
         instructions: parseInt(selectedInstructions),
       };
       fetchRecipesByFilters(filters);
-    }
-  };
-
-  const handleSort = (sortOrder) => {
-    setSortOrder(sortOrder);
-
-    if (sortOrder === "[A-Z]") {
-      setRecipes([...recipes].sort((a, b) => a.title.localeCompare(b.title)));
-    } else if (sortOrder === "[Z-A]") {
-      setRecipes([...recipes].sort((a, b) => b.title.localeCompare(a.title)));
-    } else if (sortOrder === "Oldest") {
-      setRecipes(
-        [...recipes].sort((a, b) => a.published.localeCompare(b.published))
-      );
-    } else if (sortOrder === "Recent") {
-      setRecipes(
-        [...recipes].sort((a, b) => b.published.localeCompare(a.published))
-      );
-    } else if (sortOrder === "cooktime(asc)") {
-      setRecipes([...recipes].sort((a, b) => a.cook - b.cook));
-    } else if (sortOrder === "cooktime(desc)") {
-      setRecipes([...recipes].sort((a, b) => b.cook - a.cook));
-    } else if (sortOrder === "steps(asc)") {
-      setRecipes(
-        [...recipes].sort(
-          (a, b) => a.instructions.length - b.instructions.length
-        )
-      );
-    } else if (sortOrder == "preptime(asc)") {
-      setRecipes([...recipes].sort((a, b) => a.prep - b.prep));
-    } else if (sortOrder == "preptime(desc)") {
-      setRecipes([...recipes].sort((a, b) => b.prep - a.prep));
-    } else if (sortOrder === "steps(desc)") {
-      setRecipes(
-        [...recipes].sort(
-          (a, b) => b.instructions.length - a.instructions.length
-        )
-      );
-    } else {
-      setRecipes([...recipes]);
     }
   };
 
@@ -289,7 +270,7 @@ function RecipeList({ favorites }) {
         onSearch={handleSearchButton}
         onAutocomplete={fetchAutocompleteSuggestions}
         handleChange={handleChange}
-        handleSort={handleSort}
+        setSortOrder={setSortOrder}
       />
 
       <Badges
@@ -298,10 +279,8 @@ function RecipeList({ favorites }) {
         filterCount={filterCount}
       />
 
-      {!favorites ? (
-        <p>
-          <Loading />
-        </p>
+      {isLoading ? (
+        <Loading />
       ) : favorites.length === 0 ? (
         <p className={isDarkTheme ? "text-white" : ""}>
           No favorite recipes yet.
@@ -331,9 +310,16 @@ function RecipeList({ favorites }) {
         </ul>
       )}
 
-      {noRecipesFoundMessage !=null ? (
-       
-        <p style={{fontWeight: 'bold', fontSize: '2em', textAlign: 'center'}}>{noRecipesFoundMessage}</p>
+      {noRecipesFoundMessage !== null ? (
+        <p
+          style={{
+            fontWeight: "bold",
+            fontSize: "2em",
+            textAlign: "center",
+          }}
+        >
+          {noRecipesFoundMessage}
+        </p>
       ) : (
         <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {recipes.map((recipe, index) => (
@@ -349,7 +335,7 @@ function RecipeList({ favorites }) {
           ))}
         </div>
       )}
-      {!(!filterCount == 0 || recipes.length == 0) && (
+      {(filterCount === 0 || recipes.length === 0) && (
         <>
           <p style={{ textAlign: "center" }}>
             <span style={{ fontWeight: "bold" }}>{remainingRecipes} </span>

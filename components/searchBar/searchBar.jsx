@@ -67,7 +67,6 @@ const SearchBar = ({
 
     setShowSearchButton(false);
   };
-  console.log(searchQuery);
   const clearSearch = () => {
     setSearchQuery("");
     setShowSearchButton(false);
@@ -81,7 +80,7 @@ const SearchBar = ({
           <input
             type="text"
             placeholder="Search for recipes..."
-            value={searchQuery}
+            value={searchQuery || ""}
             onClick={() => setShowSearchButton(true)}
             onChange={handleChange}
             className={classes.searchInput}

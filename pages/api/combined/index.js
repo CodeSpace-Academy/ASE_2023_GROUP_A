@@ -5,10 +5,10 @@ export default async (req, res) => {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { filters } = req.body;
+  const { filters, sortOrder } = req.body;
 
   try {
-    const result = await filtering(filters);
+    const result = await filtering(filters, sortOrder);
 
     res.status(200).json({ recipes: result });
   } catch (error) {

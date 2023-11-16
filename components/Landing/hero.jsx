@@ -22,7 +22,7 @@ export default function Hero({
   setSelectedIngredients,
   selectedInstructions,
   handleChange,
-  handleSort,
+  setSortOrder,
   sortOrder,
 }) {
   const [filtersVisible, setFiltersVisible] = useState(true);
@@ -61,7 +61,7 @@ export default function Hero({
               selectedInstructions={selectedInstructions}
               handleChange={handleChange}
             />
-            <DropdownMenu handleSort={handleSort} sortOrder={sortOrder} />
+            <DropdownMenu sortOrder={sortOrder} setSortOrder={setSortOrder} />
           </>
         </div>
       </div>
