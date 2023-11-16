@@ -37,8 +37,8 @@ export default function Hero({
     <div className={`sm:portrait:h-screen max-w-full ${classes.heroImage}`}>
       <div
         className={`sm:mt-20 sm:block ${classes.heroContent} ${
-          theme === "light" ? " bg-blue-400" : " bg-gray-500"
-        }`}
+          theme === "light" ? " bg-blue-400" : " bg-gray-700"
+        } bg-opacity-70`}
       >
         <div className={classes.search}>
           <SearchBar
@@ -49,7 +49,9 @@ export default function Hero({
             searchQuery={searchQuery}
           />
         </div>
-        <div className={`flex flex-col md:flex-row sm:block ${classes.filters}`}>
+        <div
+          className={`flex flex-col md:flex-row sm:block ${classes.filters}`}
+        >
           <Categories
             setFilterCategoryResults={setFilterCategoryResults}
             setRecipes={setRecipes}
