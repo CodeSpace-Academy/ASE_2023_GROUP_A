@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/control-has-associated-label */
@@ -35,7 +36,8 @@ const RecipeCard = ({
   }
 
   // eslint-disable-next-line no-underscore-dangle, react/prop-types
-  const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
+  const firstImage =
+    recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const favoriteCtx = useContext(FavoritesContext);
   // eslint-disable-next-line no-underscore-dangle, react/prop-types
@@ -83,7 +85,7 @@ const RecipeCard = ({
     <div
       key={Key}
       className={`${
-        theme === "light" ? "text-black bg-blue-400" : "text-white"
+        theme === "light" ? "text-black bg-blue-400" : "text-white bg-gray-900"
       } p-4 rounded  shadow mt-20 mb-5 md:h-100 flex flex-col transform transition-transform hover:scale-105`}
     >
       <div className="w-full h-60 md:h-92 mb-4 relative aspect-w-16 aspect-h-9">
@@ -102,7 +104,6 @@ const RecipeCard = ({
             theme === "dark" ? "text-white" : ""
           } `}
         >
-
           <Title
             key={`${recipe._id}${recipe.title}`}
             title={recipe.title}
