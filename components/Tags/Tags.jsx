@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 
+import { useTheme } from "../Context/ThemeContext";
+
 function Tags({
   setFilterTagsResults,
   handleDefaultTagFilter,
@@ -9,6 +11,7 @@ function Tags({
   selectedTags,
 }) {
   const [tags, setTags] = useState([]);
+  const {theme} = useTheme()
 
   useEffect(() => {
     async function fetchTags() {
@@ -51,7 +54,6 @@ function Tags({
           if (response.ok) {
             const filterTagsResult = await response.json();
             setFilterTagsResults(filterTagsResult.recipes);
-            
           } else {
             console.error("Failed to fetch tags by category");
           }
@@ -75,13 +77,13 @@ function Tags({
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
+      background: "#3496c7",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "blue",
+      backgroundColor: theme === 'light' ? "#007bff" : "#0d203eee",
       color: "white",
       width: "fitContent",
     }),
@@ -112,7 +114,7 @@ function Tags({
         onChange={handleTagChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="Select tag"
+        placeholder="Select Tag"
       />
     </div>
   );

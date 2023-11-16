@@ -10,7 +10,6 @@ import Loading from "@/components/Loading/Loading";
 import FavoritesContext from "@/components/Context/Favorites-context";
 import useSWR, { mutate } from "swr";
 import RecipeList from "@/components/RecipesList/RecipeList";
-import { ClassNames } from "@emotion/react";
 
 function Home() {
   const favoriteContext = useContext(FavoritesContext);
