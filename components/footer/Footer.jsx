@@ -11,7 +11,7 @@ export default function Footer() {
   return (
     <footer
       className={`py-6 ${
-        theme === "light" ? "bg-zinc-400" : "bg-gray-900"
+        theme === "light" ? "bg-blue-400" : "bg-gray-900"
       } bottom-0 left-0 right-0 z-10 sm:block`}
     >
       <div
