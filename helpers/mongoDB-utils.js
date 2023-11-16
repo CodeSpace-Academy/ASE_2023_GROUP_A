@@ -128,7 +128,7 @@ export const fetchAllergens = async () => {
   try {
     const db = client.db("devdb");
     const allergensDocument = await db.collection("allergens").findOne({});
-    const allergens = allergensDocument.allergens;
+    const { allergens } = allergensDocument;
     return allergens;
   } catch (error) {
     console.error("Error fetching allergens:", error);
@@ -153,9 +153,8 @@ export const getTotalRecipesCount = async () => {
 
     if (countResult.length > 0) {
       return countResult[0].count;
-    } else {
-      return 0; // No documents found, return 0
     }
+    return 0; // No documents found, return 0
   } catch (error) {
     console.error("Error fetching total recipes count:", error);
     throw error;
@@ -173,7 +172,6 @@ export const addFavoriteToMongoDB = async (recipe) => {
     if (existingFavorite) {
       // Handle the case where the favorite already exists
 
-      return;
     } else {
       // If the favorite doesn't exist, insert it into the collection
       const result = await favoritesCollection.insertOne({
@@ -226,12 +224,14 @@ export async function searchSuggestions(searchQuery) {
 }
 
 export async function filtering(filters, sortOrder) {
-  const { searchQuery, tags, ingredients, categories, instructions } = filters;
+  const {
+    searchQuery, tags, ingredients, categories, instructions,
+  } = filters;
 
   const db = client.db("devdb");
   const collection = db.collection("recipes");
 
-  let query = {};
+  const query = {};
 
   if (searchQuery && searchQuery.length > 0) {
     query.$or = [{ title: { $regex: searchQuery, $options: "i" } }];

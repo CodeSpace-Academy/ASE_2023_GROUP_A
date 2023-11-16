@@ -10,7 +10,7 @@ const updateInstructionsInDB = async (id, instructions, request) => {
     if (request.method === "PATCH") {
       const result = await collection.updateOne(
         { _id: id },
-        { $set: { instructions: instructions } }
+        { $set: { instructions } },
       );
 
       if (result.matchedCount > 0) {

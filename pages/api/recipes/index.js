@@ -8,8 +8,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const page =
-      req.query.page && req.query.page > 0 ? parseInt(req.query.page) : 1;
+    const page = req.query.page && req.query.page > 0 ? parseInt(req.query.page) : 1;
     const skip = (page - 1) * ITEMS_PER_PAGE;
 
     const [recipesData, totalRecipes] = await Promise.all([

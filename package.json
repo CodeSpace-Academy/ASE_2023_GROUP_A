@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:css": "tailwindcss build path/to/your/styles.css -o path/to/your/output.css"
+    "build:css": "tailwindcss build path/to/your/styles.css -o path/to/your/output.css",
+    "lintfix": "eslint --fix ."
+    
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

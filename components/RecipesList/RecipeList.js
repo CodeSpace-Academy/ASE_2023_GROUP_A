@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import useSWR, { mutate } from "swr";
 import Carousel from "react-multi-carousel";
+import { useRouter } from "next/router";
 import fetchRecipes from "@/helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
@@ -12,7 +13,6 @@ import { responsive } from "@/helpers/settings/settings";
 import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "@/components/Context/ThemeContext";
 import Badges from "../badges/badges";
-import { useRouter } from "next/router";
 
 function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
@@ -35,7 +35,7 @@ function RecipeList({ favorites }) {
   const {
     data: recipesData,
     error: recipesError,
-    isLoading: isLoading,
+    isLoading,
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
   useEffect(() => {
@@ -138,8 +138,8 @@ function RecipeList({ favorites }) {
       ingredients,
       categories,
       instructions,
-      searchQuery,
-      sortOrder,
+      searchQueryy,
+      sortOrders,
     } = router.query;
 
     setCurrentPage(page || 1);
@@ -147,8 +147,8 @@ function RecipeList({ favorites }) {
     setSelectedIngredients(ingredients ? ingredients.split(",") : []);
     setSelectedCategories(categories ? categories.split(",") : []);
     setSelectedInstructions(instructions ? parseInt(instructions) : null);
-    setSearchQuery(searchQuery || "");
-    setSortOrder(sortOrder || null);
+    setSearchQuery(searchQueryy || "");
+    setSortOrder(sortOrders || null);
   }, []);
 
   useEffect(() => {
@@ -352,7 +352,7 @@ function RecipeList({ favorites }) {
               handleLoad={handleLoadMore}
               remainingRecipes={remainingRecipes}
               totalRecipes={totalRecipes}
-              isLoadMore={true}
+              isLoadMore
             />
           </div>
           <FloatingButton />

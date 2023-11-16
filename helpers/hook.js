@@ -5,7 +5,6 @@
 
 // export default fetchRecipes;
 
-
 const fetchRecipes = async (url) => {
   const response = await fetch(url);
   if (!response.ok) {
@@ -15,4 +14,3 @@ const fetchRecipes = async (url) => {
 };
 
 export default fetchRecipes;
-

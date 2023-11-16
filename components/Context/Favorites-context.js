@@ -13,51 +13,47 @@ const FavoritesContext = createContext({
 
 export function FavoritesContextProvider(props) {
   const [userFavorites, setUserFavorites] = useState([]);
-const [changeListeners, setChangeListeners] = useState([]);
-const notifyChangeListeners = () => {
-  changeListeners.forEach((listener) => {
-    listener();
-  });
-};
-const addFavoritesHandler = (recipe) => {
-  setUserFavorites((prevUserFavorites) => [...prevUserFavorites, recipe]);
-  notifyChangeListeners();
-};
+  const [changeListeners, setChangeListeners] = useState([]);
+  const notifyChangeListeners = () => {
+    changeListeners.forEach((listener) => {
+      listener();
+    });
+  };
+  const addFavoritesHandler = (recipe) => {
+    setUserFavorites((prevUserFavorites) => [...prevUserFavorites, recipe]);
+    notifyChangeListeners();
+  };
 
- const updateFavoritesHandler = (recipes) => {
-   setUserFavorites(recipes);
-   notifyChangeListeners();
- };
-const removeFavoritesHandler = (recipeId) => {
-  setUserFavorites((prevUserFavorites) => {
-    return prevUserFavorites.filter((favorite) => favorite._id !== recipeId);
-  });
-  notifyChangeListeners();
-};
+  const updateFavoritesHandler = (recipes) => {
+    setUserFavorites(recipes);
+    notifyChangeListeners();
+  };
+  const removeFavoritesHandler = (recipeId) => {
+    setUserFavorites((prevUserFavorites) => prevUserFavorites.filter((favorite) => favorite._id !== recipeId));
+    notifyChangeListeners();
+  };
 
-function isRecipeInFavorites(recipeId, userFavorites) {
-  return Array.from(userFavorites).some((recipe) => recipe && recipe._id === recipeId);
-}
-const addChangeListener = (listener) => {
-  setChangeListeners((prevListeners) => [...prevListeners, listener]);
-};
+  function isRecipeInFavorites(recipeId, userFavorites) {
+    return Array.from(userFavorites).some((recipe) => recipe && recipe._id === recipeId);
+  }
+  const addChangeListener = (listener) => {
+    setChangeListeners((prevListeners) => [...prevListeners, listener]);
+  };
 
-const removeChangeListener = (listener) => {
-  setChangeListeners((prevListeners) =>
-    prevListeners.filter((l) => l !== listener)
-  );
-};
+  const removeChangeListener = (listener) => {
+    setChangeListeners((prevListeners) => prevListeners.filter((l) => l !== listener));
+  };
 
-const context = {
-  favorites: userFavorites,
-  totalFavorites: userFavorites.length,
-  addFavorite: addFavoritesHandler,
-  updateFavorites: updateFavoritesHandler,
-  removeFavorite: removeFavoritesHandler,
-  recipeIsFavorite: isRecipeInFavorites,
-  addChangeListener,
-  removeChangeListener,
-};
+  const context = {
+    favorites: userFavorites,
+    totalFavorites: userFavorites.length,
+    addFavorite: addFavoritesHandler,
+    updateFavorites: updateFavoritesHandler,
+    removeFavorite: removeFavoritesHandler,
+    recipeIsFavorite: isRecipeInFavorites,
+    addChangeListener,
+    removeChangeListener,
+  };
   return (
     <FavoritesContext.Provider value={context}>
       {props.children}
