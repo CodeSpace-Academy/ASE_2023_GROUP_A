@@ -1,32 +1,39 @@
-// CookTime component displays the cooking time and optionally preparation time for a recipe
-export default function CookTime({ cookTimeInMinutes, label, prepTimeInMinutes }) {
+import  Time  from "@/helpers/TimeConvertor";
 
-  // Function to format time in hours and minutes
-  const formatTime = (minutes) => {
-    if (minutes >= 60) {
-      const hours = Math.floor(minutes / 60);
-      const mins = minutes % 60;
-      if (mins === 0) {
-        return `${hours} hour${hours > 1 ? 's' : ''}`;
-      } else if (hours === 0) {
-        return `${mins} minute${mins > 1 ? 's' : ''}`;
-      } else {
-        return `${hours} hour${hours > 1 ? 's' : ''} ${mins} minute${mins > 1 ? 's' : ''}`;
-      }
-    } else {
-      return `${minutes} minute${minutes > 1 ? 's' : ''}`;
-    }
-  };
-
-  // Convert the label to lowercase for consistent formatting
-  const formattedLabel = label.toLowerCase();
-
-  // Calculate the formatted time, considering preparation time if provided
-  const formattedTime = formattedLabel === 'total time' ? formatTime(cookTimeInMinutes + prepTimeInMinutes) : formatTime(cookTimeInMinutes);
-
+export const PrepTime = ({ prepTime }) => {
   return (
-    <h4>
-      <b>{label}:</b> {formattedTime}
-    </h4>
+    <>
+      <Time cookTimeInMinutes={prepTime} label={"Prep Time"} />
+    </>
   );
 };
+
+export const CookTime = ({ cookTime }) => {
+  return (
+    <>
+      <Time cookTimeInMinutes={cookTime} label={"Cook Time"} />
+    </>
+  );
+};
+
+export const TotalTime = ({ totalTime }) => {
+  return (
+    <>
+      <Time
+        cookTimeInMinutes={totalTime.cook}
+        prepTimeInMinutes={totalTime.prep}
+        label="Total time"
+      />
+    </>
+  );
+};
+export const Published = ({ published }) => {
+    return (
+        <>
+            <b className="font-bold">Published:</b>
+            <p className=" transform translate-x-0 hover:translate-x-2 transition-transform duration-300 ease-in-out">
+                {new Date(published).toLocaleDateString()}
+            </p>
+        </>
+    )
+}

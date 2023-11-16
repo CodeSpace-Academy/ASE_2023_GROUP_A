@@ -1,33 +1,41 @@
-import { useState, useEffect } from "react";
+/*eslint-disable*/
+import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { useTheme } from "next-themes";
+import Image from "next/legacy/image";
+
+import { useTheme } from "@/components/Context/ThemeContext";
+
+// Faves
+import { useContext } from "react";
+import FavoritesContext from "@/components/Context/Favorites-context";
+import Badge from "@mui/material/Badge";
+import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 
 const Navigation = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const toggleTheme = () => {
-    if (theme === "light") {
-      setTheme("dark");
-    } else {
-      setTheme("light");
-    }
-  };
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  const favoriteCtx = useContext(FavoritesContext);
+
   return (
-    <nav className="w-full bg-red-500 fixed top-0 left-0 right-0 z-10 h-18">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
+    <nav
+      className={`w-full  ${
+        theme === "dark" ? "bg-gray-700" : "bg-blue-500"
+      }  bg-opacity-70 backdrop-blur-sm fixed top-0 left-0 right-0 z-10 h-18`}
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
             <button
               type="button"
               onClick={toggleMobileMenu}
-              className="block sm:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              className={`block sm:hidden relative items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white ${
+                theme === "light" ? "text-black" : "text-gray-400"
+              }`}
               aria-controls="mobile-menu"
               aria-expanded={mobileMenuOpen ? "true" : "false"}
             >
@@ -69,71 +77,47 @@ const Navigation = () => {
               </svg>
             </button>
           </div>
-          <div className="flex mr-10 flex-shrink-0 items-center">
-            <Link href={`/home`}>
+          <div className="flex mr- flex-shrink-0 items-center">
+            <Link href={`/`}>
               <Image
                 src="/Images/logo3.png"
                 alt="Cooking Devs"
-                height={50}
-                width={70}
+                height={80}
+                width={80}
               />
             </Link>
           </div>
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
               <Link
-                href={`/recipeList`}
-                className="text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium"
+                href={`/FavoritesPage`}
+                className={`${
+                  theme === "dark" ? "text-white" : "text-black"
+                } hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium`}
               >
-                Recipes
-              </Link>
-              <Link
-                href={`/favourites`}
-                className="text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium"
-              >
-                Favourites
+                Favorites{" "}
+                <Badge
+                  badgeContent={favoriteCtx.totalFavorites}
+                  color="primary"
+                  className="w-4 mr-8 text-center"
+                ></Badge>
               </Link>
             </div>
           </div>
-
           {/* mobile view */}
           {/* toggle */}
           <div className="absolute inset-y-0 right-0 flex items-center pr-5 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <button
-              type="button"
+              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
               onClick={toggleTheme}
-              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 focus:ring-offset-gray-800"
-              style={{ opacity: theme === "dark" ? 0.4 : 1 }}
             >
-              <span className="absolute -inset-1.5"></span>
-              <span className="sr-only">Toggle Theme</span>
               {theme === "light" ? (
-                <svg xmlns="http://www.w3.org/2000/svg"
-                 fill="none" 
-                 viewBox="0 0 24 24" 
-                 strokeWidth="1.5" 
-                 stroke="currentColor" 
-                 className="w-4 h-6">
-                <path strokeLinecap="round"
-                 strokeLinejoin="round"
-                 d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-                 </svg>
-
+                <MoonIcon className="h-5 text-black w-5" />
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg"
-                 fill="none"
-                  viewBox="0 0 24 24"
-                   strokeWidth="1.5" 
-                   stroke="currentColor" className="w-4 h-6">
-                  <path strokeLinecap="round" 
-                  strokeLinejoin="round"
-                   d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
-                </svg>
-
+                <SunIcon className="h-5 text-white w-5" />
               )}
             </button>
           </div>
-
           <div className="flex flex-center">
             <div>
               <button
@@ -149,20 +133,29 @@ const Navigation = () => {
               </button>
             </div>
             <div
-              className={`absolute top-12 left-0 ${mobileMenuOpen ? "bg-red-500 w-full mt-5 text- mr-6 text-center " : "hidden"}`}
+              className={`absolute top-12 left-0 ${
+                mobileMenuOpen
+                  ? "bg-blue-500 w-full mt-5 text- mr-6 text-center "
+                  : "hidden"
+              }`}
               id="mobile-menu"
             >
               <Link
-                href={`/recipeList`}
-                className="text-black-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+                href={`/Recipe_List`}
+                className="text-black-300 hover-bg-gray-700 hover-text-white block rounded-md px-3 py-2 text-base font-medium"
               >
                 Recipe
               </Link>
               <Link
-                href={`/favourites`}
-                className="text-black-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+                href={`/FavoritesPage`}
+                className="text-black-300 hover-bg-gray-700 hover-text-white block rounded-md px-3 py-2 text-base font-medium"
               >
-                Favourites
+                Favorites{" "}
+                <Badge
+                  badgeContent={favoriteCtx.totalFavorites}
+                  color="primary"
+                  className="w-3  text- mr-6 text-center"
+                ></Badge>
               </Link>
             </div>
           </div>

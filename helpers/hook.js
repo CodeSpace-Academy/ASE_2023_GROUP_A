@@ -1,21 +1,18 @@
-const fetchRecipes = async ({setRecipes, setOriginalRecipes, setTotalRecipes, setLoading}) => {
-    try {
-      const response = await fetch(`/api/recipes?page=1`);
-      if (response.ok) {
-        
-        const fetchedRecipes = await response.json();
-        
-        setRecipes(fetchedRecipes.recipes);
-        setOriginalRecipes(fetchedRecipes.recipes)
-        setTotalRecipes(fetchedRecipes.totalRecipes);
-        setLoading(false); // Set loading to false when data is fetched
+// const fetchRecipes = async (page) => {
+//   const response = await fetch(`/api/recipes?page=${page}`);
+//   return response;
+// };
 
-      } else {
-        console.error("Failed to fetch recipes");
-      }
-    } catch (error) {
-      console.error("Error fetching recipes:", error);
-    }
-  };
+// export default fetchRecipes;
 
-  export default fetchRecipes
+
+const fetchRecipes = async (url) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch recipes");
+  }
+  return response.json();
+};
+
+export default fetchRecipes;
+

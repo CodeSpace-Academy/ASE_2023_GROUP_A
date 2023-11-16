@@ -1,4 +1,5 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect } from "react";
+import Loading from "../Loading/Loading";
 
 // RecipeInstructions component displays a list of instructions for a recipe
 const RecipeInstructions = ({ recipes }) => {
@@ -12,17 +13,19 @@ const RecipeInstructions = ({ recipes }) => {
   useEffect(() => {
     // Delay for simulating a loading state (e.g., 2 seconds)
     const delay = 2000;
-    
+
     // Set a timeout to fetch and process instructions
     const timeoutId = setTimeout(() => {
       try {
         // Sort the instructions based on their index
-        const sortedInstructions = recipes.instructions.map((instruction, index) => ({ index, instruction }));
+        const sortedInstructions = recipes.instructions.map(
+          (instruction, index) => ({ index, instruction })
+        );
         sortedInstructions.sort((a, b) => a.index - b.index);
 
         // Map the sorted instructions to list items
         const reorderedInstructions = sortedInstructions.map((instruction) => (
-          <li key={instruction.index} className="text-gray-600">
+          <li key={instruction.index} className="text-gray-1000">
             {instruction.instruction}
           </li>
         ));
@@ -46,7 +49,7 @@ const RecipeInstructions = ({ recipes }) => {
       <h3 className="mt-2 text-lg font-semibold"></h3>
       {loading ? (
         // Display a loading message while instructions are being processed
-        <p>Loading...</p>
+        <p><Loading/></p>
       ) : error ? (
         // Display an error message if an error occurs
         <p>{error}</p>
