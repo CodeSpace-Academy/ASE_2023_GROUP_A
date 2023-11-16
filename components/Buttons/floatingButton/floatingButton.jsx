@@ -20,7 +20,7 @@ export default function FloatingButton() {
   return (
     <>
       <div
-        className={`${theme === "light" ? "bg-blue-500" : "bg-blue-900"} ${
+        className={`${theme === "light" ? "bg-blue-500" : "bg-blue-800"} ${
           classes.floatingButton
         }`}
         onClick={handleScrollToTop}
@@ -28,7 +28,7 @@ export default function FloatingButton() {
         <FaArrowUp />
       </div>
       <div
-        className={`${theme === "light" ? "bg-blue-500" : "bg-blue-900"} ${
+        className={`${theme === "light" ? "bg-blue-500" : "bg-blue-800"} ${
           classes.floatingButton2
         }`}
         onClick={handleScrollToBottom}

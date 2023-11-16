@@ -489,7 +489,7 @@ function RecipeList({ favorites }) {
               />
             </Stack>
           </div>
-          <FloatingButton />
+          <FloatingButton className={theme === 'light' ? 'bg-blue-500' : 'bg-blue-800'} />
         </>
       )}
     </div>
