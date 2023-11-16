@@ -1,34 +1,41 @@
-
 .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .dropdown-toggle {
-    background-color: #251610;
-    color: #fff;
-    border: none;
-    display: flex;
-    flex-direction: row;
-    padding: 8px 10px;
-    margin-top: -10px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
- 
-  .dropdown-menu .dropdown-item {
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  .dropdown.is-open .dropdown-menu {
-    display: block;
-  }
-  
-  .dropdown-item {
-    display: flex;
-    align-items: center; 
-  }
+  position: relative;
+  display: inline-block;
+}
 
+.dropdown-toggle {
+  background-color: #251610;
+  color: #fff;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  padding: 8px 10px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.dropdown-menu .dropdown-item {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.dropdown.is-open .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+}
+
+.circle {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(119, 119, 222); /* Add a background color if needed */
+  padding: 6px; /* Adjust padding as needed */
+  /* Add other styling as needed */
+}
