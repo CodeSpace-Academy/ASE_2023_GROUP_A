@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
+import { useTheme } from "../Context/ThemeContext";
 
 function Ingredients({
   setFilterIngredientResults,
@@ -9,6 +10,8 @@ function Ingredients({
   setSelectedIngredients,
 }) {
   const [ingredients, setIngredients] = useState([]);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     async function fetchIngredients() {
@@ -83,7 +86,7 @@ function Ingredients({
 
     control: (base) => ({
       ...base,
-      backgroundColor: "#007bff",
+      backgroundColor: theme === "light" ? "#007bff" : "#0d203eee",
       color: "white",
       width: "fitContent",
     }),

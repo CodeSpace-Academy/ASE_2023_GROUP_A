@@ -18,14 +18,13 @@ import Loading from "../Loading/Loading";
 import RecipeCard from "../Cards/RecipeCard";
 
 // import Pagination from "../Buttons/LoadMore/pagination/Pagination";
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "@/components/Context/ThemeContext";
 // const ITEMS_PER_PAGE = 100;
 
 function RecipeList({ favorites }) {
-
   const [recipes, setRecipes] = useState([]);
   const [originalRecipes, setOriginalRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,7 +38,9 @@ function RecipeList({ favorites }) {
   const [filterIngredientResults, setFilterIngredientResults] = useState([]);
   const { theme } = useTheme();
   const isDarkTheme = theme === "dark";
-  const [filterInstructionsResults, setFilterInstructionsResults] = useState([]);
+  const [filterInstructionsResults, setFilterInstructionsResults] = useState(
+    []
+  );
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -55,21 +56,20 @@ function RecipeList({ favorites }) {
     loading: isLoading,
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
-if(recipesError){
-
-}
+  if (recipesError) {
+  }
 
   useEffect(() => {
     favoriteContext.updateFavorites(favorites);
-  if (!isLoading && recipesData) {
-    // Check if recipesData is defined before updating the state
-    setOriginalRecipes(recipesData.recipes);
-    setTotalRecipes(recipesData.totalRecipes);
-    // Use mutate to update the state as soon as you fetch the new data
-    mutate(`/api/recipes?page=${currentPage}`);
-  }
-}, [currentPage, recipesData, favorites]);
-  
+    if (!isLoading && recipesData) {
+      // Check if recipesData is defined before updating the state
+      setOriginalRecipes(recipesData.recipes);
+      setTotalRecipes(recipesData.totalRecipes);
+      // Use mutate to update the state as soon as you fetch the new data
+      mutate(`/api/recipes?page=${currentPage}`);
+    }
+  }, [currentPage, recipesData, favorites]);
+
   const remainingRecipes = Math.max(0, totalRecipes - 100 * currentPage);
   // let combinedResults;
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
@@ -77,7 +77,6 @@ if(recipesError){
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
   };
-  
 
   if (isLoading) {
     return <Loading />;
@@ -380,9 +379,6 @@ if(recipesError){
     originalRecipes,
   ]);
 
-
-
-
   return (
     <div>
       <Hero
@@ -413,8 +409,6 @@ if(recipesError){
         All Recipes
       </button>
 
-  
-      
       <div style={{ textAlign: "center" }}>
         <p className={isDarkTheme ? "text-white" : ""}>
           Filter by number of instructions:
@@ -429,7 +423,7 @@ if(recipesError){
           }`}
         />
       </div>
-      
+
       {!favorites ? (
         <p>
           <Loading />
@@ -495,10 +489,10 @@ if(recipesError){
               />
             </Stack>
           </div>
-          <FloatingButton />
+          <FloatingButton className={theme === 'light' ? 'bg-blue-500' : 'bg-blue-800'} />
         </>
       )}
-      </div>
+    </div>
   );
 }
 
