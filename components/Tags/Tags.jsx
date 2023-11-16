@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 
+import { useTheme } from "../Context/ThemeContext";
+
 function Tags({
   setFilterTagsResults,
   handleDefaultTagFilter,
@@ -9,6 +11,7 @@ function Tags({
   selectedTags,
 }) {
   const [tags, setTags] = useState([]);
+  const {theme} = useTheme()
 
   useEffect(() => {
     async function fetchTags() {
@@ -80,7 +83,7 @@ function Tags({
 
     control: (base) => ({
       ...base,
-      backgroundColor: "#007bff",
+      backgroundColor: theme === 'light' ? "#007bff" : "#0d203eee",
       color: "white",
       width: "fitContent",
     }),
