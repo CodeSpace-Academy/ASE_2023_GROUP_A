@@ -51,7 +51,6 @@ function Tags({
           if (response.ok) {
             const filterTagsResult = await response.json();
             setFilterTagsResults(filterTagsResult.recipes);
-            
           } else {
             console.error("Failed to fetch tags by category");
           }
@@ -75,13 +74,13 @@ function Tags({
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
+      background: "#3496c7",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "blue",
+      backgroundColor: "#007bff",
       color: "white",
       width: "fitContent",
     }),
@@ -112,7 +111,7 @@ function Tags({
         onChange={handleTagChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="Select tag"
+        placeholder="Select Tag"
       />
     </div>
   );
