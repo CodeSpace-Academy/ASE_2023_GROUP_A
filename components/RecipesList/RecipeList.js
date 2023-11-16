@@ -279,7 +279,7 @@ function RecipeList({ favorites }) {
         filterCount={filterCount}
       />
 
-      {isLoading ? (
+      {/* {isLoading ? (
         <Loading />
       ) : favorites.length === 0 ? (
         <p className={isDarkTheme ? "text-white" : ""}>
@@ -295,7 +295,7 @@ function RecipeList({ favorites }) {
             ))}
           </Carousel>
         </div>
-      )}
+      )} */}
 
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
