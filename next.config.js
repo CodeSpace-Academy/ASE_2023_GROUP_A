@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   env: {
+    mongodb_password: process.env.mongodb_password,
+    mongodb_username: process.env.mongodb_username,
     mongodb_uri: process.env.mongodb_uri,
   },
   images: {
