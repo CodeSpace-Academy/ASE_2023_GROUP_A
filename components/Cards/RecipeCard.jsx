@@ -1,6 +1,9 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import Image from "next/legacy/image";
-import Highlighter from "react-highlight-words";
+
 import React, { useContext } from "react";
 import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
@@ -8,7 +11,7 @@ import FavoritesContext from "../Context/Favorites-context";
 import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRecipe";
 import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 import { useTheme } from "../Context/ThemeContext";
-
+import Title from "./Title";
 import Loading from "../Loading/Loading";
 
 // eslint-disable-next-line react/function-component-definition
@@ -33,7 +36,8 @@ const RecipeCard = ({
   }
 
   // eslint-disable-next-line no-underscore-dangle, react/prop-types
-  const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
+  const firstImage =
+    recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const favoriteCtx = useContext(FavoritesContext);
   // eslint-disable-next-line no-underscore-dangle, react/prop-types
@@ -81,7 +85,7 @@ const RecipeCard = ({
     <div
       key={Key}
       className={`${
-        theme === "light" ? "text-black bg-blue-400" : "text-white"
+        theme === "light" ? "text-black bg-blue-400" : "text-white bg-gray-900"
       } p-4 rounded  shadow mt-20 mb-5 md:h-100 flex flex-col transform transition-transform hover:scale-105`}
     >
       <div className="w-full h-60 md:h-92 mb-4 relative aspect-w-16 aspect-h-9">
@@ -100,20 +104,12 @@ const RecipeCard = ({
             theme === "dark" ? "text-white" : ""
           } `}
         >
-          <h2 className="text-sm sm:text-md md:text-lg lg:text-xl font-semibold mb-2 font-alkatra">
-            {searchQuery ? (
-              <Highlighter
-                highlightClassName="YourHighlightClass"
-                searchWords={[searchQuery]}
-                autoEscape
-                // eslint-disable-next-line react/prop-types
-                textToHighlight={recipe.title}
-              />
-            ) : (
-              // eslint-disable-next-line react/prop-types
-              recipe.title
-            )}
-          </h2>
+          <Title
+            key={`${recipe._id}${recipe.title}`}
+            title={recipe.title}
+            searchQuery={[searchQuery]}
+          />
+
           <div className="mb-1">
             {/* eslint-disable-next-line react/prop-types */}
             <PrepTime prepTime={recipe.prep} />

@@ -3,18 +3,23 @@
  * and sorting, and includes pagination functionality.
  * @returns The RecipeList component is being returned.
  */
-import { useEffect, useState, useContext } from "react";
-import useSWR, { mutate } from "swr";
+
+import React, { useEffect, useState, useContext } from "react";
 import Carousel from "react-multi-carousel";
-import fetchRecipes from "@/helpers/hook";
-import RecipeCard from "../Cards/RecipeCard";
-import Hero from "../Landing/hero";
-import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
-import Loading from "../Loading/Loading";
-import FloatingButton from "../Buttons/floatingButton/FloatingButton";
-import "react-multi-carousel/lib/styles.css";
+import fetchRecipes from "../../helpers/hook";
+import useSWR, { mutate } from "swr";
 import { responsive } from "@/helpers/settings/settings";
 
+import "react-multi-carousel/lib/styles.css";
+
+import FloatingButton from "../Buttons/floatingButton/FloatingButton";
+import Hero from "../Landing/hero";
+import Loading from "../Loading/Loading";
+import RecipeCard from "../Cards/RecipeCard";
+
+// import Pagination from "../Buttons/LoadMore/pagination/Pagination";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "@/components/Context/ThemeContext";
 // const ITEMS_PER_PAGE = 100;
@@ -36,14 +41,11 @@ function RecipeList({ favorites }) {
   const [filterInstructionsResults, setFilterInstructionsResults] = useState(
     []
   );
-
-  // const [loading, setLoading] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedInstructions, setSelectedInstructions] = useState(0);
   const [sortOrder, setSortOrder] = useState(null);
-
   const [noRecipesFoundMessage, setNoRecipesFoundMessage] = useState(null);
   // const [numberOfFilters, setNumberOfFilters] = useState(0);
   const favoriteContext = useContext(FavoritesContext);
@@ -54,29 +56,26 @@ function RecipeList({ favorites }) {
     loading: isLoading,
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
+  if (recipesError) {
+  }
+
   useEffect(() => {
     favoriteContext.updateFavorites(favorites);
-  if (!isLoading && recipesData) {
-    // Check if recipesData is defined before updating the state
-    setOriginalRecipes(recipesData.recipes);
-    setTotalRecipes(recipesData.totalRecipes);
-    // Use mutate to update the state as soon as you fetch the new data
-    mutate(`/api/recipes?page=${currentPage}`);
-  }
-}, [currentPage, recipesData, favorites]);
-  
+    if (!isLoading && recipesData) {
+      // Check if recipesData is defined before updating the state
+      setOriginalRecipes(recipesData.recipes);
+      setTotalRecipes(recipesData.totalRecipes);
+      // Use mutate to update the state as soon as you fetch the new data
+      mutate(`/api/recipes?page=${currentPage}`);
+    }
+  }, [currentPage, recipesData, favorites]);
 
+  const remainingRecipes = Math.max(0, totalRecipes - 100 * currentPage);
   // let combinedResults;
+  const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
 
-  const handleLoadLess = () => {
-    setCurrentPage(currentPage - 1);
-
-    //  loadRecipes(currentPage - 1);
-  };
-  const handleLoadMore = () => {
-    setCurrentPage(currentPage + 1);
-
-    // loadRecipes(currentPage + 1);
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
   };
 
   if (isLoading) {
@@ -380,8 +379,6 @@ function RecipeList({ favorites }) {
     originalRecipes,
   ]);
 
-  const remainingRecipes = totalRecipes - 100 * currentPage;
-
   return (
     <div>
       <Hero
@@ -412,8 +409,6 @@ function RecipeList({ favorites }) {
         All Recipes
       </button>
 
-  
-      
       <div style={{ textAlign: "center" }}>
         <p className={isDarkTheme ? "text-white" : ""}>
           Filter by number of instructions:
@@ -428,7 +423,7 @@ function RecipeList({ favorites }) {
           }`}
         />
       </div>
-      
+
       {!favorites ? (
         <p>
           <Loading />
@@ -484,25 +479,20 @@ function RecipeList({ favorites }) {
       )}
       {recipes.length < totalRecipes && (
         <>
-          <div className="flex justify-center gap-10">
-            <LoadMoreButton
-              handleLoad={handleLoadLess}
-              remainingRecipes={remainingRecipes}
-              totalRecipes={totalRecipes}
-              isLoadMore={false}
-            />
-            <LoadMoreButton
-              handleLoad={handleLoadMore}
-              remainingRecipes={remainingRecipes}
-              totalRecipes={totalRecipes}
-              isLoadMore={true}
-            />
+          <div className="flex justify-center pb-8 gap-10">
+            <Stack spacing={2} justifyContent="center" alignItems="center">
+              <Pagination
+                count={pageNumbers}
+                page={currentPage}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Stack>
           </div>
-          <FloatingButton />
+          <FloatingButton className={theme === 'light' ? 'bg-blue-500' : 'bg-blue-800'} />
         </>
       )}
-      </div>
- 
+    </div>
   );
 }
 

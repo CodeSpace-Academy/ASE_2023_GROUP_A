@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
+import { useTheme } from "../Context/ThemeContext";
 
 function Ingredients({
   setFilterIngredientResults,
@@ -9,6 +10,8 @@ function Ingredients({
   setSelectedIngredients,
 }) {
   const [ingredients, setIngredients] = useState([]);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     async function fetchIngredients() {
@@ -77,13 +80,13 @@ function Ingredients({
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
+      background: "#3496c7",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "blue",
+      backgroundColor: theme === "light" ? "#007bff" : "#0d203eee",
       color: "white",
       width: "fitContent",
     }),
@@ -116,7 +119,7 @@ function Ingredients({
         onChange={handleIngredientChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="select ingredient"
+        placeholder="Select Ingredient"
       />
     </div>
   );

@@ -34,9 +34,13 @@ export default function Hero({
 }) {
   const { theme } = useTheme();
   return (
-    <div className={classes.heroImage}>
-      <div className={`${classes.heroContent} ${ theme==="light"? " bg-blue-400":" bg-gray-500"}`}>
-        <div className={classes.search}  >
+    <div className={`sm:portrait:h-screen max-w-full ${classes.heroImage}`}>
+      <div
+        className={`sm:mt-20 sm:block ${classes.heroContent} ${
+          theme === "light" ? " bg-blue-400" : " bg-gray-700"
+        } bg-opacity-70`}
+      >
+        <div className={classes.search}>
           <SearchBar
             handleDefault={handleDefaultSearch}
             onSearch={onSearch}
@@ -45,7 +49,9 @@ export default function Hero({
             searchQuery={searchQuery}
           />
         </div>
-        <div className={classes.filters}>
+        <div
+          className={`flex flex-col md:flex-row sm:block ${classes.filters}`}
+        >
           <Categories
             setFilterCategoryResults={setFilterCategoryResults}
             setRecipes={setRecipes}

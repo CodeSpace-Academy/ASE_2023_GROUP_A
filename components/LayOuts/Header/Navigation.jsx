@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import { useState } from "react";
 import Link from "next/link";
-import Image from 'next/legacy/image'
+import Image from "next/legacy/image";
 
 import { useTheme } from "@/components/Context/ThemeContext";
 
@@ -25,7 +25,7 @@ const Navigation = () => {
     <nav
       className={`w-full  ${
         theme === "dark" ? "bg-gray-700" : "bg-blue-500"
-      }  bg-opacity-80 fixed top-0 left-0 right-0 z-10 h-18`}
+      }  bg-opacity-70 backdrop-blur-sm fixed top-0 left-0 right-0 z-10 h-18`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
@@ -33,7 +33,9 @@ const Navigation = () => {
             <button
               type="button"
               onClick={toggleMobileMenu}
-              className="block sm:hidden relative items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              className={`block sm:hidden relative items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white ${
+                theme === "light" ? "text-black" : "text-gray-400"
+              }`}
               aria-controls="mobile-menu"
               aria-expanded={mobileMenuOpen ? "true" : "false"}
             >
@@ -82,8 +84,8 @@ const Navigation = () => {
                 alt="Cooking Devs"
                 height={80}
                 width={80}
-              />  
-              </Link>
+              />
+            </Link>
           </div>
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
@@ -91,7 +93,7 @@ const Navigation = () => {
                 href={`/FavoritesPage`}
                 className={`${
                   theme === "dark" ? "text-white" : "text-black"
-           } hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium`}
+                } hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium`}
               >
                 Favorites{" "}
                 <Badge
@@ -133,7 +135,7 @@ const Navigation = () => {
             <div
               className={`absolute top-12 left-0 ${
                 mobileMenuOpen
-                  ? "bg-red-500 w-full mt-5 text- mr-6 text-center "
+                  ? "bg-blue-500 w-full mt-5 text- mr-6 text-center "
                   : "hidden"
               }`}
               id="mobile-menu"
