@@ -7,7 +7,6 @@ import DescriptionError from "../error-messages/DescriptionError";
 function Description({ description, recipeId }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description);
-  const [isLoading, setIsLoading] = useState(false);
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);
@@ -20,7 +19,6 @@ function Description({ description, recipeId }) {
 
   const handleDescriptionSave = async (newDescription) => {
     try {
-      setIsLoading(true);
       const response = await fetch(`/api/description/${recipeId}`, {
         method: "PUT",
         headers: {
@@ -36,8 +34,6 @@ function Description({ description, recipeId }) {
       }
     } catch (error) {
       console.error("Error updating description:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
