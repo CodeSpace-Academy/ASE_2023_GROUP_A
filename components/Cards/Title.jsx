@@ -7,6 +7,7 @@ function Title({ title, searchQuery }) {
   const wordCount = title.split(/\s+/).length;
 
   // Calculate font size based on the number of words in the title
+  // eslint-disable-next-line no-shadow, consistent-return
   const calculateFontSize = (wordCount) => {
     if (wordCount > 3) {
       return styles.textSmall; // Use smaller font for longer titles

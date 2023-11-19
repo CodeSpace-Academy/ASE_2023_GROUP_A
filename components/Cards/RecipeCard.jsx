@@ -119,6 +119,7 @@ function RecipeCard({
               </span>
             </button>
           ) : (
+            // eslint-disable-next-line react/button-has-type
             <button onClick={addFavoritesHandler}>
               <span>
                 <StarEmpty
