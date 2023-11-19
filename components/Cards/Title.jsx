@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import Highlighter from "react-highlight-words";
-import styles from "./Title.module.css"
+import styles from "./Title.module.css";
+
 function Title({ title, searchQuery }) {
   const wordCount = title.split(/\s+/).length;
 
@@ -15,7 +16,7 @@ function Title({ title, searchQuery }) {
   const titleClass = calculateFontSize(wordCount);
 
   return (
-    <h2 className={`${titleClass} font-semibold mb-2 font-alkatra`}>
+    <h2 className={`${titleClass} font-semibold mb-2 font-alkatra h-[40px]`}>
       {searchQuery ? (
         <Highlighter
           highlightClassName="YourHighlightClass"

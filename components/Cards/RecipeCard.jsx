@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
@@ -79,12 +80,14 @@ function RecipeCard({
       <div className="w-full h-56 md:h-92 mb-4 relative aspect-h-9">
         <Image
           src={firstImage}
+          // eslint-disable-next-line react/prop-types
           alt={recipe.title}
           layout="fill"
           objectFit="cover"
+
         />
       </div>
-      <div className="flex flex-col justify-between h-22 pb-2">
+      <div className="flex flex-col justify-between h-22 mb-2 ">
 
         <div
           className={`mb-4 text-center ${
