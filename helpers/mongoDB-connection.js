@@ -13,9 +13,10 @@ export const client = new MongoClient(uri, {
 });
 
 // Function to connect to the MongoDB server and return a collection
-export const connectToCollection = async (databaseName, collectionName)=> {
+export const connectToCollection = async (databaseName, collectionName) => {
   try {
     await client.connect();
+
     const db = client.db(databaseName);
     const collection = db.collection(collectionName);
     return collection;
@@ -23,7 +24,7 @@ export const connectToCollection = async (databaseName, collectionName)=> {
     console.error("Error connecting to MongoDB:", error);
     throw error;
   }
-}
+};
 
 // Function to close the MongoDB connection
 export async function closeMongoDBConnection() {
