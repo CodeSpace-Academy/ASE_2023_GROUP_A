@@ -22,7 +22,7 @@
 
 
 
-/* CSS
+/* CSS*/
 .button-86 {
   all: unset;
   width: 15px;
@@ -89,4 +89,4 @@
 .button-86:active::after {
   transition: 0s;
   transform: translate(0, 5%);
-} */
+} 
