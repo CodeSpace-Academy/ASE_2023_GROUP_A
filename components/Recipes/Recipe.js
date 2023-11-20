@@ -77,7 +77,6 @@ const Recipe = ({ recipe, Allergies }) => {
           
           <PrepTime prepTime={recipe.prep} />
           <CookTime cookTime={recipe.cook} />
-        
           <TotalTime totalTime={recipe} />
           <Allergens
             allergens={Allergies}
