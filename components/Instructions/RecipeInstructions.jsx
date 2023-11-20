@@ -1,24 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-function RecipeInstructions({ instruction }) {
+function RecipeInstructions({ instruction, recipeId, onSave }) {
   const [isEditingInstructions, setIsEditingInstructions] = useState(false);
   const [editedInstructions, setEditedInstructions] = useState([
     ...instruction,
   ]);
-
-  const handleEditInstructions = () => {
-    setIsEditingInstructions(true);
-  };
-
-  const handleSave = () => {
-    setIsEditingInstructions(false);
-    saveInstructions();
-  };
-
-  const handleCancel = () => {
-    setIsEditingInstructions(false);
-    setEditedInstructions([...instruction]);
-  };
 
   const handleInstructionChange = (index, newValue) => {
     const updatedInstructions = [...editedInstructions];
@@ -26,22 +12,36 @@ function RecipeInstructions({ instruction }) {
     setEditedInstructions(updatedInstructions);
   };
 
+  const handleSave = () => {
+    onSave(newInstructions);
+  };
+
+  const handleCancel = () => {
+    setIsEditingInstructions(false);
+    setEditedInstructions([...instruction]);
+  };
+
+  const handleEditInstructions = (editedInstructions) => {
+    setIsEditingInstructions(editedInstructions);
+  };
+
   const saveInstructions = async (updatedInstructions) => {
     try {
-      const requestBody = JSON.stringify({
-        recipe_Id: recipeId,
-        instructions: updatedInstructions,
-      });
-      const response = await fetch(`/api/Instructions/${recipe._Id}`, {
-        method: "POST",
-        body: requestBody,
+      const response = await fetch(`/api/Instructions/${recipeId}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          recipe_Id: recipeId,
+          instructions: updatedInstructions,
+        }),
       });
 
       if (response.ok) {
-        console.log("Instructions saved successfully.");
+        setIsEditingInstructions(updatedInstructions);
+        setIsEditingInstructions(false);
+        //console.log("Instructions saved successfully.");
       } else {
         console.error("Failed to save instructions.");
       }
@@ -70,7 +70,8 @@ function RecipeInstructions({ instruction }) {
           <div>
             <button
               className='bg-red-400 px-2 mx-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
-              onClick={handleSave}
+              onClick={saveInstructions}
+              instruction={editedInstructions}
             >
               Save
             </button>

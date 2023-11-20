@@ -18,25 +18,25 @@ const DescriptionEdit = ({ initialDescription, onSave, toggleEditing }) => {
     <div>
       <textarea
         ref={newTextRef}
-        className="w-auto h-auto bg-gray-300"
+        className='w-auto h-auto bg-gray-300'
         value={newDescription}
         onChange={handleDescriptionChange}
         rows={5}
         cols={50}
       />
-      <button className="bg-orange-300 rounded-sm-3" onClick={handleSave}>
+      <button className='bg-orange-300 rounded-sm-3' onClick={handleSave}>
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          className="w-6 h-6"
+          xmlns='http://www.w3.org/2000/svg'
+          fill='none'
+          viewBox='0 0 24 24'
+          stroke='currentColor'
+          className='w-6 h-6'
         >
           <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M14 5l7 7m0 0l-7 7m7-7H3"
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            strokeWidth='2'
+            d='M14 5l7 7m0 0l-7 7m7-7H3'
           />
         </svg>
       </button>
