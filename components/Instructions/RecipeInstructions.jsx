@@ -1,49 +1,39 @@
-import React, { useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
+import Loading from "../Loading/Loading";
 
-function RecipeInstructions({ instruction, recipeId, onSave }) {
-  const [isEditingInstructions, setIsEditingInstructions] = useState(false);
-  const [editedInstructions, setEditedInstructions] = useState([
-    ...instruction,
-  ]);
+const RecipeInstructions = ({ recipes, onUpdateInstructions }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [instructions, setInstructions] = useState([]);
+  const [editedInstructions, setEditedInstructions] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleInstructionChange = (index, newValue) => {
-    const updatedInstructions = [...editedInstructions];
-    updatedInstructions[index] = newValue;
-    setEditedInstructions(updatedInstructions);
-  };
+  useEffect(() => {
+    // Delay for simulating a loading state (e.g., 2 seconds)
+    const delay = 2000;
 
-  const handleSave = () => {
-    onSave(newInstructions);
-  };
+    // Set a timeout to fetch and process instructions
+    const timeoutId = setTimeout(() => {
+      try {
+        // Sort the instructions based on their index
+        const sortedInstructions = recipes.instructions.map(
+          (instruction, index) => ({ index, instruction })
+        );
+        sortedInstructions.sort((a, b) => a.index - b.index);
 
-  const handleCancel = () => {
-    setIsEditingInstructions(false);
-    setEditedInstructions([...instruction]);
-  };
+        // Map the sorted instructions to list items
+        const reorderedInstructions = sortedInstructions.map(
+          (instruction) => instruction.instruction
+        );
 
-  const handleEditInstructions = (editedInstructions) => {
-    setIsEditingInstructions(editedInstructions);
-  };
-
-  const saveInstructions = async (updatedInstructions) => {
-    try {
-      const response = await fetch(`/api/Instructions/${recipeId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          recipe_Id: recipeId,
-          instructions: updatedInstructions,
-        }),
-      });
-
-      if (response.ok) {
-        setIsEditingInstructions(updatedInstructions);
-        setIsEditingInstructions(false);
-        //console.log("Instructions saved successfully.");
-      } else {
-        console.error("Failed to save instructions.");
+        // Set the reordered instructions and mark loading as complete
+        setInstructions(reorderedInstructions.join("\n"));
+        setEditedInstructions(reorderedInstructions.join("\n"));
+        setLoading(false);
+      } catch (error) {
+        // Handle any errors that occur during the process
+        setError("An error occurred while fetching instructions.");
+        setLoading(false);
       }
     }, delay);
 
@@ -51,56 +41,57 @@ function RecipeInstructions({ instruction, recipeId, onSave }) {
     return () => clearTimeout(timeoutId);
   }, [recipes.instructions]);
 
+  const toggleEditing = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleSaveInstructions = () => {
+    // Call an API to save the updated instructions
+    const updatedInstructions = editedInstructions.split("\n").map((instruction) => instruction.trim());
+    
+    // Check if onUpdateInstructions is a function before calling it
+    if (typeof onUpdateInstructions === 'function') {
+      onUpdateInstructions(updatedInstructions);
+
+      // Update state and exit editing mode
+      setInstructions(updatedInstructions.join("\n"));
+      setIsEditing(false);
+    } else {
+      console.error("onUpdateInstructions is not a function");
+    }
+  };
+
   return (
-    <div>
-      {isEditingInstructions ? (
-        <div>
-          <ol className='list-decimal list-inside '>
-            {editedInstructions.map((instruction, index) => (
-              <li key={index}>
-                <input
-                  value={instruction}
-                  onChange={(e) =>
-                    handleInstructionChange(index, e.target.value)
-                  }
-                  style={{ width: "95%" }}
-                />
-              </li>
-            ))}
-          </ol>
-          <div>
-            <button
-              className='bg-red-400 px-2 mx-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
-              onClick={saveInstructions}
-              instruction={editedInstructions}
-            >
-              Save
-            </button>
-            <button
-              className='bg-green-300 px-2 mx-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
-              onClick={handleCancel}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
+    <Fragment>
+      {loading ? (
+        <p>
+          <Loading />
+        </p>
+      ) : error ? (
+        <p>{error}</p>
       ) : (
         <div>
-          <ol className='list-decimal list-inside'>
-            {editedInstructions.map((instruction, index) => (
-              <li key={index}>{instruction}</li>
-            ))}
-          </ol>
-          <button
-            className='bg-pink-200 my-2  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
-            onClick={handleEditInstructions}
-          >
-            Edit Instructions
-          </button>
+          {isEditing ? (
+            <div>
+              <textarea
+                value={editedInstructions}
+                onChange={(e) => setEditedInstructions(e.target.value)}
+                rows={10}
+                cols={70}
+              />
+              <button onClick={handleSaveInstructions}>Save</button>
+              <button onClick={toggleEditing}>Cancel</button>
+            </div>
+          ) : (
+            <div>
+              <ol className="list-decimal list-inside">{instructions}</ol>
+              <button onClick={toggleEditing}>Edit Instructions</button>
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </Fragment>
   );
-}
+};
 
 export default RecipeInstructions;
