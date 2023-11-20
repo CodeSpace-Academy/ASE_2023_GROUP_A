@@ -125,7 +125,6 @@ function Allergens({ recipeIngredients, allergens }) {
                         />
                       </span>
                       {allergen}
-                      {/* {isPlural ? " (eggs)" : " (egg)"} */}
                     </div>
                   </li>
                 );
