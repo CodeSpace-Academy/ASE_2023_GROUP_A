@@ -1,6 +1,5 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-trailing-spaces */
 import React, { useState, useRef } from "react";
+import PropTypes from "prop-types";
 
 /**
  * A component for editing descriptions.
@@ -66,5 +65,11 @@ function DescriptionEdit({ initialDescription, onSave, toggleEditing }) {
     </div>
   );
 }
+
+DescriptionEdit.propTypes = {
+  initialDescription: PropTypes.string.isRequired,
+  onSave: PropTypes.func.isRequired,
+  toggleEditing: PropTypes.func.isRequired,
+};
 
 export default DescriptionEdit;

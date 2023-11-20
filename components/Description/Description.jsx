@@ -1,6 +1,5 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-trailing-spaces */
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import DescriptionEdit from "./DescriptionEdit";
 import DescriptionError from "../error-messages/DescriptionError";
 
@@ -93,5 +92,10 @@ function Description({ description, recipeId }) {
     </div>
   );
 }
+
+Description.propTypes = {
+  description: PropTypes.string.isRequired,
+  recipeId: PropTypes.string.isRequired,
+};
 
 export default Description;
