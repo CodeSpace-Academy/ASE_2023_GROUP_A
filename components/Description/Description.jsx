@@ -4,18 +4,32 @@ import React, { useState } from "react";
 import DescriptionEdit from "./DescriptionEdit";
 import DescriptionError from "../error-messages/DescriptionError";
 
+/**
+ * Represents a component for managing and displaying recipe descriptions.
+ * @param {Object} props - The component props.
+ * @param {string} props.description - The description text to display.
+ * @param {string} props.recipeId - The ID of the recipe.
+ * @returns {JSX.Element} JSX for the Description component.
+ */
+
 function Description({ description, recipeId }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description);
+
+  /**
+   * Toggles the editing mode for the description.
+   * @returns {void}
+   */
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   };
 
-  // const handleEditComplete = () => {
-  //   setEditedDescription(editedDescription);
-  //   toggleEditing(false);
-  // };
+  /**
+   * Handles the save action for the edited description.
+   * @param {string} newDescription - The updated description.
+   * @returns {void}
+   */
 
   const handleDescriptionSave = async (newDescription) => {
     try {

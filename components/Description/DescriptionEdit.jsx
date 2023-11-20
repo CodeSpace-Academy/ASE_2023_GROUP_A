@@ -2,18 +2,35 @@
 /* eslint-disable no-trailing-spaces */
 import React, { useState, useRef } from "react";
 
-function DescriptionEdit({
-  initialDescription,
-  onSave,
-  toggleEditing,
-}) {
+/**
+ * Represents a component for editing descriptions.
+ * @param {Object} props - The component props.
+ * @param {string} props.initialDescription - The initial description text to edit.
+ * @param {Function} props.onSave - Function to call when saving the edited description.
+ * @param {Function} props.toggleEditing - Function to toggle the editing mode.
+ * @returns {JSX.Element} JSX for the DescriptionEdit component.
+ */
+
+function DescriptionEdit({ initialDescription, onSave, toggleEditing }) {
   const [newDescription, setNewDescription] = useState(initialDescription);
   const newTextRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
 
+  /**
+   * Handles changes in the description input field.
+   * @param {Object} e - The event object.
+   * @returns {void}
+   */
+
   const handleDescriptionChange = (e) => {
     setNewDescription(e.target.value);
   };
+
+  /**
+   * Handles the save action for the edited description.
+   * Triggers the onSave function and toggles the editing mode.
+   * @returns {void}
+   */
 
   const handleSave = async () => {
     setIsLoading(true);
@@ -46,7 +63,6 @@ function DescriptionEdit({
       >
         <p className="text-black">{isLoading ? "Saving..." : "Save"}</p>
       </button>
-     
     </div>
   );
 }
