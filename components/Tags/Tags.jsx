@@ -10,7 +10,7 @@ function Tags({
   selectedTags,
 }) {
   const [tags, setTags] = useState([]);
-  const { theme } = useTheme();
+  const {theme} = useTheme()
 
   useEffect(() => {
     async function fetchTags() {

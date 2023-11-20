@@ -10,6 +10,7 @@ function Ingredients({
   setSelectedIngredients,
 }) {
   const [ingredients, setIngredients] = useState([]);
+
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -85,7 +86,7 @@ function Ingredients({
 
     control: (base) => ({
       ...base,
-      backgroundColor:theme === "dark" ? "gray" : "bg-blue-500",
+      backgroundColor: theme === "light" ? "#007bff" : "#0d203eee",
       color: "white",
       width: "fitContent",
     }),

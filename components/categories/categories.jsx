@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Select from "react-select";
 import { useTheme } from "../Context/ThemeContext";
 
+import { useTheme } from "../Context/ThemeContext";
+
 function Categories({
   setFilterCategoryResults,
   handleDefaultCategoryFilter,
@@ -11,6 +13,8 @@ function Categories({
 }) {
   const [categories, setCategories] = useState([]);
   const { theme } = useTheme();
+
+  const {theme} = useTheme()
 
   useEffect(() => {
     async function fetchCategories() {
