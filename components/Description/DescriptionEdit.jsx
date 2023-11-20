@@ -1,7 +1,12 @@
-import { useState, useRef } from "react";
+/* eslint-disable react/prop-types */
+/* eslint-disable no-trailing-spaces */
+import React, { useState, useRef } from "react";
 
-const DescriptionEdit = ({ initialDescription, onSave, toggleEditing }) => {
-  // const [description, setDescription] = useState(initialDescription);
+function DescriptionEdit({
+  initialDescription, 
+  onSave, 
+  toggleEditing, 
+}) {
   const [newDescription, setNewDescription] = useState(initialDescription);
   const newTextRef = useRef();
 
@@ -13,7 +18,6 @@ const DescriptionEdit = ({ initialDescription, onSave, toggleEditing }) => {
     onSave(newDescription);
     toggleEditing();
   };
-
   return (
     <div>
       <textarea
@@ -24,24 +28,11 @@ const DescriptionEdit = ({ initialDescription, onSave, toggleEditing }) => {
         rows={5}
         cols={50}
       />
-      <button className="bg-orange-300 rounded-sm-3" onClick={handleSave}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M14 5l7 7m0 0l-7 7m7-7H3"
-          />
-        </svg>
+      <button type="button" className="bg-orange-300 rounded-sm-3" onClick={handleSave}>
+        <p className="text-black">Save</p>
       </button>
     </div>
   );
-};
+}
 
 export default DescriptionEdit;

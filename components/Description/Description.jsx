@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+import React, { useState } from "react";
 import DescriptionEdit from "./DescriptionEdit";
 import DescriptionError from "../error-messages/DescriptionError";
 
-const Description = ({ description, recipeId }) => {
+function Description({ description, recipeId }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description);
 
@@ -10,10 +12,10 @@ const Description = ({ description, recipeId }) => {
     setIsEditing(!isEditing);
   };
 
-  const handleEditComplete = (editedDescription) => {
-    setEditedDescription(editedDescription);
-    toggleEditing(false);
-  };
+  // const handleEditComplete = (editedDescription) => {
+  //   setEditedDescription(editedDescription);
+  //   toggleEditing(false);
+  // };
 
   const handleDescriptionSave = async (newDescription) => {
     try {
@@ -37,7 +39,9 @@ const Description = ({ description, recipeId }) => {
 
   return (
     <div>
-      <h3 className="font-bold text-black">Description</h3>
+      <h3 className="bold text-gray-1000">
+        Description
+      </h3>
       {!description ? (
         <DescriptionError />
       ) : (
@@ -50,7 +54,8 @@ const Description = ({ description, recipeId }) => {
               toggleEditing={toggleEditing}
             />
           ) : (
-            <button onClick={toggleEditing}>
+            <button type="button" className="flex items-center" onClick={toggleEditing}>
+              <p className="mr-2">Edit Description</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -71,6 +76,6 @@ const Description = ({ description, recipeId }) => {
       )}
     </div>
   );
-};
+}
 
 export default Description;

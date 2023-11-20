@@ -1,69 +1,14 @@
+/* Import Tailwind CSS base, components, and utilities */
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-:root {
-  --foreground-rgb: rgb(99, 99, 218);
-  --background-start-rgb: rgb(223, 172, 181);
-  --background-end-rgb: purple;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: pink;
-    --background-start-rgb: brown;
-    --background-end-rgb: yellow;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-/* Light mode styles */
-.light-mode {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-/* Dark mode styles */
+/* Global styles */
 .dark-mode {
-  background-color: #1a1a1a;
-  color: #ffffff;
+  background-color: rgba(13, 32, 62, 0.932);
 }
-
-.messages {
-  display: block;
-}
-
-/* Styling for the allergens button */
-
-/* .dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-toggle {
-  background-color: #926d22;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 5px 0;
-  list-style: none;
-  margin: 0;
+.light-mode {
+  background-color: rgba(5, 91, 229, 0.294);
 }
 
 .dropdown-menu .dropdown-item {
@@ -73,23 +18,23 @@ body {
 
 .dropdown.is-open .dropdown-menu {
   display: block;
-} */
+}
 
-/* global-styles.css */
-
-*{
-
+* {
   box-sizing: border-box;
 }
+
 body {
-  background-color: rgba(6, 83, 206, 0.5);
+  /* background-color: rgba(6, 83, 206, 0.5); */
+  min-height: 100vh;
 }
 
-/* h1{
+/* Header 1 styles */
+h1 {
   font-size: 25px;
 }
 
-/* styles.css */
+/* Hide and show content based on active buttons */
 .category-content,
 .servings-content,
 .tags-content {
@@ -102,29 +47,18 @@ body {
   display: block;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-#__next {
-  flex: 1;
-}
-
-footer {
-  margin-top: auto;
-}
-
-.flexpage {
-  height: 80vh;
-}
-
-.mainBody {
-  min-height: 90vh;
-}
-
+/* Highlight class for search term */
 .YourHighlightClass {
   background-color: yellow;
   font-weight: bold;
 }
+/* Light mode styles */
+.heroContent.light-mode {
+  background-color: #f7f7f7;
+  color: #333;
+  /* Add more light mode styles here */
+}
+
+
+
+

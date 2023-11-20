@@ -1,54 +1,48 @@
-import React, { useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
+import Loading from "../Loading/Loading";
 
-function RecipeInstructions({ instruction }) {
-  const [isEditingInstructions, setIsEditingInstructions] = useState(false);
-  const [editedInstructions, setEditedInstructions] = useState([
-    ...instruction,
-  ]);
+// RecipeInstructions component displays a list of instructions for a recipe
+const RecipeInstructions = ({ recipes }) => {
+  // State to handle loading and error states
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleEditInstructions = () => {
-    setIsEditingInstructions(true);
-  };
+  // State to store the sorted and reordered instructions
+  const [instructions, setInstructions] = useState([]);
 
-  const handleSave = () => {
-    setIsEditingInstructions(false);
-    saveInstructions();
-  };
+  useEffect(() => {
+    // Delay for simulating a loading state (e.g., 2 seconds)
+    const delay = 2000;
 
-  const handleCancel = () => {
-    setIsEditingInstructions(false);
-    setEditedInstructions([...instruction]);
-  };
+    // Set a timeout to fetch and process instructions
+    const timeoutId = setTimeout(() => {
+      try {
+        // Sort the instructions based on their index
+        const sortedInstructions = recipes.instructions.map(
+          (instruction, index) => ({ index, instruction })
+        );
+        sortedInstructions.sort((a, b) => a.index - b.index);
 
-  const handleInstructionChange = (index, newValue) => {
-    const updatedInstructions = [...editedInstructions];
-    updatedInstructions[index] = newValue;
-    setEditedInstructions(updatedInstructions);
-  };
+        // Map the sorted instructions to list items
+        const reorderedInstructions = sortedInstructions.map((instruction) => (
+          <li key={instruction.index} className="text-gray-1000">
+            {instruction.instruction}
+          </li>
+        ));
 
-  const saveInstructions = async (updatedInstructions) => {
-    try {
-      const requestBody = JSON.stringify({
-        recipe_Id: recipeId,
-        instructions: updatedInstructions,
-      });
-      const response = await fetch(`/api/Instructions/${recipe._Id}`, {
-        method: "POST",
-        body: requestBody,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        console.log("Instructions saved successfully.");
-      } else {
-        console.error("Failed to save instructions.");
+        // Set the reordered instructions and mark loading as complete
+        setInstructions(reorderedInstructions);
+        setLoading(false);
+      } catch (error) {
+        // Handle any errors that occur during the process
+        setError("An error occurred while fetching instructions.");
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("An error occurred while saving instructions:", error);
-    }
-  };
+    }, delay);
+
+    // Cleanup the timeout to prevent memory leaks
+    return () => clearTimeout(timeoutId);
+  }, [recipes.instructions]);
 
   return (
     <div>
