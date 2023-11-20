@@ -10,7 +10,7 @@ import Loading from "../Loading/Loading";
 import Title from "./Title";
 
 /**
- * Functional component representing a recipe card.
+  * RecipeCard component displays a recipe card with details and interaction buttons.
  *
  * @component
  * @param {object} props - The properties of the component.
