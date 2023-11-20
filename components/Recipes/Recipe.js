@@ -73,7 +73,7 @@ const Recipe = ({ recipe, Allergies }) => {
             <RecipeDetailTags recipe={recipe} />
           </div>
         </div>
-        <div className={`lg-w-1/2 p-4 ${textClass}`}>
+        <div className={`lg:w-1/2 p-4 ${textClass}`}>
           
           <PrepTime prepTime={recipe.prep} />
           <CookTime cookTime={recipe.cook} />
