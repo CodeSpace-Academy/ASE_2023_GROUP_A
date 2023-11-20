@@ -39,7 +39,6 @@ function Description({ description, recipeId }) {
 
   return (
     <div>
-      <b> Description</b>
       {!description ? (
         <DescriptionError />
       ) : (
