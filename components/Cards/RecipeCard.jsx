@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 import Image from "next/legacy/image";
 import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
@@ -152,31 +151,5 @@ function RecipeCard({
     </div>
   );
 }
-
-// Prop type validation
-RecipeCard.propTypes = {
-  recipe: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    images: PropTypes.arrayOf(PropTypes.string),
-    title: PropTypes.string.isRequired,
-    prep: PropTypes.number.isRequired,
-    cook: PropTypes.number.isRequired,
-    image: PropTypes.string,
-  }),
-  searchQuery: PropTypes.string.isRequired,
-  favorites: PropTypes.arrayOf.isRequired,
-  Key: PropTypes.string.isRequired,
-};
-
-// Default prop values
-RecipeCard.defaultProps = {
-  recipe: {
-    _id: '',
-    images: [],
-    title: '',
-    prep: 0,
-    cook: 0,
-  },
-};
 
 export default RecipeCard;

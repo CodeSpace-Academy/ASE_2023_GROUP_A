@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Highlighter from "react-highlight-words";
 import styles from "./Title.module.css";
 
@@ -52,23 +51,5 @@ function Title({ title, searchQuery }) {
     </h2>
   );
 }
-
-// PropTypes validation
-Title.propTypes = {
-  /**
-   * The title text to display.
-   */
-  title: PropTypes.string.isRequired,
-
-  /**
-   * The search query for highlighting. If provided, the title will be highlighted.
-   */
-  searchQuery: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
-};
-
-// Default prop values
-Title.defaultProps = {
-  searchQuery: null,
-};
 
 export default Title;

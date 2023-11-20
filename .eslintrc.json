@@ -11,11 +11,18 @@
     "plugins": ["react"],
 
     "rules": {
-      "react/jsx-no-constructed-context-values":"off",
+      // using underscores is a common Javascript convention and for certain databases it might be overly strict
       "no-underscore-dangle":"off",
+      // helps avoid conflicts and allow flexibility
       "linebreak-style":"off",
+      // this choice is a matter of personal or team preference
       "double-quoted": "off",
-      "quotes":"off"
+      // allows flexibility in the use for string literals
+      "quotes":"off",
+      // Prefer JSDoc notation
+      "react/prop-types": "off",
+      // necessary for debugging or logging information during development
+      "no-console": "off"
     },
     "overrides": [
         {
