@@ -244,10 +244,76 @@
 // export default Allergens;
 
 
+// import classes from "./allergens.module.css";
+
+// function Allergens({ recipeIngredients, allergens }) {
+
+//   const allergensList = allergens.filter(
+//     (allergen) =>
+//       recipeIngredients &&
+//       recipeIngredients.length > 0 &&
+//       recipeIngredients.some((ingredient) =>
+//         ingredient.toLowerCase().includes(allergen.toLowerCase())
+//       )
+//   );
+
+//   const hasAllergens = allergensList.length > 0;
+
+//   if (!hasAllergens) {
+//     return null;
+//   }
+
+//   return (
+//     <>
+//     <div>
+//       <div className="dropdown mt-4 mb-4">
+//         <b>Allergens</b>
+//         <div className="flex flex-wrap justify-start   ">
+//           {allergensList.length > 0 ? (
+//             <ul
+//               className={`flex flex-wrap justify-evenly sm:justify-center md:justify-between  ${classes["align-left"]}`}
+//             >
+//               {allergensList.map((allergen, index) => {
+//                 // Check if the allergen is "egg" and handle pluralization
+//                 const ingredientAmount = recipeIngredients.find((ingredient) =>
+//                   ingredient.toLowerCase().includes(allergen.toLowerCase())
+//                 );
+//                 const isPlural =
+//                   ingredientAmount &&
+//                   ingredientAmount.toLowerCase().includes("eggs");
+
+//                 return (
+//                   <button class="cicrle-11" role="button">
+//                   <li
+//                     key={index}
+//                     className={`mr-4 p-2 mb-2  sm:mb-0 md:mb-0 sm:mr-1 md:mr-4 ${classes["circle-11"]}`}
+//                   >
+//                     <div className={`flex items-center ${classes["circle-11"]}`}>
+//                       {allergen}
+//                       {/* {isPlural ? " (eggs)" : " (egg)"} */}
+//                     </div>
+//                   </li>
+//                   </button>
+//                 );
+//               })}
+//             </ul>
+//           ) : null}
+//         </div>
+//       </div>
+      
+//       </div>
+//     </>
+//   );
+// }
+
+// export default Allergens;
+
+
+
+import React from 'react';
 import classes from "./allergens.module.css";
 
 function Allergens({ recipeIngredients, allergens }) {
-
   const allergensList = allergens.filter(
     (allergen) =>
       recipeIngredients &&
@@ -264,10 +330,10 @@ function Allergens({ recipeIngredients, allergens }) {
   }
 
   return (
-    <>
-      <div className="dropdown mt-4 mb-4">
+    <div>
+      <div className=" mt-4 mb-4">
         <b>Allergens</b>
-        <div className="flex flex-wrap justify-start   ">
+        <div className="flex flex-wrap justify-start mt-4">
           {allergensList.length > 0 ? (
             <ul
               className={`flex flex-wrap justify-evenly sm:justify-center md:justify-between  ${classes["align-left"]}`}
@@ -284,17 +350,10 @@ function Allergens({ recipeIngredients, allergens }) {
                 return (
                   <li
                     key={index}
-                    className={`mr-4 p-2 mb-2  sm:mb-0 md:mb-0 sm:mr-1 md:mr-4 ${classes["dropdown-item"]}`}
+                    className={`mr-4 p-2 mb-2  sm:mb-0 md:mb-0 sm:mr-1 md:mr-4 ${classes["button-86"]}`}
+                    role="button"
                   >
-                    <div className={`flex items-center ${classes["circle"]}`}>
-                      <span className="mr-2">
-                        {/* <img
-                          src={`/images/${allergen}.png`}
-                          alt={allergen}
-                          width={24}
-                          height={24}
-                        /> */}
-                      </span>
+                    <div className={`flex items-center`}>
                       {allergen}
                       {/* {isPlural ? " (eggs)" : " (egg)"} */}
                     </div>
@@ -305,9 +364,8 @@ function Allergens({ recipeIngredients, allergens }) {
           ) : null}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
 export default Allergens;
-
