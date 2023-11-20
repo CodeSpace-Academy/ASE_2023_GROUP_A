@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-trailing-spaces */
 import React, { useState } from "react";
 import DescriptionEdit from "./DescriptionEdit";
 import DescriptionError from "../error-messages/DescriptionError";
 
 /**
- *A component for managing and displaying recipe descriptions.
+ * component for managing and displaying recipe descriptions.
  * @param {Object} props - The component props.
  * @param {string} props.description - The description text to display.
  * @param {string} props.recipeId - The ID of the recipe.
