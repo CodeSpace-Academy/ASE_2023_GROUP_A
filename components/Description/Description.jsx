@@ -39,9 +39,6 @@ function Description({ description, recipeId }) {
 
   return (
     <div>
-      <h3 className="bold text-gray-1000">
-        Description
-      </h3>
       {!description ? (
         <DescriptionError />
       ) : (
@@ -54,7 +51,11 @@ function Description({ description, recipeId }) {
               toggleEditing={toggleEditing}
             />
           ) : (
-            <button type="button" className="flex items-center" onClick={toggleEditing}>
+            <button
+              type="button"
+              className="flex items-center"
+              onClick={toggleEditing}
+            >
               <p className="mr-2">Edit Description</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
