@@ -1,8 +1,5 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable operator-linebreak */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable react/prop-types */
 import React, { useContext } from "react";
+import PropTypes from "prop-types";
 import Image from "next/legacy/image";
 import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
@@ -14,9 +11,13 @@ import Loading from "../Loading/Loading";
 import Title from "./Title";
 
 function RecipeCard({
-  recipe, searchQuery, favorites, Key,
+  recipe,
+  searchQuery,
+  favorites,
+  Key,
 }) {
   const { theme } = useTheme();
+  const favoriteCtx = useContext(FavoritesContext);
 
   if (!recipe) {
     return (
@@ -26,11 +27,7 @@ function RecipeCard({
     );
   }
 
-  // eslint-disable-next-line no-underscore-dangle, react/prop-types
-  const firstImage =
-    recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const favoriteCtx = useContext(FavoritesContext);
+  const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
 
   const removeFavoriteHandler = async () => {
@@ -47,12 +44,10 @@ function RecipeCard({
         favoriteCtx.removeFavorite(recipe._id);
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error("Error removing favorite:", error);
     }
   };
 
-  // eslint-disable-next-line consistent-return
   const addFavoritesHandler = async () => {
     try {
       const response = await fetch(`api/recipes/Favourites`, {
@@ -65,8 +60,8 @@ function RecipeCard({
       favoriteCtx.addFavorite(recipe);
       return response;
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error("Error adding favorite:", error);
+      return undefined;
     }
   };
 
@@ -80,14 +75,12 @@ function RecipeCard({
       <div className="w-full h-56 md:h-92 mb-4 relative aspect-h-9">
         <Image
           src={firstImage}
-          // eslint-disable-next-line react/prop-types
           alt={recipe.title}
           layout="fill"
           objectFit="cover"
-
         />
       </div>
-      <div className="flex flex-col justify-between h-22 mb-2 ">
+      <div className="flex flex-col justify-between h-22 pb-2">
 
         <div
           className={`mb-4 text-center ${
@@ -119,8 +112,7 @@ function RecipeCard({
               </span>
             </button>
           ) : (
-            // eslint-disable-next-line react/button-has-type
-            <button onClick={addFavoritesHandler}>
+            <button type="button" onClick={addFavoritesHandler} aria-label="Add to favorites">
               <span>
                 <StarEmpty
                   className={`w-6 h-6 ${
@@ -136,5 +128,31 @@ function RecipeCard({
     </div>
   );
 }
+
+// Prop type validation
+RecipeCard.propTypes = {
+  recipe: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    images: PropTypes.arrayOf(PropTypes.string),
+    title: PropTypes.string.isRequired,
+    prep: PropTypes.number.isRequired,
+    cook: PropTypes.number.isRequired,
+    image: PropTypes.string,
+  }),
+  searchQuery: PropTypes.string.isRequired,
+  favorites: PropTypes.arrayOf.isRequired,
+  Key: PropTypes.string.isRequired,
+};
+
+// Default prop values
+RecipeCard.defaultProps = {
+  recipe: {
+    _id: '',
+    images: [],
+    title: '',
+    prep: 0,
+    cook: 0,
+  },
+};
 
 export default RecipeCard;

@@ -12,7 +12,7 @@
 
     "rules": {
       "react/jsx-no-constructed-context-values":"off",
-      "np-underscore-dangle":"off",
+      "no-underscore-dangle":"off",
       "linebreak-style":"off",
       "double-quoted": "off",
       "quotes":"off"

@@ -25,7 +25,7 @@ function Ingredients({
             data.map((ingredient) => ({
               label: ingredient,
               value: ingredient,
-            }))
+            })),
           );
         } else {
           console.error("Failed to fetch ingredients");
@@ -86,7 +86,7 @@ function Ingredients({
 
     control: (base) => ({
       ...base,
-      backgroundColor: theme === "light" ? "#007bff" : "#0d203eee",
+      backgroundColor: theme === "dark" ? "gray" : "bg-blue-500",
       color: "white",
       width: "fitContent",
     }),
