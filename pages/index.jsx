@@ -1,7 +1,7 @@
-/* eslint-disable linebreak-style */
+
 /* eslint-disable import/extensions */
 /* eslint-disable import/order */
-/* eslint-disable operator-linebreak */
+
 /* eslint-disable eqeqeq */
 /* eslint-disable import/no-unresolved */
 import React, { useContext, useEffect } from "react";
@@ -33,11 +33,10 @@ function Home() {
   }, []);
 
   if (
-    // eslint-disable-next-line operator-linebreak
-    process.env == {} ||
-    !process.env.mongodb_password ||
-    !process.env.mongodb_username ||
-    !process.env.mongodb_uri
+    process.env == {}
+    || !process.env.mongodb_password
+    || !process.env.mongodb_username
+    || !process.env.mongodb_uri
   ) {
     return <EnvError />;
   }
