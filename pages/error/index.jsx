@@ -1,3 +1,6 @@
+/* react scope for eslint complaint */
+import React from "react";
+
 export default function EnvError() {
   return (
     <div className="flex flex-grow h-screen bg-white flex-grow">

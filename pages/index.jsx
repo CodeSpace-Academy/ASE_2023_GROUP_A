@@ -1,7 +1,5 @@
-
 /* eslint-disable import/extensions */
 /* eslint-disable import/order */
-
 /* eslint-disable eqeqeq */
 /* eslint-disable import/no-unresolved */
 import React, { useContext, useEffect } from "react";
@@ -30,7 +28,7 @@ function Home() {
   useEffect(() => {
     favoriteContext.addChangeListener(refreshFavorites);
     return () => favoriteContext.removeChangeListener(refreshFavorites);
-  }, []);
+  }, [favoriteContext]); /* Add dependency array for eslint complaint */
 
   if (
     process.env == {}
