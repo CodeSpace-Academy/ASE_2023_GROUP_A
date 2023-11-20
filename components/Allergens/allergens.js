@@ -67,16 +67,9 @@
 
 // export default Allergens;
 
-
-
-
-
 import classes from "./allergens.module.css";
 
 function Allergens({ recipeIngredients, allergens }) {
-
-
-
   const allergensList = allergens.filter(
     (allergen) =>
       recipeIngredients &&
