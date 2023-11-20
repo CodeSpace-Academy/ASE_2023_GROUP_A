@@ -5,7 +5,7 @@ import DescriptionEdit from "./DescriptionEdit";
 import DescriptionError from "../error-messages/DescriptionError";
 
 /**
- * Represents a component for managing and displaying recipe descriptions.
+ *A component for managing and displaying recipe descriptions.
  * @param {Object} props - The component props.
  * @param {string} props.description - The description text to display.
  * @param {string} props.recipeId - The ID of the recipe.

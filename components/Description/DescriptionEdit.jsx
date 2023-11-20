@@ -3,7 +3,7 @@
 import React, { useState, useRef } from "react";
 
 /**
- * Represents a component for editing descriptions.
+ * A component for editing descriptions.
  * @param {Object} props - The component props.
  * @param {string} props.initialDescription - The initial description text to edit.
  * @param {Function} props.onSave - Function to call when saving the edited description.
