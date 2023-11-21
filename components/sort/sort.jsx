@@ -27,7 +27,12 @@ const DropdownMenu = ({ handleSort, sortOrder }) => {
   return (
     <div>
       <Button
-        sx={{ background: "Blue" }}
+        sx={{
+          background: `${
+            theme === "light" ? "#007bff" : "#0d203eee"
+          } !important`,
+          "&:hover": { background: "lightBlue !important" },
+        }}
         aria-controls="simple-menu"
         aria-haspopup="true"
         variant="contained"
