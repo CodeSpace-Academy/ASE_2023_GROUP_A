@@ -11,13 +11,16 @@
     "plugins": ["react"],
 
     "rules": {
-      // using underscores is a common Javascript convention and for certain databases it might be overly strict
-      "no-underscore-dangle":"off",
-      // helps avoid conflicts and allow flexibility
+
+      "react/jsx-no-constructed-context-values":"off",
+      "np-underscore-dangle":"off",
       "linebreak-style":"off",
-      // this choice is a matter of personal or team preference
       "double-quoted": "off",
-      "quotes":"off"
+      "quotes":"off",
+      "react/prop-types": "off",
+      "no-console": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off"
     },
     "overrides": [
         {

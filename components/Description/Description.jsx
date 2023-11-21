@@ -3,13 +3,12 @@ import DescriptionEdit from "./DescriptionEdit";
 import DescriptionError from "../error-messages/DescriptionError";
 
 /**
- * component for managing and displaying recipe descriptions.
+ * Component for managing and displaying recipe descriptions.
  * @param {Object} props - The component props.
  * @param {string} props.description - The description text to display.
  * @param {string} props.recipeId - The ID of the recipe.
  * @returns {JSX.Element} JSX for the Description component.
  */
-
 function Description({ description, recipeId }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description);
@@ -18,7 +17,6 @@ function Description({ description, recipeId }) {
    * Toggles the editing mode for the description.
    * @returns {void}
    */
-
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   };
@@ -28,7 +26,6 @@ function Description({ description, recipeId }) {
    * @param {string} newDescription - The updated description.
    * @returns {void}
    */
-
   const handleDescriptionSave = async (newDescription) => {
     try {
       const response = await fetch(`/api/description/${recipeId}`, {
@@ -66,11 +63,6 @@ function Description({ description, recipeId }) {
               toggleEditing={toggleEditing}
             />
           ) : (
-            <button
-              type="button"
-              className="flex items-center"
-              onClick={toggleEditing}
-            >
             <button
               type="button"
               className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
