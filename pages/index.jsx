@@ -39,7 +39,7 @@ function Home() {
 
     // Clean up the event listener when the component is unmounted
     return () => favoriteContext.removeChangeListener(refreshFavorites);
-  }, [favoriteContext]); /* Add dependency array for eslint compliance */
+  }, []);
 
   // Check if required environment variables are present, if not, display an error component
   if (
