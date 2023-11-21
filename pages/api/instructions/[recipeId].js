@@ -36,10 +36,10 @@ const updateInstructionsInDB = async (request, result) => {
       }
     } catch (error) {
       console.error("Couldn't connect to instructions", error);
-      result.status(505).json({ error: "Couldn't connect to instructions" });
+      result.status(500).json({ error: "Couldn't connect to instructions" });
     }
   } else {
-    result.status(607).json({ error: "Couldn't connect to instructions" });
+    result.status(500).json({ error: "Couldn't connect to instructions" });
   }
 };
 
