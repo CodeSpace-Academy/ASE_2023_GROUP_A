@@ -4,19 +4,25 @@
  * @returns The RecipeList component is being returned.
  */
 
-import { useEffect, useState, useContext } from "react";
-import useSWR, { mutate } from "swr";
+import React, { useEffect, useState, useContext } from "react";
 import Carousel from "react-multi-carousel";
 import fetchRecipes from "../../helpers/hook";
-import RecipeCard from "../Cards/RecipeCard";
-import Hero from "../Landing/hero";
-import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
-import Loading from "../Loading/Loading";
-import FloatingButton from "../Buttons/floatingButton/FloatingButton";
-import "react-multi-carousel/lib/styles.css";
-import { responsive } from "../../helpers/settings/settings";
+import useSWR, { mutate } from "swr";
+import { responsive } from "@/helpers/settings/settings";
 
+import "react-multi-carousel/lib/styles.css";
+
+import FloatingButton from "../Buttons/floatingButton/FloatingButton";
+import Hero from "../Landing/hero";
+import Loading from "../Loading/Loading";
+import RecipeCard from "../Cards/RecipeCard";
+
+// import Pagination from "../Buttons/LoadMore/pagination/Pagination";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import FavoritesContext from "../Context/Favorites-context";
+import { useTheme } from "@/components/Context/ThemeContext";
+// const ITEMS_PER_PAGE = 100;
 
 function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
@@ -30,17 +36,16 @@ function RecipeList({ favorites }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [numberOfFilters, setNumberOfFilters] = useState(0);
   const [filterIngredientResults, setFilterIngredientResults] = useState([]);
+  const { theme } = useTheme();
+  const isDarkTheme = theme === "dark";
   const [filterInstructionsResults, setFilterInstructionsResults] = useState(
     []
   );
-
-  // const [loading, setLoading] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedInstructions, setSelectedInstructions] = useState(0);
   const [sortOrder, setSortOrder] = useState(null);
-
   const [noRecipesFoundMessage, setNoRecipesFoundMessage] = useState(null);
   // const [numberOfFilters, setNumberOfFilters] = useState(0);
   const favoriteContext = useContext(FavoritesContext);
@@ -51,6 +56,9 @@ function RecipeList({ favorites }) {
     loading: isLoading,
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
+  if (recipesError) {
+  }
+
   useEffect(() => {
     favoriteContext.updateFavorites(favorites);
     if (!isLoading && recipesData) {
@@ -60,17 +68,14 @@ function RecipeList({ favorites }) {
       // Use mutate to update the state as soon as you fetch the new data
       mutate(`/api/recipes?page=${currentPage}`);
     }
-  }, [currentPage, recipesData, favorites, favoriteContext, isLoading]);
+  }, [currentPage, recipesData, favorites]);
 
+  const remainingRecipes = Math.max(0, totalRecipes - 100 * currentPage);
   // let combinedResults;
+  const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
 
-  const handleLoadLess = () => {
-    setCurrentPage(currentPage - 1);
-
-    //  loadRecipes(currentPage - 1);
-  };
-  const handleLoadMore = () => {
-    setCurrentPage(currentPage + 1);
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
   };
 
   if (isLoading) {
@@ -374,8 +379,6 @@ function RecipeList({ favorites }) {
     originalRecipes,
   ]);
 
-  const remainingRecipes = totalRecipes - 100 * currentPage;
-
   return (
     <div>
       <Hero
@@ -399,24 +402,36 @@ function RecipeList({ favorites }) {
         setSearchQuery={setSearchQuery}
         handleSort={handleSort}
       />
-      <button onClick={handleDefault}>All Recipes</button>
+      <button
+        onClick={handleDefault}
+        className={isDarkTheme ? "text-white" : ""}
+      >
+        All Recipes
+      </button>
 
       <div style={{ textAlign: "center" }}>
-        <p>Filter by number of instructions:</p>
+        <p className={isDarkTheme ? "text-white" : ""}>
+          Filter by number of instructions:
+        </p>
         <input
           type='number'
           placeholder='Enter number of instructions..'
           value={parseInt(selectedInstructions)}
           onChange={handleChange}
-          className='border border-gray-300 rounded-1-md px-4 py-2'
+          className={`border border-gray-300 rounded-1-md px-4 py-2 ${
+            isDarkTheme ? "text-black" : ""
+          }`}
         />
       </div>
+
       {!favorites ? (
         <p>
           <Loading />
         </p>
       ) : favorites.length === 0 ? (
-        <p>No favorite recipes yet.</p>
+        <p className={isDarkTheme ? "text-white" : ""}>
+          No favorite recipes yet.
+        </p>
       ) : (
         <div className='h-3/5'>
           <Carousel responsive={responsive} containerClass='carousel-container'>
@@ -428,7 +443,9 @@ function RecipeList({ favorites }) {
           </Carousel>
         </div>
       )}
-      <div className='total-count'>Total Recipes: {recipes.length}</div>
+      <div className={`total-count ${isDarkTheme ? "text-white" : ""}`}>
+        Total Recipes: {recipes.length}
+      </div>
 
       {autocompleteSuggestions.length > 0 && (
         <ul className='autocomplete-list'>
@@ -462,21 +479,17 @@ function RecipeList({ favorites }) {
       )}
       {recipes.length < totalRecipes && (
         <>
-          <div className='flex justify-center gap-10'>
-            <LoadMoreButton
-              handleLoad={handleLoadLess}
-              remainingRecipes={remainingRecipes}
-              totalRecipes={totalRecipes}
-              isLoadMore={false}
-            />
-            <LoadMoreButton
-              handleLoad={handleLoadMore}
-              remainingRecipes={remainingRecipes}
-              totalRecipes={totalRecipes}
-              isLoadMore
-            />
+          <div className="flex justify-center pb-8 gap-10">
+            <Stack spacing={2} justifyContent="center" alignItems="center">
+              <Pagination
+                count={pageNumbers}
+                page={currentPage}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Stack>
           </div>
-          <FloatingButton />
+          <FloatingButton className={theme === 'light' ? 'bg-blue-500' : 'bg-blue-800'} />
         </>
       )}
     </div>

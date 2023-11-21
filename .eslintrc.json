@@ -10,22 +10,24 @@
   },
   "plugins": ["react"],
 
-  "rules": {
-    "quotes": 0
-  },
-  "overrides": [
-    {
-      "files": [
-        "pages/FavoritesPage/**",
-        "components/Context/Favorites-context/**"
-      ],
-      "rules": {
-        "ignoreComments": 0,
-        "react/react-in-jsx-scope": 0,
-        "no-underscore-dangle": 0,
-        "no-trailing-spaces": 0,
-        "react/jsx-closing-bracket-location": 0
-      }
-    }
-  ]
+    "rules": {
+      "react/jsx-no-constructed-context-values":"off",
+      "np-underscore-dangle":"off",
+      "linebreak-style":"off",
+      "double-quoted": "off",
+      "quotes":"off"
+    },
+    "overrides": [
+        {
+          "files": ["pages/FavoritesPage/**", "components/Context/Favorites-context/**"],
+          "rules": {
+            "ignoreComments": 0,
+            "react/react-in-jsx-scope": 0,
+            "no-underscore-dangle": 0,
+            "no-trailing-spaces":0,
+            "react/jsx-closing-bracket-location": 0,
+            "linebreak-style":"off"
+          }
+        }
+      ]
 }

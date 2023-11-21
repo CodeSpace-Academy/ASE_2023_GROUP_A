@@ -1,4 +1,8 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/function-component-definition */
+import React from "react";
 import classes from "./loadMore.module.css";
+import { useTheme } from "../../Context/ThemeContext";
 
 const LoadMoreButton = ({
   handleLoad,
@@ -7,22 +11,29 @@ const LoadMoreButton = ({
   isLoadMore,
   currentPage,
 }) => {
+  const { theme } = useTheme();
   return (
-    <div className="rounded items-center justify-center bg-blue-500 text-white p-2 mt-2 transition-transform hover:scale-105 duration-300 ease-in-out">
+    <div className={`${
+      theme === "light" ? "text-black bg-blue-300" : "text-white bg-gray-700"
+    } p-4 rounded shadow mt-8 mb-4 md:flex flex-col transform transition-transform hover:scale-105 items-center justify-center`}
+    >
       <button
+        type="button"
         onClick={handleLoad}
         disabled={
-          (isLoadMore && remainingRecipes <= 0) ||
-          (!isLoadMore && remainingRecipes >= totalRecipes)
+          (remainingRecipes <= 0)
+          || (remainingRecipes === totalRecipes - 100)
+          || (!isLoadMore && currentPage === 1)
+          || (!isLoadMore && remainingRecipes >= totalRecipes)
         }
         className={`${classes.viewRecipeButton} w-full text-center ${
-          (isLoadMore && remainingRecipes === 0) ||
-          (!isLoadMore && remainingRecipes === totalRecipes - currentPage * 100)
-            ? "opacity-50 cursor-not-allowed"
-            : ""
+          (isLoadMore && remainingRecipes === 0)
+          || (!isLoadMore && remainingRecipes === totalRecipes - 100)
+            ? 'opacity-50 cursor-not-allowed'
+            : ''
         }`}
       >
-        {isLoadMore ? `Next` : `Previous)`}
+        {isLoadMore ? 'Next' : 'Previous'}
       </button>
     </div>
   );

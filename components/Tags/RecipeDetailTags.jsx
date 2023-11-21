@@ -9,7 +9,7 @@ const RecipeDetailTags = ({ recipe }) => {
       <>
         <ul className="list-disc list-inside">
           {recipe.tags.map((tag, index) => (
-            <li key={index} className="text-gray-600">
+            <li key={index} className="text-gray-1000">
               {tag}
             </li>
           ))}

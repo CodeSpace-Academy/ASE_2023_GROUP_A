@@ -1,3 +1,9 @@
 {
-    "docwriter.style": "JSDoc"
+    "docwriter.style": "JSDoc",
+    "files.autoSave": "afterDelay",
+    "editor.cursorStyle": "line",
+    "editor.wordWrap": "on",
+    "workbench.editor.autoLockGroups": {
+        "mainThreadWebview-markdown.preview": true
+    }
 }

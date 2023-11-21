@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 
+import { useTheme } from "../Context/ThemeContext";
+
 function Categories({
   setFilterCategoryResults,
   handleDefaultCategoryFilter,
@@ -9,6 +11,8 @@ function Categories({
   setSelectedCategories,
 }) {
   const [categories, setCategories] = useState([]);
+
+  const {theme} = useTheme()
 
   useEffect(() => {
     async function fetchCategories() {
@@ -76,13 +80,13 @@ function Categories({
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
+      background: "#3496c7",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "blue",
+      backgroundColor: theme === 'light' ? "#007bff" : "#0d203eee",
       color: "white",
       width: "fitContent",
     }),
@@ -115,7 +119,7 @@ function Categories({
         onChange={handleCategoryChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="select category"
+        placeholder="Select Category"
       />
     </div>
   );

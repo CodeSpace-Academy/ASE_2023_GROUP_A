@@ -5,13 +5,12 @@ import Categories from "../categories/categories";
 import Tags from "../Tags/Tags";
 import Ingredients from "../ingredients/ingredients";
 import DropdownMenu from "../sort/sort";
-
+import { useTheme } from "../Context/ThemeContext";
 
 export default function Hero({
   setFilterCategoryResults,
   setFilterTagsResults,
   setFilterIngredientResults,
-  setFilterInstructionsResults,
   handleDefaultCategoryFilter,
   handleDefaultIngredientFilter,
   handleDefaultTagFilter,
@@ -33,9 +32,14 @@ export default function Hero({
   handleSort,
   sortOrder,
 }) {
+  const { theme } = useTheme();
   return (
-    <div className={classes.heroImage}>
-      <div className={classes.heroContent}>
+    <div className={`sm:portrait:h-screen max-w-full ${classes.heroImage}`}>
+      <div
+        className={`sm:mt-20 sm:block ${classes.heroContent} ${
+          theme === "light" ? " bg-blue-400" : " bg-gray-700"
+        } bg-opacity-70`}
+      >
         <div className={classes.search}>
           <SearchBar
             handleDefault={handleDefaultSearch}
@@ -45,7 +49,9 @@ export default function Hero({
             searchQuery={searchQuery}
           />
         </div>
-        <div className={classes.filters}>
+        <div
+          className={`flex flex-col md:flex-row sm:block ${classes.filters}`}
+        >
           <Categories
             setFilterCategoryResults={setFilterCategoryResults}
             setRecipes={setRecipes}
@@ -69,15 +75,6 @@ export default function Hero({
             selectedIngredients={selectedIngredients}
             setSelectedIngredients={setSelectedIngredients}
           />
-
-          {/* <InstructionF
-            ff={ff}
-            setFilterInstructionsResults={setFilterInstructionsResults}
-            setRecipes={setRecipes}
-            
-            selectedInstructions={selectedInstructions}
-            setI={setI}
-           /> */}
 
           <DropdownMenu handleSort={handleSort} sortOrder={sortOrder} />
         </div>
