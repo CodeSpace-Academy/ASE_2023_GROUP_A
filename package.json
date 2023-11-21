@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lintfix": "next lint --fix",
     "build:css": "tailwindcss build path/to/your/styles.css -o path/to/your/output.css"
   },
   "dependencies": {
