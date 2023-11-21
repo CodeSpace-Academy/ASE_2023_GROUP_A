@@ -12,7 +12,6 @@ import DropDownSVG from "../IconsAndSvg's/DropDownSVG";
 import CoverImage from "../Images/CoverImage";
 import IngredientsList from "../ingredients/IngredientsList";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
-import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 import Link from "next/link"; 
 import { FaArrowLeft, FaTag, FaUsers } from "react-icons/fa";
 import { FiBook } from "react-icons/fi";
@@ -93,7 +92,6 @@ const Recipe = ({ recipe, Allergies }) => {
           </div>
 
           {showInstructions && <RecipeInstructions recipes={recipe} />}
-          <UpdateRecipeInstructions />
         </div>
       </div>
     </div>
