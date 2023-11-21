@@ -40,7 +40,7 @@ const Recipe = ({ recipe, Allergies }) => {
   return (
     <div className={`container mx-auto mt-24 p-4 ${textClass}`}>
       <Link href="/">
-        <span className={`text-gray-600 text-xl ${textClass}`}>
+        <span className={`text-black-600 text-3xl ${textClass}`}>
           <FaArrowLeft />
         </span>
       </Link>
