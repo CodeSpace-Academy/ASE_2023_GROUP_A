@@ -11,11 +11,16 @@
     "plugins": ["react"],
 
     "rules": {
+
       "react/jsx-no-constructed-context-values":"off",
       "np-underscore-dangle":"off",
       "linebreak-style":"off",
       "double-quoted": "off",
-      "quotes":"off"
+      "quotes":"off",
+      "react/prop-types": "off",
+      "no-console": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off"
     },
     "overrides": [
         {
