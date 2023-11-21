@@ -51,7 +51,9 @@ function Description({ description, recipeId }) {
 
   return (
     <div>
-      <h3 className="bold text-gray-1000">Description</h3>
+      <h3 className="bold text-gray-1000">
+        Description
+      </h3>
       {!description ? (
         <DescriptionError />
       ) : (
@@ -64,6 +66,11 @@ function Description({ description, recipeId }) {
               toggleEditing={toggleEditing}
             />
           ) : (
+            <button
+              type="button"
+              className="flex items-center"
+              onClick={toggleEditing}
+            >
             <button
               type="button"
               className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

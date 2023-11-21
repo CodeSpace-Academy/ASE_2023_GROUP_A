@@ -25,7 +25,7 @@ function Ingredients({
             data.map((ingredient) => ({
               label: ingredient,
               value: ingredient,
-            }))
+            })),
           );
         } else {
           console.error("Failed to fetch ingredients");

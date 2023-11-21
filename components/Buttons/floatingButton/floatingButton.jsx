@@ -14,19 +14,12 @@ export default function FloatingButton() {
   };
   return (
     <>
-      <div
-        type="button"
-        className={classes.floatingButton}
-        onClick={handleScrollToTop}
-      >
+      { /* eslint-disable-next-line jsx-a11y/no-static-element-interactions */ }
+      <div className={classes.floatingButton} onClick={handleScrollToTop}>
         <FaArrowUp />
       </div>
-      <div
-        type="button"
-        className={classes.floatingButton2}
-        onClick={handleScrollToBottom}
-      >
-        <FaArrowDown />
+      <div className={classes.floatingButton2} onClick={handleScrollToBottom}>
+        <FaArrowDown/>
       </div>
     </>
   );
