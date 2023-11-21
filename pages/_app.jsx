@@ -1,8 +1,15 @@
-import "../styles/globals.css";
-import { Fragment } from "react";
-import ThemeProvider from "@/components/Context/ThemeContext";
-import { FavoritesContextProvider } from "@/components/Context/Favorites-context";
-import Layout from "@/components/LayOuts/Layout";
+import '../styles/globals.css';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { Fragment } from 'react';
+
+import { ToastContainer } from 'react-toastify';
+
+import {
+  FavoritesContextProvider,
+} from '@/components/Context/Favorites-context';
+import ThemeProvider from '@/components/Context/ThemeContext';
+import Layout from '@/components/LayOuts/Layout';
 
 function App({ Component, pageProps }) {
   return (
@@ -13,6 +20,7 @@ function App({ Component, pageProps }) {
         <Fragment>
           <Layout>
             <Component {...pageProps} />
+            <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={false} />
           </Layout>
         </Fragment>
       </ThemeProvider>

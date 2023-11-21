@@ -22,6 +22,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "@/components/Context/ThemeContext";
+import LoadingCard from "../Cards/LoadingCard";
 // const ITEMS_PER_PAGE = 100;
 
 function RecipeList({ favorites }) {
@@ -55,11 +56,13 @@ function RecipeList({ favorites }) {
     loading: isLoading,
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
-if(recipesError){
 
-}
 
   useEffect(() => {
+    if(recipesError){
+    alert("Failed to fetch Recipes, Try to reload the site");
+    window.location.reload();
+  }
     favoriteContext.updateFavorites(favorites);
   if (!isLoading && recipesData) {
     // Check if recipesData is defined before updating the state
@@ -68,7 +71,8 @@ if(recipesError){
     // Use mutate to update the state as soon as you fetch the new data
     mutate(`/api/recipes?page=${currentPage}`);
   }
-}, [currentPage, recipesData, favorites]);
+  
+}, [currentPage, recipesData, favorites, isLoading, recipesError]);
   
   const remainingRecipes = Math.max(0, totalRecipes - 100 * currentPage);
   // let combinedResults;
@@ -76,12 +80,11 @@ if(recipesError){
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
 
-  if (isLoading) {
-    return <Loading />;
-  }
+
   const handleSearch = async (searchQuery) => {
     setNoRecipesFoundMessage("");
 
@@ -429,7 +432,20 @@ if(recipesError){
           }`}
         />
       </div>
-      
+
+      {autocompleteSuggestions.length > 0 && (
+        <ul className="autocomplete-list">
+          {autocompleteSuggestions.map((suggestion, index) => (
+            <li
+              key={index}
+              onClick={() => handleAutocompleteSelect(suggestion)}
+            >
+              {suggestion}
+            </li>
+          ))}
+        </ul>
+      )}
+
       {!favorites ? (
         <p>
           <Loading />
@@ -449,40 +465,35 @@ if(recipesError){
           </Carousel>
         </div>
       )}
+
       <div className={`total-count ${isDarkTheme ? "text-white" : ""}`}>
         Total Recipes: {recipes.length}
       </div>
 
-      {autocompleteSuggestions.length > 0 && (
-        <ul className="autocomplete-list">
-          {autocompleteSuggestions.map((suggestion, index) => (
-            <li
-              key={index}
-              onClick={() => handleAutocompleteSelect(suggestion)}
-            >
-              {suggestion}
-            </li>
-          ))}
-        </ul>
-      )}
+        <h4>Remaining Recipes: {remainingRecipes}</h4>
+        
+          
+        {!recipes ? (
+  <Loading />
+) : (
+  <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    {recipes.map((recipe, index) => (
+      <div key={index}>
+        <RecipeCard
+          key={recipe._id}  
+          favorites={favorites}
+          recipe={recipe}
+          searchQuery={searchQuery}
+          description={recipe.description}
+        />
+      </div>
+    ))}
+  </div>
+)}
 
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {recipes.map((recipe, index) => (
-            <div key={index}>
-              <RecipeCard
-                key={recipe._id}
-                favorites={favorites}
-                recipe={recipe}
-                searchQuery={searchQuery}
-                description={recipe.description}
-              />
-            </div>
-          ))}
-        </div>
-      )}
+        
+
+      
       {recipes.length < totalRecipes && (
         <>
           <div className="flex justify-center pb-8 gap-10">
@@ -495,9 +506,10 @@ if(recipesError){
               />
             </Stack>
           </div>
-          <FloatingButton />
         </>
       )}
+
+       <FloatingButton />
       </div>
   );
 }

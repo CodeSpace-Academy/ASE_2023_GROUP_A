@@ -9,7 +9,7 @@ module.exports = {
   },
   reactStrictMode: true,
   eslint: {
-    dirs: ["/pages/FavoritesPage.jsx", "/components/Context/Favorites-context.js", "/components/Cards/RecipeCard.jsx", "/components/LayOuts/Header/Navigation.jsx"],
+    dirs: ["/pages/FavoritesPage.jsx", "/pages/index.jsx", "/components/Context/Favorites-context.js", "/components/Cards/RecipeCard.jsx", "/components/LayOuts/Header/Navigation.jsx"],
 
   },
 };

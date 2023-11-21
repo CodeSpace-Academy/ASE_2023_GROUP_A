@@ -1,17 +1,24 @@
+import React, { useContext } from 'react';
+
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
+import { toast } from 'react-toastify';
 
-import React, { useContext } from "react";
-import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
-import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
-import FavoritesContext from "../Context/Favorites-context";
-import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRecipe";
-import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
-import { useTheme } from "../Context/ThemeContext";
-import Title from "./Title";
-import Loading from "../Loading/Loading";
+import { StarIcon as StarEmpty } from '@heroicons/react/24/outline';
+import { StarIcon as StarFilled } from '@heroicons/react/24/solid';
+
+import ViewRecipeDetails from '../Buttons/ViewRecipeButton/ViewRecipe';
+import FavoritesContext from '../Context/Favorites-context';
+import { useTheme } from '../Context/ThemeContext';
+import {
+  CookTime,
+  PrepTime,
+  TotalTime,
+} from '../TimeAndDate/TimeConvertor';
+import LoadingCard from './LoadingCard';
+import Title from './Title';
 
 // eslint-disable-next-line react/function-component-definition
 const RecipeCard = ({
@@ -29,7 +36,7 @@ const RecipeCard = ({
   if (!recipe) {
     return (
       <div>
-        <Loading />
+        <LoadingCard />
       </div>
     );
   }
@@ -43,23 +50,29 @@ const RecipeCard = ({
 
   // eslint-disable-next-line no-shadow
   const removeFavoriteHandler = (recipe) => async () => {
-    try {
-      const response = await fetch(`api/recipes/Favourites`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // eslint-disable-next-line no-underscore-dangle, react/prop-types
-        body: JSON.stringify({ recipeId: recipe._id }),
-      });
+    // Display a confirmation dialog
+    const userConfirmed = window.confirm('Are you sure you want to remove this recipe from your favorites?');
+    if (userConfirmed) {
+      try {
+        const response = await fetch(`api/recipes/Favourites`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // eslint-disable-next-line no-underscore-dangle, react/prop-types
+          body: JSON.stringify({ recipeId: recipe._id }),
+        });
 
-      if (response.ok) {
-        // eslint-disable-next-line no-underscore-dangle, react/prop-types
-        favoriteCtx.removeFavorite(recipe._id);
+        if (response.ok) {
+          // eslint-disable-next-line no-underscore-dangle, react/prop-types
+          favoriteCtx.removeFavorite(recipe._id);
+          toast.success('Recipe removed from favorites!');
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error("Error removing favorite:", error);
+        toast.error('Error removing recipe from favorites.');
       }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error("Error removing favorite:", error);
     }
   };
 
@@ -74,9 +87,13 @@ const RecipeCard = ({
         body: JSON.stringify(recipe),
       });
       favoriteCtx.addFavorite(recipe);
+      toast.success('Recipe added to favorites!');
       return response;
       // eslint-disable-next-line no-empty
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error adding favorite:", error);
+      toast.error('Error adding recipe to favorites.');
+    }
   };
 
   return (

@@ -1,22 +1,24 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+
+import Link from 'next/link'; // Import Link
+import { FaArrowLeft } from 'react-icons/fa'; // Import FaArrowLeft
+
+import Allergens from '../Allergens/allergens';
+import { useTheme } from '../Context/ThemeContext';
+import Description from '../Description/Description';
+import DropDownSVG from '../IconsAndSvg's/DropDownSVG';
+import CoverImage from '../Images/CoverImage';
+import IngredientsList from '../ingredients/IngredientsList';
+import UpdateRecipeInstructions from '../Instructions/editRecipeInstructions';
+import RecipeInstructions from '../Instructions/RecipeInstructions';
+import Loading from '../Loading/Loading';
+import RecipeDetailTags from '../Tags/RecipeDetailTags';
 import {
   CookTime,
   PrepTime,
   Published,
   TotalTime,
-} from "../TimeAndDate/TimeConvertor";
-import RecipeDetailTags from "../Tags/RecipeDetailTags";
-import Description from "../Description/Description";
-import Allergens from "../Allergens/allergens";
-import DropDownSVG from "../IconsAndSvg's/DropDownSVG";
-import CoverImage from "../Images/CoverImage";
-import IngredientsList from "../ingredients/IngredientsList";
-import RecipeInstructions from "../Instructions/RecipeInstructions";
-import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
-import Link from "next/link"; // Import Link
-import { FaArrowLeft } from "react-icons/fa"; // Import FaArrowLeft
-import Loading from "../Loading/Loading";
-import { useTheme } from "../Context/ThemeContext";
+} from '../TimeAndDate/TimeConvertor';
 
 const Recipe = ({ recipe, Allergies }) => {
   const [showTags, setShowTags] = useState(false);
@@ -60,14 +62,7 @@ const Recipe = ({ recipe, Allergies }) => {
             </p>
           </div>
           <div className={`mt-4 ${textClass}`}>
-            {/* <button
-              onClick={() => setShowTags(!showTags)}
-              className={`bg-yellow-500 hover:bg-yellow-600 flex flex-row ${textClass} font-bold py-2 px-4 rounded mb-4`}
-            > */}
-            {/* <b>
-            {/* </button> */}
-            {/* {showTags && (
-              <div> */} 
+
              <b>Tags</b> 
                 <RecipeDetailTags recipe={recipe} />
               {/* </div>

@@ -4,12 +4,18 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable eqeqeq */
 /* eslint-disable import/no-unresolved */
-import React, { useContext, useEffect } from "react";
-import EnvError from "./error";
-import Loading from "@/components/Loading/Loading";
-import FavoritesContext from "@/components/Context/Favorites-context";
-import useSWR, { mutate } from "swr";
-import RecipeList from "@/components/RecipesList/RecipeList";
+import React, {
+  useContext,
+  useEffect,
+} from 'react';
+
+import useSWR, { mutate } from 'swr';
+
+import FavoritesContext from '@/components/Context/Favorites-context';
+import Loading from '@/components/Loading/Loading';
+import RecipeList from '@/components/RecipesList/RecipeList';
+
+import EnvError from './error';
 
 function Home() {
   const favoriteContext = useContext(FavoritesContext);
@@ -46,6 +52,7 @@ function Home() {
   }
 
   const favorites = favoritesData.favorites || [];
+
   return (
     <RecipeList favorites={favorites} />
   );
