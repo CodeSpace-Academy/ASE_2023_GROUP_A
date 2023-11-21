@@ -17,4 +17,11 @@ module.exports = {
       "/components/LayOuts/Header/Navigation.jsx",
     ],
   },
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.resolve.alias["react-dom$"] = "react-dom/profiling";
+      config.resolve.alias["scheduler/tracing"] = "scheduler/tracing-profiling";
+    }
+    return config;
+  },
 };
