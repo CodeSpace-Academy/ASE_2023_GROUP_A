@@ -68,17 +68,20 @@ const Recipe = ({ recipe, Allergies }) => {
               description={recipe.description}
               recipeId={recipe._id}
             />
-            <div className={`mt-4 ${textClass}`}>
-              <FaUsers className='ml-4 mr-2' />
+
+            <div className='flex items-center pt-2'>
+              <FaUsers className=' mr-2' />
               <b>Servings</b>: {recipe.servings}
             </div>
-            <div className={`mt-4 ${textClass}`}>
+
+            <div className='flex items-center'>
+              {" "}
               <FiBook className='mr-2' />
               <b>Category</b>: {recipe.category}
             </div>
-            <div className={`mt-4 ${textClass}`}>
-              <FaTag className='mr-2' />
-              <b>Tags</b>
+
+            <div className={` bg-pink-200 mt-4 ${textClass}`}>
+              {" "}
               <RecipeDetailTags recipe={recipe} />
               <PrepTime prepTime={recipe.prep} />
               <CookTime cookTime={recipe.cook} />
@@ -91,16 +94,13 @@ const Recipe = ({ recipe, Allergies }) => {
               <IngredientsList
                 ingredients={Object.entries(recipe.ingredients)}
               />
-
               <h3 className={`text-lg font-semibold ${textClass}`}>
                 Instructions
               </h3>
               <RecipeInstructions recipes={recipe} />
-
               <div className={`${textClass} mt-4`}>
                 <Published published={recipe.published} />
               </div>
-
               {showInstructions && <RecipeInstructions recipes={recipe} />}
             </div>
           </div>
