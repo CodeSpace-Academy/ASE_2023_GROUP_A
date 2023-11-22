@@ -1,0 +1,39 @@
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0%;
+
+  @media (max-width: 799px) {
+    flex-direction: grid;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 6%;
+    gap: 2%;
+  }
+
+  @media (min-width: 800px) {
+    flex-direction: row;
+    gap: 5%;
+    justify-content: center;
+  }
+}
+
+.copyright {
+    justify-self: center;
+}
+
+.copyright > small {
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 799px) {
+    align-content: center;
+    margin: 5%;
+    font-size: 10px;
+  }
+
+  @media (min-width: 800px) {
+    padding: auto;
+    margin: 30%;
+  }
+}

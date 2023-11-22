@@ -10,6 +10,11 @@ import "react-multi-carousel/lib/styles.css";
 import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "@/components/Context/ThemeContext";
 import Badges from "../badges/badges";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Carousel from "react-multi-carousel";
+import { responsive } from "@/helpers/settings/settings";
+import Loading from "../Loading/Loading";
 
 /**
  * RecipeList component to display a list of recipes based on various filters.
@@ -43,6 +48,15 @@ function RecipeList({ favorites }) {
     error: recipesError,
     isLoading,
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
+
+  if (recipesError) {
+  }
+
+  const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
+
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
     favoriteContext.updateFavorites(favorites);
@@ -128,10 +142,10 @@ function RecipeList({ favorites }) {
             setNoRecipesFoundMessage(null);
           }
         } else {
-          console.error("No recipes found in the response data.");
+          throw Error
         }
       } else {
-        console.error("Failed to fetch recipes by filters");
+        throw Error
       }
 
       const queryParams = new URLSearchParams(filters);
@@ -177,7 +191,7 @@ function RecipeList({ favorites }) {
 
       router.push(url);
     } catch (error) {
-      console.error("Error fetching recipes by filters:", error);
+      throw Error
     }
   };
 
@@ -259,11 +273,11 @@ function RecipeList({ favorites }) {
           const data = await response.json();
           setAutocompleteSuggestions(data.autocomplete);
         } else {
-          console.error("Autocomplete request failed");
+          throw Error
         }
       }
     } catch (error) {
-      console.error("Error fetching autocomplete suggestions:", error);
+      throw Error
     }
   };
 
@@ -329,7 +343,7 @@ function RecipeList({ favorites }) {
         filterCount={filterCount}
       />
 
-      {/* {isLoading ? (
+      {isLoading ? (
         <Loading />
       ) : favorites.length === 0 ? (
         <p className={isDarkTheme ? "text-white" : ""}>
@@ -345,7 +359,7 @@ function RecipeList({ favorites }) {
             ))}
           </Carousel>
         </div>
-      )} */}
+      )}
 
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
@@ -391,24 +405,22 @@ function RecipeList({ favorites }) {
             <span style={{ fontWeight: "bold" }}>{remainingRecipes} </span>
             recipes remaining
           </p>
-          <div className="flex justify-center gap-10">
-            <LoadMoreButton
-              handleLoad={handleLoadLess}
-              remainingRecipes={remainingRecipes}
-              totalRecipes={totalRecipes}
-              isLoadMore={false}
-            />
-            <LoadMoreButton
-              handleLoad={handleLoadMore}
-              remainingRecipes={remainingRecipes}
-              totalRecipes={totalRecipes}
-              isLoadMore
-            />
+          
+          <div className="flex justify-center pb-8 gap-10">
+            <Stack spacing={2} justifyContent="center" alignItems="center">
+              <Pagination
+                count={pageNumbers}
+                page={currentPage}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Stack>
           </div>
-          <FloatingButton />
+          <FloatingButton className={theme === 'light' ? 'bg-blue-500' : 'bg-blue-800'} />
         </>
       )}
     </div>
+    
   );
 }
 

@@ -56,7 +56,9 @@ export default function Hero({
             searchQuery={searchQuery}
           />
         </div>
-        <div className={classes.filters}>
+        <div
+          className={`flex flex-col md:flex-row sm:block ${classes.filters}`}
+        >
           <Categories
             selectedCategories={selectedCategories}
             setSelectedCategories={setSelectedCategories}

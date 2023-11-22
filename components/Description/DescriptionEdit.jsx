@@ -1,17 +1,45 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 
-const DescriptionEdit = ({ initialDescription, onSave, toggleEditing }) => {
-  // const [description, setDescription] = useState(initialDescription);
+/**
+ * A component for editing descriptions.
+ * @param {Object} props - The component props.
+ * @param {string} props.initialDescription - The initial description text to edit.
+ * @param {Function} props.onSave - Function to call when saving the edited description.
+ * @param {Function} props.toggleEditing - Function to toggle the editing mode.
+ * @returns {JSX.Element} JSX for the DescriptionEdit component.
+ */
+
+function DescriptionEdit({ initialDescription, onSave, toggleEditing }) {
   const [newDescription, setNewDescription] = useState(initialDescription);
   const newTextRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
+
+  /**
+   * Handles changes in the description input field.
+   * @param {Object} e - The event object.
+   * @returns {void}
+   */
 
   const handleDescriptionChange = (e) => {
     setNewDescription(e.target.value);
   };
 
-  const handleSave = () => {
-    onSave(newDescription);
-    toggleEditing();
+  /**
+   * Handles the save action for the edited description.
+   * Triggers the onSave function and toggles the editing mode.
+   * @returns {void}
+   */
+
+  const handleSave = async () => {
+    setIsLoading(true);
+    try {
+      await onSave(newDescription);
+      toggleEditing();
+    } catch (error) {
+      console.error("Error updating description:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -23,25 +51,18 @@ const DescriptionEdit = ({ initialDescription, onSave, toggleEditing }) => {
         onChange={handleDescriptionChange}
         rows={5}
         cols={50}
+        disabled={isLoading}
       />
-      <button className="bg-orange-300 rounded-sm-3" onClick={handleSave}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M14 5l7 7m0 0l-7 7m7-7H3"
-          />
-        </svg>
+      <button
+        type="button"
+        className="bg-orange-300 rounded-sm-3"
+        onClick={handleSave}
+        disabled={isLoading}
+      >
+        <p className="text-black">{isLoading ? "Saving..." : "Save"}</p>
       </button>
     </div>
   );
-};
+}
 
 export default DescriptionEdit;

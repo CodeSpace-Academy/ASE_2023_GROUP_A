@@ -1,20 +1,31 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import DescriptionEdit from "./DescriptionEdit";
 import DescriptionError from "../error-messages/DescriptionError";
 
-const Description = ({ description, recipeId }) => {
+/**
+ * Component for managing and displaying recipe descriptions.
+ * @param {Object} props - The component props.
+ * @param {string} props.description - The description text to display.
+ * @param {string} props.recipeId - The ID of the recipe.
+ * @returns {JSX.Element} JSX for the Description component.
+ */
+function Description({ description, recipeId }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(description);
 
+  /**
+   * Toggles the editing mode for the description.
+   * @returns {void}
+   */
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   };
 
-  const handleEditComplete = (editedDescription) => {
-    setEditedDescription(editedDescription);
-    toggleEditing(false);
-  };
-
+  /**
+   * Handles the save action for the edited description.
+   * @param {string} newDescription - The updated description.
+   * @returns {void}
+   */
   const handleDescriptionSave = async (newDescription) => {
     try {
       const response = await fetch(`/api/description/${recipeId}`, {
@@ -37,7 +48,9 @@ const Description = ({ description, recipeId }) => {
 
   return (
     <div>
-      <h3 className="className=" bold text-gray-1000>Description</h3>
+      <h3 className="bold text-gray-1000">
+        Description
+      </h3>
       {!description ? (
         <DescriptionError />
       ) : (
@@ -50,7 +63,12 @@ const Description = ({ description, recipeId }) => {
               toggleEditing={toggleEditing}
             />
           ) : (
-            <button onClick={toggleEditing}>
+            <button
+              type="button"
+              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={toggleEditing}
+            >
+              <p className="mr-2">Edit Description</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -71,6 +89,6 @@ const Description = ({ description, recipeId }) => {
       )}
     </div>
   );
-};
+}
 
 export default Description;

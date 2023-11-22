@@ -1,6 +1,6 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-const uri = `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
+const uri = process.env.mongodb_uri;
 
 /**
  * MongoDB client for connecting to the database.
@@ -208,20 +208,19 @@ export const addFavoriteToMongoDB = async (recipe) => {
   try {
     const favoritesCollection = client.db("devdb").collection("favorites"); // Create or use a 'favorites' collection
     // Check if the user's favorite already exists
-    const existingFavorite = await favoritesCollection.findOne({
-      _id: recipe.id,
-    });
+    const existingFavorite = await favoritesCollection.findOne({ _id: recipe._id });
     if (existingFavorite) {
       // Handle the case where the favorite already exists
     } else {
       // If the favorite doesn't exist, insert it into the collection
       const result = await favoritesCollection.insertOne({
-        id: recipe._id,
+        _id: recipe._id,
         recipe,
       });
       return result;
     }
   } catch (error) {
+    console.error("Error adding favorite to MongoDB:", error);
     throw error;
   }
 };

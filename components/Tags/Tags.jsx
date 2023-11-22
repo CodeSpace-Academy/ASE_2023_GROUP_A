@@ -50,7 +50,7 @@ function Tags({ setSelectedTags, selectedTags }) {
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
+      background: "#3496c7",
       color: "white",
     }),
 
@@ -90,7 +90,7 @@ function Tags({ setSelectedTags, selectedTags }) {
         onChange={handleTagChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="Select tag"
+        placeholder="Select Tag"
       />
     </div>
   );

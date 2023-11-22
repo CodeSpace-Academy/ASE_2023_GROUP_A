@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Select from "react-select";
 
 /**
- * multi-select dropdown for categories.
+ * Functional component representing a multi-select dropdown for categories.
  *
  * @component
  * @param {Object} props - The component's props.
