@@ -1,10 +1,26 @@
 import { useState, useEffect } from "react";
 import Select from "react-select";
 
+/**
+ * multi-select dropdown for categories.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {string[]} props.selectedCategories - The selected categories.
+ * @param {Function} props.setSelectedCategories - The function to set selected categories.
+ * @returns {JSX.Element} - The component's rendered elements.
+ */
 function Categories({ selectedCategories, setSelectedCategories }) {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
+    /**
+     * Fetches categories from the server and sets them in the component state.
+     *
+     * @async
+     * @function
+     * @throws {Error} If there is an issue fetching categories.
+     */
     async function fetchCategories() {
       try {
         const response = await fetch("/api/categories");
@@ -28,10 +44,16 @@ function Categories({ selectedCategories, setSelectedCategories }) {
     fetchCategories();
   }, []);
 
+  /**
+   * Handles the change event when categories are selected or deselected.
+   *
+   * @param {Object[]} selectedOptions - The selected options.
+   */
   const handleCategoryChange = (selectedOptions) => {
     setSelectedCategories(selectedOptions.map((option) => option.value));
   };
 
+  // Custom styles for the React Select component
   const customStyles = {
     multiValue: (base) => ({
       ...base,

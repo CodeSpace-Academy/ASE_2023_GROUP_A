@@ -2,10 +2,26 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Select from "react-select";
 
+/**
+ * Functional component representing a multi-select dropdown for ingredients.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {string[]} props.selectedIngredients - The selected ingredients.
+ * @param {Function} props.setSelectedIngredients - The function to set selected ingredients.
+ * @returns {JSX.Element} - The component's rendered elements.
+ */
 function Ingredients({ selectedIngredients, setSelectedIngredients }) {
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
+    /**
+     * Fetches ingredients from the server and sets them in the component state.
+     *
+     * @async
+     * @function
+     * @throws {Error} If there is an issue fetching ingredients.
+     */
     async function fetchIngredients() {
       try {
         const response = await fetch("/api/ingredients");
@@ -30,10 +46,16 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
     fetchIngredients();
   }, []);
 
+  /**
+   * Handles the change event when ingredients are selected or deselected.
+   *
+   * @param {Object[]} selectedOptions - The selected options.
+   */
   const handleIngredientChange = (selectedOptions) => {
     setSelectedIngredients(selectedOptions.map((option) => option.value));
   };
 
+  // Custom styles for the React Select component
   const customStyles = {
     multiValue: (base) => ({
       ...base,

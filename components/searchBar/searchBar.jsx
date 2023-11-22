@@ -2,6 +2,16 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import classes from "./searchBar.module.css";
 
+/**
+ * Functional component representing a search bar for recipes.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {Function} props.onSearch - The function to handle search.
+ * @param {string} props.searchQuery - The current search query.
+ * @param {Function} props.setSearchQuery - The function to set the search query.
+ * @returns {JSX.Element} - The component's rendered elements.
+ */
 export default function SearchBar({ onSearch, searchQuery, setSearchQuery }) {
   const [isLongQuery, setIsLongQuery] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState(0);
@@ -16,6 +26,9 @@ export default function SearchBar({ onSearch, searchQuery, setSearchQuery }) {
     }
   }, []);
 
+  /**
+   * Handles the search operation when the search button is clicked.
+   */
   const handleSearch = () => {
     if (isLongQuery) {
       onSearch(searchQuery);
@@ -28,6 +41,11 @@ export default function SearchBar({ onSearch, searchQuery, setSearchQuery }) {
     }
   };
 
+  /**
+   * Handles changes in the search input.
+   *
+   * @param {Object} e - The input event object.
+   */
   const handleChange = (e) => {
     const text = e.target.value;
     setSearchQuery(text);
@@ -51,12 +69,19 @@ export default function SearchBar({ onSearch, searchQuery, setSearchQuery }) {
     }
   };
 
+  /**
+   * Handles a click on a history item, updating the search query.
+   *
+   * @param {string} historyItem - The selected history item.
+   */
   const handleHistoryClick = (historyItem) => {
     setSearchQuery(historyItem);
-
     setShowSearchButton(false);
   };
 
+  /**
+   * Clears the current search query.
+   */
   const clearSearch = () => {
     setSearchQuery("");
     setShowSearchButton(false);
@@ -102,5 +127,5 @@ export default function SearchBar({ onSearch, searchQuery, setSearchQuery }) {
 SearchBar.propTypes = {
   onSearch: PropTypes.func.isRequired,
   searchQuery: PropTypes.string.isRequired,
-  setSearchQuery: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setSearchQuery: PropTypes.func.isRequired,
 };

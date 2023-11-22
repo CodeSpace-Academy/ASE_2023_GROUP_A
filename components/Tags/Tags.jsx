@@ -2,6 +2,15 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Select from "react-select";
 
+/**
+ * Functional component representing a tags selection component.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {Function} props.setSelectedTags - The function to set the selected tags.
+ * @param {string[]} props.selectedTags - The currently selected tags.
+ * @returns {JSX.Element} - The component's rendered elements.
+ */
 function Tags({ setSelectedTags, selectedTags }) {
   const [tags, setTags] = useState([]);
 
@@ -29,6 +38,11 @@ function Tags({ setSelectedTags, selectedTags }) {
     fetchTags();
   }, []);
 
+  /**
+   * Handles the change in selected tags.
+   *
+   * @param {Object} selectedOptions - The selected tag options.
+   */
   const handleTagChange = (selectedOptions) => {
     setSelectedTags(selectedOptions.map((option) => option.value));
   };

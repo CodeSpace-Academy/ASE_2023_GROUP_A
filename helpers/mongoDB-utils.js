@@ -2,6 +2,10 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 
 const uri = `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
 
+/**
+ * MongoDB client for connecting to the database.
+ * @type {MongoClient}
+ */
 export const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -10,6 +14,13 @@ export const client = new MongoClient(uri, {
   },
 });
 
+/**
+ * Connects to the specified collection in the MongoDB database.
+ *
+ * @param {string} databaseName - The name of the database.
+ * @param {string} collectionName - The name of the collection.
+ * @returns {Promise<Collection>} - A promise that resolves to the connected collection.
+ */
 export const connectToCollection = async (databaseName, collectionName) => {
   await client.connect();
 
@@ -18,12 +29,22 @@ export const connectToCollection = async (databaseName, collectionName) => {
   return collection;
 };
 
-// Function to close the MongoDB connection
+/**
+ * Closes the MongoDB connection.
+ *
+ * @returns {Promise<void>} - A promise that resolves when the connection is closed.
+ */
 export async function closeMongoDBConnection() {
   await client.close();
 }
 
-// Fetch all recipes with optional skip and limit parameters
+/**
+ * Retrieves all recipes with optional skip and limit parameters.
+ *
+ * @param {number} skip - The number of documents to skip.
+ * @param {number} limit - The maximum number of documents to return.
+ * @returns {Promise<Object[]>} - A promise that resolves to an array of recipes.
+ */
 export const getAllRecipes = async (skip, limit) => {
   const collection = client.db("devdb").collection("recipes");
   const query = collection.find();
@@ -36,6 +57,11 @@ export const getAllRecipes = async (skip, limit) => {
   }
 };
 
+/**
+ * Retrieves all tags from the recipes collection.
+ *
+ * @returns {Promise<string[]>} - A promise that resolves to an array of tags.
+ */
 export async function getTags() {
   const collection = client.db("devdb").collection("recipes");
 
@@ -54,6 +80,11 @@ export async function getTags() {
   }
 }
 
+/**
+ * Retrieves all unique ingredients from the recipes collection.
+ *
+ * @returns {Promise<string[]>} - A promise that resolves to an array of unique ingredients.
+ */
 export async function getIngredients() {
   const collection = client.db("devdb").collection("recipes");
 
@@ -93,6 +124,11 @@ export async function getIngredients() {
   }
 }
 
+/**
+ * Retrieves all categories from the categories collection.
+ *
+ * @returns {Promise<Object[]>} - A promise that resolves to an array of categories.
+ */
 export async function getCategories() {
   const categoriesCollection = client.db("devdb").collection("categories");
 
@@ -104,7 +140,12 @@ export async function getCategories() {
   }
 }
 
-// Fetch recipe data from MongoDB based on the recipe title and collection
+/**
+ * Fetches recipe data from MongoDB based on the recipe title.
+ *
+ * @param {string} recipeName - The title of the recipe.
+ * @returns {Promise<Object>} - A promise that resolves to the recipe data.
+ */
 export const fetchRecipeDataFromMongo = async (recipeName) => {
   try {
     const collection = client.db("devdb").collection("recipes");
@@ -115,6 +156,11 @@ export const fetchRecipeDataFromMongo = async (recipeName) => {
   }
 };
 
+/**
+ * Retrieves allergens from the allergens collection.
+ *
+ * @returns {Promise<string[]>} - A promise that resolves to an array of allergens.
+ */
 export const fetchAllergens = async () => {
   try {
     const db = client.db("devdb");
@@ -126,6 +172,11 @@ export const fetchAllergens = async () => {
   }
 };
 
+/**
+ * Retrieves the total count of recipes in the recipes collection.
+ *
+ * @returns {Promise<number>} - A promise that resolves to the total count of recipes.
+ */
 export const getTotalRecipesCount = async () => {
   try {
     const recipesCollection = client.db("devdb").collection("recipes");
@@ -147,7 +198,12 @@ export const getTotalRecipesCount = async () => {
   }
 };
 
-// Function to add a favorite recipe to MongoDB
+/**
+ * Adds a favorite recipe to MongoDB.
+ *
+ * @param {Object} recipe - The recipe object to add to favorites.
+ * @returns {Promise<Object>} - A promise that resolves to the result of the insertion.
+ */
 export const addFavoriteToMongoDB = async (recipe) => {
   try {
     const favoritesCollection = client.db("devdb").collection("favorites"); // Create or use a 'favorites' collection
@@ -170,7 +226,12 @@ export const addFavoriteToMongoDB = async (recipe) => {
   }
 };
 
-// Function to remove a favorite recipe from MongoDB
+/**
+ * Removes a favorite recipe from MongoDB.
+ *
+ * @param {string} recipeId - The ID of the recipe to remove from favorites.
+ * @returns {Promise<Object>} - A promise that resolves to the result of the deletion.
+ */
 export const removeFavoriteFromDB = async (recipeId) => {
   try {
     const favoritesCollection = client.db("devdb").collection("favorites");
@@ -181,7 +242,11 @@ export const removeFavoriteFromDB = async (recipeId) => {
   }
 };
 
-// Function to get favorites from MongoDB
+/**
+ * Retrieves favorite recipes from MongoDB.
+ *
+ * @returns {Promise<Object[]>} - A promise that resolves to an array of favorite recipes.
+ */
 export const getFavouritesFromMongoDB = async () => {
   try {
     const collection = client.db("devdb").collection("favorites");
@@ -192,6 +257,12 @@ export const getFavouritesFromMongoDB = async () => {
   }
 };
 
+/**
+ * Retrieves search suggestions based on the provided search query.
+ *
+ * @param {string} searchQuery - The search query.
+ * @returns {Promise<Object[]>} - A promise that resolves to an array of search suggestions.
+ */
 export async function searchSuggestions(searchQuery) {
   const recipesCollection = client.db("devdb").collection("recipes");
 
@@ -213,6 +284,14 @@ export async function searchSuggestions(searchQuery) {
   }
 }
 
+/**
+ * Filters recipes based on the provided filters and sort order.
+ *
+ * @param {Object} filters - The filters to apply.
+ * @param {string} sortOrder - The sort order.
+ * @returns {Promise<Object[]>} - A promise that resolves to an array of filtered and sorted
+ * recipes.
+ */
 export async function filtering(filters, sortOrder) {
   const {
     searchQuery, tags, ingredients, categories, instructions,

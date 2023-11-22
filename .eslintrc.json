@@ -17,7 +17,10 @@
       "no-shadow": "off",
       "react/no-array-index-key": "off",
       "jsx-a11y/no-noninteractive-element-interactions": "off",
-      "jsx-a11y/click-events-have-key-events": "off"
+      "jsx-a11y/click-events-have-key-events": "off",
+      "no-else-return": "off",
+      "consistent-return": "off",
+      "no-useless-catch": "off"
 
     },
     "overrides": [

@@ -8,6 +8,27 @@ import Ingredients from "../ingredients/ingredients";
 import DropdownMenu from "../sort/sort";
 import InstructionF from "../instructions/instructions";
 
+/**
+ * Functional component representing the hero section of the application.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {Function} props.handleDefaultSearch - The function to handle default search.
+ * @param {Function} props.onSearch - The function to handle search.
+ * @param {Function} props.setSearchQuery - The function to set the search query.
+ * @param {string} props.searchQuery - The current search query.
+ * @param {Array} props.selectedTags - The selected tags for filtering.
+ * @param {Function} props.setSelectedTags - The function to set selected tags.
+ * @param {Array} props.selectedCategories - The selected categories for filtering.
+ * @param {Function} props.setSelectedCategories - The function to set selected categories.
+ * @param {Array} props.selectedIngredients - The selected ingredients for filtering.
+ * @param {Function} props.setSelectedIngredients - The function to set selected ingredients.
+ * @param {Array} props.selectedInstructions - The selected number of instructions for filtering.
+ * @param {Function} props.handleChange - The function to handle changes in instructions input.
+ * @param {Function} props.setSortOrder - The function to set the sorting order.
+ * @param {string} props.sortOrder - The current sorting order.
+ * @returns {JSX.Element} - The component's rendered elements.
+ */
 export default function Hero({
   handleDefaultSearch,
   onSearch,
