@@ -11,6 +11,15 @@ import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "@/components/Context/ThemeContext";
 import Badges from "../badges/badges";
 
+/**
+ * RecipeList component to display a list of recipes based on various filters.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {Object[]} props.favorites - List of favorite recipes.
+ * @returns {JSX.Element} - Rendered component.
+ */
+
 function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,7 +57,7 @@ function RecipeList({ favorites }) {
     selectedCategories,
     selectedIngredients,
     selectedTags,
-    selectedInstructions,
+    selectedInstructions
   ) {
     let count = 0;
 
@@ -76,7 +85,7 @@ function RecipeList({ favorites }) {
       selectedCategories,
       selectedIngredients,
       selectedTags,
-      selectedInstructions,
+      selectedInstructions
     );
     setFilterCount(counts);
   }, [
@@ -108,8 +117,12 @@ function RecipeList({ favorites }) {
           if (result.recipes.length === 0) {
             setNoRecipesFoundMessage(
               `No Recipes Found for ${
-                searchQuery.length > 0 ? searchQuery : "chosen filters"
-              }`,
+                selectedInstructions > 0
+                  ? "Specified number of steps"
+                  : searchQuery.length > 0
+                  ? searchQuery
+                  : "chosen filters"
+              }`
             );
           } else {
             setNoRecipesFoundMessage(null);
@@ -160,7 +173,7 @@ function RecipeList({ favorites }) {
       }
 
       const queryString = queryParams.toString();
-      const url = queryString ? `/?${queryString}` : '/';
+      const url = queryString ? `/?${queryString}` : "/";
 
       router.push(url);
     } catch (error) {
@@ -192,11 +205,11 @@ function RecipeList({ favorites }) {
     let typingTimeout;
 
     if (
-      searchQuery.length <= 4
-      || selectedTags.length > 0
-      || selectedIngredients.length > 0
-      || selectedCategories.length > 0
-      || selectedInstructions
+      searchQuery.length <= 4 ||
+      selectedTags.length > 0 ||
+      selectedIngredients.length > 0 ||
+      selectedCategories.length > 0 ||
+      selectedInstructions
     ) {
       clearTimeout(typingTimeout);
 
@@ -239,7 +252,7 @@ function RecipeList({ favorites }) {
         setAutocompleteSuggestions([]);
       } else {
         const response = await fetch(
-          `/api/autocomplete?searchQuery=${searchQuery}`,
+          `/api/autocomplete?searchQuery=${searchQuery}`
         );
 
         if (response.ok) {
@@ -375,10 +388,7 @@ function RecipeList({ favorites }) {
       {(filterCount === 0 || recipes.length === 0) && (
         <>
           <p style={{ textAlign: "center" }}>
-            <span style={{ fontWeight: "bold" }}>
-              {remainingRecipes}
-              {' '}
-            </span>
+            <span style={{ fontWeight: "bold" }}>{remainingRecipes} </span>
             recipes remaining
           </p>
           <div className="flex justify-center gap-10">
