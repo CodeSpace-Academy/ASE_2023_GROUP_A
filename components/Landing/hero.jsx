@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import classes from "./hero.module.css";
 import SearchBar from "../searchBar/searchBar";
 import Categories from "../categories/categories";
@@ -78,20 +77,3 @@ export default function Hero({
     </div>
   );
 }
-
-Hero.propTypes = {
-  handleDefaultSearch: PropTypes.func.isRequired,
-  onSearch: PropTypes.func.isRequired,
-  setSearchQuery: PropTypes.func.isRequired,
-  searchQuery: PropTypes.string.isRequired,
-  selectedTags: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setSelectedTags: PropTypes.func.isRequired,
-  selectedCategories: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setSelectedCategories: PropTypes.func.isRequired,
-  selectedIngredients: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setSelectedIngredients: PropTypes.func.isRequired,
-  selectedInstructions: PropTypes.arrayOf(PropTypes.string).isRequired,
-  handleChange: PropTypes.func.isRequired,
-  setSortOrder: PropTypes.func.isRequired,
-  sortOrder: PropTypes.string.isRequired,
-};

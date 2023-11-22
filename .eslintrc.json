@@ -33,20 +33,7 @@
       "jsx-a11y/click-events-have-key-events": "off",
       "no-else-return": "off",
       //After removing the console logs, I got the following two errors and I could not find a solution to fix them
-      "consistent-return": "off",
-      "no-useless-catch": "off"
+      "consistent-return": "off"
 
-    },
-    "overrides": [
-        {
-          "files": ["pages/FavoritesPage/**", "components/Context/Favorites-context/**"],
-          "rules": {
-            "ignoreComments": 0,
-            "react/react-in-jsx-scope": 0,
-            "no-underscore-dangle": 0,
-            "no-trailing-spaces":0,
-            "react/jsx-closing-bracket-location": 0
-          }
-        }
-      ]
+    }
 }

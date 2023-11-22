@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 /**
  * An input field for the number of instructions.
@@ -24,8 +23,3 @@ export default function InstructionF({ handleChange, selectedInstructions }) {
     </div>
   );
 }
-
-InstructionF.propTypes = {
-  handleChange: PropTypes.func.isRequired,
-  selectedInstructions: PropTypes.string.isRequired,
-};

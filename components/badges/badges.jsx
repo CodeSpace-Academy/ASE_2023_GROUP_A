@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Badge from "@mui/material/Badge";
 import { FaTrash } from "react-icons/fa";
 
@@ -47,13 +46,3 @@ export default function Badges({ numberOfRecipes, handleDefault, filterCount }) 
     </div>
   );
 }
-
-// Prop types validation
-Badges.propTypes = {
-  /** The number of recipes. */
-  numberOfRecipes: PropTypes.number.isRequired,
-  /** The function to handle resetting filters to default. */
-  handleDefault: PropTypes.func.isRequired,
-  /** The count of active filters. */
-  filterCount: PropTypes.number.isRequired,
-};

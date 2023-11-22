@@ -53,7 +53,7 @@ export const getAllRecipes = async (skip, limit) => {
     const recipes = await query.toArray();
     return recipes;
   } catch (error) {
-    throw error;
+    throw new Error("could not fetch recipes");
   }
 };
 
@@ -76,7 +76,7 @@ export async function getTags() {
 
     return tags.map((tagObj) => tagObj.tag);
   } catch (error) {
-    throw error;
+    throw new Error("could not fetch tags");
   }
 }
 
@@ -120,7 +120,7 @@ export async function getIngredients() {
 
     return ingredients[0].uniqueIngredients;
   } catch (error) {
-    throw error;
+    throw new Error("could not fetch ingredients");
   }
 }
 
@@ -136,7 +136,7 @@ export async function getCategories() {
     const categories = await categoriesCollection.find().toArray();
     return categories;
   } catch (error) {
-    throw error;
+    throw new Error("could not fetch categories");
   }
 }
 
@@ -152,7 +152,7 @@ export const fetchRecipeDataFromMongo = async (recipeName) => {
     const recipeData = await collection.findOne({ title: recipeName });
     return recipeData;
   } catch (error) {
-    throw error;
+    throw new Error("could not fetch recipe details by id");
   }
 };
 
@@ -168,7 +168,7 @@ export const fetchAllergens = async () => {
     const { allergens } = allergensDocument;
     return allergens;
   } catch (error) {
-    throw error;
+    throw new Error("could not fetch allergens");
   }
 };
 
@@ -194,7 +194,7 @@ export const getTotalRecipesCount = async () => {
 
     return countResult.length > 0 ? countResult[0].count : 0;
   } catch (error) {
-    throw error;
+    throw new Error("could not fetch total count of recipes fetched");
   }
 };
 
@@ -220,8 +220,7 @@ export const addFavoriteToMongoDB = async (recipe) => {
       return result;
     }
   } catch (error) {
-    console.error("Error adding favorite to MongoDB:", error);
-    throw error;
+    throw new Error("could not add recipe to favorites");
   }
 };
 
@@ -237,7 +236,7 @@ export const removeFavoriteFromDB = async (recipeId) => {
     const deleteResult = await favoritesCollection.deleteOne({ _id: recipeId });
     return deleteResult;
   } catch (err) {
-    throw err;
+    throw new Error("could not remove recipe from favorites");
   }
 };
 
@@ -252,7 +251,7 @@ export const getFavouritesFromMongoDB = async () => {
     const recipes = await collection.find().toArray();
     return recipes;
   } catch (error) {
-    throw error;
+    throw new Error("could not fetch favorites");
   }
 };
 
@@ -279,7 +278,7 @@ export async function searchSuggestions(searchQuery) {
 
     return autocompleteResults;
   } catch (error) {
-    throw error;
+    throw new Error("could not fetch suggestions based on the search query provided");
   }
 }
 
@@ -357,6 +356,6 @@ export async function filtering(filters, sortOrder) {
 
     return result;
   } catch (error) {
-    throw error;
+    throw new Error("could not filter recipes according to the filters selected");
   }
 }

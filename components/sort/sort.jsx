@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
@@ -110,8 +109,3 @@ export default function DropdownMenu({ sortOrder, setSortOrder }) {
     </div>
   );
 }
-
-DropdownMenu.propTypes = {
-  sortOrder: PropTypes.string.isRequired,
-  setSortOrder: PropTypes.func.isRequired,
-};

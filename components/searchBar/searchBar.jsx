@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import classes from "./searchBar.module.css";
 
 /**
@@ -123,9 +122,3 @@ export default function SearchBar({ onSearch, searchQuery, setSearchQuery }) {
     </div>
   );
 }
-
-SearchBar.propTypes = {
-  onSearch: PropTypes.func.isRequired,
-  searchQuery: PropTypes.string.isRequired,
-  setSearchQuery: PropTypes.func.isRequired,
-};

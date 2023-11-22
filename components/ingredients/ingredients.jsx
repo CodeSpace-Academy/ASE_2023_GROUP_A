@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import Select from "react-select";
 
 /**
@@ -49,7 +48,7 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
   /**
    * Handles the change event when ingredients are selected or deselected.
    *
-   * @param {Object[]} selectedOptions - The selected options.
+   * @param {Object[]} selectedOptions - The selected ingredient options to filter by.
    */
   const handleIngredientChange = (selectedOptions) => {
     setSelectedIngredients(selectedOptions.map((option) => option.value));
@@ -104,10 +103,5 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
     </div>
   );
 }
-
-Ingredients.propTypes = {
-  selectedIngredients: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setSelectedIngredients: PropTypes.func.isRequired,
-};
 
 export default Ingredients;

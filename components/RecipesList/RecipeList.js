@@ -251,14 +251,6 @@ function RecipeList({ favorites }) {
     sortOrder,
   ]);
 
-  const handleLoadLess = () => {
-    setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : 1));
-  };
-
-  const handleLoadMore = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-
   const fetchAutocompleteSuggestions = async (searchQuery) => {
     try {
       if (searchQuery.length === 0) {

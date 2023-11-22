@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import Select from "react-select";
 
 /**
@@ -95,10 +94,5 @@ function Tags({ setSelectedTags, selectedTags }) {
     </div>
   );
 }
-
-Tags.propTypes = {
-  setSelectedTags: PropTypes.func.isRequired,
-  selectedTags: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
 
 export default Tags;
