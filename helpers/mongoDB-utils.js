@@ -1,9 +1,7 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-// MongoDB connection URI, including authentication details
 const uri = `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
 
-// Create a MongoDB client instance with specific server API version and options
 export const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -12,18 +10,12 @@ export const client = new MongoClient(uri, {
   },
 });
 
-// Function to connect to the MongoDB server and return a collection
 export const connectToCollection = async (databaseName, collectionName) => {
-  try {
-    await client.connect();
+  await client.connect();
 
-    const db = client.db(databaseName);
-    const collection = db.collection(collectionName);
-    return collection;
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-    throw error;
-  }
+  const db = client.db(databaseName);
+  const collection = db.collection(collectionName);
+  return collection;
 };
 
 // Function to close the MongoDB connection
@@ -40,7 +32,6 @@ export const getAllRecipes = async (skip, limit) => {
     const recipes = await query.toArray();
     return recipes;
   } catch (error) {
-    console.error("Error fetching recipes:", error);
     throw error;
   }
 };
@@ -59,7 +50,6 @@ export async function getTags() {
 
     return tags.map((tagObj) => tagObj.tag);
   } catch (error) {
-    console.error("Error fetching unique tags:", error);
     throw error;
   }
 }
@@ -99,7 +89,6 @@ export async function getIngredients() {
 
     return ingredients[0].uniqueIngredients;
   } catch (error) {
-    console.error("Error fetching unique ingredients:", error);
     throw error;
   }
 }
@@ -107,19 +96,21 @@ export async function getIngredients() {
 export async function getCategories() {
   const categoriesCollection = client.db("devdb").collection("categories");
 
-  const categories = categoriesCollection.find().toArray();
-
-  return categories;
+  try {
+    const categories = await categoriesCollection.find().toArray();
+    return categories;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // Fetch recipe data from MongoDB based on the recipe title and collection
 export const fetchRecipeDataFromMongo = async (recipeName) => {
   try {
     const collection = client.db("devdb").collection("recipes");
-    const recipeData = collection.findOne({ title: recipeName });
+    const recipeData = await collection.findOne({ title: recipeName });
     return recipeData;
   } catch (error) {
-    console.error("Error fetching recipe data from MongoDB:", error);
     throw error;
   }
 };
@@ -131,7 +122,6 @@ export const fetchAllergens = async () => {
     const { allergens } = allergensDocument;
     return allergens;
   } catch (error) {
-    console.error("Error fetching allergens:", error);
     throw error;
   }
 };
@@ -151,12 +141,8 @@ export const getTotalRecipesCount = async () => {
       ])
       .toArray();
 
-    if (countResult.length > 0) {
-      return countResult[0].count;
-    }
-    return 0; // No documents found, return 0
+    return countResult.length > 0 ? countResult[0].count : 0;
   } catch (error) {
-    console.error("Error fetching total recipes count:", error);
     throw error;
   }
 };
@@ -167,41 +153,41 @@ export const addFavoriteToMongoDB = async (recipe) => {
     const favoritesCollection = client.db("devdb").collection("favorites"); // Create or use a 'favorites' collection
     // Check if the user's favorite already exists
     const existingFavorite = await favoritesCollection.findOne({
-      _id: recipe._id,
+      _id: recipe.id,
     });
     if (existingFavorite) {
       // Handle the case where the favorite already exists
-
     } else {
       // If the favorite doesn't exist, insert it into the collection
       const result = await favoritesCollection.insertOne({
-        _id: recipe._id,
+        id: recipe._id,
         recipe,
       });
       return result;
     }
   } catch (error) {
-    console.error("Error adding favorite to MongoDB:", error);
     throw error;
   }
 };
 
+// Function to remove a favorite recipe from MongoDB
 export const removeFavoriteFromDB = async (recipeId) => {
   try {
     const favoritesCollection = client.db("devdb").collection("favorites");
     const deleteResult = await favoritesCollection.deleteOne({ _id: recipeId });
     return deleteResult;
-  } catch (err) {}
+  } catch (err) {
+    throw err;
+  }
 };
 
+// Function to get favorites from MongoDB
 export const getFavouritesFromMongoDB = async () => {
-  const collection = client.db("devdb").collection("favorites");
-  const data = collection.find();
   try {
-    const recipes = await data.toArray();
+    const collection = client.db("devdb").collection("favorites");
+    const recipes = await collection.find().toArray();
     return recipes;
   } catch (error) {
-    console.error("Error fetching favourites:", error);
     throw error;
   }
 };
@@ -209,18 +195,22 @@ export const getFavouritesFromMongoDB = async () => {
 export async function searchSuggestions(searchQuery) {
   const recipesCollection = client.db("devdb").collection("recipes");
 
-  const autocompleteResults = recipesCollection
-    .find({
-      $or: [
-        { title: { $regex: searchQuery, $options: "i" } },
-        { description: { $regex: searchQuery, $options: "i" } },
-      ],
-    })
-    .limit(5)
-    .project({ title: 1 })
-    .toArray();
+  try {
+    const autocompleteResults = await recipesCollection
+      .find({
+        $or: [
+          { title: { $regex: searchQuery, $options: "i" } },
+          { description: { $regex: searchQuery, $options: "i" } },
+        ],
+      })
+      .limit(5)
+      .project({ title: 1 })
+      .toArray();
 
-  return autocompleteResults;
+    return autocompleteResults;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function filtering(filters, sortOrder) {
@@ -270,21 +260,25 @@ export async function filtering(filters, sortOrder) {
     sortCriteria = { cook: 1 };
   } else if (sortOrder === "cooktime(desc)") {
     sortCriteria = { cook: -1 };
-  } else if (sortOrder === "steps(asc)") {
-    sortCriteria = { "instructions.length": 1 };
   } else if (sortOrder === "preptime(asc)") {
     sortCriteria = { prep: 1 };
   } else if (sortOrder === "preptime(desc)") {
     sortCriteria = { prep: -1 };
   } else if (sortOrder === "steps(desc)") {
-    sortCriteria = { "instructions.length": -1 };
+    sortCriteria = { instructions: -1 };
+  } else if (sortOrder === "steps(asc)") {
+    sortCriteria = { instructions: 1 };
   }
 
-  const result = await collection
-    .find(query)
-    .sort(sortCriteria)
-    .limit(100)
-    .toArray();
+  try {
+    const result = await collection
+      .find(query)
+      .sort(sortCriteria)
+      .limit(100)
+      .toArray();
 
-  return result;
+    return result;
+  } catch (error) {
+    throw error;
+  }
 }

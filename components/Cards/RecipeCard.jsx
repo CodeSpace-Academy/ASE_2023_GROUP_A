@@ -66,9 +66,9 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
       key={Key}
       className={`${
         theme === "light" ? "text-black bg-blue-300" : "text-white bg-gray-700"
-      } p-4 rounded shadow mt-8 mb-4 md:h-96 flex flex-col transform transition-transform hover:scale-105`}
+      } p-4 rounded shadow mt-8 mb-4 md:h-97 flex flex-col transform transition-transform hover:scale-105`}
     >
-      <div className="w-full h-60 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
+      <div className="w-full h-40 md:h-72 mb-4 relative aspect-w-16 aspect-h-9">
         <Image
           src={firstImage}
           alt={recipe.title}
@@ -98,6 +98,7 @@ const RecipeCard = ({ recipe, searchQuery, favorites, Key }) => {
             <CookTime cookTime={recipe.cook} />
           </div>
           <TotalTime totalTime={recipe} />
+          <p> Instructions: {recipe.instructions.length}</p>
         </div>
         <div>
           {recipeIsFavorite ? (

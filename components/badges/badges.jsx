@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import Badge from "@mui/material/Badge";
 import { FaTrash } from "react-icons/fa";
 
@@ -12,12 +14,11 @@ export default function Badges({
         badgeContent={filterCount}
         color="primary"
         style={{ margin: "auto", fontWeight: "bold", zIndex: "-1" }}
-        
       >
         FILTERS
       </Badge>
 
-      <button onClick={handleDefault}>
+      <button type="button" onClick={handleDefault}>
         <span
           style={{ display: "inline-flex", fontWeight: "bold", gap: "0.2em" }}
         >
@@ -36,3 +37,9 @@ export default function Badges({
     </div>
   );
 }
+
+Badges.propTypes = {
+  numberOfRecipes: PropTypes.number.isRequired,
+  handleDefault: PropTypes.func.isRequired,
+  filterCount: PropTypes.number.isRequired,
+};

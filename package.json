@@ -9,7 +9,6 @@
     "lint": "next lint",
     "build:css": "tailwindcss build path/to/your/styles.css -o path/to/your/output.css",
     "lintfix": "eslint --fix ."
-    
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -25,6 +24,7 @@
     "next": "13.5.4",
     "next-themes": "^0.2.1",
     "postcss-import": "^15.1.0",
+    "prop-types": "^15.8.1",
     "react": "^18",
     "react-dom": "^18",
     "react-highlight-words": "^0.20.0",

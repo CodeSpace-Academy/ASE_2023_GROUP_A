@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import Select from "react-select";
 
 function Tags({ setSelectedTags, selectedTags }) {
@@ -15,13 +16,13 @@ function Tags({ setSelectedTags, selectedTags }) {
           if (data) {
             setTags(data.map((tag) => ({ label: tag, value: tag })));
           } else {
-            console.error("Response data is missing tags.");
+            throw Error;
           }
         } else {
-          console.error("Failed to fetch tags");
+          throw Error;
         }
       } catch (error) {
-        console.error("Error fetching tags:", error);
+        throw Error;
       }
     }
 
@@ -80,5 +81,10 @@ function Tags({ setSelectedTags, selectedTags }) {
     </div>
   );
 }
+
+Tags.propTypes = {
+  setSelectedTags: PropTypes.func.isRequired,
+  selectedTags: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 export default Tags;

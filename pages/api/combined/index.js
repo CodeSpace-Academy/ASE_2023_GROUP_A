@@ -10,8 +10,8 @@ export default async (req, res) => {
   try {
     const result = await filtering(filters, sortOrder);
 
-    res.status(200).json({ recipes: result });
+    return res.status(200).json({ recipes: result });
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };

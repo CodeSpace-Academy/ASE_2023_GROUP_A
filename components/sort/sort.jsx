@@ -1,10 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 
-const DropdownMenu = ({ sortOrder, setSortOrder }) => {
+export default function DropdownMenu({ sortOrder, setSortOrder }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -15,9 +16,36 @@ const DropdownMenu = ({ sortOrder, setSortOrder }) => {
     setAnchorEl(null);
   };
 
-  const handleSortOption = (sortOrder) => {
-    setSortOrder(sortOrder);
+  const handleSortOption = (newSortOrder) => {
+    setSortOrder(newSortOrder);
     handleClose();
+  };
+
+  const getSortOrderText = (sortOrder) => {
+    switch (sortOrder) {
+      case "[A-Z]":
+        return "Ascending";
+      case "[Z-A]":
+        return "Descending";
+      case "Recent":
+        return "Recent";
+      case "Oldest":
+        return "Oldest";
+      case "cooktime(asc)":
+        return "Cook time (asc)";
+      case "cooktime(desc)":
+        return "Cook time (desc)";
+      case "preptime(asc)":
+        return "Prep time (asc)";
+      case "preptime(desc)":
+        return "Prep time (desc)";
+      case "steps(asc)":
+        return "Steps (asc)";
+      case "steps(desc)":
+        return "Steps (desc)";
+      default:
+        return null;
+    }
   };
 
   return (
@@ -29,28 +57,8 @@ const DropdownMenu = ({ sortOrder, setSortOrder }) => {
         variant="contained"
         onClick={handleClick}
       >
-        Sort{" "}
-        {sortOrder === "[A-Z]"
-          ? "Ascending"
-          : sortOrder === "[Z-A]"
-          ? "Descending"
-          : sortOrder === "Recent"
-          ? "Recent"
-          : sortOrder === "Oldest"
-          ? "Oldest"
-          : sortOrder == "cooktime(asc)"
-          ? "cooktime(asc)"
-          : sortOrder == "cooktime(desc)"
-          ? "cooktime(desc)"
-          : sortOrder == "preptime(asc)"
-          ? "preptime(asc)"
-          : sortOrder == "preptime(desc)"
-          ? "preptime(desc)"
-          : sortOrder == "steps(asc)"
-          ? "steps(asc)"
-          : sortOrder == "steps(desc)"
-          ? "steps(desc)"
-          : null}{" "}
+        Sort
+        {getSortOrderText(sortOrder)}
         <ArrowDropDown />
       </Button>
 
@@ -62,53 +70,48 @@ const DropdownMenu = ({ sortOrder, setSortOrder }) => {
         onClose={handleClose}
       >
         <MenuItem onClick={() => handleSortOption("[A-Z]")}>
-          {" "}
-          Title (asc){" "}
+          Title (asc)
         </MenuItem>
 
         <MenuItem onClick={() => handleSortOption("[Z-A]")}>
-          {" "}
           Title (desc)
         </MenuItem>
 
-        <MenuItem onClick={() => handleSortOption("Recent")}> Recent </MenuItem>
+        <MenuItem onClick={() => handleSortOption("Recent")}>Recent</MenuItem>
 
-        <MenuItem onClick={() => handleSortOption("Oldest")}> Oldest </MenuItem>
+        <MenuItem onClick={() => handleSortOption("Oldest")}>Oldest</MenuItem>
 
         <MenuItem onClick={() => handleSortOption("cooktime(asc)")}>
-          {" "}
-          Cook time (asc){" "}
+          Cook time (asc)
         </MenuItem>
 
         <MenuItem onClick={() => handleSortOption("cooktime(desc)")}>
-          {" "}
-          Cook time (desc){" "}
+          Cook time (desc)
         </MenuItem>
 
         <MenuItem onClick={() => handleSortOption("preptime(asc)")}>
-          {" "}
-          Prep time (asc){" "}
+          Prep time (asc)
         </MenuItem>
 
         <MenuItem onClick={() => handleSortOption("preptime(desc)")}>
-          {" "}
-          Prep time (desc){" "}
+          Prep time (desc)
         </MenuItem>
 
         <MenuItem onClick={() => handleSortOption("steps(asc)")}>
-          {" "}
-          Steps (asc){" "}
+          Steps (asc)
         </MenuItem>
 
         <MenuItem onClick={() => handleSortOption("steps(desc)")}>
-          {" "}
-          Steps (desc){" "}
+          Steps (desc)
         </MenuItem>
 
-        <MenuItem onClick={() => handleSortOption("none")}> None </MenuItem>
+        <MenuItem onClick={() => handleSortOption("none")}>None</MenuItem>
       </Menu>
     </div>
   );
-};
+}
 
-export default DropdownMenu;
+DropdownMenu.propTypes = {
+  sortOrder: PropTypes.string.isRequired,
+  setSortOrder: PropTypes.func.isRequired,
+};

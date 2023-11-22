@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import Select from "react-select";
 
 function Ingredients({ selectedIngredients, setSelectedIngredients }) {
@@ -16,13 +17,13 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
             data.map((ingredient) => ({
               label: ingredient,
               value: ingredient,
-            }))
+            })),
           );
         } else {
-          console.error("Failed to fetch ingredients");
+          throw Error;
         }
       } catch (error) {
-        console.error("Error fetching ingredients:", error);
+        throw Error;
       }
     }
 
@@ -72,9 +73,7 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
       <Select
         isMulti
         options={ingredients}
-        value={ingredients.filter((ingredient) =>
-          selectedIngredients?.includes(ingredient.value)
-        )}
+        value={ingredients.filter((ingredient) => selectedIngredients?.includes(ingredient.value))}
         onChange={handleIngredientChange}
         styles={customStyles}
         blurInputOnSelect
@@ -83,5 +82,10 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
     </div>
   );
 }
+
+Ingredients.propTypes = {
+  selectedIngredients: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setSelectedIngredients: PropTypes.func.isRequired,
+};
 
 export default Ingredients;

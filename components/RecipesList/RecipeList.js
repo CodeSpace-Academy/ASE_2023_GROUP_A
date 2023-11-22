@@ -1,15 +1,12 @@
 import { useEffect, useState, useContext } from "react";
 import useSWR, { mutate } from "swr";
-import Carousel from "react-multi-carousel";
 import { useRouter } from "next/router";
 import fetchRecipes from "@/helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
 import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
-import Loading from "../Loading/Loading";
 import FloatingButton from "../Buttons/floatingButton/FloatingButton";
 import "react-multi-carousel/lib/styles.css";
-import { responsive } from "@/helpers/settings/settings";
 import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "@/components/Context/ThemeContext";
 import Badges from "../badges/badges";
@@ -51,7 +48,7 @@ function RecipeList({ favorites }) {
     selectedCategories,
     selectedIngredients,
     selectedTags,
-    selectedInstructions
+    selectedInstructions,
   ) {
     let count = 0;
 
@@ -79,7 +76,7 @@ function RecipeList({ favorites }) {
       selectedCategories,
       selectedIngredients,
       selectedTags,
-      selectedInstructions
+      selectedInstructions,
     );
     setFilterCount(counts);
   }, [
@@ -112,7 +109,7 @@ function RecipeList({ favorites }) {
             setNoRecipesFoundMessage(
               `No Recipes Found for ${
                 searchQuery.length > 0 ? searchQuery : "chosen filters"
-              }`
+              }`,
             );
           } else {
             setNoRecipesFoundMessage(null);
@@ -125,7 +122,47 @@ function RecipeList({ favorites }) {
       }
 
       const queryParams = new URLSearchParams(filters);
-      router.push(`/?${queryParams.toString()}`);
+
+      if (searchQuery.length > 0) {
+        queryParams.set("searchQuery", searchQuery);
+      } else {
+        queryParams.delete("searchQuery");
+      }
+
+      if (selectedTags.length > 0) {
+        queryParams.set("tags", selectedTags.join(","));
+      } else {
+        queryParams.delete("tags");
+      }
+
+      if (selectedCategories.length > 0) {
+        queryParams.set("categories", selectedCategories.join(","));
+      } else {
+        queryParams.delete("categories");
+      }
+
+      if (selectedIngredients.length > 0) {
+        queryParams.set("ingredients", selectedIngredients.join(","));
+      } else {
+        queryParams.delete("ingredients");
+      }
+
+      if (selectedInstructions) {
+        queryParams.set("instructions", selectedInstructions.toString());
+      } else {
+        queryParams.delete("instructions");
+      }
+
+      if (sortOrder) {
+        queryParams.set("sortOrders", sortOrder);
+      } else {
+        queryParams.delete("sortOrders");
+      }
+
+      const queryString = queryParams.toString();
+      const url = queryString ? `/?${queryString}` : '/';
+
+      router.push(url);
     } catch (error) {
       console.error("Error fetching recipes by filters:", error);
     }
@@ -138,7 +175,7 @@ function RecipeList({ favorites }) {
       ingredients,
       categories,
       instructions,
-      searchQueryy,
+      searchQuery,
       sortOrders,
     } = router.query;
 
@@ -147,7 +184,7 @@ function RecipeList({ favorites }) {
     setSelectedIngredients(ingredients ? ingredients.split(",") : []);
     setSelectedCategories(categories ? categories.split(",") : []);
     setSelectedInstructions(instructions ? parseInt(instructions) : null);
-    setSearchQuery(searchQueryy || "");
+    setSearchQuery(searchQuery || "");
     setSortOrder(sortOrders || null);
   }, []);
 
@@ -155,11 +192,11 @@ function RecipeList({ favorites }) {
     let typingTimeout;
 
     if (
-      searchQuery.length <= 4 ||
-      selectedTags.length > 0 ||
-      selectedIngredients.length > 0 ||
-      selectedCategories.length > 0 ||
-      selectedInstructions
+      searchQuery.length <= 4
+      || selectedTags.length > 0
+      || selectedIngredients.length > 0
+      || selectedCategories.length > 0
+      || selectedInstructions
     ) {
       clearTimeout(typingTimeout);
 
@@ -202,7 +239,7 @@ function RecipeList({ favorites }) {
         setAutocompleteSuggestions([]);
       } else {
         const response = await fetch(
-          `/api/autocomplete?searchQuery=${searchQuery}`
+          `/api/autocomplete?searchQuery=${searchQuery}`,
         );
 
         if (response.ok) {
@@ -338,7 +375,10 @@ function RecipeList({ favorites }) {
       {(filterCount === 0 || recipes.length === 0) && (
         <>
           <p style={{ textAlign: "center" }}>
-            <span style={{ fontWeight: "bold" }}>{remainingRecipes} </span>
+            <span style={{ fontWeight: "bold" }}>
+              {remainingRecipes}
+              {' '}
+            </span>
             recipes remaining
           </p>
           <div className="flex justify-center gap-10">

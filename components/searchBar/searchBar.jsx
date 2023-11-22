@@ -1,15 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import classes from "./searchBar.module.css";
 
-const SearchBar = ({
-  onSearch,
-  onAutocomplete,
-  searchQuery,
-  setSearchQuery,
-}) => {
+export default function SearchBar({ onSearch, searchQuery, setSearchQuery }) {
   const [isLongQuery, setIsLongQuery] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState(0);
-  const [autocompleteResults, setAutocompleteResults] = useState([]);
   const [showSearchButton, setShowSearchButton] = useState(false);
   const [searchHistory, setSearchHistory] = useState([]);
 
@@ -47,7 +42,7 @@ const SearchBar = ({
       setShowSearchButton(false);
 
       const newTimeout = setTimeout(() => {
-        onAutocomplete(text);
+        onSearch(searchQuery);
       }, 500);
 
       setTypingTimeout(newTimeout);
@@ -56,21 +51,15 @@ const SearchBar = ({
     }
   };
 
-  const handleAutocompleteSelect = (suggestion) => {
-    setSearchQuery(suggestion);
-    setAutocompleteResults([]);
-    setShowSearchButton(false);
-  };
-
   const handleHistoryClick = (historyItem) => {
     setSearchQuery(historyItem);
 
     setShowSearchButton(false);
   };
+
   const clearSearch = () => {
     setSearchQuery("");
     setShowSearchButton(false);
-    setAutocompleteResults([]);
   };
 
   return (
@@ -87,14 +76,14 @@ const SearchBar = ({
           />
 
           {searchQuery && (
-            <button className={classes.clearButton} onClick={clearSearch}>
+            <button type="button" className={classes.clearButton} onClick={clearSearch}>
               ❌
             </button>
           )}
         </div>
 
         {showSearchButton && isLongQuery && (
-          <button onClick={handleSearch}>Search</button>
+          <button type="button" onClick={handleSearch}>Search</button>
         )}
       </div>
       {searchHistory.length > 0 && showSearchButton && !isLongQuery && (
@@ -106,20 +95,12 @@ const SearchBar = ({
           ))}
         </ul>
       )}
-      {autocompleteResults.length > 0 && (
-        <ul className="autocomplete-list">
-          {autocompleteResults.map((suggestion, index) => (
-            <li
-              key={index}
-              onClick={() => handleAutocompleteSelect(suggestion)}
-            >
-              {suggestion}
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
-};
+}
 
-export default SearchBar;
+SearchBar.propTypes = {
+  onSearch: PropTypes.func.isRequired,
+  searchQuery: PropTypes.string.isRequired,
+  setSearchQuery: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
