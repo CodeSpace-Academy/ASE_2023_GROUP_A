@@ -1,19 +1,18 @@
 import { useEffect, useState, useContext } from "react";
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/router";
-import fetchRecipes from "@/helpers/hook";
+import fetchRecipes from "../../helpers/hook"
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
-import LoadMoreButton from "../Buttons/LoadMore/LoadMore";
 import FloatingButton from "../Buttons/floatingButton/FloatingButton";
 import "react-multi-carousel/lib/styles.css";
 import FavoritesContext from "../Context/Favorites-context";
-import { useTheme } from "@/components/Context/ThemeContext";
+import { useTheme } from "../../components/Context/ThemeContext"
 import Badges from "../badges/badges";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Carousel from "react-multi-carousel";
-import { responsive } from "@/helpers/settings/settings";
+import { responsive } from "../../helpers/settings/settings";
 import Loading from "../Loading/Loading";
 
 /**

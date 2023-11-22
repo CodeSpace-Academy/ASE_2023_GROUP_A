@@ -6,7 +6,7 @@ import {
   Published,
   TotalTime,
 } from "../TimeAndDate/TimeConvertor";
-import RecipeDetailTags from "../tags/RecipeDetailTags";
+import RecipeDetailTags from "../Tags/RecipeDetailTags";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
 import CoverImage from "../Images/CoverImage";

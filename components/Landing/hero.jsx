@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import classes from "./hero.module.css";
 import SearchBar from "../searchBar/searchBar";
 import Categories from "../categories/categories";
-import Tags from "../tags/Tags";
+import Tags from "../Tags/Tags";
 import Ingredients from "../ingredients/ingredients";
 import DropdownMenu from "../sort/sort";
-import InstructionF from "../instructions/instructions";
+import InstructionF from "../Instructions/instructions";
 
 /**
  * Functional component representing the hero section of the application.
