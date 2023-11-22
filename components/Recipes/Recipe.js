@@ -39,10 +39,12 @@ const Recipe = ({ recipe, Allergies }) => {
   const firstImage = recipe.images[0];
 
   return (
-    <div className={` container mx-auto mt-24 p-4 ${textClass}`}>
+    <div className={` mt-19 p-14 ${textClass}`}>
       <Link href='/'>
-        <span className={`flex text-black-600 text-xl gap-2 p-4 ${textClass}`}>
-          <button className='flex border rounded p-2'>
+        <span
+          className={`flex text-black-600 text-xl gap-2 p-4 mt-2 ${textClass}`}
+        >
+          <button className=' ml-10 flex border rounded p-2'>
             {" "}
             <FaArrowLeft className='mr-2' />
             Back to More Recipes{" "}
@@ -52,7 +54,7 @@ const Recipe = ({ recipe, Allergies }) => {
       <div
         className={`bg-${
           theme === "dark" ? "gray-700" : "white"
-        } p-5 m-12 rounded shadow mb-4`}
+        } p-5 ml-14 mr-14 mb-5 rounded shadow mb-4`}
       >
         <div className=' flex items-center justify-center '>
           <div className=' lg:w-1/2'>
