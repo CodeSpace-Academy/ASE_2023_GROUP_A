@@ -44,7 +44,7 @@ const Recipe = ({ recipe, Allergies }) => {
         <span
           className={`flex text-black-600 text-xl gap-2 p-4 mt-2 ${textClass}`}
         >
-          <button className=' ml-10 flex border rounded p-2'>
+          <button className='ml-10 flex border bg-gradient-to-br from-white to-gray-400 text-white hover:text-blue-400 px-4 py-2 rounded-lg '>
             {" "}
             <FaArrowLeft className='mr-2' />
             Back to More Recipes{" "}
