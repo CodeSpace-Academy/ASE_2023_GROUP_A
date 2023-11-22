@@ -58,7 +58,9 @@ const Recipe = ({ recipe, Allergies }) => {
       >
         <div className=' flex items-center justify-center '>
           <div className=' lg:w-1/2'>
-            <h1 className={`text-2xl font-bold mb-2 ml-15 ${textClass}`}>
+            <h1
+              className={`text-2xl text-center font-bold mb-2 ml-15 ${textClass}`}
+            >
               {recipe.title}
             </h1>
             <CoverImage
