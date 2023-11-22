@@ -54,9 +54,9 @@ const Recipe = ({ recipe, Allergies }) => {
           theme === "dark" ? "gray-700" : "white"
         } p-5 m-12 rounded shadow mb-4`}
       >
-        <div className=' flex items-center justify-center'>
-          <div className='  lg:w-1/2'>
-            <h1 className={`text-2xl font-bold mb-2  ${textClass}`}>
+        <div className=' flex items-center justify-center '>
+          <div className=' lg:w-1/2'>
+            <h1 className={`text-2xl font-bold mb-2 ml-15 ${textClass}`}>
               {recipe.title}
             </h1>
             <CoverImage
@@ -80,7 +80,7 @@ const Recipe = ({ recipe, Allergies }) => {
               <b>Category</b>: {recipe.category}
             </div>
 
-            <div className={` bg-pink-200 mt-4 ${textClass}`}>
+            <div className={` mt-2 ${textClass}`}>
               {" "}
               <RecipeDetailTags recipe={recipe} />
               <PrepTime prepTime={recipe.prep} />
