@@ -2,7 +2,7 @@ import {
   addFavoriteToMongoDB,
   getFavouritesFromMongoDB,
   removeFavoriteFromDB,
-} from "@/helpers/mongoDB-utils";
+} from "../../../helpers/mongoDB-utils"
 
 const handler = async (request, response) => {
   if (request.method === "GET") {
