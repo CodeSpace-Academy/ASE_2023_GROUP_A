@@ -1,11 +1,13 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable no-shadow */
-/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable indent */
+/* eslint-disable react/jsx-no-constructed-context-values */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable implicit-arrow-linebreak */
 import { useState, createContext } from "react";
 
 const FavoritesContext = createContext({
@@ -37,24 +39,20 @@ export function FavoritesContextProvider(props) {
     notifyChangeListeners();
   };
   const removeFavoritesHandler = (recipeId) => {
-    setUserFavorites((prevUserFavorites) => {
-      prevUserFavorites.filter((favorite) => favorite._id !== recipeId);
-    });
+    setUserFavorites((prevUserFavorites) => prevUserFavorites.filter((favorite) =>
+      favorite._id !== recipeId));
     notifyChangeListeners();
   };
 
-  function isRecipeInFavorites(recipeId, userFavorites) {
-    return Array.from(userFavorites).some(
-      (recipe) => recipe && recipe._id === recipeId,
-    );
+  function isRecipeInFavorites(recipeId, userfavorites) {
+    return Array.from(userfavorites).some((recipe) => recipe && recipe._id === recipeId);
   }
   const addChangeListener = (listener) => {
     setChangeListeners((prevListeners) => [...prevListeners, listener]);
   };
 
   const removeChangeListener = (listener) => {
-    setChangeListeners((prevListeners) =>
-      prevListeners.filter((l) => l !== listener));
+    setChangeListeners((prevListeners) => prevListeners.filter((l) => l !== listener));
   };
 
   const context = {
@@ -67,10 +65,10 @@ export function FavoritesContextProvider(props) {
     addChangeListener,
     removeChangeListener,
   };
-  return (
-    <FavoritesContext.Provider value={context}>
-      {props.children}
-    </FavoritesContext.Provider>
+    return (
+      <FavoritesContext.Provider value={context}>
+        {props.children}
+      </FavoritesContext.Provider>
   );
 }
 

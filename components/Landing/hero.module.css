@@ -4,7 +4,7 @@
   background-repeat: no-repeat;
   background-position: center;
   width: 100vw;
-  height: 100vh;
+  /* height: 50vh; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,10 +14,12 @@
   }
 
   @media (max-width: 799px) {
+    height: 100vh;
     background-position: left center;
     background-size: cover;
   }
 }
+
 
 .heroContent {
   display: flex;
@@ -25,6 +27,7 @@
   justify-content: center;
   gap: 20px;
   padding: 2em;
+  background-color: rgb(59 130 246 / 0.5);
   border: 2px solid grey;
   background-color: rgba(0, 140, 255, 0.456);
 

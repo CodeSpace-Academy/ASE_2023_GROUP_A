@@ -37,8 +37,14 @@
   font-style: italic;
 }
 
-@media (max-width: 799px) {
-  .searchInput::placeholder {
-    color: yellow;
+  @media (max-width:799px) {
+    .searchInput::placeholder{
+      color: yellow;
+    }
   }
+
+.history{
+  display: flex;
+  flex-direction: row;
+  background-color: green;
 }

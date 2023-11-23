@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./Loading.module.css";
 
-const Landing = () => {
+function Landing() {
   return (
     <div className={styles.homeContainer}>
       <div className={styles.logoContainer}>
@@ -17,7 +17,7 @@ const Landing = () => {
         </Link>
       </div>
       <div className={styles.loaderContainer}>
-        <div className={styles.loader}></div>
+        <div className={styles.loader} />
       </div>
       <div className={styles.buttonsContainer}>
         <Link href="/signin" className={styles.button}>
@@ -29,6 +29,6 @@ const Landing = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Landing;

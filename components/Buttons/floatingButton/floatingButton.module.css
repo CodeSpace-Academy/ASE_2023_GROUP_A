@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  transition: background-color 0.3s;
+  /* transition: background-color 0.3s; */
 }
 
 .floatingButton:hover {
@@ -39,7 +39,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  transition: background-color 0.3s;
+  /* transition: background-color 0.3s; */
 }
 
 .floatingButton2:hover {

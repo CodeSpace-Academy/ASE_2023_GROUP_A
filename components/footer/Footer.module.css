@@ -1,6 +1,7 @@
 .footer {
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 0%;
 
   @media (max-width: 799px) {
     flex-direction: grid;
@@ -8,7 +9,6 @@
     align-items: flex-start;
     padding: 6%;
     gap: 2%;
-    /* line-break: 20%; */
   }
 
   @media (min-width: 800px) {
@@ -18,7 +18,11 @@
   }
 }
 
-small.copyright {
+.copyright {
+    justify-self: center;
+}
+
+.copyright > small {
   justify-content: center;
   align-items: center;
 
@@ -30,6 +34,6 @@ small.copyright {
 
   @media (min-width: 800px) {
     padding: auto;
-    margin: 35%;
+    margin: 30%;
   }
 }
