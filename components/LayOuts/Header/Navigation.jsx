@@ -145,7 +145,7 @@ const Navigation = () => {
                 Recipe
               </Link>
               <Link
-                href={`/FavoritesPage`}
+                href={`/FavoritesPage`} as={`favourites`}
                 className="text-black-300 hover-bg-gray-700 hover-text-white block rounded-md px-3 py-2 text-base font-medium"
               >
                 Favorites{" "}

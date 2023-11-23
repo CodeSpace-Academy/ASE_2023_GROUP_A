@@ -11,9 +11,9 @@ import {
 import Link from 'next/link';
 import useSWR from 'swr';
 
-import RecipeCard from '../components/Cards/RecipeCard';
-import FavoritesContext from '../components/Context/Favorites-context';
-import Loading from '../components/Loading/Loading';
+import RecipeCard from '../../components/Cards/RecipeCard';
+import FavoritesContext from '../../components/Context/Favorites-context';
+import Loading from '../../components/Loading/Loading';
 
 function FavoritesPage() {
   const favoriteCtx = useContext(FavoritesContext);
