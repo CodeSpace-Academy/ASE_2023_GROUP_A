@@ -1,7 +1,7 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 // MongoDB connection URI, including authentication details
-const uri = `mongodb+srv://groupa:${process.env.mongodb_password}@${process.env.mongodb_username}.uyuxme9.mongodb.net/?retryWrites=true&w=majority`;
+const uri = process.env.mongodb_uri;
 
 // Create a MongoDB client instance with specific server API version and options
 export const client = new MongoClient(uri, {
@@ -13,9 +13,10 @@ export const client = new MongoClient(uri, {
 });
 
 // Function to connect to the MongoDB server and return a collection
-export const connectToCollection = async (databaseName, collectionName)=> {
+export const connectToCollection = async (databaseName, collectionName) => {
   try {
     await client.connect();
+
     const db = client.db(databaseName);
     const collection = db.collection(collectionName);
     return collection;
@@ -23,7 +24,7 @@ export const connectToCollection = async (databaseName, collectionName)=> {
     console.error("Error connecting to MongoDB:", error);
     throw error;
   }
-}
+};
 
 // Function to close the MongoDB connection
 export async function closeMongoDBConnection() {

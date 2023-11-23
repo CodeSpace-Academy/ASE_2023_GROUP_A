@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import classes from "./searchBar.module.css";
 
-const SearchBar = ({
-  onSearch,
-  onAutocomplete,
-  handleDefault,
-  searchQuery,
-  setSearchQuery,
-}) => {
+/**
+ * Functional component representing a search bar for recipes.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {Function} props.onSearch - The function to handle search.
+ * @param {string} props.searchQuery - The current search query.
+ * @param {Function} props.setSearchQuery - The function to set the search query.
+ * @returns {JSX.Element} - The component's rendered elements.
+ */
+export default function SearchBar({ onSearch, searchQuery, setSearchQuery }) {
   const [isLongQuery, setIsLongQuery] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState(0);
-  const [autocompleteResults, setAutocompleteResults] = useState([]);
   const [showSearchButton, setShowSearchButton] = useState(false);
   const [searchHistory, setSearchHistory] = useState([]);
 
@@ -22,6 +26,9 @@ const SearchBar = ({
     }
   }, []);
 
+  /**
+   * Handles the search operation when the search button is clicked.
+   */
   const handleSearch = () => {
     if (isLongQuery) {
       onSearch(searchQuery);
@@ -34,6 +41,11 @@ const SearchBar = ({
     }
   };
 
+  /**
+   * Handles changes in the search input.
+   *
+   * @param {Object} e - The input event object.
+   */
   const handleChange = (e) => {
     const text = e.target.value;
     setSearchQuery(text);
@@ -48,8 +60,7 @@ const SearchBar = ({
       setShowSearchButton(false);
 
       const newTimeout = setTimeout(() => {
-        onSearch(text);
-        onAutocomplete(text);
+        onSearch(searchQuery);
       }, 500);
 
       setTypingTimeout(newTimeout);
@@ -58,24 +69,22 @@ const SearchBar = ({
     }
   };
 
-  const handleAutocompleteSelect = (suggestion) => {
-    setSearchQuery(suggestion);
-    setAutocompleteResults([]);
-    setShowSearchButton(false);
-  };
-
+  /**
+   * Handles a click on a history item, updating the search query.
+   *
+   * @param {string} historyItem - The selected history item.
+   */
   const handleHistoryClick = (historyItem) => {
     setSearchQuery(historyItem);
-
     setShowSearchButton(false);
-
-    onSearch(historyItem);
   };
 
+  /**
+   * Clears the current search query.
+   */
   const clearSearch = () => {
     setSearchQuery("");
     setShowSearchButton(false);
-    handleDefault();
   };
 
   return (
@@ -85,46 +94,32 @@ const SearchBar = ({
           <input
             type="text"
             placeholder="Search for recipes..."
-            value={searchQuery}
+            value={searchQuery || ""}
             onClick={() => setShowSearchButton(true)}
             onChange={handleChange}
             className={classes.searchInput}
           />
 
           {searchQuery && (
-            <button className={classes.clearButton} onClick={clearSearch}>
+            <button type="button" className={classes.clearButton} onClick={clearSearch}>
               ❌
             </button>
           )}
         </div>
 
         {showSearchButton && isLongQuery && (
-          <button onClick={handleSearch}>Search</button>
+          <button type="button" onClick={handleSearch}>Search</button>
         )}
       </div>
       {searchHistory.length > 0 && showSearchButton && !isLongQuery && (
-        <ul className="autocomplete-list">
-          {searchHistory.map((historyItem, index) => (
-            <li key={index} onClick={() => handleHistoryClick(historyItem)}>
+        searchHistory.map((historyItem) => (
+          <div className="history" key={uuidv4()}>
+            <button type="button" onClick={() => handleHistoryClick(historyItem)}>
               {historyItem}
-            </li>
-          ))}
-        </ul>
-      )}
-      {autocompleteResults.length > 0 && (
-        <ul className="autocomplete-list">
-          {autocompleteResults.map((suggestion, index) => (
-            <li
-              key={index}
-              onClick={() => handleAutocompleteSelect(suggestion)}
-            >
-              {suggestion}
-            </li>
-          ))}
-        </ul>
+            </button>
+          </div>
+        ))
       )}
     </div>
   );
-};
-
-export default SearchBar;
+}

@@ -1,16 +1,26 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
-function Ingredients({
-  setFilterIngredientResults,
-  handleDefaultIngredientFilter,
-  setRecipes,
-  selectedIngredients,
-  setSelectedIngredients,
-}) {
+/**
+ * Functional component representing a multi-select dropdown for ingredients.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {string[]} props.selectedIngredients - The selected ingredients.
+ * @param {Function} props.setSelectedIngredients - The function to set selected ingredients.
+ * @returns {JSX.Element} - The component's rendered elements.
+ */
+function Ingredients({ selectedIngredients, setSelectedIngredients }) {
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
+    /**
+     * Fetches ingredients from the server and sets them in the component state.
+     *
+     * @async
+     * @function
+     * @throws {Error} If there is an issue fetching ingredients.
+     */
     async function fetchIngredients() {
       try {
         const response = await fetch("/api/ingredients");
@@ -22,58 +32,29 @@ function Ingredients({
             data.map((ingredient) => ({
               label: ingredient,
               value: ingredient,
-            }))
+            })),
           );
         } else {
-          console.error("Failed to fetch ingredients");
+          throw Error;
         }
       } catch (error) {
-        console.error("Error fetching ingredients:", error);
+        throw Error;
       }
     }
 
     fetchIngredients();
   }, []);
 
-  useEffect(() => {
-    const fetchRecipesByIngredients = async () => {
-      if (selectedIngredients.length === 0) {
-        setFilterIngredientResults([]);
-      } else {
-        try {
-          const response = await fetch(`/api/filterbyingredient`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ selectedIngredients }),
-          });
-
-          if (response.ok) {
-            const filterIngredientsResult = await response.json();
-            // setRecipes(filterResult.recipes);
-            setFilterIngredientResults(filterIngredientsResult.recipes);
-            // setCount(filterResult.recipes.length);
-          } else {
-            console.error("Failed to fetch recipes by ingredients");
-          }
-        } catch (error) {
-          console.error("Error fetching recipes by ingredients:", error);
-        }
-      }
-    };
-
-    if (selectedIngredients.length > 0) {
-      fetchRecipesByIngredients(selectedIngredients);
-    } else {
-      handleDefaultIngredientFilter();
-    }
-  }, [selectedIngredients, setRecipes]);
-
+  /**
+   * Handles the change event when ingredients are selected or deselected.
+   *
+   * @param {Object[]} selectedOptions - The selected ingredient options to filter by.
+   */
   const handleIngredientChange = (selectedOptions) => {
     setSelectedIngredients(selectedOptions.map((option) => option.value));
   };
 
+  // Custom styles for the React Select component
   const customStyles = {
     multiValue: (base) => ({
       ...base,
@@ -83,9 +64,12 @@ function Ingredients({
 
     control: (base) => ({
       ...base,
-      backgroundColor: "blue",
+      backgroundColor: "#007bff",
       color: "white",
       width: "fitContent",
+      cursor: "pointer",
+
+      "&:hover": { background: "lightBlue" },
     }),
 
     multiValueLabel: (base) => ({
@@ -110,13 +94,11 @@ function Ingredients({
       <Select
         isMulti
         options={ingredients}
-        value={ingredients.filter((ingredient) =>
-          selectedIngredients.includes(ingredient.value)
-        )}
+        value={ingredients.filter((ingredient) => selectedIngredients?.includes(ingredient.value))}
         onChange={handleIngredientChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="select ingredient"
+        placeholder="Select ingredient"
       />
     </div>
   );
