@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   CookTime,
   PrepTime,
@@ -12,13 +13,13 @@ import Allergens from "../Allergens/allergens";
 import CoverImage from "../Images/CoverImage";
 import IngredientsList from "../ingredients/IngredientsList";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
-import Link from "next/link";
+import UpdateRecipeInstructions from "../Instructions/editRecipeInstructions";
 import { FaArrowLeft, FaTag, FaUsers } from "react-icons/fa";
 import { FiBook } from "react-icons/fi";
 import Loading from "../Loading/Loading";
 import { useTheme } from "../Context/ThemeContext";
 
-const Recipe = ({ recipe, Allergies }) => {
+function Recipe({ recipe, Allergies }) {
   const [showTags, setShowTags] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const { theme } = useTheme();
@@ -112,6 +113,6 @@ const Recipe = ({ recipe, Allergies }) => {
       </div>
     </div>
   );
-};
+}
 
 export default Recipe;
