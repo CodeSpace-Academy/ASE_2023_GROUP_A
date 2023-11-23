@@ -83,7 +83,7 @@ const FavCard = ({ recipe, favorites }) => {
       </div>
       
     </div>
-    <Link href={`/FavoritesPage/similarRecipes of ${recipe.title}`} > View similar recipes</Link>
+    <Link href={`/FavoritesPage/similar-recipes/${recipe._id}`} as={`/FavoritesPage/similar-recipes/${recipe.title}`} > View similar recipes</Link>
     </>
   );
 };

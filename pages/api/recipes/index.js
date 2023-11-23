@@ -14,7 +14,6 @@ import { getAllRecipes, getTotalRecipesCount } from "../../../helpers/mongoDB-ut
 const ITEMS_PER_PAGE = 100;
 
 const handler = async (req, res) => {
-  const page = req.query.page ? parseInt(req.query.page) : 1;
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }

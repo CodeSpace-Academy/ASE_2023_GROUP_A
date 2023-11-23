@@ -311,8 +311,9 @@ function RecipeList({ favorites }) {
   const handleViewFavorites = () => {
     setShowCarousel(!showCarousel);
   };
-  const remainingRecipes = totalRecipes - 100 * currentPage;
-
+  // const remainingRecipes = totalRecipes - 100 * currentPage;
+  const recipesPerPage = 100;
+  const displayRemainingRecipes = Math.max(0, totalRecipes - recipesPerPage * currentPage);
   return (
     <div>
       <Hero
@@ -413,7 +414,7 @@ function RecipeList({ favorites }) {
       {(filterCount === 0 || recipes.length === 0) && (
         <>
           <p style={{ textAlign: "center" }}>
-            <span style={{ fontWeight: "bold" }}>{remainingRecipes} </span>
+            <span style={{ fontWeight: "bold" }}>{displayRemainingRecipes} </span>
             recipes remaining
           </p>
           

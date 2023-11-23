@@ -45,8 +45,14 @@ export function FavoritesContextProvider(props) {
   };
 
   function isRecipeInFavorites(recipeId, userfavorites) {
-    return Array.from(userfavorites).some((recipe) => recipe && recipe._id === recipeId);
+    if (Array.isArray(userfavorites)) {
+      return userfavorites.some((recipe) => recipe && recipe._id === recipeId);
+    } else {
+      // If not an array, handle accordingly (assuming it's a single recipe)
+      return userfavorites && userfavorites._id === recipeId;
+    }
   }
+  
   const addChangeListener = (listener) => {
     setChangeListeners((prevListeners) => [...prevListeners, listener]);
   };

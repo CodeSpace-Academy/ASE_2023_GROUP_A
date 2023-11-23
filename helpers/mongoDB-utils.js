@@ -1,4 +1,5 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
+import Recipe from './../components/Recipes/Recipe';
 
 const uri = process.env.mongodb_uri;
 
@@ -360,3 +361,29 @@ export async function filtering(filters, sortOrder) {
     throw new Error("could not filter recipes according to the filters selected");
   }
 }
+export const getSimilarRecipes = async (recipeTitle) => {
+  const db = client.db("devdb");
+  const collection = db.collection("recipes");
+
+  // Await the findOne call
+  const favoriteRecipe = await collection.findOne({ title: recipeTitle });
+  // Fetch similar recipes based on shared tags, categories, etc.
+  const { category } = favoriteRecipe;
+  const categoryQuery = Array.isArray(category)
+  ? { category: { $in: category } }
+  : { category: category };
+
+  const similarRecipes = await collection
+    .find({
+      $or: [
+        { tags: { $in: favoriteRecipe.tags } },
+        categoryQuery,
+        // You can add more criteria based on your requirements
+      ],
+      title: { $ne: favoriteRecipe.title }, // Exclude the favorite recipe itself
+    })
+    .limit(50)
+    .toArray();
+    console.log("Favorite Similar Recipes size:", similarRecipes.length);
+  return similarRecipes;
+};
