@@ -4,29 +4,34 @@
  * @returns The RecipeList component is being returned.
  */
 
-import React, { useEffect, useState, useContext } from "react";
-import Carousel from "react-multi-carousel";
-import fetchRecipes from "../../helpers/hook";
-import useSWR, { mutate } from "swr";
-import { responsive } from "@/helpers/settings/settings";
+import 'react-multi-carousel/lib/styles.css';
 
-import "react-multi-carousel/lib/styles.css";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import FloatingButton from "../Buttons/floatingButton/FloatingButton";
-import Hero from "../Landing/hero";
-import Loading from "../Loading/Loading";
-import RecipeCard from "../Cards/RecipeCard";
+import Carousel from 'react-multi-carousel';
+import useSWR, { mutate } from 'swr';
 
+import { useTheme } from '@/components/Context/ThemeContext';
 // import Pagination from "../Buttons/LoadMore/pagination/Pagination";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import FavoritesContext from "../Context/Favorites-context";
-import { useTheme } from "@/components/Context/ThemeContext";
-import LoadingCard from "../Cards/LoadingCard";
+
+import fetchRecipes from '../../helpers/hook';
+import FloatingButton from '../Buttons/floatingButton/FloatingButton';
+import FavCard from '../Cards/FavCard';
+import RecipeCard from '../Cards/RecipeCard';
+import FavoritesContext from '../Context/Favorites-context';
+import Hero from '../Landing/hero';
+import Loading from '../Loading/Loading';
+
 // const ITEMS_PER_PAGE = 100;
 
 function RecipeList({ favorites }) {
-
+  const [showCarousel, setShowCarousel] = useState(false);
   const [recipes, setRecipes] = useState([]);
   const [originalRecipes, setOriginalRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -383,9 +388,26 @@ function RecipeList({ favorites }) {
     originalRecipes,
   ]);
 
-
-
-
+  const responsive2 = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+      slidesToSlide: 3, // optional, default to 1.
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+      slidesToSlide: 2, // optional, default to 1.
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+      slidesToSlide: 1, // optional, default to 1.
+    },
+  };
+  const handleViewFavorites = () => {
+    setShowCarousel(!showCarousel);
+  };
   return (
     <div>
       <Hero
@@ -446,25 +468,39 @@ function RecipeList({ favorites }) {
         </ul>
       )}
 
-      {!favorites ? (
-        <p>
-          <Loading />
-        </p>
-      ) : favorites.length === 0 ? (
-        <p className={isDarkTheme ? "text-white" : ""}>
-          No favorite recipes yet.
-        </p>
-      ) : (
-        <div className={`h-3/5`}>
-          <Carousel responsive={responsive} containerClass="carousel-container">
-            {favorites.map((recipe) => (
-              <div key={recipe.recipe._id}>
-                <RecipeCard recipe={recipe.recipe} favorites={favorites} />
-              </div>
-            ))}
-          </Carousel>
-        </div>
+<div className="my-8">
+      <button
+        type="button"
+        onClick={handleViewFavorites}
+        className="bg-blue-500 px-4 py-2 rounded-md"
+      >
+        {!showCarousel ? "view Favourites" : "Hide Favourites"}
+      </button>
+
+      {showCarousel && (
+        <>
+          {!favorites ? (
+            <p>
+              <Loading />
+            </p>
+          ) : favorites.length === 0 ? (
+            <p className={isDarkTheme ? "text-white" : "text-blue-black-10"}>
+              No favorite recipes yet.
+            </p>
+          ) : (
+            <div className="mt-4">
+              <Carousel responsive={responsive2} containerClass="carousel-container">
+                {favorites.map((recipe) => (
+                  <div key={recipe.recipe._id} >
+                    <FavCard recipe={recipe.recipe} favorites={favorites} />
+                  </div>
+                ))}
+              </Carousel>
+            </div>
+          )}
+        </>
       )}
+    </div>
 
       <div className={`total-count ${isDarkTheme ? "text-white" : ""}`}>
         Total Recipes: {recipes.length}
