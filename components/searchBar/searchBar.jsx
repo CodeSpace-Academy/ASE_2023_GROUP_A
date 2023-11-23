@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import classes from "./searchBar.module.css";
 
 /**
@@ -111,13 +112,13 @@ export default function SearchBar({ onSearch, searchQuery, setSearchQuery }) {
         )}
       </div>
       {searchHistory.length > 0 && showSearchButton && !isLongQuery && (
-        <ul className="autocomplete-list">
-          {searchHistory.map((historyItem, index) => (
-            <li key={index} onClick={() => handleHistoryClick(historyItem)}>
+        searchHistory.map((historyItem) => (
+          <div className="history" key={uuidv4()}>
+            <button type="button" onClick={() => handleHistoryClick(historyItem)}>
               {historyItem}
-            </li>
-          ))}
-        </ul>
+            </button>
+          </div>
+        ))
       )}
     </div>
   );

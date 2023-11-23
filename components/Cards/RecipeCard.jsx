@@ -118,7 +118,6 @@ function RecipeCard({
           </div>
           {/* Display total time for the recipe */}
           <TotalTime totalTime={recipe} />
-          <p> Instructions: {recipe.instructions.length}</p>
         </div>
         <div>
           {/* Display favorite button */}

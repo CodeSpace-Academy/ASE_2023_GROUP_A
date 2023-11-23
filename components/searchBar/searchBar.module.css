@@ -42,3 +42,9 @@
       color: yellow;
     }
   }
+
+.history{
+  display: flex;
+  flex-direction: row;
+  background-color: green;
+}

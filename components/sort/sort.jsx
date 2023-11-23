@@ -20,7 +20,7 @@ export default function DropdownMenu({ sortOrder, setSortOrder }) {
     handleClose();
   };
 
-  const getSortOrderText = (sortOrder) => {
+  const getSortOrderText = () => {
     switch (sortOrder) {
       case "[A-Z]":
         return "Ascending";
@@ -57,6 +57,7 @@ export default function DropdownMenu({ sortOrder, setSortOrder }) {
         onClick={handleClick}
       >
         Sort
+        {sortOrder}
         {getSortOrderText(sortOrder)}
         <ArrowDropDown />
       </Button>

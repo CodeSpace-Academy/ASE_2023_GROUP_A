@@ -47,7 +47,7 @@ function Categories({ selectedCategories, setSelectedCategories }) {
   /**
    * Handles the change event when categories are selected or deselected.
    *
-   * @param {Object[]} selectedOptions - The selected options.
+   * @param {Object[]} selectedOptions - The selected category options to filter by.
    */
   const handleCategoryChange = (selectedOptions) => {
     setSelectedCategories(selectedOptions.map((option) => option.value));

@@ -40,7 +40,7 @@ function Tags({ setSelectedTags, selectedTags }) {
   /**
    * Handles the change in selected tags.
    *
-   * @param {Object} selectedOptions - The selected tag options.
+   * @param {Object} selectedOptions - The selected tag options to filter by.
    */
   const handleTagChange = (selectedOptions) => {
     setSelectedTags(selectedOptions.map((option) => option.value));
@@ -49,14 +49,14 @@ function Tags({ setSelectedTags, selectedTags }) {
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "#3496c7",
+      background: "red",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
       backgroundColor: "#007bff",
-      color: "white",
+      color: "black",
       width: "fitContent",
       cursor: "pointer",
 

@@ -21,19 +21,8 @@
       "quotes":"off",
       // Prefer JSDoc notation
       "react/prop-types": "off",
-      // necessary for debugging or logging information during development
-      "no-console": "off",
       //for react hooks to not assume dependencies, mount/unmount
-      "react-hooks/exhaustive-deps": "off",
-      "no-shadow": "off",
-      //using index as key is not recommeneded, but there was nothing else I could use as a key
-      "react/no-array-index-key": "off",
-      //When conditionally rendering an element, I got this eslint error and I could not find a solution for it
-      "jsx-a11y/no-noninteractive-element-interactions": "off",
-      "jsx-a11y/click-events-have-key-events": "off",
-      "no-else-return": "off",
-      //After removing the console logs, I got the following two errors and I could not find a solution to fix them
-      "consistent-return": "off"
+      "react-hooks/exhaustive-deps": "off"
 
     }
 }
