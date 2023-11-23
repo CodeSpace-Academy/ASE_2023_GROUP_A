@@ -36,10 +36,8 @@ export const Published = ({ published }) => {
   return (
     <div className='flex items-center'>
       <FaClock className='mr-2' />
-      <b className='font-bold'>Published:</b>
-      <p className='transform translate-x-0 hover:translate-x-2 transition-transform duration-300 ease-in-out'>
-        {new Date(published).toLocaleDateString()}
-      </p>
+      <b className='font-bold p-1'>Published:</b>
+      <p>{new Date(published).toLocaleDateString()}</p>
     </div>
   );
 };
