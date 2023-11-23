@@ -20,12 +20,14 @@
   }
 }
 
+
 .heroContent {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 20px;
   padding: 2em;
+  background-color: rgb(59 130 246 / 0.5);
   border: 2px solid grey;
 
   @media (min-width: 800px) {

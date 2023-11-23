@@ -21,10 +21,8 @@
       "quotes":"off",
       // Prefer JSDoc notation
       "react/prop-types": "off",
-      // necessary for debugging or logging information during development
-      "no-console": "off",
       //for react hooks to not assume dependencies, mount/unmount
       "react-hooks/exhaustive-deps": "off"
+
     }
-  
 }
