@@ -23,7 +23,6 @@ const handler = async (request, response) => {
       // If filters or searchQuery exist, apply them
       const result = await getSimilarRecipesWithTotalCount(
         recipeTitle,
-        limit,
         skip,
         searchQuery,
         filters,
@@ -33,11 +32,7 @@ const handler = async (request, response) => {
       totalCount = result.totalCount;
     } else {
       // If no filters or searchQuery, fetch all recipes without filtering
-      const result = await getSimilarRecipesWithTotalCount(
-        recipeTitle,
-        limit,
-        skip
-      );
+      const result = await getSimilarRecipesWithTotalCount(recipeTitle, skip);
       similarRecipes = result.similarRecipes;
       totalCount = result.totalCount;
     }

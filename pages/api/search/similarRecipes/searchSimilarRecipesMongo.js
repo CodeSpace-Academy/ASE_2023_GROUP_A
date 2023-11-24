@@ -6,7 +6,14 @@ const handler = async (request, response) => {
     return response.status(405).json({ error: "Method not allowed" });
   }
 
-  const { recipeTitle, searchQuery, page } = request.query;
+  const { recipeTitle, searchQuery, page, tag, category, sortOrder } =
+    request.query;
+  const filters = {
+    category,
+    tag,
+  };
+  console.log("Filters:", filters);
+  console.log("Sort Order:", sortOrder);
 
   try {
     const limit = 100;
@@ -14,9 +21,10 @@ const handler = async (request, response) => {
 
     const result = await getSimilarRecipesWithTotalCount(
       recipeTitle,
-      limit,
       skip,
-      searchQuery
+      searchQuery,
+      filters, // Pass both tags and categories as an object
+      sortOrder
     );
 
     return response.status(200).json({

@@ -365,29 +365,46 @@ export async function filtering(filters, sortOrder) {
     );
   }
 }
-// helpers/mongoDB-utils.js
-//
 
-// helpers/mongoDB-utils.js
 export const getSimilarRecipesWithTotalCount = async (
   recipeTitle,
-  limit,
   skip,
   searchQuery,
-  filters,
+  filters = {},
   sortOrder
 ) => {
   try {
     const cl = await client.connect();
     const db = cl.db("devdb");
     const collection = db.collection("recipes");
-
-    const favoriteRecipe = await collection.findOne({ title: recipeTitle });
+    const { tag, category } = filters;
 
     // Check if favoriteRecipe is null
+    const favoriteRecipe = await collection.findOne({ title: recipeTitle });
     if (!favoriteRecipe) {
       return { similarRecipes: [], totalCount: 0 };
     }
+
+    // Initialize the query object
+    const query = {};
+
+    // Add category condition if it exists
+    // Add category condition if it exists
+    if (
+      category &&
+      (Array.isArray(category) ? category.length > 0 : category)
+    ) {
+      query.category = {
+        $all: Array.isArray(category) ? category : [category],
+      };
+    }
+
+    // Add tag condition if it exists
+    if (tag && (Array.isArray(tag) ? tag.length > 0 : tag)) {
+      query.tags = { $all: Array.isArray(tag) ? tag : [tag] };
+    }
+
+    // Initialize sortCriteria
 
     // Ensure that favoriteRecipe.tags is an array
     const tags = Array.isArray(favoriteRecipe.tags)
@@ -419,18 +436,49 @@ export const getSimilarRecipesWithTotalCount = async (
         }
       : {};
 
-    const query = {
+    // Merge the baseQuery, regexSearchQuery, and additional query conditions
+    const finalQuery = {
       ...baseQuery,
       ...regexSearchQuery,
+      ...query,
     };
 
+    let sortCriteria = {};
+
+    // Handle sort order based on sortOrder value
+    if (sortOrder === "default") {
+      sortCriteria = {};
+    } else if (sortOrder === "A-Z") {
+      sortCriteria = { title: 1 };
+    } else if (sortOrder === "Z-A") {
+      sortCriteria = { title: -1 };
+    } else if (sortOrder === "Oldest") {
+      sortCriteria = { published: 1 };
+    } else if (sortOrder === "Recent") {
+      sortCriteria = { published: -1 };
+    } else if (sortOrder === "cooktime(asc)") {
+      sortCriteria = { cook: 1 };
+    } else if (sortOrder === "cooktime(desc)") {
+      sortCriteria = { cook: -1 };
+    } else if (sortOrder === "preptime(asc)") {
+      sortCriteria = { prep: 1 };
+    } else if (sortOrder === "preptime(desc)") {
+      sortCriteria = { prep: -1 };
+    } else if (sortOrder === "steps(desc)") {
+      sortCriteria = { instructions: -1 };
+    } else if (sortOrder === "steps(asc)") {
+      sortCriteria = { instructions: 1 };
+    }
     const similarRecipes = await collection
-      .find(query)
-      .limit(limit)
+      .find(finalQuery)
+      .sort(sortCriteria)
+      .limit(100)
       .skip(skip)
       .toArray();
 
-    const totalCount = await collection.find(query).count();
+    const totalCount = await collection.find(finalQuery).count();
+    console.log("MongoDB Query:", finalQuery);
+    console.log("Sort Criteria:", sortCriteria);
 
     return { similarRecipes, totalCount };
   } catch (error) {
@@ -438,125 +486,3 @@ export const getSimilarRecipesWithTotalCount = async (
     throw error;
   }
 };
-
-
-// export async function getSimilarRecipesWithTotalCount2(
-//   recipeTitle,
-//   limit,
-//   skip,
-//   searchQuery,
-//   filters,
-//   sortOrder
-// ) {
-//   try {
-//     const cl = await client.connect();
-//     const db = cl.db("devdb");
-//     const collection = db.collection("recipes");
-
-//     const favoriteRecipe = await collection.findOne({ title: recipeTitle });
-
-//     // Ensure that favoriteRecipe.tags is an array
-//     const tags = Array.isArray(favoriteRecipe.tags)
-//       ? favoriteRecipe.tags
-//       : [favoriteRecipe.tags];
-
-//     const categoryQuery = Array.isArray(favoriteRecipe.category)
-//       ? { category: { $in: favoriteRecipe.category } }
-//       : { category: favoriteRecipe.category };
-
-//     const query = {
-//       $or: [
-//         { tags: { $in: tags } },
-//         categoryQuery,
-//         // Add more conditions based on your requirements
-//       ],
-//       title: { $ne: favoriteRecipe.title },
-//     };
-
-//     // Apply additional filters
-//     applyFilters(query, filters);
-
-//     // Apply search query using regex
-//     if (searchQuery && searchQuery.length > 0) {
-//       query.$or.push(
-//         { title: { $regex: searchQuery, $options: "i" } },
-//         { description: { $regex: searchQuery, $options: "i" } }
-//       );
-//     }
-
-//     const similarRecipes = await collection
-//       .find({ query })
-//       .sort(sortCriteria(sortOrder))
-//       .limit(limit)
-//       .skip(skip)
-//       .toArray();
-
-//     const totalCount = await collection.find(query).count();
-
-//     return { similarRecipes, totalCount };
-//   } catch (error) {
-//     console.error("Error fetching similar recipes:", error);
-//     throw error;
-//   }
-// }
-// function applyFilters(query, filters) {
-//   const { searchQuery, tags, ingredients, categories, instructions } = filters;
-
-//   if (searchQuery && searchQuery.length > 0) {
-//     query.$or = [
-//       { title: { $regex: searchQuery, $options: "i" } },
-//       { description: { $regex: searchQuery, $options: "i" } },
-//     ];
-//   }
-//  if (filters) {
-//    applyFilters(query, filters);
-//  }
-//   // Apply other filter criteria as needed...
-
-//   if (categories && categories.length > 0) {
-//     query.category = { $all: categories };
-//   }
-
-//   if (tags && tags.length > 0) {
-//     query.tags = { $all: tags };
-//   }
-
-//   if (ingredients && ingredients.length > 0) {
-//     const ingredientQueries = ingredients.map((ingredient) => ({
-//       [`ingredients.${ingredient}`]: { $exists: true },
-//     }));
-//     query.$and = ingredientQueries;
-//   }
-
-//   if (instructions) {
-//     query.instructions = { $size: instructions };
-//   }
-// }
-
-// function sortCriteria(sortOrder) {
-//   let sortCriteria = {};
-
-//   if (sortOrder === "[A-Z]") {
-//     sortCriteria = { title: 1 };
-//   } else if (sortOrder === "[Z-A]") {
-//     sortCriteria = { title: -1 };
-//   } else if (sortOrder === "Oldest") {
-//     sortCriteria = { published: 1 };
-//   } else if (sortOrder === "Recent") {
-//     sortCriteria = { published: -1 };
-//   } else if (sortOrder === "cooktime(asc)") {
-//     sortCriteria = { cook: 1 };
-//   } else if (sortOrder === "cooktime(desc)") {
-//     sortCriteria = { cook: -1 };
-//   } else if (sortOrder === "preptime(asc)") {
-//     sortCriteria = { prep: 1 };
-//   } else if (sortOrder === "preptime(desc)") {
-//     sortCriteria = { prep: -1 };
-//   } else if (sortOrder === "steps(desc)") {
-//     sortCriteria = { instructions: -1 };
-//   } else if (sortOrder === "steps(asc)") {
-//     sortCriteria = { instructions: 1 };
-//   }
-
-//   return sortCriteria;
-// }

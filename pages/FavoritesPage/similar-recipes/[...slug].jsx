@@ -9,6 +9,8 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Loading from "@/components/Loading/Loading";
 // ... (other imports)
+import Tags from "@/components/Tags/Tags";
+import Categories from "@/components/categories/categories";
 
 const SimilarRecipes = () => {
   const router = useRouter();
@@ -20,9 +22,11 @@ const SimilarRecipes = () => {
   const [fuse, setFuse] = useState(null);
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const favoriteCtx = useContext(FavoritesContext);
-  const favorites = favoriteCtx.favorites || [];
-
+  const [sortOrder, setSortOrder] = useState("default");
+  
   const fetcher = (url) => fetch(url).then((res) => res.json());
 
   // Use the useSWR hook to fetch data for the user's favorite recipes
@@ -34,11 +38,14 @@ const SimilarRecipes = () => {
   const recipeTitle = Array.isArray(slug) ? slug[0] : slug;
 
   // Function to search and fetch similar recipes
-  const searchSimilarRecipes = async (searchQuery) => {
+  const searchSimilarRecipes = async () => {
     try {
       const response = await fetch(
-        `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&searchQuery=${searchQuery}&page=${currentSimilarRecipesPage}`
+        `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&searchQuery=${searchQuery}&page=${currentSimilarRecipesPage}&tag=${selectedTags.join(
+          ","
+        )}&category=${selectedCategories.join(",")}&sortOrder=${sortOrder}`
       );
+
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -88,13 +95,13 @@ const SimilarRecipes = () => {
 
   useEffect(() => {
     // Perform fuzzy search when searchQuery changes
-    if (fuse && searchQuery.length >= 4) {
+    if (fuse && searchQuery.length >= 4 || selectedTags || selectedCategories || sortOrder) {
       // If searchQuery is not sufficient for fuzzy search, reset to original recipes
-      searchSimilarRecipes(searchQuery);
+      searchSimilarRecipes();
     } else {
       setSimilarRecipes(originalRecipes);
     }
-  }, [searchQuery, fuse, originalRecipes]);
+  }, [searchQuery, fuse, originalRecipes, selectedTags, selectedCategories, sortOrder]);
 
   const handlePageChange = (event, page) => {
     setSimilarRecipesCurrentPage(page);
@@ -103,7 +110,7 @@ const SimilarRecipes = () => {
 
   const handleSearch = () => {
     // Trigger the search when the search button is clicked
-    searchSimilarRecipes(searchQuery);
+    searchSimilarRecipes();
   };
 
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
@@ -114,33 +121,56 @@ const SimilarRecipes = () => {
         Similar Recipes For:<span> {slug}</span>
       </h2>
       <input
-        id="search"
         type="text"
         placeholder="Search for recipes..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-      <button htmlFor="search" type="button" onClick={handleSearch}>
+      <button type="button" onClick={handleSearch}>
         Search
       </button>
+      <Tags setSelectedTags={setSelectedTags} selectedTags={selectedTags} />
+      <Categories
+        setSelectedCategories={setSelectedCategories}
+        selectedCategories={selectedCategories}
+      />
+
+      {/* Add a dropdown for sort order */}
+      <label htmlFor="sortOrder">Sort Order:</label>
+      <select
+        id="sortOrder"
+        value={sortOrder}
+        onChange={(e) => setSortOrder(e.target.value)}
+      >
+        <option value="default">Default</option>
+        <option value="A-Z">Alphabetical (A-Z)</option>
+        <option value="Z-A">Alphabetical (Z-A)</option>
+        <option value="Oldest">Oldest</option>
+        <option value="Recent">Recent</option>
+        <option value="cooktime(asc)">Cook Time (Ascending)</option>
+        <option value="cooktime(desc)">Cook Time (Descending)</option>
+        <option value="preptime(asc)">Prep Time (Ascending)</option>
+        <option value="preptime(desc)">Prep Time (Descending)</option>
+        <option value="steps(asc)">Steps (Ascending)</option>
+        <option value="steps(desc)">Steps (Descending)</option>
+      </select>
 
       {similarRecipes === null ? (
         <p>No similar recipes found.</p>
       ) : (
         <div className={``}>
-         
           {similarRecipes.length === 0 ? (
             <Loading />
-            ) : (
-              <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {similarRecipes.map((recipe) => (
-                    <RecipeCard
-                      key={recipe._id}
-                      recipe={recipe}
-                      isFavorite={favoriteCtx.recipeIsFavorite(recipe._id)}
-                    />
-                  ))}
-              </div>     
+          ) : (
+            <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {similarRecipes.map((recipe) => (
+                <RecipeCard
+                  key={recipe._id}
+                  recipe={recipe}
+                  isFavorite={favoriteCtx.recipeIsFavorite(recipe._id)}
+                />
+              ))}
+            </div>
           )}
         </div>
       )}
