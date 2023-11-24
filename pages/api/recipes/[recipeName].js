@@ -9,15 +9,15 @@ import {
 
 const handler = async (req, res) => {
   try {
-    const recipeName  = req.query.recipeName;
+    const { recipeName } = req.query;
     // const collection = await connectToCollection("devdb", "recipes");
-    const recipeData = await fetchRecipeDataFromMongo( recipeName);
+    const recipeData = await fetchRecipeDataFromMongo(recipeName);
     const allergens = await fetchAllergens();
     // await closeMongoDBConnection();
     if (!recipeData) {
       res.status(404).json({ error: "Recipe not found" });
     } else {
-      res.status(200).json({ recipe: recipeData, allergens: allergens });
+      res.status(200).json({ recipe: recipeData, allergens });
     }
   } catch (error) {
     console.error("Error fetching recipe data:", error);

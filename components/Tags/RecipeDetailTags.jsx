@@ -1,23 +1,27 @@
+import { FaTag } from "react-icons/fa";
+
 const RecipeDetailTags = ({ recipe }) => {
   try {
     if (!recipe) {
       return <div>Loading please wait...</div>;
     }
 
-    // Display tags for the recipe
     return (
-      <>
-        <ul className="list-disc list-inside">
+      <div className=' pb-2 items-center pt-2'>
+        <div className='flex'>
+          <FaTag className='mr-2' />
+          <b>Tags</b>
+        </div>
+        <ul className='list-disc list-inside'>
           {recipe.tags.map((tag, index) => (
-            <li key={index} className="text-gray-1000">
+            <li key={index} className='text-gray-1000'>
               {tag}
             </li>
           ))}
         </ul>
-      </>
+      </div>
     );
   } catch (error) {
-    // Handle and log errors that occur during tag rendering
     console.error("An error occurred:", error);
     return <div>Failed to load tags!</div>;
   }

@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+
+// const { components } = require("react-select");
+
 module.exports = {
   env: {
     mongodb_password: process.env.mongodb_password,
@@ -11,14 +14,23 @@ module.exports = {
   reactStrictMode: true,
   eslint: {
     dirs: [
-      "/pages/FavoritesPage.jsx",
-      "/components/Context/Favorites-context.js",
-      "/components/Cards/RecipeCard.jsx",
-      "/components/LayOuts/Header/Navigation.jsx",
+      "categories/categories.jsx",
+      "ingredients/ingredients.jsx",
+      "instructions/instructions.jsx",
+      "searchBar/searchBar.jsx",
+      "sort/sort.jsx",
+      "tags/Tags.jsx",
+      "Landing/hero.jsx",
+      "RecipeList/RecipeList.js",
+      "badges/badges.jsx",
+      "helpers/mongoDB-utils.js",
+
+      "pages/api/combined",
     ],
   },
   webpack: (config, { dev }) => {
     if (dev) {
+      
       config.resolve.alias["react-dom$"] = "react-dom/profiling";
       config.resolve.alias["scheduler/tracing"] = "scheduler/tracing-profiling";
     }
