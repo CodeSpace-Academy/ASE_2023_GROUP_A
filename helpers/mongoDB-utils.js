@@ -1,5 +1,5 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
-import Recipe from './../components/Recipes/Recipe';
+import Recipe from "./../components/Recipes/Recipe";
 
 const uri = process.env.mongodb_uri;
 
@@ -209,7 +209,9 @@ export const addFavoriteToMongoDB = async (recipe) => {
   try {
     const favoritesCollection = client.db("devdb").collection("favorites"); // Create or use a 'favorites' collection
     // Check if the user's favorite already exists
-    const existingFavorite = await favoritesCollection.findOne({ _id: recipe._id });
+    const existingFavorite = await favoritesCollection.findOne({
+      _id: recipe._id,
+    });
     if (existingFavorite) {
       // Handle the case where the favorite already exists
       throw new Error("could not add recipe to favorites");
@@ -280,7 +282,9 @@ export async function searchSuggestions(searchQuery) {
 
     return autocompleteResults;
   } catch (error) {
-    throw new Error("could not fetch suggestions based on the search query provided");
+    throw new Error(
+      "could not fetch suggestions based on the search query provided"
+    );
   }
 }
 
@@ -293,9 +297,7 @@ export async function searchSuggestions(searchQuery) {
  * recipes.
  */
 export async function filtering(filters, sortOrder) {
-  const {
-    searchQuery, tags, ingredients, categories, instructions,
-  } = filters;
+  const { searchQuery, tags, ingredients, categories, instructions } = filters;
 
   const db = client.db("devdb");
   const collection = db.collection("recipes");
@@ -358,32 +360,59 @@ export async function filtering(filters, sortOrder) {
 
     return result;
   } catch (error) {
-    throw new Error("could not filter recipes according to the filters selected");
+    throw new Error(
+      "could not filter recipes according to the filters selected"
+    );
   }
 }
-export const getSimilarRecipes = async (recipeTitle) => {
-  const db = client.db("devdb");
-  const collection = db.collection("recipes");
+// helpers/mongoDB-utils.js
+//
 
-  // Await the findOne call
-  const favoriteRecipe = await collection.findOne({ title: recipeTitle });
-  // Fetch similar recipes based on shared tags, categories, etc.
-  const { category } = favoriteRecipe;
-  const categoryQuery = Array.isArray(category)
-  ? { category: { $in: category } }
-  : { category: category };
+// helpers/mongoDB-utils.js
 
-  const similarRecipes = await collection
-    .find({
-      $or: [
-        { tags: { $in: favoriteRecipe.tags } },
-        categoryQuery,
-        // You can add more criteria based on your requirements
-      ],
-      title: { $ne: favoriteRecipe.title }, // Exclude the favorite recipe itself
-    })
-    .limit(50)
-    .toArray();
-    console.log("Favorite Similar Recipes size:", similarRecipes.length);
-  return similarRecipes;
+export const getSimilarRecipesWithTotalCount = async (recipeTitle, limit, skip) => {
+  try {
+    const cl = await client.connect();
+    const db = cl.db("devdb");
+    const collection = db.collection("recipes");
+
+    const favoriteRecipe = await collection.findOne({ title: recipeTitle });
+
+    // Ensure that favoriteRecipe.tags is an array
+    const tags = Array.isArray(favoriteRecipe.tags)
+      ? favoriteRecipe.tags
+      : [favoriteRecipe.tags];
+
+    const categoryQuery = Array.isArray(favoriteRecipe.category)
+      ? { category: { $in: favoriteRecipe.category } }
+      : { category: favoriteRecipe.category };
+
+    const similarRecipes = await collection
+      .find({
+        $or: [
+          { tags: { $in: tags } },
+          categoryQuery,
+          // You can add more complete conditions based on your requirements
+        ],
+        title: { $ne: favoriteRecipe.title }, // Exclude the favorite recipe itself
+      })
+      .limit(limit)
+      .skip(skip)
+      .toArray();
+
+    const totalCount = await collection
+      .find({
+        $or: [
+          { tags: { $in: tags } },
+          // You can add more complete conditions based on your requirements
+        ],
+        title: { $ne: favoriteRecipe.title }, // Exclude the favorite recipe itself
+      })
+      .count();
+
+    return { similarRecipes, totalCount };
+  } catch (error) {
+    console.error("Error fetching similar recipes:", error);
+    throw error;
+  }
 };

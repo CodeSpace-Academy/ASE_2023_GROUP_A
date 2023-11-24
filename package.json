@@ -20,6 +20,7 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.6",
     "autoprefixer": "^10.4.16",
     "cookies-next": "^4.0.0",
+    "fuse.js": "^7.0.0",
     "heroicons": "^2.0.18",
     "js-cookie": "^3.0.5",
     "mongodb": "^6.1.0",

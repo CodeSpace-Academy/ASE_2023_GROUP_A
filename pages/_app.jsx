@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { PageProvider } from '@/components/Context/currentPageContexts/currentHomePage';
+import { SimilarRecipesPageProvider } from '@/components/Context/currentPageContexts/currentSimilarRecipesPage copy';
 import { Fragment } from 'react';
 
 import { ToastContainer } from 'react-toastify';
@@ -18,10 +19,14 @@ function App({ Component, pageProps }) {
       <ThemeProvider>
         <title>Cooking Devs</title>
         <Fragment>
+          <PageProvider>
+          <SimilarRecipesPageProvider>
           <Layout>
             <Component {...pageProps} />
             <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={false} />
-          </Layout>
+            </Layout>
+          </SimilarRecipesPageProvider>
+          </PageProvider>
         </Fragment>
       </ThemeProvider>
     </FavoritesContextProvider>

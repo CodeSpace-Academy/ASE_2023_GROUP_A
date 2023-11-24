@@ -1,14 +1,15 @@
 import { useEffect, useState, useContext } from "react";
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/router";
-import fetchRecipes from "../../helpers/hook"
+import fetchRecipes from "../../helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
-import FavCard from '../Cards/FavCard';
+import FavCard from "../Cards/FavCard";
 import Hero from "../Landing/hero";
 import FloatingButton from "../Buttons/floatingButton/FloatingButton";
 import "react-multi-carousel/lib/styles.css";
 import FavoritesContext from "../Context/Favorites-context";
-import { useTheme } from "../../components/Context/ThemeContext"
+import { usePageContext } from "../Context/currentPageContexts/currentHomePage";
+import { useTheme } from "../../components/Context/ThemeContext";
 import Badges from "../badges/badges";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -26,7 +27,7 @@ import { responsive } from "../../helpers/settings/settings";
 
 function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const { currentPage, setCurrentPage } = usePageContext();
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -56,9 +57,8 @@ function RecipeList({ favorites }) {
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
 
   useEffect(() => {
     favoriteContext.updateFavorites(favorites);
@@ -144,10 +144,10 @@ function RecipeList({ favorites }) {
             setNoRecipesFoundMessage(null);
           }
         } else {
-          throw Error
+          throw Error;
         }
       } else {
-        throw Error
+        throw Error;
       }
 
       const queryParams = new URLSearchParams(filters);
@@ -193,7 +193,7 @@ function RecipeList({ favorites }) {
 
       router.push(url);
     } catch (error) {
-      throw Error
+      throw Error;
     }
   };
 
@@ -267,11 +267,11 @@ function RecipeList({ favorites }) {
           const data = await response.json();
           setAutocompleteSuggestions(data.autocomplete);
         } else {
-          throw Error
+          throw Error;
         }
       }
     } catch (error) {
-      throw Error
+      throw Error;
     }
   };
 
@@ -313,7 +313,10 @@ function RecipeList({ favorites }) {
   };
   // const remainingRecipes = totalRecipes - 100 * currentPage;
   const recipesPerPage = 100;
-  const displayRemainingRecipes = Math.max(0, totalRecipes - recipesPerPage * currentPage);
+  const displayRemainingRecipes = Math.max(
+    0,
+    totalRecipes - recipesPerPage * currentPage
+  );
   return (
     <div>
       <Hero
@@ -340,39 +343,42 @@ function RecipeList({ favorites }) {
         filterCount={filterCount}
       />
 
-<div className="my-8">
-      <button
-        type="button"
-        onClick={handleViewFavorites}
-        className="bg-blue-500 px-4 py-2 rounded-md"
-      >
-        {!showCarousel ? "view Favourites" : "Hide Favourites"}
-      </button>
+      <div className="my-8">
+        <button
+          type="button"
+          onClick={handleViewFavorites}
+          className="bg-blue-500 px-4 py-2 rounded-md"
+        >
+          {!showCarousel ? "view Favourites" : "Hide Favourites"}
+        </button>
 
-      {showCarousel && (
-        <>
-          {!favorites ? (
-            <p>
-              <Loading />
-            </p>
-          ) : favorites.length === 0 ? (
-            <p className={isDarkTheme ? "text-white" : "text-blue-black-10"}>
-              No favorite recipes yet.
-            </p>
-          ) : (
-            <div className="mt-4">
-              <Carousel responsive={responsive} containerClass="carousel-container">
-                {favorites.map((recipe) => (
-                  <div key={recipe.recipe._id} >
-                    <FavCard recipe={recipe.recipe} favorites={favorites} />
-                  </div>
-                ))}
-              </Carousel>
+        {showCarousel && (
+          <>
+            {!favorites ? (
+              <p>
+                <Loading />
+              </p>
+            ) : favorites.length === 0 ? (
+              <p className={isDarkTheme ? "text-white" : "text-blue-black-10"}>
+                No favorite recipes yet.
+              </p>
+            ) : (
+              <div className="mt-4">
+                <Carousel
+                  responsive={responsive}
+                  containerClass="carousel-container"
+                >
+                  {favorites.map((recipe) => (
+                    <div key={recipe.recipe._id}>
+                      <FavCard recipe={recipe.recipe} favorites={favorites} />
+                    </div>
+                  ))}
+                </Carousel>
               </div>
-          )}
-        </>
-      )}
-    </div>
+            )}
+          </>
+        )}
+      </div>
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
           {autocompleteSuggestions.map((suggestion, index) => (
@@ -414,10 +420,12 @@ function RecipeList({ favorites }) {
       {(filterCount === 0 || recipes.length === 0) && (
         <>
           <p style={{ textAlign: "center" }}>
-            <span style={{ fontWeight: "bold" }}>{displayRemainingRecipes} </span>
+            <span style={{ fontWeight: "bold" }}>
+              {displayRemainingRecipes}{" "}
+            </span>
             recipes remaining
           </p>
-          
+
           <div className="flex justify-center pb-8 gap-10">
             <Stack spacing={2} justifyContent="center" alignItems="center">
               <Pagination
@@ -428,7 +436,9 @@ function RecipeList({ favorites }) {
               />
             </Stack>
           </div>
-          <FloatingButton className={theme === 'light' ? 'bg-blue-500' : 'bg-blue-800'} />
+          <FloatingButton
+            className={theme === "light" ? "bg-blue-500" : "bg-blue-800"}
+          />
         </>
       )}
     </div>
