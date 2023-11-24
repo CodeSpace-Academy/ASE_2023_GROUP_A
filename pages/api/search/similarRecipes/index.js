@@ -1,10 +1,5 @@
 // pages/api/similar-recipes/[...slug].js
-
-import {
-  getSimilarRecipes,
-  getSimilarRecipesTotalCount,
-  getSimilarRecipesWithTotalCount,
-} from "../../../../helpers/mongoDB-utils";
+import { getSimilarRecipesWithTotalCount } from "../../../../helpers/mongoDB-utils";
 
 const handler = async (request, response) => {
   const page =
@@ -19,11 +14,40 @@ const handler = async (request, response) => {
   }
 
   const { recipeTitle } = request.query;
-  console.log("Recipe Title:", recipeTitle);
+  const { filters, sortOrder, searchQuery } = request.body || {}; // Get filters and sortOrder from the request body
 
   try {
-    const { similarRecipes, totalCount } =
-      await getSimilarRecipesWithTotalCount(recipeTitle, limit, skip);
+    let similarRecipes, totalCount;
+
+    if (filters || searchQuery) {
+      // If filters or searchQuery exist, apply them
+      const result = await getSimilarRecipesWithTotalCount(
+        recipeTitle,
+        limit,
+        skip,
+        searchQuery,
+        filters,
+        sortOrder
+      );
+      similarRecipes = result.similarRecipes;
+      totalCount = result.totalCount;
+    } else {
+      // If no filters or searchQuery, fetch all recipes without filtering
+      const result = await getSimilarRecipesWithTotalCount(
+        recipeTitle,
+        limit,
+        skip
+      );
+      similarRecipes = result.similarRecipes;
+      totalCount = result.totalCount;
+    }
+
+    // console.log(
+    //   "SIMILAR RECIPES FROM API:",
+    //   similarRecipes,
+    //   "TOTAL RECIPES:",
+    //   totalCount
+    // );
 
     return response.status(200).json({
       similarRecipes: similarRecipes,

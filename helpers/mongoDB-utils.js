@@ -369,14 +369,25 @@ export async function filtering(filters, sortOrder) {
 //
 
 // helpers/mongoDB-utils.js
-
-export const getSimilarRecipesWithTotalCount = async (recipeTitle, limit, skip) => {
+export const getSimilarRecipesWithTotalCount = async (
+  recipeTitle,
+  limit,
+  skip,
+  searchQuery,
+  filters,
+  sortOrder
+) => {
   try {
     const cl = await client.connect();
     const db = cl.db("devdb");
     const collection = db.collection("recipes");
 
     const favoriteRecipe = await collection.findOne({ title: recipeTitle });
+
+    // Check if favoriteRecipe is null
+    if (!favoriteRecipe) {
+      return { similarRecipes: [], totalCount: 0 };
+    }
 
     // Ensure that favoriteRecipe.tags is an array
     const tags = Array.isArray(favoriteRecipe.tags)
@@ -387,28 +398,39 @@ export const getSimilarRecipesWithTotalCount = async (recipeTitle, limit, skip) 
       ? { category: { $in: favoriteRecipe.category } }
       : { category: favoriteRecipe.category };
 
+    const baseQuery = {
+      $or: [
+        { tags: { $in: tags } },
+        categoryQuery,
+        // You can add more complete conditions based on your requirements
+      ],
+      title: { $ne: favoriteRecipe.title }, // Exclude the favorite recipe itself
+    };
+
+    // If searchQuery exists, add it to the base query for fuzzy search
+    const regexSearchQuery = searchQuery
+      ? {
+          $or: [
+            { title: { $regex: new RegExp(searchQuery, "i") } },
+            { description: { $regex: new RegExp(searchQuery, "i") } },
+            { tags: { $regex: new RegExp(searchQuery, "i") } },
+            { ingredients: { $regex: new RegExp(searchQuery, "i") } },
+          ],
+        }
+      : {};
+
+    const query = {
+      ...baseQuery,
+      ...regexSearchQuery,
+    };
+
     const similarRecipes = await collection
-      .find({
-        $or: [
-          { tags: { $in: tags } },
-          categoryQuery,
-          // You can add more complete conditions based on your requirements
-        ],
-        title: { $ne: favoriteRecipe.title }, // Exclude the favorite recipe itself
-      })
+      .find(query)
       .limit(limit)
       .skip(skip)
       .toArray();
 
-    const totalCount = await collection
-      .find({
-        $or: [
-          { tags: { $in: tags } },
-          // You can add more complete conditions based on your requirements
-        ],
-        title: { $ne: favoriteRecipe.title }, // Exclude the favorite recipe itself
-      })
-      .count();
+    const totalCount = await collection.find(query).count();
 
     return { similarRecipes, totalCount };
   } catch (error) {
@@ -416,3 +438,125 @@ export const getSimilarRecipesWithTotalCount = async (recipeTitle, limit, skip) 
     throw error;
   }
 };
+
+
+// export async function getSimilarRecipesWithTotalCount2(
+//   recipeTitle,
+//   limit,
+//   skip,
+//   searchQuery,
+//   filters,
+//   sortOrder
+// ) {
+//   try {
+//     const cl = await client.connect();
+//     const db = cl.db("devdb");
+//     const collection = db.collection("recipes");
+
+//     const favoriteRecipe = await collection.findOne({ title: recipeTitle });
+
+//     // Ensure that favoriteRecipe.tags is an array
+//     const tags = Array.isArray(favoriteRecipe.tags)
+//       ? favoriteRecipe.tags
+//       : [favoriteRecipe.tags];
+
+//     const categoryQuery = Array.isArray(favoriteRecipe.category)
+//       ? { category: { $in: favoriteRecipe.category } }
+//       : { category: favoriteRecipe.category };
+
+//     const query = {
+//       $or: [
+//         { tags: { $in: tags } },
+//         categoryQuery,
+//         // Add more conditions based on your requirements
+//       ],
+//       title: { $ne: favoriteRecipe.title },
+//     };
+
+//     // Apply additional filters
+//     applyFilters(query, filters);
+
+//     // Apply search query using regex
+//     if (searchQuery && searchQuery.length > 0) {
+//       query.$or.push(
+//         { title: { $regex: searchQuery, $options: "i" } },
+//         { description: { $regex: searchQuery, $options: "i" } }
+//       );
+//     }
+
+//     const similarRecipes = await collection
+//       .find({ query })
+//       .sort(sortCriteria(sortOrder))
+//       .limit(limit)
+//       .skip(skip)
+//       .toArray();
+
+//     const totalCount = await collection.find(query).count();
+
+//     return { similarRecipes, totalCount };
+//   } catch (error) {
+//     console.error("Error fetching similar recipes:", error);
+//     throw error;
+//   }
+// }
+// function applyFilters(query, filters) {
+//   const { searchQuery, tags, ingredients, categories, instructions } = filters;
+
+//   if (searchQuery && searchQuery.length > 0) {
+//     query.$or = [
+//       { title: { $regex: searchQuery, $options: "i" } },
+//       { description: { $regex: searchQuery, $options: "i" } },
+//     ];
+//   }
+//  if (filters) {
+//    applyFilters(query, filters);
+//  }
+//   // Apply other filter criteria as needed...
+
+//   if (categories && categories.length > 0) {
+//     query.category = { $all: categories };
+//   }
+
+//   if (tags && tags.length > 0) {
+//     query.tags = { $all: tags };
+//   }
+
+//   if (ingredients && ingredients.length > 0) {
+//     const ingredientQueries = ingredients.map((ingredient) => ({
+//       [`ingredients.${ingredient}`]: { $exists: true },
+//     }));
+//     query.$and = ingredientQueries;
+//   }
+
+//   if (instructions) {
+//     query.instructions = { $size: instructions };
+//   }
+// }
+
+// function sortCriteria(sortOrder) {
+//   let sortCriteria = {};
+
+//   if (sortOrder === "[A-Z]") {
+//     sortCriteria = { title: 1 };
+//   } else if (sortOrder === "[Z-A]") {
+//     sortCriteria = { title: -1 };
+//   } else if (sortOrder === "Oldest") {
+//     sortCriteria = { published: 1 };
+//   } else if (sortOrder === "Recent") {
+//     sortCriteria = { published: -1 };
+//   } else if (sortOrder === "cooktime(asc)") {
+//     sortCriteria = { cook: 1 };
+//   } else if (sortOrder === "cooktime(desc)") {
+//     sortCriteria = { cook: -1 };
+//   } else if (sortOrder === "preptime(asc)") {
+//     sortCriteria = { prep: 1 };
+//   } else if (sortOrder === "preptime(desc)") {
+//     sortCriteria = { prep: -1 };
+//   } else if (sortOrder === "steps(desc)") {
+//     sortCriteria = { instructions: -1 };
+//   } else if (sortOrder === "steps(asc)") {
+//     sortCriteria = { instructions: 1 };
+//   }
+
+//   return sortCriteria;
+// }
