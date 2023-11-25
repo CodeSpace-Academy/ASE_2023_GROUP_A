@@ -3,12 +3,12 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["airbnb", "airbnb/hooks", "eslint:recommended", "plugin:next/recommended"],
+  "extends": ["airbnb", "airbnb/hooks", "eslint:recommended", "plugin:react/recommended", "plugin:react-hooks/recommended", "plugin:@next/next/recommended"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "next"],
+  "plugins": ["import", "react", "jsx-a11y"],
 
     "rules": {
       // using underscores is a common Javascript convention and for certain databases it might be overly strict

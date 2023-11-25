@@ -28,6 +28,7 @@ import Title from "./Title";
  * @returns {JSX.Element} - The rendered RecipeCard component.
  */
 function RecipeCard({ recipe, searchQuery, favorites, Key }) {
+  
   const { theme } = useTheme();
   const favoriteCtx = useContext(FavoritesContext);
 

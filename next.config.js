@@ -3,6 +3,10 @@
 const { components } = require("react-select");
 
 module.exports = {
+  extends: [
+    //...
+    "plugin:@next/next/recommended",
+  ],
   env: {
     mongodb_password: process.env.mongodb_password,
     mongodb_username: process.env.mongodb_username,
@@ -13,7 +17,6 @@ module.exports = {
   },
   reactStrictMode: true,
   eslint: {
-
     dirs: [
       "componets/categories/categories.jsx",
       "components/Ingredients/Ingredients.jsx",
@@ -26,6 +29,7 @@ module.exports = {
       "components/Badges/Badges.jsx",
       "helpers/mongoDB-utils.js",
       "pages/api/combined",
+      "pages/api/search/similarRecipes",
       "/pages/FavoritesPage.jsx",
       "/pages/index.jsx",
       "/components/Context/Favorites-context.js",
