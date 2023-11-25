@@ -10,7 +10,7 @@ import "react-multi-carousel/lib/styles.css";
 import FavoritesContext from "../Context/Favorites-context";
 import { usePageContext } from "../Context/CurrentPageContexts/CurrentHomePage";
 import { useTheme } from "../../components/Context/ThemeContext";
-import Badges from "../badges/Badges";
+import Badges from "../Badges/Badges";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Carousel from "react-multi-carousel";
