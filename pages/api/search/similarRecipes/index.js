@@ -2,10 +2,9 @@
 import { getSimilarRecipesWithTotalCount } from "../../../../helpers/mongoDB-utils";
 
 const handler = async (request, response) => {
-  const page =
-    request.query.page && request.query.page > 0
-      ? parseInt(request.query.page)
-      : 1;
+  const page = request.query.page && request.query.page > 0
+    ? parseInt(request.query.page, 10)
+    : 1;
   const limit = 100;
   const skip = (page - 1) * limit;
 
@@ -14,10 +13,12 @@ const handler = async (request, response) => {
   }
 
   const { recipeTitle } = request.query;
-  const { filters, sortOrder, searchQuery } = request.body || {}; // Get filters and sortOrder from the request body
+  const { filters, sortOrder, searchQuery } = request.body || {};
+  // Get filters and sortOrder from the request body
 
   try {
-    let similarRecipes, totalCount;
+    let similarRecipes; let
+      totalCount;
 
     if (filters || searchQuery) {
       // If filters or searchQuery exist, apply them
@@ -26,7 +27,7 @@ const handler = async (request, response) => {
         skip,
         searchQuery,
         filters,
-        sortOrder
+        sortOrder,
       );
       similarRecipes = result.similarRecipes;
       totalCount = result.totalCount;
@@ -45,7 +46,7 @@ const handler = async (request, response) => {
     // );
 
     return response.status(200).json({
-      similarRecipes: similarRecipes,
+      similarRecipes,
       totalSimilarRecipes: totalCount,
     });
   } catch (error) {

@@ -3,10 +3,7 @@
 const { components } = require("react-select");
 
 module.exports = {
-  extends: [
-    //...
-    "plugin:@next/next/recommended",
-  ],
+
   env: {
     mongodb_password: process.env.mongodb_password,
     mongodb_username: process.env.mongodb_username,
@@ -35,6 +32,9 @@ module.exports = {
       "/components/Context/Favorites-context.js",
       "/components/Cards/RecipeCard.jsx",
       "/components/LayOuts/Header/Navigation.jsx",
+    ],
+    extends: [
+      "plugin:@next/next/recommended",
     ],
   },
   webpack: (config, { dev }) => {

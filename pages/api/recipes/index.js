@@ -32,6 +32,6 @@ const handler = async (req, res) => {
     console.error("Error fetching recipes:", error);
     res.status(500).json({ error: "Error fetching recipes" });
   }
-}
+};
 
-export default handler
+export default handler;

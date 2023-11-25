@@ -1,5 +1,4 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
-import Recipe from "./../components/Recipes/Recipe";
 
 const uri = process.env.mongodb_uri;
 
@@ -283,7 +282,7 @@ export async function searchSuggestions(searchQuery) {
     return autocompleteResults;
   } catch (error) {
     throw new Error(
-      "could not fetch suggestions based on the search query provided"
+      "could not fetch suggestions based on the search query provided",
     );
   }
 }
@@ -297,7 +296,9 @@ export async function searchSuggestions(searchQuery) {
  * recipes.
  */
 export async function filtering(filters, sortOrder) {
-  const { searchQuery, tags, ingredients, categories, instructions } = filters;
+  const {
+    searchQuery, tags, ingredients, categories, instructions,
+  } = filters;
 
   const db = client.db("devdb");
   const collection = db.collection("recipes");
@@ -361,7 +362,7 @@ export async function filtering(filters, sortOrder) {
     return result;
   } catch (error) {
     throw new Error(
-      "could not filter recipes according to the filters selected"
+      "could not filter recipes according to the filters selected",
     );
   }
 }
@@ -370,8 +371,8 @@ export const getSimilarRecipesWithTotalCount = async (
   recipeTitle,
   skip,
   searchQuery,
+  sortOrder,
   filters = {},
-  sortOrder
 ) => {
   try {
     const cl = await client.connect();
@@ -391,8 +392,8 @@ export const getSimilarRecipesWithTotalCount = async (
     // Add category condition if it exists
     // Add category condition if it exists
     if (
-      category &&
-      (Array.isArray(category) ? category.length > 0 : category)
+      category
+      && (Array.isArray(category) ? category.length > 0 : category)
     ) {
       query.category = {
         $all: Array.isArray(category) ? category : [category],
@@ -427,13 +428,13 @@ export const getSimilarRecipesWithTotalCount = async (
     // If searchQuery exists, add it to the base query for fuzzy search
     const regexSearchQuery = searchQuery
       ? {
-          $or: [
-            { title: { $regex: new RegExp(searchQuery, "i") } },
-            { description: { $regex: new RegExp(searchQuery, "i") } },
-            { tags: { $regex: new RegExp(searchQuery, "i") } },
-            { ingredients: { $regex: new RegExp(searchQuery, "i") } },
-          ],
-        }
+        $or: [
+          { title: { $regex: new RegExp(searchQuery, "i") } },
+          { description: { $regex: new RegExp(searchQuery, "i") } },
+          { tags: { $regex: new RegExp(searchQuery, "i") } },
+          { ingredients: { $regex: new RegExp(searchQuery, "i") } },
+        ],
+      }
       : {};
 
     // Merge the baseQuery, regexSearchQuery, and additional query conditions
@@ -477,7 +478,6 @@ export const getSimilarRecipesWithTotalCount = async (
       .toArray();
 
     const totalCount = await collection.find(finalQuery).count();
-
 
     return { similarRecipes, totalCount };
   } catch (error) {

@@ -1,6 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/router";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Carousel from "react-multi-carousel";
 import fetchRecipes from "../../helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import FavCard from "../Cards/FavCard";
@@ -9,11 +12,8 @@ import FloatingButton from "../Buttons/FloatingButton/FloatingButton";
 import "react-multi-carousel/lib/styles.css";
 import FavoritesContext from "../Context/Favorites-context";
 import { usePageContext } from "../Context/CurrentPageContexts/CurrentHomePage";
-import { useTheme } from "../../components/Context/ThemeContext";
+import { useTheme } from "../Context/ThemeContext";
 import Badges from "../Badges/Badges";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-import Carousel from "react-multi-carousel";
 import Loading from "../Loading/Loading";
 import { responsive } from "../../helpers/settings/settings";
 /**
@@ -73,7 +73,7 @@ function RecipeList({ favorites }) {
     selectedCategories,
     selectedIngredients,
     selectedTags,
-    selectedInstructions
+    selectedInstructions,
   ) {
     let count = 0;
 
@@ -101,7 +101,7 @@ function RecipeList({ favorites }) {
       selectedCategories,
       selectedIngredients,
       selectedTags,
-      selectedInstructions
+      selectedInstructions,
     );
     setFilterCount(counts);
   }, [
@@ -136,9 +136,9 @@ function RecipeList({ favorites }) {
                 selectedInstructions > 0
                   ? "Specified number of steps"
                   : searchQuery.length > 0
-                  ? searchQuery
-                  : "chosen filters"
-              }`
+                    ? searchQuery
+                    : "chosen filters"
+              }`,
             );
           } else {
             setNoRecipesFoundMessage(null);
@@ -221,11 +221,11 @@ function RecipeList({ favorites }) {
     let typingTimeout;
 
     if (
-      searchQuery.length <= 4 ||
-      selectedTags.length > 0 ||
-      selectedIngredients.length > 0 ||
-      selectedCategories.length > 0 ||
-      selectedInstructions
+      searchQuery.length <= 4
+      || selectedTags.length > 0
+      || selectedIngredients.length > 0
+      || selectedCategories.length > 0
+      || selectedInstructions
     ) {
       clearTimeout(typingTimeout);
 
@@ -260,7 +260,7 @@ function RecipeList({ favorites }) {
         setAutocompleteSuggestions([]);
       } else {
         const response = await fetch(
-          `/api/autocomplete?searchQuery=${searchQuery}`
+          `/api/autocomplete?searchQuery=${searchQuery}`,
         );
 
         if (response.ok) {
@@ -315,7 +315,7 @@ function RecipeList({ favorites }) {
   const recipesPerPage = 100;
   const displayRemainingRecipes = Math.max(
     0,
-    totalRecipes - recipesPerPage * currentPage
+    totalRecipes - recipesPerPage * currentPage,
   );
   return (
     <div>
@@ -421,7 +421,8 @@ function RecipeList({ favorites }) {
         <>
           <p style={{ textAlign: "center" }}>
             <span style={{ fontWeight: "bold" }}>
-              {displayRemainingRecipes}{" "}
+              {displayRemainingRecipes}
+              {" "}
             </span>
             recipes remaining
           </p>

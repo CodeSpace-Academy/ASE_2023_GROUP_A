@@ -6,8 +6,9 @@ const handler = async (request, response) => {
     return response.status(405).json({ error: "Method not allowed" });
   }
 
-  const { recipeTitle, searchQuery, page, tag, category, sortOrder } =
-    request.query;
+  const {
+    recipeTitle, searchQuery, page, tag, category, sortOrder,
+  } = request.query;
   const filters = {
     category,
     tag,
@@ -21,8 +22,8 @@ const handler = async (request, response) => {
       recipeTitle,
       skip,
       searchQuery,
-      filters, // Pass both tags and categories as an object
-      sortOrder
+      sortOrder,
+      filters,
     );
 
     return response.status(200).json({

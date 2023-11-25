@@ -1,23 +1,31 @@
-import React, { useEffect, useState, useContext, useMemo } from "react";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  useMemo,
+} from "react";
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/router";
 import Fuse from "fuse.js";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { useSimilarRecipesPageContext } from "@/components/Context/CurrentPageContexts/CurrentSimilarRecipesPage copy";
+import { useSimilarRecipesPageContext } from "../../../components/Context/CurrentPageContexts/CurrentSimilarRecipesPage copy";
 import FavoritesContext from "../../../components/Context/Favorites-context";
-import RecipeCard from "../../../components/cards/RecipeCard";
-import Loading from "@/components/Loading/Loading";
-import { useTheme } from "@/components/Context/ThemeContext";
-import Tags from "@/components/Tags/Tags";
-import Categories from "@/components/Categories/Categories";
-import FloatingButton from "@/components/Buttons/FloatingButton/FloatingButton";
+import RecipeCard from "../../../components/Cards/RecipeCard";
+import Loading from "../../../components/Loading/Loading";
+import { useTheme } from "../../../components/Context/ThemeContext";
+import Tags from "../../../components/Tags/Tags";
+import Categories from "../../../components/Categories/Categories";
+import FloatingButton from "../../../components/Buttons/FloatingButton/FloatingButton";
 
 function SimilarRecipes() {
   const router = useRouter();
   const { slug } = router.query;
-  const { currentSimilarRecipesPage, setSimilarRecipesCurrentPage } =
-    useSimilarRecipesPageContext();
+  const {
+    currentSimilarRecipesPage,
+    setSimilarRecipesCurrentPage,
+  } = useSimilarRecipesPageContext();
   const [originalRecipes, setOriginalRecipes] = useState([]); // New state for original recipes
   const [similarRecipes, setSimilarRecipes] = useState([]);
   // const [fuse, setFuse] = useState(null);
@@ -29,7 +37,7 @@ function SimilarRecipes() {
   const [sortOrder, setSortOrder] = useState("default");
 
   const fetcher = (url) => fetch(url).then((res) => res.json());
-const { theme } = useTheme()
+  const { theme } = useTheme();
   // Use the useSWR hook to fetch data for the user's favorite recipes
   const {
     data: favoritesData,
@@ -54,8 +62,8 @@ const { theme } = useTheme()
     try {
       const response = await fetch(
         `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&searchQuery=${searchQuery}&page=${currentSimilarRecipesPage}&tag=${selectedTags.join(
-          ","
-        )}&category=${selectedCategories.join(",")}&sortOrder=${sortOrder}`
+          ",",
+        )}&category=${selectedCategories.join(",")}&sortOrder=${sortOrder}`,
       );
 
       if (!response.ok) {
@@ -65,8 +73,8 @@ const { theme } = useTheme()
       const data = await response.json();
       setSimilarRecipes(data.similarRecipes);
       setTotalRecipes(data.totalSimilarRecipes);
-    } catch (error) {
-      console.error("Error fetching recipes:", error);
+    } catch (err) {
+      console.error("Error fetching recipes:", err);
     }
   };
 
@@ -74,7 +82,7 @@ const { theme } = useTheme()
   const fetchOriginalRecipes = async () => {
     try {
       const response = await fetch(
-        `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&page=${currentSimilarRecipesPage}`
+        `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&page=${currentSimilarRecipesPage}`,
       );
 
       if (!response.ok) {
@@ -85,8 +93,8 @@ const { theme } = useTheme()
       setOriginalRecipes(data.similarRecipes);
       setTotalRecipes(data.totalSimilarRecipes);
       // await mutate("/api/recipes/Favourites")
-    } catch (error) {
-      console.error("Error fetching original recipes:", error);
+    } catch (err) {
+      console.error("Error fetching original recipes:", err);
     }
   };
   // useEffect(() => {
@@ -128,10 +136,10 @@ const { theme } = useTheme()
   useEffect(() => {
     // Perform fuzzy search when searchQuery changes
     if (
-      (fuse && searchQuery.length >= 4) ||
-      selectedTags ||
-      selectedCategories ||
-      sortOrder
+      (fuse && searchQuery.length >= 4)
+      || selectedTags
+      || selectedCategories
+      || sortOrder
     ) {
       // If searchQuery is not sufficient for fuzzy search, reset to original recipes
       searchSimilarRecipes();
@@ -176,7 +184,7 @@ const { theme } = useTheme()
     <div className="pt-12">
       <h2>
         Similar Recipes For:
-        <span> {slug}</span>
+        <span>{slug}</span>
       </h2>
       <input
         id="searchBar"
@@ -193,8 +201,6 @@ const { theme } = useTheme()
         setSelectedCategories={setSelectedCategories}
         selectedCategories={selectedCategories}
       />
-
-      {/* Add a dropdown for sort order */}
       <label htmlFor="sortOrder">Sort Order:</label>
       <select
         id="sortOrder"
@@ -244,7 +250,7 @@ const { theme } = useTheme()
           />
         </Stack>
       </div>
-      <FloatingButton/>
+      <FloatingButton />
     </div>
   );
 }

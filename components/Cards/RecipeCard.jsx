@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useContext } from "react";
 
 /* eslint-disable no-underscore-dangle */
@@ -27,8 +28,12 @@ import Title from "./Title";
  * @param {string} props.Key - The unique key for the recipe card.
  * @returns {JSX.Element} - The rendered RecipeCard component.
  */
-function RecipeCard({ recipe, searchQuery, favorites, Key }) {
-  
+const RecipeCard = ({
+  recipe,
+  searchQuery,
+  favorites,
+  Key,
+}) => {
   const { theme } = useTheme();
   const favoriteCtx = useContext(FavoritesContext);
 
@@ -42,8 +47,7 @@ function RecipeCard({ recipe, searchQuery, favorites, Key }) {
   }
 
   // Determine the first image for the recipe
-  const firstImage =
-    recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
+  const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
 
   // Check if the recipe is marked as a favorite
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
@@ -52,7 +56,7 @@ function RecipeCard({ recipe, searchQuery, favorites, Key }) {
   const removeFavoriteHandler = async () => {
     // Display a confirmation dialog
     const userConfirmed = window.confirm(
-      "Are you sure you want to remove this recipe from your favorites?"
+      "Are you sure you want to remove this recipe from your favorites?",
     );
     if (userConfirmed) {
       try {
@@ -102,8 +106,8 @@ function RecipeCard({ recipe, searchQuery, favorites, Key }) {
         }
       }
     } catch (error) {
-      console.error("Error adding favorite:", error);
       toast.error("Error adding recipe to favorites.");
+      console.error(new Error("Error adding favorite:", error));
     }
   };
   // const htmlEntities = {
@@ -198,6 +202,6 @@ function RecipeCard({ recipe, searchQuery, favorites, Key }) {
       </div>
     </div>
   );
-}
+};
 
 export default RecipeCard;

@@ -51,7 +51,7 @@ export function FavoritesContextProvider({ children }) {
       // If not an array, handle accordingly (assuming it's a single recipe)
       return userfavorites && userfavorites._id === recipeId;
   }
-  
+
   const addChangeListener = (listener) => {
     setChangeListeners((prevListeners) => [...prevListeners, listener]);
   };
