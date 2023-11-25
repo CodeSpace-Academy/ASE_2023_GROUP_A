@@ -1,18 +1,19 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
 import useSWR, { mutate } from "swr";
-import RecipeCard from "../../../components/cards/RecipeCard";
 import { useRouter } from "next/router";
-import FavoritesContext from "../../../components/Context/Favorites-context";
 import Fuse from "fuse.js";
-import { useSimilarRecipesPageContext } from "@/components/Context/currentPageContexts/currentSimilarRecipesPage copy";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { useSimilarRecipesPageContext } from "@/components/Context/CurrentPageContexts/CurrentSimilarRecipesPage copy";
+import FavoritesContext from "../../../components/Context/Favorites-context";
+import RecipeCard from "../../../components/cards/RecipeCard";
 import Loading from "@/components/Loading/Loading";
-// ... (other imports)
+import { useTheme } from "@/components/Context/ThemeContext";
 import Tags from "@/components/Tags/Tags";
-import Categories from "@/components/categories/categories";
+import Categories from "@/components/Categories/Categories";
+import FloatingButton from "@/components/Buttons/FloatingButton/FloatingButton";
 
-const SimilarRecipes = () => {
+function SimilarRecipes() {
   const router = useRouter();
   const { slug } = router.query;
   const { currentSimilarRecipesPage, setSimilarRecipesCurrentPage } =
@@ -28,7 +29,7 @@ const SimilarRecipes = () => {
   const [sortOrder, setSortOrder] = useState("default");
 
   const fetcher = (url) => fetch(url).then((res) => res.json());
-
+const { theme } = useTheme()
   // Use the useSWR hook to fetch data for the user's favorite recipes
   const {
     data: favoritesData,
@@ -45,7 +46,6 @@ const SimilarRecipes = () => {
   };
 
   // Set up an event listener for changes in favorite recipes
-
 
   const recipeTitle = Array.isArray(slug) ? slug[0] : slug;
 
@@ -96,7 +96,6 @@ const SimilarRecipes = () => {
   //   favoriteContext.addChangeListener(refreshFavorites);
   //   return () => favoriteContext.removeChangeListener(refreshFavorites);
   // }, [favoriteContext.userFavorites]); // empty dependency array to run only once
-  
 
   useEffect(() => {
     // Fetch the original recipes without search when the component mounts
@@ -113,7 +112,7 @@ const SimilarRecipes = () => {
     // Cleanup: Remove the change listener when the component unmounts
     return () => favoriteContext.removeChangeListener(refreshFavorites);
   }, [recipeTitle, currentSimilarRecipesPage]);
-  
+
   const fuse = useMemo(() => {
     if (originalRecipes.length > 0) {
       const options = {
@@ -170,21 +169,23 @@ const SimilarRecipes = () => {
 
   // Extract the list of favorite recipes from the fetched data
   const favorites = favoritesData ? favoritesData.favorites || [] : [];
-  
+
   // Rest of your code...
 
   return (
     <div className="pt-12">
       <h2>
-        Similar Recipes For:<span> {slug}</span>
+        Similar Recipes For:
+        <span> {slug}</span>
       </h2>
       <input
+        id="searchBar"
         type="text"
         placeholder="Search for recipes..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-      <button type="button" onClick={handleSearch}>
+      <button htmlFor="searchBar" type="button" onClick={handleSearch}>
         Search
       </button>
       <Tags setSelectedTags={setSelectedTags} selectedTags={selectedTags} />
@@ -216,7 +217,7 @@ const SimilarRecipes = () => {
       {similarRecipes === null ? (
         <p>No similar recipes found.</p>
       ) : (
-        <div className={``}>
+        <div className="">
           {similarRecipes.length === 0 ? (
             <Loading />
           ) : (
@@ -243,8 +244,9 @@ const SimilarRecipes = () => {
           />
         </Stack>
       </div>
+      <FloatingButton/>
     </div>
   );
-};
+}
 
 export default SimilarRecipes;

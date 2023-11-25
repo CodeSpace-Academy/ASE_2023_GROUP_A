@@ -477,8 +477,7 @@ export const getSimilarRecipesWithTotalCount = async (
       .toArray();
 
     const totalCount = await collection.find(finalQuery).count();
-    console.log("MongoDB Query:", finalQuery);
-    console.log("Sort Criteria:", sortCriteria);
+
 
     return { similarRecipes, totalCount };
   } catch (error) {

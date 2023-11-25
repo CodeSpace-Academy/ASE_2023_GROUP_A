@@ -12,8 +12,6 @@ const handler = async (request, response) => {
     category,
     tag,
   };
-  console.log("Filters:", filters);
-  console.log("Sort Order:", sortOrder);
 
   try {
     const limit = 100;

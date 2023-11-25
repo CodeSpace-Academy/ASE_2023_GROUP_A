@@ -1,27 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import Image from 'next/legacy/image';
-import { toast } from 'react-toastify';
+import Image from "next/legacy/image";
+import { toast } from "react-toastify";
 
-import { StarIcon as StarEmpty } from '@heroicons/react/24/outline';
-import { StarIcon as StarFilled } from '@heroicons/react/24/solid';
+import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
+import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
 
-import ViewRecipeDetails from '../Buttons/ViewRecipeButton/ViewRecipe';
-import FavoritesContext from '../Context/Favorites-context';
-import { useTheme } from '../Context/ThemeContext';
-import {
-  CookTime,
-  PrepTime,
-  TotalTime,
-} from '../TimeAndDate/TimeConvertor';
-import LoadingCard from './LoadingCard';
-import Title from './Title';
+import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRecipe";
+import FavoritesContext from "../Context/Favorites-context";
+import { useTheme } from "../Context/ThemeContext";
+import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
+import LoadingCard from "./LoadingCard";
+import Title from "./Title";
 
 /**
-  * RecipeCard component displays a recipe card with details and interaction buttons.
+ * RecipeCard component displays a recipe card with details and interaction buttons.
  *
  * @component
  * @param {object} props - The properties of the component.
@@ -31,12 +27,7 @@ import Title from './Title';
  * @param {string} props.Key - The unique key for the recipe card.
  * @returns {JSX.Element} - The rendered RecipeCard component.
  */
-function RecipeCard({
-  recipe,
-  searchQuery,
-  favorites,
-  Key,
-}) {
+function RecipeCard({ recipe, searchQuery, favorites, Key }) {
   const { theme } = useTheme();
   const favoriteCtx = useContext(FavoritesContext);
 
@@ -50,15 +41,18 @@ function RecipeCard({
   }
 
   // Determine the first image for the recipe
-  const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
-  console.log("Favorites:", favorites);
+  const firstImage =
+    recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
+
   // Check if the recipe is marked as a favorite
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
 
   // eslint-disable-next-line no-shadow
- const removeFavoriteHandler = async () => {
+  const removeFavoriteHandler = async () => {
     // Display a confirmation dialog
-    const userConfirmed = window.confirm('Are you sure you want to remove this recipe from your favorites?');
+    const userConfirmed = window.confirm(
+      "Are you sure you want to remove this recipe from your favorites?"
+    );
     if (userConfirmed) {
       try {
         // Send a request to remove the recipe from MongoDB
@@ -73,13 +67,13 @@ function RecipeCard({
         if (response.ok) {
           // Update the state and display a success message
           favoriteCtx.removeFavorite(recipe._id);
-          toast.success('Recipe removed from favorites!');
+          toast.success("Recipe removed from favorites!");
         } else {
-          toast.error('Error removing recipe from favorites.');
+          toast.error("Error removing recipe from favorites.");
         }
       } catch (error) {
         console.error("Error removing favorite:", error);
-        toast.error('Error removing recipe from favorites.');
+        toast.error("Error removing recipe from favorites.");
       }
     }
   };
@@ -101,17 +95,35 @@ function RecipeCard({
         if (response.ok) {
           // Update the state and display a success message
           favoriteCtx.addFavorite(recipe);
-          toast.success('Recipe added to favorites!');
+          toast.success("Recipe added to favorites!");
         } else {
-          toast.error('Error adding recipe to favorites.');
+          toast.error("Error adding recipe to favorites.");
         }
       }
     } catch (error) {
       console.error("Error adding favorite:", error);
-      toast.error('Error adding recipe to favorites.');
+      toast.error("Error adding recipe to favorites.");
     }
   };
+  // const htmlEntities = {
+  //   "&ldquo;": "“",
+  //   "&rdquo;": "”",
+  //   "&quot;": '"',
+  //   // Add more HTML entities and their replacements as needed
+  // };
+  // const correctTitle = (title) => {
+  //   Object.entries(htmlEntities).forEach(([entity, symbol]) => {
+  //     title = title.replace(new RegExp(entity, "g"), symbol);
+  //   });
 
+  //   // Trim the title
+  //   return title.trim();
+  // };
+  function decodeHtmlEntities(html) {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  }
+  const correctedTitle = decodeHtmlEntities(recipe.title);
   return (
     <div
       key={Key}
@@ -136,7 +148,7 @@ function RecipeCard({
           {/* Display recipe title with optional highlighting */}
           <Title
             key={`${recipe._id}${recipe.title}`}
-            title={recipe.title}
+            title={correctedTitle}
             searchQuery={[searchQuery]}
           />
           <div className="mb-1">
@@ -164,7 +176,11 @@ function RecipeCard({
               </span>
             </button>
           ) : (
-            <button type="button" onClick={addFavoritesHandler} aria-label="Add to favorites">
+            <button
+              type="button"
+              onClick={addFavoritesHandler}
+              aria-label="Add to favorites"
+            >
               <span>
                 {/* Display empty star icon for non-favorites */}
                 <StarEmpty

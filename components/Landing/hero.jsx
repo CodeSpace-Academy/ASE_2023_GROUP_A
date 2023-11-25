@@ -1,9 +1,9 @@
 import React from "react";
 import classes from "./hero.module.css";
-import SearchBar from "../searchBar/searchBar";
-import Categories from "../categories/categories";
+import SearchBar from "../searchBar/SearchBar";
+import Categories from "../Categories/Categories";
 import Tags from "../Tags/Tags";
-import Ingredients from "../ingredients/ingredients";
+import Ingredients from "../Ingredients/Ingredients";
 import DropdownMenu from "../sort/sort";
 import InstructionF from "../Instructions/instructions";
 
