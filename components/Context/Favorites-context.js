@@ -21,7 +21,7 @@ const FavoritesContext = createContext({
   removeChangeListener: (listener) => { },
 });
 
-export function FavoritesContextProvider(props) {
+export function FavoritesContextProvider({ children }) {
   const [userFavorites, setUserFavorites] = useState([]);
   const [changeListeners, setChangeListeners] = useState([]);
   const notifyChangeListeners = () => {
@@ -47,10 +47,9 @@ export function FavoritesContextProvider(props) {
   function isRecipeInFavorites(recipeId, userfavorites) {
     if (Array.isArray(userfavorites)) {
       return userfavorites.some((recipe) => recipe && recipe._id === recipeId);
-    } else {
+    }
       // If not an array, handle accordingly (assuming it's a single recipe)
       return userfavorites && userfavorites._id === recipeId;
-    }
   }
   
   const addChangeListener = (listener) => {
@@ -73,7 +72,7 @@ export function FavoritesContextProvider(props) {
   };
     return (
       <FavoritesContext.Provider value={context}>
-        {props.children}
+        {children}
       </FavoritesContext.Provider>
   );
 }

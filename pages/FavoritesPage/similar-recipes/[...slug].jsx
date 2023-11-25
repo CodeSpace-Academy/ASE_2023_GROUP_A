@@ -1,5 +1,5 @@
-import { useEffect, useState, useContext } from "react";
-import useSWR from "swr";
+import React, { useEffect, useState, useContext, useMemo } from "react";
+import useSWR, { mutate } from "swr";
 import RecipeCard from "../../../components/cards/RecipeCard";
 import { useRouter } from "next/router";
 import FavoritesContext from "../../../components/Context/Favorites-context";
@@ -19,21 +19,33 @@ const SimilarRecipes = () => {
     useSimilarRecipesPageContext();
   const [originalRecipes, setOriginalRecipes] = useState([]); // New state for original recipes
   const [similarRecipes, setSimilarRecipes] = useState([]);
-  const [fuse, setFuse] = useState(null);
+  // const [fuse, setFuse] = useState(null);
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const favoriteCtx = useContext(FavoritesContext);
+  const favoriteContext = useContext(FavoritesContext);
   const [sortOrder, setSortOrder] = useState("default");
-  
+
   const fetcher = (url) => fetch(url).then((res) => res.json());
 
   // Use the useSWR hook to fetch data for the user's favorite recipes
-  const { data: favoritesData, error } = useSWR(
-    "api/recipes/Favourites",
-    fetcher
-  );
+  const {
+    data: favoritesData,
+    isLoading,
+    error,
+  } = useSWR("/api/recipes/Favourites", fetcher);
+
+  /**
+   * A function to manually refresh the favorites data.
+   * It triggers a revalidation of the 'favorites' data using the mutate function.
+   */
+  const refreshFavorites = async () => {
+    await mutate("/api/recipes/Favourites");
+  };
+
+  // Set up an event listener for changes in favorite recipes
+
 
   const recipeTitle = Array.isArray(slug) ? slug[0] : slug;
 
@@ -45,7 +57,6 @@ const SimilarRecipes = () => {
           ","
         )}&category=${selectedCategories.join(",")}&sortOrder=${sortOrder}`
       );
-
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -73,35 +84,69 @@ const SimilarRecipes = () => {
       const data = await response.json();
       setOriginalRecipes(data.similarRecipes);
       setTotalRecipes(data.totalSimilarRecipes);
+      // await mutate("/api/recipes/Favourites")
     } catch (error) {
       console.error("Error fetching original recipes:", error);
     }
   };
+  // useEffect(() => {
+  //   if (favoritesData) {
+  //     favoriteContext.updateFavorites(favoritesData.favorites || []);
+  //   }
+  //   favoriteContext.addChangeListener(refreshFavorites);
+  //   return () => favoriteContext.removeChangeListener(refreshFavorites);
+  // }, [favoriteContext.userFavorites]); // empty dependency array to run only once
+  
 
   useEffect(() => {
     // Fetch the original recipes without search when the component mounts
     fetchOriginalRecipes();
-  }, [recipeTitle, currentSimilarRecipesPage]);
 
-  useEffect(() => {
-    // Initialize Fuse with your recipe data
-    const options = {
-      keys: ["title", "description", "tags", "ingredients"],
-      includeMatches: true,
-      threshold: 0.3,
-    };
-    setFuse(new Fuse(originalRecipes, options));
+    // Update the favorites in the context when the component mounts
+    if (favoritesData) {
+      favoriteContext.updateFavorites(favoritesData.favorites || []);
+    }
+
+    // Add the change listener for future updates
+    favoriteContext.addChangeListener(refreshFavorites);
+
+    // Cleanup: Remove the change listener when the component unmounts
+    return () => favoriteContext.removeChangeListener(refreshFavorites);
+  }, [recipeTitle, currentSimilarRecipesPage]);
+  
+  const fuse = useMemo(() => {
+    if (originalRecipes.length > 0) {
+      const options = {
+        keys: ["title", "description", "tags", "ingredients"],
+        includeMatches: true,
+        threshold: 0.3,
+      };
+      return new Fuse(originalRecipes, options);
+    }
+    return null;
   }, [originalRecipes]);
 
   useEffect(() => {
     // Perform fuzzy search when searchQuery changes
-    if (fuse && searchQuery.length >= 4 || selectedTags || selectedCategories || sortOrder) {
+    if (
+      (fuse && searchQuery.length >= 4) ||
+      selectedTags ||
+      selectedCategories ||
+      sortOrder
+    ) {
       // If searchQuery is not sufficient for fuzzy search, reset to original recipes
       searchSimilarRecipes();
     } else {
       setSimilarRecipes(originalRecipes);
     }
-  }, [searchQuery, fuse, originalRecipes, selectedTags, selectedCategories, sortOrder]);
+  }, [
+    searchQuery,
+    fuse,
+    originalRecipes,
+    selectedTags,
+    selectedCategories,
+    sortOrder,
+  ]);
 
   const handlePageChange = (event, page) => {
     setSimilarRecipesCurrentPage(page);
@@ -114,6 +159,19 @@ const SimilarRecipes = () => {
   };
 
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <p>Error fetching favorites</p>;
+  }
+
+  // Extract the list of favorite recipes from the fetched data
+  const favorites = favoritesData ? favoritesData.favorites || [] : [];
+  
+  // Rest of your code...
 
   return (
     <div className="pt-12">
@@ -165,9 +223,9 @@ const SimilarRecipes = () => {
             <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {similarRecipes.map((recipe) => (
                 <RecipeCard
-                  key={recipe._id}
+                  Key={recipe._id}
                   recipe={recipe}
-                  isFavorite={favoriteCtx.recipeIsFavorite(recipe._id)}
+                  favorites={favorites}
                 />
               ))}
             </div>

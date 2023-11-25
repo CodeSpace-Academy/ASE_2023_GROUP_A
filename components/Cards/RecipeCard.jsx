@@ -51,32 +51,33 @@ function RecipeCard({
 
   // Determine the first image for the recipe
   const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
-
+  console.log("Favorites:", favorites);
   // Check if the recipe is marked as a favorite
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
 
   // eslint-disable-next-line no-shadow
-  const removeFavoriteHandler = () => async () => {
+ const removeFavoriteHandler = async () => {
     // Display a confirmation dialog
     const userConfirmed = window.confirm('Are you sure you want to remove this recipe from your favorites?');
     if (userConfirmed) {
       try {
-        const response = await fetch(`api/recipes/Favourites`, {
+        // Send a request to remove the recipe from MongoDB
+        const response = await fetch(`/api/recipes/Favourites`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
-          // eslint-disable-next-line no-underscore-dangle, react/prop-types
           body: JSON.stringify({ recipeId: recipe._id }),
         });
 
         if (response.ok) {
-          // eslint-disable-next-line no-underscore-dangle, react/prop-types
+          // Update the state and display a success message
           favoriteCtx.removeFavorite(recipe._id);
           toast.success('Recipe removed from favorites!');
+        } else {
+          toast.error('Error removing recipe from favorites.');
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.error("Error removing favorite:", error);
         toast.error('Error removing recipe from favorites.');
       }
@@ -86,17 +87,25 @@ function RecipeCard({
   // Add a recipe to favorites
   const addFavoritesHandler = async () => {
     try {
-      const response = await fetch(`api/recipes/Favourites`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(recipe),
-      });
-      favoriteCtx.addFavorite(recipe);
-      toast.success('Recipe added to favorites!');
-      return response;
-      // eslint-disable-next-line no-empty
+      // Check if the recipe is already a favorite
+      if (!recipeIsFavorite) {
+        // Add the recipe to MongoDB
+        const response = await fetch(`/api/recipes/Favourites`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(recipe),
+        });
+
+        if (response.ok) {
+          // Update the state and display a success message
+          favoriteCtx.addFavorite(recipe);
+          toast.success('Recipe added to favorites!');
+        } else {
+          toast.error('Error adding recipe to favorites.');
+        }
+      }
     } catch (error) {
       console.error("Error adding favorite:", error);
       toast.error('Error adding recipe to favorites.');
