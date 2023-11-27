@@ -15,13 +15,13 @@ import { useRouter } from "next/router";
 import Fuse from "fuse.js";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import useSimilarRecipesPageContext from "../../../components/Context/CurrentPageContexts/CurrentSimilarRecipesPage";
+import useSimilarRecipesPageContext from "../../../components/Context/CurrentPageContexts/CurrentSimilarRecipesPage.jsx";
 import FavoritesContext from "../../../components/Context/Favorites-context";
 import RecipeCard from "../../../components/Cards/RecipeCard";
 import Loading from "../../../components/Loading/Loading";
 
 import Tags from "../../../components/Tags/Tags";
-import Categories from "../../../components/Categories/Categories";
+import Categories from "../../../components/Categories/Categories.jsx";
 import FloatingButton from "../../../components/Buttons/FloatingButton/FloatingButton";
 
 function SimilarRecipes() {
