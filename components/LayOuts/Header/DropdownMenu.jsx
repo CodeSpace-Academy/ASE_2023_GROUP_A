@@ -30,7 +30,7 @@ const DropdownMenu = ({ options, onSelect }) => {
           aria-haspopup="true"
           aria-expanded="true"
         >
-          {selectedOption ? selectedOption : "Select a category"}
+          {selectedOption || "Select a category"}
           <svg
             className="-mr-1 ml-2 h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -58,6 +58,7 @@ const DropdownMenu = ({ options, onSelect }) => {
             {options.map((option) => (
               // Render each option as a button and handle its selection
               <button
+                type="button"
                 key={option}
                 onClick={() => handleOptionSelect(option)}
                 className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"

@@ -33,7 +33,7 @@ function SimilarRecipes() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const favoriteContext = useContext(FavoritesContext);
   const [sortOrder, setSortOrder] = useState("default");
-
+  console.log("CURRENT PAGE:", currentSimilarRecipesPage)
   const fetcher = (url) => fetch(url).then((res) => res.json());
   const { theme } = useTheme();
   // Use the useSWR hook to fetch data for the user's favorite recipes

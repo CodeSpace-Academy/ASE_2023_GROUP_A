@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
 /**
@@ -31,7 +31,7 @@ function Categories({ selectedCategories, setSelectedCategories }) {
             data[0].categories.map((category) => ({
               label: category,
               value: category,
-            }))
+            })),
           );
         } else {
           console.error("Failed to fetch categories");
@@ -93,9 +93,7 @@ function Categories({ selectedCategories, setSelectedCategories }) {
       <Select
         isMulti
         options={categories}
-        value={categories.filter((category) =>
-          selectedCategories?.includes(category.value)
-        )}
+        value={categories.filter((category) => selectedCategories?.includes(category.value))}
         onChange={handleCategoryChange}
         styles={customStyles}
         blurInputOnSelect

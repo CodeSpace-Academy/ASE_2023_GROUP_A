@@ -1,14 +1,14 @@
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
-import { PageProvider } from "@/components/Context/CurrentPageContexts/CurrentHomePage";
-import { SimilarRecipesPageProvider } from "@/components/Context/CurrentPageContexts/CurrentSimilarRecipesPage copy";
+import { PageProvider } from "../components/Context/CurrentPageContexts/CurrentHomePage";
+import { SimilarRecipesPageProvider } from "../components/Context/CurrentPageContexts/CurrentSimilarRecipesPage copy";
 import { Fragment } from "react";
 
 import { ToastContainer } from "react-toastify";
 
-import { FavoritesContextProvider } from "@/components/Context/Favorites-context";
-import ThemeProvider from "@/components/Context/ThemeContext";
-import Layout from "@/components/LayOuts/Layout";
+import { FavoritesContextProvider } from "../components/Context/Favorites-context";
+import ThemeProvider from "../components/Context/ThemeContext";
+import Layout from "../components/LayOuts/Layout";
 
 function App({ Component, pageProps }) {
   return (

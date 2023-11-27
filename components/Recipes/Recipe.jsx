@@ -12,10 +12,10 @@ import RecipeDetailTags from "../Tags/RecipeDetailTags";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/Allergens";
 import CoverImage from "../Images/CoverImage";
-import IngredientsList from "../Ingredients/IngredientsList";
-import RecipeInstructions from "../Instructions/RecipeInstructions";
-import Loading from "../Loading/Loading";
-import { useTheme } from "../Context/ThemeContext";
+import IngredientsList from '../Ingredients/IngredientsList';
+import RecipeInstructions from '../Instructions/RecipeInstructions';
+import Loading from '../Loading/Loading';
+import { useTheme } from '../Context/ThemeContext';
 
 function Recipe({ recipe, Allergies }) {
   const [showTags, setShowTags] = useState(false);

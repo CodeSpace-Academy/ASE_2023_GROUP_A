@@ -32,6 +32,11 @@ module.exports = {
       "/components/Context/Favorites-context.jsx",
       "/components/Cards/RecipeCard.jsx",
       "/components/LayOuts/Header/Navigation.jsx",
+      "components/Ingredients/IngredientsList.jsx",
+      "components/Landing/Hero.jsx",
+      "components/Buttons/FloatingButton/FloatingButton.jsx",
+      "components/Context/CurrentPageContexts/CurrentHomePage.jsx",
+      "components/Badges/Badges.jsx",
     ],
   },
 

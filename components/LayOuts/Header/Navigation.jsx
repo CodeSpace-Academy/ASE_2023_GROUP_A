@@ -3,11 +3,11 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/legacy/image";
 
-import { useTheme } from "@/components/Context/ThemeContext";
+import { useTheme } from "../../Context/ThemeContext";
 
 // Faves
 import { useContext } from "react";
-import FavoritesContext from "@/components/Context/Favorites-context";
+import FavoritesContext from "../../Context/Favorites-context";
 import Badge from "@mui/material/Badge";
 import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 
@@ -100,7 +100,7 @@ const Navigation = () => {
                   badgeContent={favoriteCtx.totalFavorites}
                   color="primary"
                   className="w-4 mr-8 text-center"
-                ></Badge>
+                />
               </Link>
             </div>
           </div>
@@ -128,7 +128,7 @@ const Navigation = () => {
                 aria-expanded={mobileMenuOpen ? "true" : "false"}
                 aria-haspopup="true"
               >
-                <span className="absolute -inset-1.5"></span>
+                <span className="absolute -inset-1.5"/>
                 <span className="sr-only">Open user menu</span>
               </button>
             </div>

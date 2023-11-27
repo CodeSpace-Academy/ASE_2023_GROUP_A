@@ -1,20 +1,25 @@
+/* eslint-disable no-nested-ternary */
 import React, { useEffect, useState, useContext } from "react";
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/router";
+
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Carousel from "react-multi-carousel";
+
 import fetchRecipes from "../../helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import FavCard from "../Cards/FavCard";
 import Hero from "../Landing/Hero";
 import FloatingButton from "../Buttons/FloatingButton/FloatingButton";
-import "react-multi-carousel/lib/styles.css";
+import Badges from "../Badges/Badges";
+import Loading from "../Loading/Loading";
+
 import FavoritesContext from "../Context/Favorites-context";
 import { usePageContext } from "../Context/CurrentPageContexts/CurrentHomePage";
 import { useTheme } from "../Context/ThemeContext";
-import Badges from "../Badges/Badges";
-import Loading from "../Loading/Loading";
+
 import { responsive } from "../../helpers/settings/settings";
 /**
  * RecipeList component to display a list of recipes based on various filters.
@@ -215,7 +220,7 @@ function RecipeList({ favorites }) {
     setSelectedTags(tags ? tags.split(",") : []);
     setSelectedIngredients(ingredients ? ingredients.split(",") : []);
     setSelectedCategories(categories ? categories.split(",") : []);
-    setSelectedInstructions(instructions ? parseInt(instructions) : null);
+    setSelectedInstructions(instructions ? parseInt(instructions, 10) : null);
     setSearchQuery(searchQuery || "");
     setSortOrder(sortOrders || null);
   }, []);
@@ -238,7 +243,7 @@ function RecipeList({ favorites }) {
           searchQuery,
           ingredients: selectedIngredients,
           categories: selectedCategories,
-          instructions: parseInt(selectedInstructions),
+          instructions: parseInt(selectedInstructions, 10),
         };
 
         fetchRecipesByFilters(filters, sortOrder);
@@ -257,13 +262,13 @@ function RecipeList({ favorites }) {
     sortOrder,
   ]);
 
-  const fetchAutocompleteSuggestions = async (searchQuery) => {
+  const fetchAutocompleteSuggestions = async (searchInput) => {
     try {
-      if (searchQuery.length === 0) {
+      if (searchInput.length === 0) {
         setAutocompleteSuggestions([]);
       } else {
         const response = await fetch(
-          `/api/autocomplete?searchQuery=${searchQuery}`,
+          `/api/autocomplete?searchQuery=${searchInput}`,
         );
 
         if (response.ok) {
@@ -302,7 +307,7 @@ function RecipeList({ favorites }) {
         tags: selectedTags,
         ingredients: selectedIngredients,
         categories: selectedCategories,
-        instructions: parseInt(selectedInstructions),
+        instructions: parseInt(selectedInstructions, 10),
       };
       fetchRecipesByFilters(filters);
     }
@@ -356,7 +361,7 @@ function RecipeList({ favorites }) {
         </button>
 
         {showCarousel && (
-          <>
+          <div>
             {!favorites ? (
               <p>
                 <Loading />
@@ -379,17 +384,18 @@ function RecipeList({ favorites }) {
                 </Carousel>
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
           {autocompleteSuggestions.map((suggestion, index) => (
             <li
-              key={index}
-              onClick={() => handleAutocompleteSelect(suggestion)}
-            >
-              {suggestion}
+              key={`${index}:${suggestiong}`}
+             >
+                <button type="button" onClick={() => handleAutocompleteSelect(suggestion)}>
+                {suggestion}
+                </button>
             </li>
           ))}
         </ul>
@@ -406,22 +412,22 @@ function RecipeList({ favorites }) {
           {noRecipesFoundMessage}
         </p>
       ) : (
-      <div>
-        {recipes ? <Loading /> : (
-        <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {recipes.map((recipe, index) => (
-            <div key={index}>
-              <RecipeCard
-                key={recipe._id}
-                favorites={favorites}
-                recipe={recipe}
-                searchQuery={searchQuery}
-                description={recipe.description}
-              />
+        <div>
+          {!recipes ? <Loading /> : (
+            <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {recipes.map((recipe, pos) => (
+                <div key={pos}>
+                  <RecipeCard
+                    key={recipe._id}
+                    favorites={favorites}
+                    recipe={recipe}
+                    searchQuery={searchQuery}
+                    description={recipe.description}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        )}
+          )}
         </div>
       )}
       {(filterCount === 0 || recipes.length === 0) && (

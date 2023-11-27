@@ -1,3 +1,4 @@
+import React from 'react';
 const RecipeDetailTags = ({ recipe }) => {
   try {
     if (!recipe) {
@@ -6,7 +7,7 @@ const RecipeDetailTags = ({ recipe }) => {
 
     // Display tags for the recipe
     return (
-      <>
+      <div>
         <ul className="list-disc list-inside">
           {recipe.tags.map((tag, index) => (
             <li key={index} className="text-gray-600">
@@ -14,7 +15,7 @@ const RecipeDetailTags = ({ recipe }) => {
             </li>
           ))}
         </ul>
-      </>
+      </div>
     );
   } catch (error) {
     // Handle and log errors that occur during tag rendering

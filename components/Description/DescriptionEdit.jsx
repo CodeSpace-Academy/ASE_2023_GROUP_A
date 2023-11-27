@@ -46,7 +46,7 @@ function DescriptionEdit({ initialDescription, onSave, toggleEditing }) {
     <div>
       <textarea
         ref={newTextRef}
-        className='w-auto h-auto bg-gray-300'
+        className="w-auto h-auto bg-gray-300"
         value={newDescription}
         onChange={handleDescriptionChange}
         rows={5}
@@ -54,12 +54,12 @@ function DescriptionEdit({ initialDescription, onSave, toggleEditing }) {
         disabled={isLoading}
       />
       <button
-        type='button'
-        className='bg-orange-300 rounded-sm-3 '
+        type="button"
+        className="bg-orange-300 rounded-sm-3 "
         onClick={handleSave}
         disabled={isLoading}
       >
-        <p className='text-black'>{isLoading ? "Saving..." : "Save"}</p>
+        <p className="text-black">{isLoading ? "Saving..." : "Save"}</p>
       </button>
     </div>
   );
