@@ -22,7 +22,6 @@ module.exports = {
       "components/sort/sort.jsx",
       "components/Tags/Tags.jsx",
       "components/Landing/Hero.jsx",
-      "components/RecipeList/RecipeList.jsx",
       "components/Badges/Badges.jsx",
       "helpers/mongoDB-utils.js",
       "pages/api/combined",
