@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /**
@@ -20,9 +21,8 @@ import useSimilarRecipesPageContext from "../../../components/Context/CurrentPag
 import FavoritesContext from "../../../components/Context/Favorites-context";
 import RecipeCard from "../../../components/Cards/RecipeCard";
 import Loading from "../../../components/Loading/Loading";
-
-import Tags from "../../../components/Tags/Tags";
-import Categories from "../../../components/Categories/Categories";
+import Tags from "../../../components/Tags/Tags.jsx";
+import Categories from "../../../components/Categories/Categories.jsx";
 import FloatingButton from "../../../components/Buttons/FloatingButton/FloatingButton";
 
 function SimilarRecipes() {
