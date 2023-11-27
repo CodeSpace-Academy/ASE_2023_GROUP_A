@@ -35,7 +35,6 @@ export default function Badges({ numberOfRecipes, handleDefault, filterCount }) 
         </span>
       </button>
 
-      {/* Badge for the number of recipes */}
       <Badge
         badgeContent={numberOfRecipes}
         color="primary"

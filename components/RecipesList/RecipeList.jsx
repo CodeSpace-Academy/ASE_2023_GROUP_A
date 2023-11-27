@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/router";
 import Pagination from "@mui/material/Pagination";
@@ -51,7 +51,9 @@ function RecipeList({ favorites }) {
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
   if (recipesError) {
-    return(<><h1>Error Failed to Fetch Recipes</h1></>)
+    return (
+      <h1>Error Failed to Fetch Recipes</h1>
+    );
   }
 
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
