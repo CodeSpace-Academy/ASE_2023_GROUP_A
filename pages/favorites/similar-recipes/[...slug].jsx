@@ -27,8 +27,10 @@ import FloatingButton from "../../../components/Buttons/FloatingButton/FloatingB
 function SimilarRecipes() {
   const router = useRouter();
   const { slug } = router.query;
-  const { currentSimilarRecipesPage, setSimilarRecipesCurrentPage } =
-    useSimilarRecipesPageContext();
+  const {
+    currentSimilarRecipesPage,
+    setSimilarRecipesCurrentPage,
+  } = useSimilarRecipesPageContext();
   const [originalRecipes, setOriginalRecipes] = useState([]); // New state for original recipes
   const [similarRecipes, setSimilarRecipes] = useState([]);
   // const [fuse, setFuse] = useState(null);
@@ -69,8 +71,8 @@ function SimilarRecipes() {
     try {
       const response = await fetch(
         `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&searchQuery=${searchQuery}&page=${currentSimilarRecipesPage}&tag=${selectedTags.join(
-          ","
-        )}&category=${selectedCategories.join(",")}&sortOrder=${sortOrder}`
+          ",",
+        )}&category=${selectedCategories.join(",")}&sortOrder=${sortOrder}`,
       );
 
       if (!response.ok) {
@@ -89,7 +91,7 @@ function SimilarRecipes() {
   const fetchOriginalRecipes = async () => {
     try {
       const response = await fetch(
-        `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&page=${currentSimilarRecipesPage}`
+        `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&page=${currentSimilarRecipesPage}`,
       );
 
       if (!response.ok) {
@@ -150,10 +152,10 @@ function SimilarRecipes() {
   useEffect(() => {
     // Perform fuzzy search when searchQuery changes
     if (
-      (fuse && searchQuery.length >= 4) ||
-      selectedTags ||
-      selectedCategories ||
-      sortOrder
+      (fuse && searchQuery.length >= 4)
+      || selectedTags
+      || selectedCategories
+      || sortOrder
     ) {
       // If searchQuery is not sufficient for fuzzy search, reset to original recipes
       searchSimilarRecipes();
