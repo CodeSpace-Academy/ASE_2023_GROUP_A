@@ -4,13 +4,18 @@
  * @component
  * @returns {JSX.Element} - Rendered SimilarRecipes component.
  */
-import React, { useEffect, useState, useContext, useMemo } from "react";
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  useMemo,
+} from "react";
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/router";
 import Fuse from "fuse.js";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { useSimilarRecipesPageContext } from "../../../components/Context/CurrentPageContexts/CurrentSimilarRecipesPage copy";
+import useSimilarRecipesPageContext from "../../../components/Context/CurrentPageContexts/CurrentSimilarRecipesPage";
 import FavoritesContext from "../../../components/Context/Favorites-context";
 import RecipeCard from "../../../components/Cards/RecipeCard";
 import Loading from "../../../components/Loading/Loading";
@@ -33,7 +38,7 @@ function SimilarRecipes() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const favoriteContext = useContext(FavoritesContext);
   const [sortOrder, setSortOrder] = useState("default");
-  console.log("CURRENT PAGE:", currentSimilarRecipesPage)
+  console.log("CURRENT PAGE:", currentSimilarRecipesPage);
   const fetcher = (url) => fetch(url).then((res) => res.json());
   // Use the useSWR hook to fetch data for the user's favorite recipes
   const {
@@ -145,10 +150,10 @@ function SimilarRecipes() {
   useEffect(() => {
     // Perform fuzzy search when searchQuery changes
     if (
-      (fuse && searchQuery.length >= 4)
-      || selectedTags
-      || selectedCategories
-      || sortOrder
+      (fuse && searchQuery.length >= 4) ||
+      selectedTags ||
+      selectedCategories ||
+      sortOrder
     ) {
       // If searchQuery is not sufficient for fuzzy search, reset to original recipes
       searchSimilarRecipes();

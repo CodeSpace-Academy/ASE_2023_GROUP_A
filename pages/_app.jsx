@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { PageProvider } from "../components/Context/CurrentPageContexts/CurrentHomePage";
-import { SimilarRecipesPageProvider } from "../components/Context/CurrentPageContexts/CurrentSimilarRecipesPage copy";
+import { SimilarRecipesPageProvider } from "../components/Context/CurrentPageContexts/CurrentSimilarRecipesPage";
 import { Fragment } from "react";
 
 import { ToastContainer } from "react-toastify";

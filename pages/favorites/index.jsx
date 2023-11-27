@@ -13,7 +13,7 @@ import React, {
   useState,
   useMemo,
 } from 'react';
-
+import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
 import Fuse from "fuse.js";
@@ -90,6 +90,7 @@ function FavoritesPage() {
         setSortOrderSteps((prev) => (prev === "asc" ? "desc" : "asc"));
         break;
       case "default":
+        sortOrder1 = sortOrderDefault;
         setSortOrderDefault([...favoriteRecipes].flat());
         break;
       default:
@@ -242,13 +243,18 @@ function FavoritesPage() {
         {isLoading ? (
           <Loading />
         ) : filteredRecipes.length === 0 ? (
-          <img src="../Images/nix.png" alt="No Likes" />
+          <Image
+            height={200}
+            width={200}
+            src="../Images/nix.png"
+            alt="No Likes"
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredRecipes.map((result, index) => (
-              <div key={`${index},[${result.recipe._id}]`}>
+            {filteredRecipes.map((result) => (
+              <div key={result.recipe.title}>
                 <RecipeCard
-                  key={index}
+                  key={result.instructions.length}
                   recipe={result.recipe}
                   favorites={favoriteRecipes}
                   searchQuery={searchTerm}

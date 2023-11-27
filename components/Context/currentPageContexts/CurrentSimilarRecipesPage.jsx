@@ -34,7 +34,7 @@ export const SimilarRecipesPageProvider = ({ children }) => {
   );
 };
 
-export const useSimilarRecipesPageContext = () => {
+const useSimilarRecipesPageContext = () => {
   const context = useContext(SimilarRecipesPageContext);
   if (!context) {
     throw new Error('usePageNumber must only be used within a page number provider');
@@ -42,3 +42,4 @@ export const useSimilarRecipesPageContext = () => {
 
   return context;
 };
+export default useSimilarRecipesPageContext;
