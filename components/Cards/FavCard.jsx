@@ -13,7 +13,7 @@ import { useTheme } from '../Context/ThemeContext';
 
 const FavCard = ({ recipe, favorites }) => {
   const favoriteCtx = useContext(FavoritesContext);
-  const { theme } = useTheme()
+  const { theme } = useTheme();
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
 
   const removeFavoriteHandler = async () => {
@@ -43,47 +43,62 @@ const FavCard = ({ recipe, favorites }) => {
 
   return (
     <>
-    <div className={`${ theme === "dark" ?"text-custom-color-mixed-20":"text-blue-black-10"} bg-blue-400 rounded-lg shadow-lg overflow-hidden`}>
-      <div className="relative h-40 overflow-hidden">
-        {firstImage ? (
-          <Image src={firstImage} alt={recipe.title} layout="fill" objectFit="cover" className="rounded-t-lg" />
-        ) : (
-          <div className="flex items-center justify-center h-full bg-gray-300 text-gray-600">No Image</div>
-        )}
-      </div>
-      <div className={`flex flex-col justify-between h-16 p-4`}>
-        <div className="text-center">
-          <h3 className="text-lg font-semibold">{recipe.title}</h3>
-        </div>
-        <div className="flex items-center justify-end">
-          {recipeIsFavorite ? (
-            <button
-              type="button"
-              onClick={removeFavoriteHandler}
-              className={` 
-              text-blue-900 hover:text-red-500 transition`}
-            >
-              <span aria-label="Remove from favorites">
-                <StarFilled className="w-6 h-6" />
-              </span>
-            </button>
+      <div
+        className={`${
+          theme === "dark" ? "text-custom-color-mixed-20" : "text-blue-black-10"
+        } bg-blue-400 rounded-lg shadow-lg overflow-hidden`}
+      >
+        <div className="relative h-40 overflow-hidden">
+          {firstImage ? (
+            <Image
+              src={firstImage}
+              alt={recipe.title}
+              layout="fill"
+              objectFit="cover"
+              className="rounded-t-lg"
+            />
           ) : (
-            <button
-              type="button"
-              onClick={removeFavoriteHandler}
-              className="text-custom-blue-10 hover:text-blue-500 transition"
-            >
-              <span aria-label="Add to favorites">
-                <StarEmpty className="w-6 h-6" />
-              </span>
-            </button>
+            <div className="flex items-center justify-center h-full bg-gray-300 text-gray-600">
+              No Image
+            </div>
           )}
-          
+        </div>
+        <div className={`flex flex-col justify-between h-16 p-4`}>
+          <div className="text-center">
+            <h3 className="text-lg font-semibold">{recipe.title}</h3>
+          </div>
+          <div className="flex items-center justify-end">
+            {recipeIsFavorite ? (
+              <button
+                type="button"
+                onClick={removeFavoriteHandler}
+                className={` 
+                text-blue-900 hover:text-red-500 transition`}
+              >
+                <span aria-label="Remove from favorites">
+                  <StarFilled className="w-6 h-6" />
+                </span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={removeFavoriteHandler}
+                className="text-custom-blue-10 hover:text-blue-500 transition"
+              >
+                <span aria-label="Add to favorites">
+                  <StarEmpty className="w-6 h-6" />
+                </span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
-      
-    </div>
-    <Link href={`/FavoritesPage/similar-recipes/${recipe._id}`} as={`/FavoritesPage/similar-recipes/${recipe.title}`} > View similar recipes</Link>
+      <Link
+        legacyBehavior
+        href={`/favorites/similar-recipes/${recipe.title}`}
+      >
+        View similar recipes
+      </Link>
     </>
   );
 };

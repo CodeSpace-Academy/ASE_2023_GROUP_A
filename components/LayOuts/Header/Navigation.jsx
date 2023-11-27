@@ -90,7 +90,7 @@ const Navigation = () => {
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
               <Link
-                href={`/FavoritesPage`}
+                href={`/favorites`}
                 className={`${
                   theme === "dark" ? "text-white" : "text-black"
                 } hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium`}
@@ -147,7 +147,8 @@ const Navigation = () => {
                 Recipe
               </Link>
               <Link
-                href={`/FavoritesPage`} as={`favourites`}
+                href={`/favorites`}
+                type="button"
                 className="text-black-300 hover-bg-gray-700 hover-text-white block rounded-md px-3 py-2 text-base font-medium"
               >
                 Favorites{" "}

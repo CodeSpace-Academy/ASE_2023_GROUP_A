@@ -1,5 +1,5 @@
 /* eslint-disable no-alert */
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
@@ -45,12 +45,15 @@ const RecipeCard = ({
       </div>
     );
   }
-
   // Determine the first image for the recipe
   const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
 
   // Check if the recipe is marked as a favorite
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
+
+  useEffect(() => {
+    favoriteCtx.updateFavorites(favorites);
+  }, [favorites]);
 
   // eslint-disable-next-line no-shadow
   const removeFavoriteHandler = async () => {
@@ -128,10 +131,12 @@ const RecipeCard = ({
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent || "";
   }
+
   const correctedTitle = decodeHtmlEntities(recipe.title);
+
   return (
     <div
-      key={Key}
+      key={`${Key},${recipe.title}`}
       className={`${
         theme === "light" ? "text-black bg-blue-300" : "text-white bg-gray-700"
       } rounded shadow mt-8 mb-4 flex flex-col transform transition-transform hover:scale-105`}

@@ -403,6 +403,8 @@ function RecipeList({ favorites }) {
           {noRecipesFoundMessage}
         </p>
       ) : (
+      <div>
+        {recipes ? <Loading /> : (
         <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {recipes.map((recipe, index) => (
             <div key={index}>
@@ -415,6 +417,8 @@ function RecipeList({ favorites }) {
               />
             </div>
           ))}
+        </div>
+        )}
         </div>
       )}
       {(filterCount === 0 || recipes.length === 0) && (

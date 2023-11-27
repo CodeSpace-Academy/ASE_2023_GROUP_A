@@ -33,10 +33,8 @@ module.exports = {
       "/components/Cards/RecipeCard.jsx",
       "/components/LayOuts/Header/Navigation.jsx",
     ],
-    extends: [
-      "plugin:@next/next/recommended",
-    ],
   },
+
   webpack: (config, { dev }) => {
     if (dev) {
       config.resolve.alias["react-dom$"] = "react-dom/profiling";

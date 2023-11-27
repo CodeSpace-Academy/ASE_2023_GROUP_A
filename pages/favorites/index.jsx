@@ -2,15 +2,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/jsx-no-duplicate-props */
-import {
+/**
+ * FavoritesPage component displays a list of user's favorite recipes.
+ * @component
+ * @returns {JSX.Element} - Rendered FavoritesPage component.
+ */
+import React, {
   useContext,
   useEffect,
   useState,
-  useMemo
+  useMemo,
 } from 'react';
 
 import Link from 'next/link';
-import useSWR, { mutate } from 'swr';
+import useSWR from 'swr';
 import Fuse from "fuse.js";
 import RecipeCard from '../../components/Cards/RecipeCard';
 import FavoritesContext from '../../components/Context/Favorites-context';
@@ -24,17 +29,17 @@ function FavoritesPage() {
   const [sortOrderCookTime, setSortOrderCookTime] = useState("asc");
   const [sortOrderTotalTime, setSortOrderTotalTime] = useState("asc");
   const [sortOrderSteps, setSortOrderSteps] = useState("asc");
+  const [sortOrderDefault, setSortOrderDefault] = useState("default");
   const [sortOrder, setSortOrder] = useState("default");
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   // const [, setFuse] = useState(null); // State to hold the Fuse instance
-console.log("SEARCH TERM:", searchTerm)
 
   const fetcher = (url) => fetch(url).then((res) => res.json());
 
   const { data: favoritesData, error: recipesError } = useSWR(
     "/api/recipes/Favourites",
-    fetcher
+    fetcher,
   );
 
   const favoriteRecipes = favoriteCtx.favorites || [];
@@ -56,47 +61,55 @@ console.log("SEARCH TERM:", searchTerm)
     }
   }, [favoriteRecipes, favoritesData]);
 
+  /**+
+   * Function to handle sorting and filtering of favorite recipes.
+   * @param {string} sortType - The type of sorting to apply.
+   * @returns {void}
+   */
   const sortAndFilterHandler = (sortType) => {
-    let sortOrder;
+    let sortOrder1;
     switch (sortType) {
       case "title":
-        sortOrder = sortOrderTitle === "asc" ? 1 : -1;
+        sortOrder1 = sortOrderTitle === "asc" ? 1 : -1;
         setSortOrderTitle((prev) => (prev === "asc" ? "desc" : "asc"));
         break;
       case "prepTime":
-        sortOrder = sortOrderPrepTime === "asc" ? 1 : -1;
+        sortOrder1 = sortOrderPrepTime === "asc" ? 1 : -1;
         setSortOrderPrepTime((prev) => (prev === "asc" ? "desc" : "asc"));
         break;
       case "cookTime":
-        sortOrder = sortOrderCookTime === "asc" ? 1 : -1;
+        sortOrder1 = sortOrderCookTime === "asc" ? 1 : -1;
         setSortOrderCookTime((prev) => (prev === "asc" ? "desc" : "asc"));
         break;
       case "totalTime":
-        sortOrder = sortOrderTotalTime === "asc" ? 1 : -1;
+        sortOrder1 = sortOrderTotalTime === "asc" ? 1 : -1;
         setSortOrderTotalTime((prev) => (prev === "asc" ? "desc" : "asc"));
         break;
       case "steps":
-        sortOrder = sortOrderSteps === "asc" ? 1 : -1;
+        sortOrder1 = sortOrderSteps === "asc" ? 1 : -1;
         setSortOrderSteps((prev) => (prev === "asc" ? "desc" : "asc"));
         break;
       case "default":
+        setSortOrderDefault([...favoriteRecipes].flat());
+        break;
+      default:
         setFilteredRecipes([...favoriteRecipes].flat());
         break;
     }
 
     const sortedRecipes = [...filteredRecipes].sort((a, b) => {
       if (sortType === "title") {
-        return sortOrder * a.recipe.title.localeCompare(b.recipe.title);
-      } else if (sortType === "prepTime") {
-        return sortOrder * (a.recipe.prep - b.recipe.prep);
-      } else if (sortType === "cookTime") {
-        return sortOrder * (a.recipe.cook - b.recipe.cook);
-      } else if (sortType === "steps") {
-        return sortOrder * (a.recipe.instructions.length - b.recipe.instructions.length);
-      } else if (sortType === "totalTime") {
+        return sortOrder1 * a.recipe.title.localeCompare(b.recipe.title);
+      } if (sortType === "prepTime") {
+        return sortOrder1 * (a.recipe.prep - b.recipe.prep);
+      } if (sortType === "cookTime") {
+        return sortOrder1 * (a.recipe.cook - b.recipe.cook);
+      } if (sortType === "steps") {
+        return sortOrder1 * (a.recipe.instructions.length - b.recipe.instructions.length);
+      } if (sortType === "totalTime") {
         const aTotalTime = a.recipe.prep + a.recipe.cook;
         const bTotalTime = b.recipe.prep + b.recipe.cook;
-        return sortOrder * (aTotalTime - bTotalTime);
+        return sortOrder1 * (aTotalTime - bTotalTime);
       }
       return 0; // Default case
     });
@@ -137,56 +150,58 @@ console.log("SEARCH TERM:", searchTerm)
         sortAndFilterHandler("steps");
         break;
       case "default":
-        // Reset filtered recipes to the original state
         sortAndFilterHandler("default");
-        break
+        break;
+      default:
+        sortAndFilterHandler("default");
+        break;
+    }
+  }, [sortOrder]);
+
+  const fuse = useMemo(() => {
+    if (favoriteRecipes.length > 0) {
+      const options = {
+        keys: [
+          "recipe.title",
+          "recipe.description",
+          "recipe.tags",
+          "recipe.ingredients",
+        ],
+        includeMatches: true,
+        threshold: 0.3,
+      };
+      return new Fuse(favoriteRecipes, options);
+    }
+    return null;
+  }, [favoriteRecipes]);
+
+  /**
+   * Function to handle search input change and update filtered recipes.
+   * @param {object} event - The input change event.
+   * @returns {void}
+   */
+  const handleSearch = (event) => {
+    const searchTermEntered = event.target.value;
+
+    setSearchTerm(searchTermEntered);
+
+    if (searchTermEntered === "") {
+      setIsLoading(true);
+
+      // Reset filtered recipes to favorites when the search term is empty
+      setFilteredRecipes(favoriteRecipes);
+      setIsLoading(false);
+      return;
     }
 
+    // Perform the search using Fuse
+    const searchResults = fuse.search(searchTermEntered);
 
-  }, [sortOrder]);
-    const fuse = useMemo(() => {
-      if (favoriteRecipes.length > 0) {
-        const options = {
-          keys: [
-            "recipe.title",
-            "recipe.description",
-            "recipe.tags",
-            "recipe.ingredients",
-          ],
-          includeMatches: true,
-          threshold: 0.3,
-        };
-        return new Fuse(favoriteRecipes, options);
-      }
-      return null;
-    }, [favoriteRecipes]);
-  
+    // Update the filtered recipes state with the search results
+    setFilteredRecipes(searchResults.map((result) => result.item));
 
-console.log("SEARCH FUSE:", fuse);
-  const searchResults = searchTerm ? fuse.search(searchTerm) : filteredRecipes;
-
-const handleSearch = (event) => {
-  const searchTerm = event.target.value;
-
-  setSearchTerm(searchTerm);
-
-  if (searchTerm === "") {
-    setIsLoading(true);
-
-    // Reset filtered recipes to favorites when the search term is empty
-    setFilteredRecipes(favoriteRecipes);
     setIsLoading(false);
-    return;
-  }
-
-  // Perform the search using Fuse
-  const searchResults = fuse.search(searchTerm);
-
-  // Update the filtered recipes state with the search results
-  setFilteredRecipes(searchResults.map((result) => result.item));
-
-  setIsLoading(false);
-};
+  };
 
   return (
     <section>
@@ -231,14 +246,21 @@ const handleSearch = (event) => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredRecipes.map((result, index) => (
-              <RecipeCard
-                key={index}
-                recipe={result.recipe}
-                favorites={favoriteRecipes}
-                searchQuery={searchTerm}
-              />
+              <div key={`${index},[${result.recipe._id}]`}>
+                <RecipeCard
+                  key={index}
+                  recipe={result.recipe}
+                  favorites={favoriteRecipes}
+                  searchQuery={searchTerm}
+                />
+                <Link
+                  href={`/favorites/similar-recipes/${result.recipe.title}`}
+                >
+                  {" "}
+                  View similar recipes
+                </Link>
+              </div>
             ))}
-            {/* If there are search results, render them as well */}
           </div>
         )}
 

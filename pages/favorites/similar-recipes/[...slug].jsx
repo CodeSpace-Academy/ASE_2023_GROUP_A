@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, {
-  useEffect,
-  useState,
-  useContext,
-  useMemo,
-} from "react";
+/**
+ * SimilarRecipes component displays a list of recipes similar to the specified one.
+ * @component
+ * @returns {JSX.Element} - Rendered SimilarRecipes component.
+ */
+import React, { useEffect, useState, useContext, useMemo } from "react";
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/router";
 import Fuse from "fuse.js";
@@ -22,10 +22,8 @@ import FloatingButton from "../../../components/Buttons/FloatingButton/FloatingB
 function SimilarRecipes() {
   const router = useRouter();
   const { slug } = router.query;
-  const {
-    currentSimilarRecipesPage,
-    setSimilarRecipesCurrentPage,
-  } = useSimilarRecipesPageContext();
+  const { currentSimilarRecipesPage, setSimilarRecipesCurrentPage } =
+    useSimilarRecipesPageContext();
   const [originalRecipes, setOriginalRecipes] = useState([]); // New state for original recipes
   const [similarRecipes, setSimilarRecipes] = useState([]);
   // const [fuse, setFuse] = useState(null);
@@ -57,13 +55,18 @@ function SimilarRecipes() {
 
   const recipeTitle = Array.isArray(slug) ? slug[0] : slug;
 
-  // Function to search and fetch similar recipes
+  /**
+   * Function to search and fetch similar recipes based on the specified criteria.
+   * @async
+   * @function
+   * @returns {Promise<void>} - Resolves when the similar recipes are fetched and updated.
+   */
   const searchSimilarRecipes = async () => {
     try {
       const response = await fetch(
         `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&searchQuery=${searchQuery}&page=${currentSimilarRecipesPage}&tag=${selectedTags.join(
-          ",",
-        )}&category=${selectedCategories.join(",")}&sortOrder=${sortOrder}`,
+          ","
+        )}&category=${selectedCategories.join(",")}&sortOrder=${sortOrder}`
       );
 
       if (!response.ok) {
@@ -82,7 +85,7 @@ function SimilarRecipes() {
   const fetchOriginalRecipes = async () => {
     try {
       const response = await fetch(
-        `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&page=${currentSimilarRecipesPage}`,
+        `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&page=${currentSimilarRecipesPage}`
       );
 
       if (!response.ok) {
@@ -121,6 +124,13 @@ function SimilarRecipes() {
     return () => favoriteContext.removeChangeListener(refreshFavorites);
   }, [recipeTitle, currentSimilarRecipesPage]);
 
+  // useEffect(() => {
+  //   // Update the favorites in the context when favoritesData changes
+  //   if (favoritesData) {
+  //     favoriteContext.updateFavorites(favoritesData.favorites || []);
+  //   }
+  // }, [favoritesData]);
+
   const fuse = useMemo(() => {
     if (originalRecipes.length > 0) {
       const options = {
@@ -136,10 +146,10 @@ function SimilarRecipes() {
   useEffect(() => {
     // Perform fuzzy search when searchQuery changes
     if (
-      (fuse && searchQuery.length >= 4)
-      || selectedTags
-      || selectedCategories
-      || sortOrder
+      (fuse && searchQuery.length >= 4) ||
+      selectedTags ||
+      selectedCategories ||
+      sortOrder
     ) {
       // If searchQuery is not sufficient for fuzzy search, reset to original recipes
       searchSimilarRecipes();
@@ -154,7 +164,12 @@ function SimilarRecipes() {
     selectedCategories,
     sortOrder,
   ]);
-
+  /**
+   * Function to handle page change in the pagination component.
+   * @param {object} event - The event object.
+   * @param {number} page - The selected page number.
+   * @returns {void}
+   */
   const handlePageChange = (event, page) => {
     setSimilarRecipesCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -228,9 +243,10 @@ function SimilarRecipes() {
             <Loading />
           ) : (
             <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {similarRecipes.map((recipe) => (
+              {similarRecipes.map((recipe, index) => (
                 <RecipeCard
-                  Key={recipe._id}
+                  key={recipe._id + index}
+                  Key={recipe._id + index}
                   recipe={recipe}
                   favorites={favorites}
                 />
