@@ -14,7 +14,7 @@ import { useSimilarRecipesPageContext } from "../../../components/Context/Curren
 import FavoritesContext from "../../../components/Context/Favorites-context";
 import RecipeCard from "../../../components/Cards/RecipeCard";
 import Loading from "../../../components/Loading/Loading";
-import { useTheme } from "../../../components/Context/ThemeContext";
+
 import Tags from "../../../components/Tags/Tags";
 import Categories from "../../../components/Categories/Categories";
 import FloatingButton from "../../../components/Buttons/FloatingButton/FloatingButton";
@@ -35,7 +35,6 @@ function SimilarRecipes() {
   const [sortOrder, setSortOrder] = useState("default");
   console.log("CURRENT PAGE:", currentSimilarRecipesPage)
   const fetcher = (url) => fetch(url).then((res) => res.json());
-  const { theme } = useTheme();
   // Use the useSWR hook to fetch data for the user's favorite recipes
   const {
     data: favoritesData,
@@ -146,10 +145,10 @@ function SimilarRecipes() {
   useEffect(() => {
     // Perform fuzzy search when searchQuery changes
     if (
-      (fuse && searchQuery.length >= 4) ||
-      selectedTags ||
-      selectedCategories ||
-      sortOrder
+      (fuse && searchQuery.length >= 4)
+      || selectedTags
+      || selectedCategories
+      || sortOrder
     ) {
       // If searchQuery is not sufficient for fuzzy search, reset to original recipes
       searchSimilarRecipes();
@@ -245,7 +244,6 @@ function SimilarRecipes() {
             <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {similarRecipes.map((recipe, index) => (
                 <RecipeCard
-                  key={recipe._id + index}
                   Key={recipe._id + index}
                   recipe={recipe}
                   favorites={favorites}

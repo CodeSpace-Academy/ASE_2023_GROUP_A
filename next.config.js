@@ -26,7 +26,7 @@ module.exports = {
       "helpers/mongoDB-utils.js",
       "pages/api/combined",
       "pages/api/search/similarRecipes",
-      "/pages/favorites.jsx",
+      "/pages/favorites",
       "/pages/index.jsx",
       "/components/Context/Favorites-context.jsx",
       "/components/Cards/RecipeCard.jsx",
