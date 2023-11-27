@@ -51,6 +51,7 @@ function RecipeList({ favorites }) {
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
   if (recipesError) {
+    return(<><h1>Error Failed to Fetch Recipes</h1></>)
   }
 
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);

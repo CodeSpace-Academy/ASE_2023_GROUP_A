@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { FiBook } from "react-icons/fi";
-import { FaArrowLeft, FaTag, FaUsers } from "react-icons/fa";
+import { FaArrowLeft, FaUsers } from "react-icons/fa";
 import {
   CookTime,
   PrepTime,
