@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /**
  * SimilarRecipes component displays a list of recipes similar to the specified one.
@@ -21,7 +22,7 @@ import RecipeCard from "../../../components/Cards/RecipeCard";
 import Loading from "../../../components/Loading/Loading";
 
 import Tags from "../../../components/Tags/Tags";
-import Categories from "../../../components/Categories/Categories.jsx";
+import Categories from "../../../components/Categories/Categories";
 import FloatingButton from "../../../components/Buttons/FloatingButton/FloatingButton";
 
 function SimilarRecipes() {
