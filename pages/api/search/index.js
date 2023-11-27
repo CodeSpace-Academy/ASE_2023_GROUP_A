@@ -1,4 +1,4 @@
-import { searching } from "../../../helpers/mongoDB-utils";
+import { filtering } from "../../../helpers/mongoDB-utils";
 
 const handler = async (req, res) => {
   if (req.method !== "POST") {
@@ -8,7 +8,7 @@ const handler = async (req, res) => {
   const { searchQuery } = req.body;
 
   try {
-    const searchResult = await searching(searchQuery);
+    const searchResult = await filtering(searchQuery);
     return res.status(200).json({ recipes: searchResult });
   } catch (error) {
     console.error("Error searching recipes:", error);
