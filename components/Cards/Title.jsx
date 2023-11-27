@@ -1,3 +1,5 @@
+/* The code is defining a React functional component called "Title". This component displays a title
+with optional highlighting. */
 import React from "react";
 import Highlighter from "react-highlight-words";
 import styles from "./Title.module.css";

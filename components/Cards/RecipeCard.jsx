@@ -37,7 +37,10 @@ const RecipeCard = ({
   const { theme } = useTheme();
   const favoriteCtx = useContext(FavoritesContext);
 
-  // Display loading spinner if recipe data is not available
+  useEffect(() => {
+    favoriteCtx.updateFavorites(favorites);
+  }, [favorites]);
+
   if (!recipe) {
     return (
       <div>
@@ -50,10 +53,6 @@ const RecipeCard = ({
 
   // Check if the recipe is marked as a favorite
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
-
-  useEffect(() => {
-    favoriteCtx.updateFavorites(favorites);
-  }, [favorites]);
 
   // eslint-disable-next-line no-shadow
   const removeFavoriteHandler = async () => {
@@ -113,21 +112,8 @@ const RecipeCard = ({
       console.error(new Error("Error adding favorite:", error));
     }
   };
-  // const htmlEntities = {
-  //   "&ldquo;": "“",
-  //   "&rdquo;": "”",
-  //   "&quot;": '"',
-  //   // Add more HTML entities and their replacements as needed
-  // };
-  // const correctTitle = (title) => {
-  //   Object.entries(htmlEntities).forEach(([entity, symbol]) => {
-  //     title = title.replace(new RegExp(entity, "g"), symbol);
-  //   });
 
-  //   // Trim the title
-  //   return title.trim();
-  // };
-  function decodeHtmlEntities(html) {
+  const decodeHtmlEntities = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent || "";
   }
