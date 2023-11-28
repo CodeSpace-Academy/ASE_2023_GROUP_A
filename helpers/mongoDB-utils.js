@@ -361,35 +361,16 @@ export async function filtering(filters, sortOrder) {
   }
 }
 
-export async function handleUpdateInstructions(recipeId, updatedInstruction) {
-  const db = client.db("devdb");
-  const collection = db.collection("recipes");
-
-  try {
-    await collection.updateOne(
-      { _id: recipeId },
-      {
-        $set: { instructions: updatedInstruction },
-      }
-    );
-
-    return { success: true, message: "Instruction updated successfully" };
-  } catch (error) {
-    console.error("Database update error:", error);
-    throw error;
-  }
-}
-
 export const updateRecipeInstructions = async (
   recipeId,
-  updatedInstructions
+  updatedInstructions,
 ) => {
   const collection = client.db("devdb").collection("recipes");
 
   try {
     const result = await collection.updateOne(
       { _id: recipeId },
-      { $set: { instructions: updatedInstructions } }
+      { $set: { instructions: updatedInstructions } },
     );
 
     if (result.matchedCount > 0) {

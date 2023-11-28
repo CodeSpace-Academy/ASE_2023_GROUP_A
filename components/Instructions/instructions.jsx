@@ -1,3 +1,28 @@
+// /**
+//  * An input field for the number of instructions.
+//  *
+//  * @component
+//  * @param {Object} props - The component's props.
+//  * @param {Function} props.handleChange - The function to handle changes in the input.
+//  * @param {string} props.selectedInstructions - The selected number of instructions.
+//  * @returns {JSX.Element} - The component's rendered elements.
+//  */
+// export default function InstructionF({ handleChange, selectedInstructions }) {
+//   return (
+//     <div className="flex">
+//       <input
+//         type="number"
+//         min={0}
+//         placeholder="Number of instructions..."
+//         value={parseInt(selectedInstructions, 10)}
+//         onChange={handleChange}
+//         className="border border-gray-300 rounded-l-md px-4 py-2"
+//       />
+//     </div>
+//   );
+// }
+
+
 import React from "react";
 
 /**
@@ -11,40 +36,15 @@ import React from "react";
  */
 export default function InstructionF({ handleChange, selectedInstructions }) {
   return (
-    <div className="flex">
+    <div className='flex'>
       <input
-        type="number"
+        type='number'
         min={0}
-        placeholder="Number of instructions..."
+        placeholder='Number of instructions...'
         value={parseInt(selectedInstructions, 10)}
         onChange={handleChange}
-        className="border border-gray-300 rounded-l-md px-4 py-2"
+        className='border border-gray-300 rounded-l-md px-4 py-2'
       />
     </div>
   );
 }
-// import React from "react";
-
-// /**
-//  * An input field for the number of instructions.
-//  *
-//  * @component
-//  * @param {Object} props - The component's props.
-//  * @param {Function} props.handleChange - The function to handle changes in the input.
-//  * @param {string} props.selectedInstructions - The selected number of instructions.
-//  * @returns {JSX.Element} - The component's rendered elements.
-//  */
-// export default function InstructionF({ handleChange, selectedInstructions }) {
-//   return (
-//     <div className='flex'>
-//       <input
-//         type='number'
-//         min={0}
-//         placeholder='Number of instructions...'
-//         value={parseInt(selectedInstructions, 10)}
-//         onChange={handleChange}
-//         className='border border-gray-300 rounded-l-md px-4 py-2'
-//       />
-//     </div>
-//   );
-// }

@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import Loading from "../Loading/Loading";
+import { request } from "http";
 
 const EditRecipeInstructions = ({ instructions, onSave }) => {
   const [editedInstructions, setEditedInstructions] = useState([
@@ -81,13 +82,21 @@ const RecipeInstructions = ({ recipes, recipeId }) => {
 
   const handleInstructionsSave = async (updatedInstructions) => {
     try {
-      const response = await fetch(`/api/updateInstructions/${recipeId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ instructions: updatedInstructions }),
+      const requestBody = JSON.stringify({
+        recipeId: recipeId,
+        instructions: updatedInstructions,
       });
+      const response = await fetch(
+        "/api/updateInstructions/updateInstructions",
+        {
+          method: "POST",
+          body: requestBody,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ instructions: editedInstructions }),
+        }
+      );
       if (response.ok) {
         setInstructions(updatedInstructions);
         setEditMode(false);

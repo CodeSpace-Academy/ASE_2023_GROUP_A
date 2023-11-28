@@ -28,6 +28,7 @@ import InstructionF from "../Instructions/instructions";
  * @param {string} props.sortOrder - The current sorting order.
  * @returns {JSX.Element} - The component's rendered elements.
  */
+
 export default function Hero({
   handleDefaultSearch,
   onSearch,

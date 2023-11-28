@@ -19,10 +19,10 @@ function Home() {
   const fetcher = (url) => fetch(url).then((res) => res.json());
 
   // Use the useSWR hook to fetch data for the user's favorite recipes
-  const {
-    data: favoritesData,
-    error,
-  } = useSWR("api/recipes/Favourites", fetcher);
+  const { data: favoritesData, error } = useSWR(
+    "api/recipes/Favourites",
+    fetcher
+  );
 
   /**
    * A function to manually refresh the favorites data.
@@ -43,10 +43,10 @@ function Home() {
 
   // Check if required environment variables are present, if not, display an error component
   if (
-    process.env === undefined
-    || !process.env.mongodb_password
-    || !process.env.mongodb_username
-    || !process.env.mongodb_uri
+    process.env === undefined ||
+    !process.env.mongodb_password ||
+    !process.env.mongodb_username ||
+    !process.env.mongodb_uri
   ) {
     return <EnvError />;
   }
