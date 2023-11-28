@@ -20,6 +20,7 @@ import Fuse from "fuse.js";
 import RecipeCard from '../../components/Cards/RecipeCard';
 import FavoritesContext from '../../components/Context/Favorites-context';
 import Loading from '../../components/Loading/Loading';
+import { v4 as KeyUUID } from "uuid";
 
 function FavoritesPage() {
   const favoriteCtx = useContext(FavoritesContext);
@@ -252,9 +253,9 @@ function FavoritesPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredRecipes.map((result) => (
-              <div key={result.recipe.title}>
+              <div key={KeyUUID()}>
                 <RecipeCard
-                  key={result.instructions.length}
+                  key={KeyUUID()}
                   recipe={result.recipe}
                   favorites={favoriteRecipes}
                   searchQuery={searchTerm}

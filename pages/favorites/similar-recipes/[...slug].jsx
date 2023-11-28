@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import Fuse from "fuse.js";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { v4 as KeyUUID } from "uuid";
 import useSimilarRecipesPageContext from "../../../components/Context/CurrentPageContexts/CurrentSimilarRecipesPage.jsx";
 import FavoritesContext from "../../../components/Context/Favorites-context";
 import RecipeCard from "../../../components/Cards/RecipeCard";
@@ -41,7 +42,7 @@ function SimilarRecipes() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const favoriteContext = useContext(FavoritesContext);
   const [sortOrder, setSortOrder] = useState("default");
-  console.log("CURRENT PAGE:", currentSimilarRecipesPage);
+  // console.log("CURRENT PAGE:", currentSimilarRecipesPage);
   const fetcher = (url) => fetch(url).then((res) => res.json());
   // Use the useSWR hook to fetch data for the user's favorite recipes
   const {
@@ -252,7 +253,7 @@ function SimilarRecipes() {
             <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {similarRecipes.map((recipe, index) => (
                 <RecipeCard
-                  Key={recipe._id + index}
+                  Key={KeyUUID()}
                   recipe={recipe}
                   favorites={favorites}
                 />

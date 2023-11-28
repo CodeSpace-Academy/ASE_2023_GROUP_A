@@ -27,7 +27,9 @@
 
       "no-alert ":"off",
 
-      "react-hooks/rules-of-hooks":"off"
-      
+      "react-hooks/rules-of-hooks":"off",
+      "import/no-named-as-default": "off",
+      "import/no-named-as-default-member": "off",
+
     }
 }

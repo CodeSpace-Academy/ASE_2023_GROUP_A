@@ -7,6 +7,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { v4 as KeyUUID } from "uuid";
 
 import fetchRecipes from "../../helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
@@ -53,12 +54,11 @@ function RecipeList({ favorites }) {
     data: recipesData,
     error: recipesError,
     isLoading,
-  } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
-
+  } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes, {
+    revalidateOnFocus: false, // Disable revalidation on focus to prevent unnecessary re-fetching
+  });
   if (recipesError) {
-    return (
-      <h1>Error Failed to Fetch Recipes</h1>
-    );
+    return <h1>Error Failed to Fetch Recipes</h1>;
   }
 
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
@@ -75,13 +75,13 @@ function RecipeList({ favorites }) {
       setTotalRecipes(recipesData.totalRecipes);
       mutate(`/api/recipes?page=${currentPage}`);
     }
-  }, [currentPage, favorites, isLoading, recipesData]);
+  }, [favorites, isLoading, recipesData]);
 
   function countAppliedFilters(
     selectedCategories,
     selectedIngredients,
     selectedTags,
-    selectedInstructions,
+    selectedInstructions
   ) {
     let count = 0;
 
@@ -100,7 +100,10 @@ function RecipeList({ favorites }) {
     if (selectedInstructions > 0) {
       count++;
     }
-
+    // Check if selectedInstructions is not null before comparing
+    if (selectedInstructions !== null && selectedInstructions > 0) {
+      count++;
+    }
     return count;
   }
 
@@ -109,7 +112,7 @@ function RecipeList({ favorites }) {
       selectedCategories,
       selectedIngredients,
       selectedTags,
-      selectedInstructions,
+      selectedInstructions
     );
     setFilterCount(counts);
   }, [
@@ -144,9 +147,9 @@ function RecipeList({ favorites }) {
                 selectedInstructions > 0
                   ? "Specified number of steps"
                   : searchQuery.length > 0
-                    ? searchQuery
-                    : "chosen filters"
-              }`,
+                  ? searchQuery
+                  : "chosen filters"
+              }`
             );
           } else {
             setNoRecipesFoundMessage(null);
@@ -229,11 +232,11 @@ function RecipeList({ favorites }) {
     let typingTimeout;
 
     if (
-      searchQuery.length <= 4
-      || selectedTags.length > 0
-      || selectedIngredients.length > 0
-      || selectedCategories.length > 0
-      || selectedInstructions
+      searchQuery.length <= 4 ||
+      selectedTags.length > 0 ||
+      selectedIngredients.length > 0 ||
+      selectedCategories.length > 0 ||
+      selectedInstructions
     ) {
       clearTimeout(typingTimeout);
 
@@ -268,7 +271,7 @@ function RecipeList({ favorites }) {
         setAutocompleteSuggestions([]);
       } else {
         const response = await fetch(
-          `/api/autocomplete?searchQuery=${searchInput}`,
+          `/api/autocomplete?searchQuery=${searchInput}`
         );
 
         if (response.ok) {
@@ -323,7 +326,7 @@ function RecipeList({ favorites }) {
   const recipesPerPage = 100;
   const displayRemainingRecipes = Math.max(
     0,
-    totalRecipes - recipesPerPage * currentPage,
+    totalRecipes - recipesPerPage * currentPage
   );
   return (
     <div>
@@ -357,7 +360,7 @@ function RecipeList({ favorites }) {
           onClick={handleViewFavorites}
           className="bg-blue-500 px-4 py-2 rounded-md"
         >
-          {!showCarousel ? "view Favourites" : "Hide Favourites"}
+          {showCarousel ? "Hide Favourites" : "view Favourites"}
         </button>
 
         {showCarousel && (
@@ -390,12 +393,23 @@ function RecipeList({ favorites }) {
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
           {autocompleteSuggestions.map((suggestion, index) => (
-            <li
-              key={`${index}:${suggestiong}`}
-             >
-                <button type="button" onClick={() => handleAutocompleteSelect(suggestion)}>
+            <li key={`${index}:${suggestion}`}>
+              <button
+                type="button"
+                onClick={() => handleAutocompleteSelect(suggestion)}
+              >
                 {suggestion}
-                </button>
+              </button>
+            </li>
+          ))}
+          {autocompleteSuggestions.map((suggestion, index) => (
+            <li key={KeyUUID()}>
+              <button
+                type="button"
+                onClick={() => handleAutocompleteSelect(suggestion)}
+              >
+                {suggestion}
+              </button>
             </li>
           ))}
         </ul>
@@ -413,10 +427,11 @@ function RecipeList({ favorites }) {
         </p>
       ) : (
         <div>
-          {!recipes ? <Loading /> : (
-            <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {recipes.map((recipe, pos) => (
-                <div key={pos}>
+          {recipes.length === 0 ? (
+            <Loading />
+          ) : (<div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {recipes.map((recipe) => (
+                <div key={KeyUUID()}>
                   <RecipeCard
                     key={recipe._id}
                     favorites={favorites}
@@ -434,8 +449,7 @@ function RecipeList({ favorites }) {
         <>
           <p style={{ textAlign: "center" }}>
             <span style={{ fontWeight: "bold" }}>
-              {displayRemainingRecipes}
-              {" "}
+              {displayRemainingRecipes}{" "}
             </span>
             recipes remaining
           </p>

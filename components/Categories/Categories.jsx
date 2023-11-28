@@ -10,7 +10,7 @@ import Select from "react-select";
  * @param {Function} props.setSelectedCategories - The function to set selected categories.
  * @returns {JSX.Element} - The component's rendered elements.
  */
-function Categories({ selectedCategories, setSelectedCategories }) {
+const Categories = ({ selectedCategories, setSelectedCategories }) => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
