@@ -1,5 +1,5 @@
 import React from "react";
-import { FaArrowUp,FaArrowDown } from "react-icons/fa";
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import classes from "./floatingButton.module.css";
 
 export default function FloatingButton() {
@@ -14,6 +14,7 @@ export default function FloatingButton() {
   };
   return (
     <>
+      { /* eslint-disable-next-line jsx-a11y/no-static-element-interactions */ }
       <div className={classes.floatingButton} onClick={handleScrollToTop}>
         <FaArrowUp />
       </div>
