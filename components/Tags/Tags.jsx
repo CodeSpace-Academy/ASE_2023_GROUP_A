@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
-import { useTheme } from "../Context/ThemeContext";
-
-function Tags({
-  setFilterTagsResults,
-  handleDefaultTagFilter,
-  setRecipes,
-  setSelectedTags,
-  selectedTags,
-}) {
+/**
+ * Functional component representing a tags selection component.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {Function} props.setSelectedTags - The function to set the selected tags.
+ * @param {string[]} props.selectedTags - The currently selected tags.
+ * @returns {JSX.Element} - The component's rendered elements.
+ */
+function Tags({ setSelectedTags, selectedTags }) {
   const [tags, setTags] = useState([]);
-  const {theme} = useTheme()
 
   useEffect(() => {
     async function fetchTags() {
@@ -24,52 +24,24 @@ function Tags({
           if (data) {
             setTags(data.map((tag) => ({ label: tag, value: tag })));
           } else {
-            console.error("Response data is missing tags.");
+            throw Error;
           }
         } else {
-          console.error("Failed to fetch tags");
+          throw Error;
         }
       } catch (error) {
-        console.error("Error fetching tags:", error);
+        throw Error;
       }
     }
 
     fetchTags();
   }, []);
 
-  useEffect(() => {
-    const fetchRecipesByTags = async () => {
-      if (selectedTags.length === 0) {
-        setFilterTagsResults([]);
-      } else {
-        try {
-          const response = await fetch(`/api/filterbytags`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ selectedTags }),
-          });
-
-          if (response.ok) {
-            const filterTagsResult = await response.json();
-            setFilterTagsResults(filterTagsResult.recipes);
-          } else {
-            console.error("Failed to fetch tags by category");
-          }
-        } catch (error) {
-          console.error("Error fetching recipes by tags:", error);
-        }
-      }
-    };
-
-    if (selectedTags.length > 0) {
-      fetchRecipesByTags(selectedTags);
-    } else {
-      handleDefaultTagFilter();
-    }
-  }, [selectedTags, setRecipes]);
-
+  /**
+   * Handles the change in selected tags.
+   *
+   * @param {Object} selectedOptions - The selected tag options to filter by.
+   */
   const handleTagChange = (selectedOptions) => {
     setSelectedTags(selectedOptions.map((option) => option.value));
   };
@@ -77,15 +49,18 @@ function Tags({
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "#3496c7",
+      background: "red",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: theme === 'light' ? "#007bff" : "#0d203eee",
-      color: "white",
+      backgroundColor: "#007bff",
+      color: "black",
       width: "fitContent",
+      cursor: "pointer",
+
+      "&:hover": { background: "lightBlue" },
     }),
 
     multiValueLabel: (base) => ({
@@ -110,7 +85,7 @@ function Tags({
       <Select
         isMulti
         options={tags}
-        value={tags.filter((tag) => selectedTags.includes(tag.value))}
+        value={tags.filter((tag) => selectedTags?.includes(tag.value))}
         onChange={handleTagChange}
         styles={customStyles}
         blurInputOnSelect

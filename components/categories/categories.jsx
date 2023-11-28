@@ -1,20 +1,26 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import Select from "react-select";
 
-import { useTheme } from "../Context/ThemeContext";
-
-function Categories({
-  setFilterCategoryResults,
-  handleDefaultCategoryFilter,
-  setRecipes,
-  selectedCategories,
-  setSelectedCategories,
-}) {
+/**
+ * Functional component representing a multi-select dropdown for categories.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {string[]} props.selectedCategories - The selected categories.
+ * @param {Function} props.setSelectedCategories - The function to set selected categories.
+ * @returns {JSX.Element} - The component's rendered elements.
+ */
+function Categories({ selectedCategories, setSelectedCategories }) {
   const [categories, setCategories] = useState([]);
 
-  const {theme} = useTheme()
-
   useEffect(() => {
+    /**
+     * Fetches categories from the server and sets them in the component state.
+     *
+     * @async
+     * @function
+     * @throws {Error} If there is an issue fetching categories.
+     */
     async function fetchCategories() {
       try {
         const response = await fetch("/api/categories");
@@ -38,57 +44,31 @@ function Categories({
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    const fetchRecipesByCategories = async () => {
-      if (selectedCategories.length === 0) {
-        setFilterCategoryResults([]);
-      } else {
-        try {
-          const response = await fetch(`/api/filterbycategory`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ selectedCategories }),
-          });
-
-          if (response.ok) {
-            const filterResult = await response.json();
-            // setRecipes(filterResult.recipes);
-            setFilterCategoryResults(filterResult.recipes);
-            // setCount(filterResult.recipes.length);
-          } else {
-            console.error("Failed to fetch recipes by category");
-          }
-        } catch (error) {
-          console.error("Error fetching recipes by category:", error);
-        }
-      }
-    };
-
-    if (selectedCategories.length > 0) {
-      fetchRecipesByCategories(selectedCategories);
-    } else {
-      handleDefaultCategoryFilter();
-    }
-  }, [selectedCategories, setRecipes]);
-
+  /**
+   * Handles the change event when categories are selected or deselected.
+   *
+   * @param {Object[]} selectedOptions - The selected category options to filter by.
+   */
   const handleCategoryChange = (selectedOptions) => {
     setSelectedCategories(selectedOptions.map((option) => option.value));
   };
 
+  // Custom styles for the React Select component
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "#3496c7",
+      background: "red",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: theme === 'light' ? "#007bff" : "#0d203eee",
-      color: "white",
+      backgroundColor: "#007bff",
+      color: "black",
       width: "fitContent",
+      cursor: "pointer",
+
+      "&:hover": { background: "lightBlue" },
     }),
 
     multiValueLabel: (base) => ({
@@ -114,12 +94,12 @@ function Categories({
         isMulti
         options={categories}
         value={categories.filter((category) =>
-          selectedCategories.includes(category.value)
+          selectedCategories?.includes(category.value)
         )}
         onChange={handleCategoryChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="Select Category"
+        placeholder="Select category"
       />
     </div>
   );
