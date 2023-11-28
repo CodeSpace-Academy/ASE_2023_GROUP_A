@@ -375,9 +375,8 @@ export const updateRecipeInstructions = async (
 
     if (result.matchedCount > 0) {
       return { success: true, message: "Instructions updated successfully" };
-    } else {
-      return { success: false, message: "Recipe not found" };
     }
+    return { success: false, message: "Recipe not found" };
   } catch (error) {
     console.error("Error updating instructions:", error);
     throw error;

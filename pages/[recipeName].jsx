@@ -1,11 +1,12 @@
+import React from "react";
 import { useRouter } from "next/router";
-import Recipe from "../components/Recipes/Recipe";
 import useSWR from "swr";
-import Loading from "@/components/Loading/Loading";
+import Recipe from "../components/Recipes/Recipe";
+import Loading from "../components/Loading/Loading";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-const RecipePage = () => {
+function RecipePage() {
   const router = useRouter();
   const { recipeName } = router.query;
 
@@ -23,7 +24,10 @@ const RecipePage = () => {
   const { recipe, allergens } = data;
 
   if (!recipe || !recipe.description || !allergens) {
-    <p>Can't find recipes for ${recipeName}</p>
+    <p>
+      Can not find recipes for $
+      {recipeName}
+    </p>;
   }
 
   return (
@@ -35,6 +39,6 @@ const RecipePage = () => {
       />
     </div>
   );
-};
+}
 
 export default RecipePage;

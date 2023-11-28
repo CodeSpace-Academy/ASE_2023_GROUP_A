@@ -1,11 +1,12 @@
-import { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Loading from "../Loading/Loading";
-import { request } from "http";
 
-const EditRecipeInstructions = ({ instructions, onSave }) => {
+function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
   const [editedInstructions, setEditedInstructions] = useState([
     ...instructions,
   ]);
+  const router = useRouter();
 
   const handleInputChange = (index, newValue) => {
     const updatedInstructions = [...editedInstructions];
@@ -13,31 +14,64 @@ const EditRecipeInstructions = ({ instructions, onSave }) => {
     setEditedInstructions(updatedInstructions);
   };
 
-  const handleSave = () => {
-    onSave(editedInstructions);
-    console.log("clicked at save");
+  const handleInstructionsSave = async () => {
+    const requestBody = JSON.stringify({
+      recipeId,
+      instructions: editedInstructions,
+    });
+    try {
+      const response = await fetch("/api/updateInstructions", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: requestBody,
+      });
+      if (response.ok) {
+        router.replace(router.asPath);
+      } else {
+        console.error("Failed to update instructions.");
+      }
+    } catch (error) {
+      console.error("Error updating instructions:", error);
+    }
   };
-
+  const handleCancel = () => {
+    onCancel();
+  };
   return (
-    <Fragment>
-      <h3 className='mt-2 text-lg font-semibold'>Edit Instructions</h3>
-      <ol className='list-decimal list-inside'>
+    <>
+      <h3 className="mt-2 text-lg font-semibold">Edit Instructions</h3>
+      <ol className="list-decimal list-inside bg-pink-200">
         {editedInstructions.map((instruction, index) => (
-          <li key={index}>
+          <li key={editedInstructions.recipeId}>
             <input
-              type='text'
+              className="bg-orange-200 w-full"
+              type="text"
               value={instruction}
               onChange={(e) => handleInputChange(index, e.target.value)}
             />
           </li>
         ))}
       </ol>
-      <button onClick={handleSave}>Save</button>
-    </Fragment>
+      <div className="flex flex-row gap-4">
+        {" "}
+        <div>
+          <button type="button" onClick={handleInstructionsSave}>
+            Save
+          </button>
+        </div>
+        <div>
+          <button type="button" onClick={handleCancel}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    </>
   );
-};
+}
 
-const RecipeInstructions = ({ recipes, recipeId }) => {
+function RecipeInstructions({ recipes, recipeId }) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [instructions, setInstructions] = useState([]);
@@ -55,10 +89,10 @@ const RecipeInstructions = ({ recipes, recipeId }) => {
 
           const reorderedInstructions = sortedInstructions.map(
             (instruction) => (
-              <li key={instruction.index} className='text-gray-1000'>
+              <li key={instruction.index} className="text-gray-1000">
                 {instruction.instruction}
               </li>
-            )
+            ),
           );
 
           setInstructions(reorderedInstructions);
@@ -67,7 +101,7 @@ const RecipeInstructions = ({ recipes, recipeId }) => {
           setError("No instructions found.");
           setLoading(false);
         }
-      } catch (error) {
+      } catch {
         setError("An error occurred while fetching instructions.");
         setLoading(false);
       }
@@ -80,57 +114,38 @@ const RecipeInstructions = ({ recipes, recipeId }) => {
     setEditMode((prevEditMode) => !prevEditMode);
   };
 
-  const handleInstructionsSave = async (updatedInstructions) => {
-    try {
-      const requestBody = JSON.stringify({
-        recipeId: recipeId,
-        instructions: updatedInstructions,
-      });
-      const response = await fetch(
-        "/api/updateInstructions/updateInstructions",
-        {
-          method: "POST",
-          body: requestBody,
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ instructions: editedInstructions }),
-        }
-      );
-      if (response.ok) {
-        setInstructions(updatedInstructions);
-        setEditMode(false);
-      } else {
-        console.error("Keo, it Failed to update instructions.");
-      }
-    } catch (error) {
-      console.error("Error updating instructions:", error);
-    }
-    console.log("Save by the bell");
+  const handleCancelEdit = () => {
+    setEditMode(false);
   };
 
+
+  let content;
+  if (loading) {
+    content = <Loading />;
+  } else if (error) {
+    content = <p>{error}</p>;
+  } else if (editMode) {
+    content = (
+      <EditRecipeInstructions
+        instructions={recipes.instructions} 
+        recipeId={recipeId}
+        onCancel={handleCancelEdit} />
+    );
+  } else {
+    content = (
+      <>
+        <ol className="list-decimal list-inside">{instructions}</ol>
+        <button onClick={toggleEditMode} type="button">Edit Instructions</button>
+      </>
+    );
+  }
+
   return (
-    <Fragment>
-      <h3 className='mt-2 text-lg font-semibold'></h3>
-      {loading ? (
-        <p>
-          <Loading />
-        </p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : editMode ? (
-        <EditRecipeInstructions
-          instructions={recipes.instructions}
-          onSave={handleInstructionsSave}
-        />
-      ) : (
-        <Fragment>
-          <ol className='list-decimal list-inside'>{instructions}</ol>
-          <button onClick={toggleEditMode}>Edit Instructions</button>
-        </Fragment>
-      )}
-    </Fragment>
+    <>
+      <h3 className="text-lg font-semibold"> Instruction </h3>
+      {content}
+    </>
   );
-};
+}
 
 export default RecipeInstructions;

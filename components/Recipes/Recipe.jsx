@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { FiBook } from "react-icons/fi";
-import { FaArrowLeft, FaTag, FaUsers } from "react-icons/fa";
+import { FaArrowLeft, FaUsers } from "react-icons/fa";
 import {
   CookTime,
   PrepTime,
@@ -18,9 +18,8 @@ import Loading from "../Loading/Loading";
 import { useTheme } from "../Context/ThemeContext";
 
 function Recipe({ recipe, Allergies }) {
-  const [showTags, setShowTags] = useState(false);
-  const [showInstructions, setShowInstructions] = useState(false);
-  const [currentRecipeId, setCurrentRecipeId] = useState(null);
+  const [showInstructions] = useState(false);
+
   const { theme } = useTheme();
 
   if (!recipe) { return (<Loading />); }
@@ -29,8 +28,6 @@ function Recipe({ recipe, Allergies }) {
   const ingredientsList = Object.entries(recipe.ingredients).map(
     (ingredient) => `${ingredient}`,
   );
-
-  const firstImage = recipe.images[0];
 
   return (
     <div className={` mt-19 p-14 ${textClass}`}>
@@ -96,10 +93,7 @@ function Recipe({ recipe, Allergies }) {
               <IngredientsList
                 ingredients={Object.entries(recipe.ingredients)}
               />
-              <h3 className={`text-lg font-semibold ${textClass}`}>
-                Instructions
-              </h3>
-              <RecipeInstructions recipes={recipe} />
+              <RecipeInstructions recipes={recipe} recipeId={recipe._id} />
               <div className={`${textClass} mt-4`}>
                 <Published published={recipe.published} />
               </div>
