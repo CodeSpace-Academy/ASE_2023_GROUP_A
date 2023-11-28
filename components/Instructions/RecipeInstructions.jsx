@@ -1,97 +1,127 @@
-// import React, { Fragment, useState, useEffect } from "react";
-// import Loading from "../Loading/Loading";
+import { Fragment, useState, useEffect } from "react";
+import Loading from "../Loading/Loading";
 
-// const RecipeInstructions = ({ recipes, onUpdateInstructions }) => {
-//   const [isEditing, setIsEditing] = useState(false);
-//   const [instructions, setInstructions] = useState([]);
-//   const [editedInstructions, setEditedInstructions] = useState("");
-//   const [error, setError] = useState(null);
-//   const [loading, setLoading] = useState(true);
+const EditRecipeInstructions = ({ instructions, onSave }) => {
+  const [editedInstructions, setEditedInstructions] = useState([
+    ...instructions,
+  ]);
 
-//   useEffect(() => {
-//     // Delay for simulating a loading state (e.g., 2 seconds)
-//     const delay = 2000;
+  const handleInputChange = (index, newValue) => {
+    const updatedInstructions = [...editedInstructions];
+    updatedInstructions[index] = newValue;
+    setEditedInstructions(updatedInstructions);
+  };
 
-//     // Set a timeout to fetch and process instructions
-//     const timeoutId = setTimeout(() => {
-//       try {
-//         // Sort the instructions based on their index
-//         const sortedInstructions = recipes.instructions.map(
-//           (instruction, index) => ({ index, instruction })
-//         );
-//         sortedInstructions.sort((a, b) => a.index - b.index);
+  const handleSave = () => {
+    onSave(editedInstructions);
+    console.log("clicked at save");
+  };
 
-//         // Map the sorted instructions to list items
-//         const reorderedInstructions = sortedInstructions.map(
-//           (instruction) => instruction.instruction
-//         );
+  return (
+    <Fragment>
+      <h3 className='mt-2 text-lg font-semibold'>Edit Instructions</h3>
+      <ol className='list-decimal list-inside'>
+        {editedInstructions.map((instruction, index) => (
+          <li key={index}>
+            <input
+              type='text'
+              value={instruction}
+              onChange={(e) => handleInputChange(index, e.target.value)}
+            />
+          </li>
+        ))}
+      </ol>
+      <button onClick={handleSave}>Save</button>
+    </Fragment>
+  );
+};
 
-//         // Set the reordered instructions and mark loading as complete
-//         setInstructions(reorderedInstructions.join("\n"));
-//         setEditedInstructions(reorderedInstructions.join("\n"));
-//         setLoading(false);
-//       } catch (error) {
-//         // Handle any errors that occur during the process
-//         setError("An error occurred while fetching instructions.");
-//         setLoading(false);
-//       }
-//     }, delay);
+const RecipeInstructions = ({ recipes, recipeId }) => {
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [instructions, setInstructions] = useState([]);
+  const [editMode, setEditMode] = useState(false);
 
-//     // Cleanup the timeout to prevent memory leaks
-//     return () => clearTimeout(timeoutId);
-//   }, [recipes.instructions]);
+  useEffect(() => {
+    const delay = 2000;
+    const timeoutId = setTimeout(() => {
+      try {
+        if (recipes && recipes.instructions) {
+          const sortedInstructions = recipes.instructions.map(
+            (instruction, index) => ({ index, instruction })
+          );
+          sortedInstructions.sort((a, b) => a.index - b.index);
 
-//   const toggleEditing = () => {
-//     setIsEditing(!isEditing);
-//   };
+          const reorderedInstructions = sortedInstructions.map(
+            (instruction) => (
+              <li key={instruction.index} className='text-gray-1000'>
+                {instruction.instruction}
+              </li>
+            )
+          );
 
-//   const handleSaveInstructions = () => {
-//     // Call an API to save the updated instructions
-//     const updatedInstructions = editedInstructions.split("\n").map((instruction) => instruction.trim());
-    
-//     // Check if onUpdateInstructions is a function before calling it
-//     if (typeof onUpdateInstructions === 'function') {
-//       onUpdateInstructions(updatedInstructions);
+          setInstructions(reorderedInstructions);
+          setLoading(false);
+        } else {
+          setError("No instructions found.");
+          setLoading(false);
+        }
+      } catch (error) {
+        setError("An error occurred while fetching instructions.");
+        setLoading(false);
+      }
+    }, delay);
 
-//       // Update state and exit editing mode
-//       setInstructions(updatedInstructions.join("\n"));
-//       setIsEditing(false);
-//     } else {
-//       console.error("onUpdateInstructions is not a function");
-//     }
-//   };
+    return () => clearTimeout(timeoutId);
+  }, [recipes]);
 
-//   return (
-//     <Fragment>
-//       {loading ? (
-//         <p>
-//           <Loading />
-//         </p>
-//       ) : error ? (
-//         <p>{error}</p>
-//       ) : (
-//         <div>
-//           {isEditing ? (
-//             <div>
-//               <textarea
-//                 value={editedInstructions}
-//                 onChange={(e) => setEditedInstructions(e.target.value)}
-//                 rows={10}
-//                 cols={70}
-//               />
-//               <button onClick={handleSaveInstructions}>Save</button>
-//               <button onClick={toggleEditing}>Cancel</button>
-//             </div>
-//           ) : (
-//             <div>
-//               <ol className="list-decimal list-inside">{instructions}</ol>
-//               <button onClick={toggleEditing}>Edit Instructions</button>
-//             </div>
-//           )}
-//         </div>
-//       )}
-//     </Fragment>
-//   );
-// };
+  const toggleEditMode = () => {
+    setEditMode((prevEditMode) => !prevEditMode);
+  };
 
-// export default RecipeInstructions;
+  const handleInstructionsSave = async (updatedInstructions) => {
+    try {
+      const response = await fetch(`/api/updateInstructions/${recipeId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ instructions: updatedInstructions }),
+      });
+      if (response.ok) {
+        setInstructions(updatedInstructions);
+        setEditMode(false);
+      } else {
+        console.error("Keo, it Failed to update instructions.");
+      }
+    } catch (error) {
+      console.error("Error updating instructions:", error);
+    }
+    console.log("Save by the bell");
+  };
+
+  return (
+    <Fragment>
+      <h3 className='mt-2 text-lg font-semibold'></h3>
+      {loading ? (
+        <p>
+          <Loading />
+        </p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : editMode ? (
+        <EditRecipeInstructions
+          instructions={recipes.instructions}
+          onSave={handleInstructionsSave}
+        />
+      ) : (
+        <Fragment>
+          <ol className='list-decimal list-inside'>{instructions}</ol>
+          <button onClick={toggleEditMode}>Edit Instructions</button>
+        </Fragment>
+      )}
+    </Fragment>
+  );
+};
+
+export default RecipeInstructions;

@@ -1,9 +1,10 @@
 {
-    "docwriter.style": "JSDoc",
-    "files.autoSave": "afterDelay",
-    "editor.cursorStyle": "line",
-    "editor.wordWrap": "on",
-    "workbench.editor.autoLockGroups": {
-        "mainThreadWebview-markdown.preview": true
-    }
+  "docwriter.style": "JSDoc",
+  "files.autoSave": "afterDelay",
+  "editor.cursorStyle": "line",
+  "editor.wordWrap": "on",
+  "workbench.editor.autoLockGroups": {
+    "mainThreadWebview-markdown.preview": true
+  },
+  "editor.inlineSuggest.showToolbar": "always"
 }

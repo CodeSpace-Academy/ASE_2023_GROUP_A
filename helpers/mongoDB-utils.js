@@ -296,3 +296,26 @@ export async function handleUpdateInstructions(recipeId, updatedInstruction) {
     throw error;
   }
 }
+
+export const updateRecipeInstructions = async (
+  recipeId,
+  updatedInstructions
+) => {
+  const collection = client.db("devdb").collection("recipes");
+
+  try {
+    const result = await collection.updateOne(
+      { _id: recipeId },
+      { $set: { instructions: updatedInstructions } }
+    );
+
+    if (result.matchedCount > 0) {
+      return { success: true, message: "Instructions updated successfully" };
+    } else {
+      return { success: false, message: "Recipe not found" };
+    }
+  } catch (error) {
+    console.error("Error updating instructions:", error);
+    throw error;
+  }
+};
