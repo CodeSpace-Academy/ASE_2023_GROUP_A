@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Select from "react-select";
+import { useTheme } from "../Context/ThemeContext";
 
 /**
  * Functional component representing a multi-select dropdown for categories.
@@ -12,6 +13,7 @@ import Select from "react-select";
  */
 function Categories({ selectedCategories, setSelectedCategories }) {
   const [categories, setCategories] = useState([]);
+  const { theme } = useTheme();
 
   useEffect(() => {
     /**
@@ -57,13 +59,13 @@ function Categories({ selectedCategories, setSelectedCategories }) {
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
+      background: "#3496c7",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "#007bff",
+      backgroundColor: theme === 'light' ? "#007bff" : "#0d203eee",
       color: "black",
       width: "fitContent",
       cursor: "pointer",
@@ -99,7 +101,7 @@ function Categories({ selectedCategories, setSelectedCategories }) {
         onChange={handleCategoryChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="Select category"
+        placeholder="Select Category"
       />
     </div>
   );

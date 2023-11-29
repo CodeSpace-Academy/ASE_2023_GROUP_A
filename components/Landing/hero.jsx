@@ -29,6 +29,7 @@ import InstructionF from "../Instructions/instructions";
  * @returns {JSX.Element} - The component's rendered elements.
  */
 export default function Hero({
+  theme,
   handleDefaultSearch,
   onSearch,
   setSearchQuery,
@@ -45,8 +46,8 @@ export default function Hero({
   sortOrder,
 }) {
   return (
-    <div className={classes.heroImage}>
-      <div className={classes.heroContent}>
+    <div className={`sm:portrait:h-screen max-w-full ${classes.heroImage}`}>
+      <div className={`sm:mt-20 sm:block ${classes.heroContent} ${theme === "light" ? " bg-blue-400" : " bg-gray-700"} bg-opacity-70`}>
         <div className={classes.search}>
           <SearchBar
             handleDefault={handleDefaultSearch}

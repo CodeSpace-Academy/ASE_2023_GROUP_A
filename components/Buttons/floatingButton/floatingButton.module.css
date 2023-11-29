@@ -2,7 +2,7 @@
   position: fixed;
   bottom: 20%;
   right: 20px;
-  /* background-color: #007bff; */
+  background-color: rgba(87, 116, 158, 0.3);
   color: #fff;
   border: none;
   border-radius: 50%;
@@ -19,13 +19,13 @@
 }
 
 .floatingButton:hover {
-  background-color: #0056b3;
+  background-color: #697FA1;
 }
 .floatingButton2 {
   position: fixed;
   bottom: 10%;
   right: 20px;
-  /* background-color: #007bff; */
+  background-color: rgba(87, 116, 158, 0.3);
   color: #fff;
   border: none;
   border-radius: 50%;
@@ -42,5 +42,5 @@
 }
 
 .floatingButton2:hover {
-  background-color: #0056b3;
+  background-color: #697FA1;
 }
