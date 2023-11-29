@@ -2,7 +2,13 @@ import React, { useContext } from "react";
 import Image from "next/legacy/image";
 import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
-import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
+import {
+  CookTime,
+  PrepTime,
+  TotalTime,
+  Steps,
+  Published,
+} from "../TimeAndDate/TimeConvertor";
 import FavoritesContext from "../Context/Favorites-context";
 import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRecipe";
 import { useTheme } from "../Context/ThemeContext";
@@ -10,7 +16,7 @@ import Loading from "../Loading/Loading";
 import Title from "./Title";
 
 /**
-  * RecipeCard component displays a recipe card with details and interaction buttons.
+ * RecipeCard component displays a recipe card with details and interaction buttons.
  *
  * @component
  * @param {object} props - The properties of the component.
@@ -20,12 +26,7 @@ import Title from "./Title";
  * @param {string} props.Key - The unique key for the recipe card.
  * @returns {JSX.Element} - The rendered RecipeCard component.
  */
-function RecipeCard({
-  recipe,
-  searchQuery,
-  favorites,
-  Key,
-}) {
+function RecipeCard({ recipe, searchQuery, favorites, Key }) {
   const { theme } = useTheme();
   const favoriteCtx = useContext(FavoritesContext);
 
@@ -39,7 +40,8 @@ function RecipeCard({
   }
 
   // Determine the first image for the recipe
-  const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
+  const firstImage =
+    recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
 
   // Check if the recipe is marked as a favorite
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
@@ -108,16 +110,13 @@ function RecipeCard({
             title={recipe.title}
             searchQuery={[searchQuery]}
           />
-          <div className="mb-1">
-            {/* Display preparation time */}
+          <div className="pl-5">
             <PrepTime prepTime={recipe.prep} />
-          </div>
-          <div className="mb-">
-            {/* Display cooking time */}
             <CookTime cookTime={recipe.cook} />
+            <TotalTime totalTime={recipe} />
+            <Published published={recipe.published} />
+            <Steps instructions={recipe.instructions} />
           </div>
-          {/* Display total time for the recipe */}
-          <TotalTime totalTime={recipe} />
         </div>
         <div>
           {/* Display favorite button */}
@@ -126,18 +125,22 @@ function RecipeCard({
               <span aria-label="Remove from favorites">
                 {/* Display filled star icon for favorites */}
                 <StarFilled
-                  className={`w-6 h-6 ${
+                  className={`w-6 h-6 ml-5 ${
                     theme === "light" ? "text-blue-900" : "text-custom-blue-10"
                   }`}
                 />
               </span>
             </button>
           ) : (
-            <button type="button" onClick={addFavoritesHandler} aria-label="Add to favorites">
+            <button
+              type="button"
+              onClick={addFavoritesHandler}
+              aria-label="Add to favorites"
+            >
               <span>
                 {/* Display empty star icon for non-favorites */}
                 <StarEmpty
-                  className={`w-6 h-6 ${
+                  className={`w-6 h-6 ml-5 ${
                     theme === "dark" ? "text-white" : "text-custom-blue-10"
                   }`}
                 />
