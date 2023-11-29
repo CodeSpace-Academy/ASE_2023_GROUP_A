@@ -33,7 +33,7 @@ import { responsive } from "../../helpers/settings/settings";
 
 function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
-  const { currentPage, setCurrentPage } = usePageContext();
+  const { currentPage, updatePage, api } = usePageContext();
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -54,7 +54,7 @@ function RecipeList({ favorites }) {
     data: recipesData,
     error: recipesError,
     isLoading,
-  } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes, {
+  } = useSWR(`${api}`, fetchRecipes, {
     revalidateOnFocus: false, // Disable revalidation on focus to prevent unnecessary re-fetching
   });
   if (recipesError) {
@@ -64,19 +64,26 @@ function RecipeList({ favorites }) {
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
 
   const handlePageChange = (event, page) => {
-    setCurrentPage(page);
+    updatePage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  useEffect(() => {
+    console.log("RECIPES EFFECT1:", recipes);
+    updatePage(currentPage);
+  }, [currentPage, recipesData]);
 
   useEffect(() => {
     favoriteContext.updateFavorites(favorites);
     if (!isLoading && recipesData) {
-      setRecipes(recipesData.recipes);
+      // setRecipes(recipesData.recipes);
       setTotalRecipes(recipesData.totalRecipes);
-      mutate(`/api/recipes?page=${currentPage}`);
+      mutate(`${api}`);
+      // setCurrentApiRout(`/api/recipes?page=${currentPage}`);
     }
   }, [favorites, isLoading, recipesData]);
 
+  console.log("RECIPES:", recipes);
+  
   function countAppliedFilters(
     selectedCategories,
     selectedIngredients,
@@ -201,7 +208,6 @@ function RecipeList({ favorites }) {
 
       const queryString = queryParams.toString();
       const url = queryString ? `/?${queryString}` : "/";
-
       router.push(url);
     } catch (error) {
       throw Error;
@@ -210,7 +216,6 @@ function RecipeList({ favorites }) {
 
   useEffect(() => {
     const {
-      page,
       tags,
       ingredients,
       categories,
@@ -219,7 +224,6 @@ function RecipeList({ favorites }) {
       sortOrders,
     } = router.query;
 
-    setCurrentPage(page || 1);
     setSelectedTags(tags ? tags.split(",") : []);
     setSelectedIngredients(ingredients ? ingredients.split(",") : []);
     setSelectedCategories(categories ? categories.split(",") : []);
@@ -299,7 +303,7 @@ function RecipeList({ favorites }) {
     setSelectedInstructions(null);
     setAutocompleteSuggestions([]);
     setFilterCount(0);
-    setCurrentPage((prevPage) => prevPage);
+    updatePage(currentPage);
     router.push("/");
   }
 
@@ -429,7 +433,8 @@ function RecipeList({ favorites }) {
         <div>
           {recipes.length === 0 ? (
             <Loading />
-          ) : (<div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          ) : (
+            <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {recipes.map((recipe) => (
                 <div key={KeyUUID()}>
                   <RecipeCard

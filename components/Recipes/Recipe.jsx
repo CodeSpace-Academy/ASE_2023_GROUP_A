@@ -16,12 +16,14 @@ import IngredientsList from '../Ingredients/IngredientsList';
 import RecipeInstructions from '../Instructions/RecipeInstructions';
 import Loading from '../Loading/Loading';
 import { useTheme } from '../Context/ThemeContext';
+import { usePageContext } from '../Context/CurrentPageContexts/CurrentHomePage';
+
 
 function Recipe({ recipe, Allergies }) {
   const [showTags, setShowTags] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const { theme } = useTheme();
-
+  const { goBack } = usePageContext();
   if (!recipe) { return (<Loading />); }
 
   const textClass = theme === "dark" ? "text-white" : "text-black";
@@ -33,17 +35,15 @@ function Recipe({ recipe, Allergies }) {
 
   return (
     <div className={` mt-19 p-14 ${textClass}`}>
-      <Link href="/">
         <span
           className={`flex text-black-600 text-xl gap-2 p-4 mt-2 ${textClass}`}
         >
-          <button type="button" className="ml-10 flex border bg-gradient-to-br from-white to-gray-400 text-white hover:text-blue-400 px-2 py-2 rounded-lg">
+          <button type="button" onClick={goBack} className="ml-10 flex border bg-gradient-to-br from-white to-gray-400 text-white hover:text-blue-400 px-2 py-2 rounded-lg">
             {" "}
             <FaArrowLeft className="mr-2" />
             <p>Back to More Recipes </p>
           </button>
         </span>
-      </Link>
       <div
         className={`bg-${
           theme === "dark" ? "gray-700" : "white"

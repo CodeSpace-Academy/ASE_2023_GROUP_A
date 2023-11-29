@@ -517,3 +517,108 @@ export const getSimilarRecipesWithTotalCount = async (
     throw error;
   }
 };
+
+
+export const getAllRecipesWithFilter = async (
+  skip,
+  limit,
+  filters,
+  sortOrder
+) => {
+  try {
+    const cl = await client.connect();
+    const db = cl.db("devdb");
+    const collection = db.collection("recipes");
+
+    const { searchQuery, tags, ingredients, categories, instructions } =
+      filters;
+
+    const query = {};
+
+    if (searchQuery && searchQuery.length > 0) {
+      query.$or = [{ title: { $regex: searchQuery, $options: "i" } }];
+    }
+
+    if (categories && categories.length > 0) {
+      query.category = { $all: categories };
+    }
+
+    if (tags && tags.length > 0) {
+      query.tags = { $all: tags };
+    }
+
+    if (ingredients && ingredients.length > 0) {
+      const ingredientQueries = ingredients.map((ingredient) => ({
+        [`ingredients.${ingredient}`]: { $exists: true },
+      }));
+      query.$and = ingredientQueries;
+    }
+
+    if (instructions) {
+      query.instructions = { $size: instructions };
+    }
+
+    let sortCriteria = {};
+
+    if (sortOrder === "[A-Z]") {
+      sortCriteria = { title: 1 };
+    } else if (sortOrder === "[Z-A]") {
+      sortCriteria = { title: -1 };
+    } else if (sortOrder === "Oldest") {
+      sortCriteria = { published: 1 };
+    } else if (sortOrder === "Recent") {
+      sortCriteria = { published: -1 };
+    } else if (sortOrder === "cooktime(asc)") {
+      sortCriteria = { cook: 1 };
+    } else if (sortOrder === "cooktime(desc)") {
+      sortCriteria = { cook: -1 };
+    } else if (sortOrder === "preptime(asc)") {
+      sortCriteria = { prep: 1 };
+    } else if (sortOrder === "preptime(desc)") {
+      sortCriteria = { prep: -1 };
+    } else if (sortOrder === "steps(desc)" || sortOrder === "steps(asc)") {
+      const sortOrderValue = sortOrder === "steps(desc)" ? -1 : 1;
+
+      const result = await collection
+        .aggregate([
+          { $match: query },
+          {
+            $project: {
+              title: 1,
+              instructions: 1,
+              prep: 1,
+              cook: 1,
+              images: 1,
+              sortOrder: { $size: "$instructions" },
+            },
+          },
+          { $sort: { sortOrder: sortOrderValue } },
+          {
+            $project: {
+              title: 1,
+              instructions: 1,
+              prep: 1,
+              cook: 1,
+              images: 1,
+            },
+          },
+        ])
+        .limit(100)
+        .toArray();
+
+      return result;
+    }
+
+    const result = await collection
+      .find(query)
+      .sort(sortCriteria)
+      .limit(100)
+      .skip(skip)
+      .toArray();
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching recipes:", error);
+    throw error;
+  }
+};

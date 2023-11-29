@@ -8,7 +8,11 @@ module that exports a handler function.
 This handler function
 is used to handle a GET request and fetch a
 list of recipes from a MongoDB database. */
-import { getAllRecipes, getTotalRecipesCount } from "../../../helpers/mongoDB-utils";
+import {
+  getAllRecipes,
+  getTotalRecipesCount,
+  getAllRecipesWithFilter,
+} from "../../../helpers/mongoDB-utils";
 
 /* Recipies to be rendered on each page */
 const ITEMS_PER_PAGE = 100;
@@ -20,13 +24,10 @@ const handler = async (req, res) => {
 
   try {
     const page = req.query.page;
-    console.log("INCOMIING REQUEST:", page)
+    console.log("INCOMIING REQUEST:", page);
     const skip = (page - 1) * ITEMS_PER_PAGE;
 
-    const [recipesData, totalRecipes] = await Promise.all([
-      getAllRecipes(skip, ITEMS_PER_PAGE),
-      getTotalRecipesCount(),
-    ]);
+    const data = await getAllRecipesWithFilter();
 
     res.status(200).json({ recipes: recipesData, totalRecipes });
   } catch (error) {
