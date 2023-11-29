@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import Loading from "../Loading/Loading";
 
-function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
-  const [editedInstructions, setEditedInstructions] = useState([
-    ...instructions,
-  ]);
-  const router = useRouter();
+function EditRecipeInstructions({ instructions, recipeId, onCancel, onSaveSuccess }) {
+  const [editedInstructions, setEditedInstructions] = useState([...instructions]);
 
   const handleInputChange = (index, newValue) => {
     const updatedInstructions = [...editedInstructions];
@@ -28,7 +24,7 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
         body: requestBody,
       });
       if (response.ok) {
-        router.replace(router.asPath);
+        onSaveSuccess(); 
       } else {
         console.error("Failed to update instructions.");
       }
@@ -36,15 +32,17 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
       console.error("Error updating instructions:", error);
     }
   };
+
   const handleCancel = () => {
     onCancel();
   };
+
   return (
     <>
       <h3 className="mt-2 text-lg font-semibold">Edit Instructions</h3>
       <ol className="list-decimal list-inside bg-pink-200">
         {editedInstructions.map((instruction, index) => (
-          <li key={editedInstructions.recipeId}>
+          <li key={index}>
             <input
               className="bg-orange-200 w-full"
               type="text"
@@ -55,7 +53,6 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
         ))}
       </ol>
       <div className="flex flex-row gap-4">
-        {" "}
         <div>
           <button type="button" onClick={handleInstructionsSave}>
             Save
@@ -76,10 +73,11 @@ function RecipeInstructions({ recipes, recipeId }) {
   const [loading, setLoading] = useState(true);
   const [instructions, setInstructions] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
 
   useEffect(() => {
-    const delay = 2000;
-    const timeoutId = setTimeout(() => {
+
+    const fetchInstructions = async () => {
       try {
         if (recipes && recipes.instructions) {
           const sortedInstructions = recipes.instructions.map(
@@ -89,7 +87,7 @@ function RecipeInstructions({ recipes, recipeId }) {
 
           const reorderedInstructions = sortedInstructions.map(
             (instruction) => (
-              <li key={instruction.index} className="text-gray-1000">
+              <li key={instruction.index} className="text-black-200  mb-3 ">
                 {instruction.instruction}
               </li>
             ),
@@ -105,10 +103,27 @@ function RecipeInstructions({ recipes, recipeId }) {
         setError("An error occurred while fetching instructions.");
         setLoading(false);
       }
-    }, delay);
+    };
 
-    return () => clearTimeout(timeoutId);
+    fetchInstructions();
   }, [recipes]);
+
+  useEffect(() => {
+    
+    if (updateSuccess) {
+      setEditMode(false);
+     
+      const fetchInstructions = async () => {
+        try {
+          
+        } catch (error) {
+          console.error("Error fetching instructions:", error);
+        }
+      };
+
+      fetchInstructions();
+    }
+  }, [updateSuccess]);
 
   const toggleEditMode = () => {
     setEditMode((prevEditMode) => !prevEditMode);
@@ -118,6 +133,9 @@ function RecipeInstructions({ recipes, recipeId }) {
     setEditMode(false);
   };
 
+  const handleSaveSuccess = () => {
+    setUpdateSuccess(true);
+  };
 
   let content;
   if (loading) {
@@ -127,15 +145,19 @@ function RecipeInstructions({ recipes, recipeId }) {
   } else if (editMode) {
     content = (
       <EditRecipeInstructions
-        instructions={recipes.instructions} 
+        instructions={recipes.instructions}
         recipeId={recipeId}
-        onCancel={handleCancelEdit} />
+        onCancel={handleCancelEdit}
+        onSaveSuccess={handleSaveSuccess}
+      />
     );
   } else {
     content = (
       <>
         <ol className="list-decimal list-inside">{instructions}</ol>
-        <button onClick={toggleEditMode} type="button">Edit Instructions</button>
+        <button onClick={toggleEditMode} type="button">
+          Edit Instructions
+        </button>
       </>
     );
   }
