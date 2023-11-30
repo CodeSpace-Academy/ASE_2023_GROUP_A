@@ -342,10 +342,42 @@ export async function filtering(filters, sortOrder) {
     sortCriteria = { prep: 1 };
   } else if (sortOrder === "preptime(desc)") {
     sortCriteria = { prep: -1 };
-  } else if (sortOrder === "steps(desc)") {
-    sortCriteria = { instructions: -1 };
-  } else if (sortOrder === "steps(asc)") {
-    sortCriteria = { instructions: 1 };
+  } else if (sortOrder === "steps(desc)" || sortOrder === "steps(asc)") {
+    const sortOrderValue = sortOrder === "steps(desc)" ? -1 : 1;
+    try {
+      const result = await collection
+        .aggregate([
+          { $match: query },
+          {
+            $project: {
+              title: 1,
+              instructions: 1,
+              prep: 1,
+              cook: 1,
+              images: 1,
+              sortOrder: { $size: "$instructions" },
+            },
+          },
+          { $sort: { sortOrder: sortOrderValue } },
+          {
+            $project: {
+              title: 1,
+              instructions: 1,
+              prep: 1,
+              cook: 1,
+              images: 1,
+            },
+          },
+        ])
+        .limit(100)
+        .toArray();
+
+      return result;
+    } catch (error) {
+      throw new Error(
+        "could not filter recipes according to the filters selected",
+      );
+    }
   }
 
   try {
@@ -357,6 +389,8 @@ export async function filtering(filters, sortOrder) {
 
     return result;
   } catch (error) {
-    throw new Error("could not filter recipes according to the filters selected");
+    throw new Error(
+      "could not filter recipes according to the filters selected",
+    );
   }
 }
