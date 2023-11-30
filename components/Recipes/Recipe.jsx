@@ -27,8 +27,10 @@ import { useTheme } from "../Context/ThemeContext";
  * @returns {JSX.Element} The Recipe component.
  */
 function Recipe({ recipe, Allergies }) {
-  // State to control the visibility of instructions
-  const [showInstructions] = useState(false);
+  // State to control the visibility of instructions and the number of steps to display initially
+  const [showInstructions, setShowInstructions] = useState(false);
+  const initialStepsToShow = 10;
+  const [visibleSteps, setVisibleSteps] = useState(initialStepsToShow);
 
   // Access the current theme from the ThemeContext
   const { theme } = useTheme();
@@ -47,6 +49,15 @@ function Recipe({ recipe, Allergies }) {
     (ingredient) => `${ingredient}`,
   );
 
+  // Handle click event for "Show More" button
+  const handleShowMore = () => {
+    setShowInstructions(true);
+    setVisibleSteps(recipe.instructions.length);
+  };
+
+  // Render only the visible number of steps
+  const renderedInstructions = recipe.instructions.slice(0, visibleSteps);
+
   return (
     <div className={`mt-12 p-6 lg:p-12 ${textClass}`}>
       {/* Link to navigate back to the list of recipes */}
@@ -63,7 +74,7 @@ function Recipe({ recipe, Allergies }) {
       </Link>
 
       {/* Recipe details grid */}
-      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 ${containerClass} rounded-lg shadow-lg p-6`}>
+      <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 ${containerClass} rounded-lg shadow-lg p-6`}>
         {/* Left column with recipe information */}
         <div>
           <h1 className={`text-3xl font-bold mb-4 ${textClass}`}>
@@ -93,7 +104,6 @@ function Recipe({ recipe, Allergies }) {
           </div>
 
           <div className={`mt-2 ${textClass}`}>
-            <RecipeDetailTags recipe={recipe} />
             <PrepTime prepTime={recipe.prep} />
             <CookTime cookTime={recipe.cook} />
             <TotalTime totalTime={recipe} />
@@ -107,18 +117,30 @@ function Recipe({ recipe, Allergies }) {
         </div>
 
         {/* Right column with ingredients, instructions, and an optional display of instructions */}
-        <div className={`space-y-4 ${textClass}`}>
-          <div className="border-4 border-purple-500 p-4 rounded-lg">
+        <div className={`space-y-12 ${textClass}`}>
+          <div className="border-8 border-purple-500 mt-14 p-4 rounded-lg">
             <h3 className="text-2xl font-semibold">Ingredients:</h3>
             <IngredientsList ingredients={Object.entries(recipe.ingredients)} />
           </div>
-
-          <div className="border-4 border-green-500 p-4 rounded-lg">
+          <RecipeDetailTags recipe={recipe} />
+          <div className="border-8 border-green-500 p-4 rounded-lg space-y-0">
             <h3 className="text-2xl font-semibold">Instructions</h3>
-            <RecipeInstructions recipes={recipe} />
+            {renderedInstructions.map((step, index) => (
+              <p key={index} className="mb-2">
+                {step}
+              </p>
+            ))}
+            {/* Show More button */}
+            {!showInstructions && recipe.instructions.length > initialStepsToShow && (
+              <button
+                type="button"
+                className="text-blue-500 cursor-pointer"
+                onClick={handleShowMore}
+              >
+                Show More
+              </button>
+            )}
           </div>
-
-          {showInstructions && <RecipeInstructions recipes={recipe} />}
         </div>
       </div>
     </div>

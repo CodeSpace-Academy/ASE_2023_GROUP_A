@@ -26,7 +26,9 @@ import Title from "./Title";
  * @param {string} props.Key - The unique key for the recipe card.
  * @returns {JSX.Element} - The rendered RecipeCard component.
  */
-function RecipeCard({ recipe, searchQuery, favorites, Key }) {
+function RecipeCard({
+  recipe, searchQuery, favorites, Key,
+}) {
   const { theme } = useTheme();
   const favoriteCtx = useContext(FavoritesContext);
 
@@ -40,8 +42,7 @@ function RecipeCard({ recipe, searchQuery, favorites, Key }) {
   }
 
   // Determine the first image for the recipe
-  const firstImage =
-    recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
+  const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
 
   // Check if the recipe is marked as a favorite
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
