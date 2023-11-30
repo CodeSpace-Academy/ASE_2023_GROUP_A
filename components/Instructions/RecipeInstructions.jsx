@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from "react";
+import EditRecipeInstructions from "./EditRecipeInstructions";
 import Loading from "../Loading/Loading";
 
-function EditRecipeInstructions({ instructions, recipeId, onCancel, onSaveSuccess }) {
-  const [editedInstructions, setEditedInstructions] = useState([...instructions]);
+/**
+ * This component renders and manages the instructions of a recipe.
+ *  It fetches the instructions from the API, displays them in a list,
+ *  and allows the user to edit them.
+ *
+ * @param {Object} recipes - The recipes object from the parent component.
+ * @param {number} recipeId - The ID of the recipe.
+ * @returns {ReactElement} The recipe instructions component.
+ */
+function RecipeInstructions({ recipes, recipeId }) {
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [instructions, setInstructions] = useState([]);
+  const [editMode, setEditMode] = useState(false);
 
-  const handleInputChange = (index, newValue) => {
-    const updatedInstructions = [...editedInstructions];
-    updatedInstructions[index] = newValue;
-    setEditedInstructions(updatedInstructions);
-  };
+  const [editedInstructions] = useState(instructions);
 
+  /**
+   * Handles the saving of edited instructions.
+   */
   const handleInstructionsSave = async () => {
     const requestBody = JSON.stringify({
       recipeId,
       instructions: editedInstructions,
     });
+
     try {
       const response = await fetch("/api/updateInstructions", {
         method: "PUT",
@@ -23,75 +36,38 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel, onSaveSucces
         },
         body: requestBody,
       });
+
       if (response.ok) {
-        onSaveSuccess(); 
+        setInstructions(editedInstructions);
       } else {
         console.error("Failed to update instructions.");
       }
-    } catch (error) {
+    } catch {
       console.error("Error updating instructions:", error);
+    } finally {
+      setEditMode(false);
     }
   };
 
-  const handleCancel = () => {
-    onCancel();
-  };
-
-  return (
-    <>
-      <h3 className="mt-2 text-lg font-semibold">Edit Instructions</h3>
-      <ol className="list-decimal list-inside bg-pink-200">
-        {editedInstructions.map((instruction, index) => (
-          <li key={index}>
-            <input
-              className="bg-orange-200 w-full"
-              type="text"
-              value={instruction}
-              onChange={(e) => handleInputChange(index, e.target.value)}
-            />
-          </li>
-        ))}
-      </ol>
-      <div className="flex flex-row gap-4">
-        <div>
-          <button type="button" onClick={handleInstructionsSave}>
-            Save
-          </button>
-        </div>
-        <div>
-          <button type="button" onClick={handleCancel}>
-            Cancel
-          </button>
-        </div>
-      </div>
-    </>
-  );
-}
-
-function RecipeInstructions({ recipes, recipeId }) {
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [instructions, setInstructions] = useState([]);
-  const [editMode, setEditMode] = useState(false);
-  const [updateSuccess, setUpdateSuccess] = useState(false);
-
+  /**
+   * Fetches the instructions from the API and sets the state.
+   */
   useEffect(() => {
+    const delay = 2000; 
 
-    const fetchInstructions = async () => {
+    const timeoutId = setTimeout(() => {
       try {
         if (recipes && recipes.instructions) {
           const sortedInstructions = recipes.instructions.map(
-            (instruction, index) => ({ index, instruction })
+            (instruction, index) => ({ index, instruction }),
           );
           sortedInstructions.sort((a, b) => a.index - b.index);
 
-          const reorderedInstructions = sortedInstructions.map(
-            (instruction) => (
-              <li key={instruction.index} className="text-black-200  mb-3 ">
-                {instruction.instruction}
-              </li>
-            ),
-          );
+          const reorderedInstructions = sortedInstructions.map((instruction) => (
+            <li key={instruction.index} className="text-black-200  mb-3">
+              {instruction.instruction}
+            </li>
+          ));
 
           setInstructions(reorderedInstructions);
           setLoading(false);
@@ -103,40 +79,26 @@ function RecipeInstructions({ recipes, recipeId }) {
         setError("An error occurred while fetching instructions.");
         setLoading(false);
       }
-    };
+    }, delay);
 
-    fetchInstructions();
+    return () => clearTimeout(timeoutId);
   }, [recipes]);
 
-  useEffect(() => {
-    
-    if (updateSuccess) {
-      setEditMode(false);
-     
-      const fetchInstructions = async () => {
-        try {
-          
-        } catch (error) {
-          console.error("Error fetching instructions:", error);
-        }
-      };
-
-      fetchInstructions();
-    }
-  }, [updateSuccess]);
-
+  /**
+   * Toggles the edit mode.
+   */
   const toggleEditMode = () => {
     setEditMode((prevEditMode) => !prevEditMode);
   };
 
+  /**
+   * Cancels the editing of instructions.
+   */
   const handleCancelEdit = () => {
     setEditMode(false);
   };
 
-  const handleSaveSuccess = () => {
-    setUpdateSuccess(true);
-  };
-
+  // Determine the content to render based on the loading, error, and edit mode states
   let content;
   if (loading) {
     content = <Loading />;
@@ -148,7 +110,7 @@ function RecipeInstructions({ recipes, recipeId }) {
         instructions={recipes.instructions}
         recipeId={recipeId}
         onCancel={handleCancelEdit}
-        onSaveSuccess={handleSaveSuccess}
+        onSave={handleInstructionsSave}
       />
     );
   } else {
