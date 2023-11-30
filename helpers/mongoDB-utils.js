@@ -378,7 +378,6 @@ export const updateRecipeInstructions = async (
     }
     return { success: false, message: "Recipe not found" };
   } catch (error) {
-    console.error("Error updating instructions:", error);
-    throw error;
+    throw new Error("Error updating instructions:", error);
   }
 };

@@ -1,16 +1,14 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/function-component-definition */
 import React from "react";
 import classes from "./loadMore.module.css";
 import { useTheme } from "../../Context/ThemeContext";
 
-const LoadMoreButton = ({
+function LoadMoreButton({
   handleLoad,
   remainingRecipes,
   totalRecipes,
   isLoadMore,
   currentPage,
-}) => {
+}) {
   const { theme } = useTheme();
   return (
     <div className={`${
@@ -37,6 +35,6 @@ const LoadMoreButton = ({
       </button>
     </div>
   );
-};
+}
 
 export default LoadMoreButton;

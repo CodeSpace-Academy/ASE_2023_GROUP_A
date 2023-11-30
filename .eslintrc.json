@@ -23,6 +23,6 @@
       "react/prop-types": "off",
       //for react hooks to not assume dependencies, mount/unmount
       "react-hooks/exhaustive-deps": "off"
-
+     /* eslint-disable jsx-a11y/control-has-associated-label */
     }
 }
