@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { FiBook } from "react-icons/fi";
 import { FaArrowLeft, FaUsers } from "react-icons/fa";
+import { v4 as uuidv4 } from 'uuid';
+import { Carousel } from 'react-responsive-carousel';
 import {
   CookTime,
   PrepTime,
@@ -11,56 +13,71 @@ import {
 import RecipeDetailTags from "../Tags/RecipeDetailTags";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/allergens";
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import CoverImage from "../Images/CoverImage";
-import IngredientsList from "../ingredients/IngredientsList";
-import RecipeInstructions from "../Instructions/RecipeInstructions";
 import Loading from "../Loading/Loading";
 import { useTheme } from "../Context/ThemeContext";
 
-/**
- * React component for displaying a recipe, including details, image, and instructions.
- *
- * @component
- * @param {Object} props - The properties passed to the component.
- * @param {Object} props.recipe - The recipe object containing information like title, images, etc.
- * @param {Object[]} props.Allergies - An array of allergens associated with the recipe.
- * @returns {JSX.Element} The Recipe component.
- */
 function Recipe({ recipe, Allergies }) {
-  // State to control the visibility of instructions and the number of steps to display initially
   const [showInstructions, setShowInstructions] = useState(false);
-  const initialStepsToShow = 10;
+  const initialStepsToShow = 7;
   const [visibleSteps, setVisibleSteps] = useState(initialStepsToShow);
 
-  // Access the current theme from the ThemeContext
+  const [showIngredients, setShowIngredients] = useState(false);
+  const initialIngredientsToShow = 6;
+  const [visibleIngredients, setVisibleIngredients] = useState(initialIngredientsToShow);
+
   const { theme } = useTheme();
 
-  // Check if the recipe object is available, otherwise, display a loading indicator
   if (!recipe) {
     return <Loading />;
   }
 
-  // Determine text and container classes based on the theme
   const textClass = theme === "dark" ? "text-white" : "text-black";
   const containerClass = theme === "dark" ? "bg-gray-700" : "bg-blue";
 
-  // Convert ingredients object to a list for display
   const ingredientsList = Object.entries(recipe.ingredients).map(
     (ingredient) => `${ingredient}`,
   );
 
-  // Handle click event for "Show More" button
+  const handleShowMoreIngredients = () => {
+    setShowIngredients(true);
+    setVisibleIngredients(recipe.ingredients.length);
+  };
+
+  const handleShowLessIngredients = () => {
+    setShowIngredients(false);
+    setVisibleIngredients(initialIngredientsToShow);
+  };
+
+  const renderedIngredients = Object.entries(recipe.ingredients)
+    .slice(0, visibleIngredients)
+    .map(([ingredient, quantity]) => (
+      <li key={uuidv4()} className="mb-0 list-disc">
+        {`${ingredient}: ${quantity}`}
+      </li>
+    ));
+
   const handleShowMore = () => {
     setShowInstructions(true);
     setVisibleSteps(recipe.instructions.length);
   };
 
-  // Render only the visible number of steps
-  const renderedInstructions = recipe.instructions.slice(0, visibleSteps);
+  const handleShowLess = () => {
+    setShowInstructions(false);
+    setVisibleSteps(initialStepsToShow);
+  };
+
+  const renderedInstructions = recipe.instructions
+    .slice(0, visibleSteps)
+    .map((step, index) => (
+      <p key={uuidv4()} className="mb-2">
+        {`${index + 1}. ${step}`}
+      </p>
+    ));
 
   return (
     <div className={`mt-12 p-6 lg:p-12 ${textClass}`}>
-      {/* Link to navigate back to the list of recipes */}
       <Link href="/">
         <span className={`flex text-xl gap-2 p-4 ${textClass}`}>
           <button
@@ -73,23 +90,26 @@ function Recipe({ recipe, Allergies }) {
         </span>
       </Link>
 
-      {/* Recipe details grid */}
       <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 ${containerClass} rounded-lg shadow-lg p-6`}>
-        {/* Left column with recipe information */}
         <div>
           <h1 className={`text-3xl font-bold mb-4 ${textClass}`}>
             {recipe.title}
           </h1>
-          <div className="rounded border-4 border-blue-500 mb-4 relative">
+          <div className="rounded mb-4 relative">
             <div
-              className="absolute top-0 left-0 right-0 bottom-0 border-t-4 border-l-4 border-r-4 border-b-4 border-blue-500"
+              className="absolute top-0 left-0 right-0 bottom-0"
               style={{ borderRadius: '0.5rem' }}
             />
-            <CoverImage images={recipe.images} title={recipe.title} className="rounded" />
+            <Carousel style={{ width: '100%' }}>
+              {recipe.images.map((image) => (
+                <div key={uuidv4()} style={{ height: '500px', width: '100%' }}>
+                  <CoverImage images={[image]} title={recipe.title} className="rounded" />
+                </div>
+              ))}
+            </Carousel>
           </div>
           <Description description={recipe.description} recipeId={recipe._id} />
 
-          {/* Display servings and category information */}
           <div className="flex items-center mt-2">
             <FaUsers className="mr-2" />
             <b>Servings:</b>
@@ -108,7 +128,6 @@ function Recipe({ recipe, Allergies }) {
             <CookTime cookTime={recipe.cook} />
             <TotalTime totalTime={recipe} />
             <Allergens allergens={Allergies} recipeIngredients={ingredientsList} />
-            {/* Container for published information */}
             <div className="mt-4">
               <h3 className="text-2xl font-semibold">Published</h3>
               <Published published={recipe.published} />
@@ -116,28 +135,31 @@ function Recipe({ recipe, Allergies }) {
           </div>
         </div>
 
-        {/* Right column with ingredients, instructions, and an optional display of instructions */}
         <div className={`space-y-12 ${textClass}`}>
           <div className="border-8 border-purple-500 mt-14 p-4 rounded-lg">
             <h3 className="text-2xl font-semibold">Ingredients:</h3>
-            <IngredientsList ingredients={Object.entries(recipe.ingredients)} />
+            {renderedIngredients}
+            {Object.entries(recipe.ingredients).length > initialIngredientsToShow && (
+              <button
+                type="button"
+                className="text-blue-500 cursor-pointer"
+                onClick={showIngredients ? handleShowLessIngredients : handleShowMoreIngredients}
+              >
+                {showIngredients ? "Show Less" : "Show More"}
+              </button>
+            )}
           </div>
           <RecipeDetailTags recipe={recipe} />
           <div className="border-8 border-green-500 p-4 rounded-lg space-y-0">
             <h3 className="text-2xl font-semibold">Instructions</h3>
-            {renderedInstructions.map((step, index) => (
-              <p key={index} className="mb-2">
-                {step}
-              </p>
-            ))}
-            {/* Show More button */}
-            {!showInstructions && recipe.instructions.length > initialStepsToShow && (
+            {renderedInstructions}
+            {recipe.instructions.length > initialStepsToShow && (
               <button
                 type="button"
                 className="text-blue-500 cursor-pointer"
-                onClick={handleShowMore}
+                onClick={showInstructions ? handleShowLess : handleShowMore}
               >
-                Show More
+                {showInstructions ? "Show Less" : "Show More"}
               </button>
             )}
           </div>
