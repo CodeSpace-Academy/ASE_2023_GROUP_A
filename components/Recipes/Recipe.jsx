@@ -48,7 +48,7 @@ function Recipe({ recipe, Allergies }) {
   );
 
   return (
-    <div className={`mt-8 p-6 lg:p-12 ${textClass}`}>
+    <div className={`mt-12 p-6 lg:p-12 ${textClass}`}>
       {/* Link to navigate back to the list of recipes */}
       <Link href="/">
         <span className={`flex text-xl gap-2 p-4 ${textClass}`}>

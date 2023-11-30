@@ -1,5 +1,4 @@
 import { connectToCollection } from "@/helpers/mongoDB-connection";
-// import Recipe from './../../../components/Recipes/Recipe';
 
 const handler = async (req, res) => {
   if (req.method === "PUT") {
