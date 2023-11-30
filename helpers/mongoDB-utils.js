@@ -518,14 +518,13 @@ export const getSimilarRecipesWithTotalCount = async (
   }
 };
 
-
-export const getAllRecipesWithFilter = async (
+export const getModifiedRecipesWithTotalCount = async (
   skip,
-  limit,
-  filters,
+  filters = {},
   sortOrder
 ) => {
   try {
+    
     const cl = await client.connect();
     const db = cl.db("devdb");
     const collection = db.collection("recipes");
@@ -535,18 +534,32 @@ export const getAllRecipesWithFilter = async (
 
     const query = {};
 
+    // Handle search query
     if (searchQuery && searchQuery.length > 0) {
-      query.$or = [{ title: { $regex: searchQuery, $options: "i" } }];
+      const fuzzySearchQuery = {
+        $or: [
+          { title: { $regex: searchQuery, $options: "i" } },
+          { description: { $regex: searchQuery, $options: "i" } },
+          { tags: { $regex: searchQuery, $options: "i" } },
+          { ingredients: { $regex: searchQuery, $options: "i" } },
+        ],
+      };
+
+      // Combine fuzzy search with existing conditions
+      query.$and = [fuzzySearchQuery];
     }
 
+    // Handle category filter
     if (categories && categories.length > 0) {
       query.category = { $all: categories };
     }
 
+    // Handle tag filter
     if (tags && tags.length > 0) {
       query.tags = { $all: tags };
     }
 
+    // Handle ingredient filter
     if (ingredients && ingredients.length > 0) {
       const ingredientQueries = ingredients.map((ingredient) => ({
         [`ingredients.${ingredient}`]: { $exists: true },
@@ -554,12 +567,14 @@ export const getAllRecipesWithFilter = async (
       query.$and = ingredientQueries;
     }
 
+    // Handle instructions filter
     if (instructions) {
       query.instructions = { $size: instructions };
     }
 
     let sortCriteria = {};
 
+    // Handle sort order based on sortOrder value
     if (sortOrder === "[A-Z]") {
       sortCriteria = { title: 1 };
     } else if (sortOrder === "[Z-A]") {
@@ -576,47 +591,19 @@ export const getAllRecipesWithFilter = async (
       sortCriteria = { prep: 1 };
     } else if (sortOrder === "preptime(desc)") {
       sortCriteria = { prep: -1 };
-    } else if (sortOrder === "steps(desc)" || sortOrder === "steps(asc)") {
-      const sortOrderValue = sortOrder === "steps(desc)" ? -1 : 1;
-
-      const result = await collection
-        .aggregate([
-          { $match: query },
-          {
-            $project: {
-              title: 1,
-              instructions: 1,
-              prep: 1,
-              cook: 1,
-              images: 1,
-              sortOrder: { $size: "$instructions" },
-            },
-          },
-          { $sort: { sortOrder: sortOrderValue } },
-          {
-            $project: {
-              title: 1,
-              instructions: 1,
-              prep: 1,
-              cook: 1,
-              images: 1,
-            },
-          },
-        ])
-        .limit(100)
-        .toArray();
-
-      return result;
+    } else if (sortOrder === "steps(desc)") {
+      sortCriteria = { instructions: -1 };
+    } else if (sortOrder === "steps(asc)") {
+      sortCriteria = { instructions: 1 };
     }
 
-    const result = await collection
-      .find(query)
-      .sort(sortCriteria)
-      .limit(100)
-      .skip(skip)
-      .toArray();
+    // Execute the query and fetch total count
+    const [recipes, totalCount] = await Promise.all([
+      collection.find(query).sort(sortCriteria).limit(100).skip(skip).toArray(),
+      collection.find(query).count(),
+    ]);
 
-    return result;
+    return { recipes, totalCount };
   } catch (error) {
     console.error("Error fetching recipes:", error);
     throw error;
