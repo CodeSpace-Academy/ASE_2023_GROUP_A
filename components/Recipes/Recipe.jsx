@@ -18,6 +18,15 @@ import CoverImage from "../Images/CoverImage";
 import Loading from "../Loading/Loading";
 import { useTheme } from "../Context/ThemeContext";
 
+/**
+ * Recipe Component displays detailed information about a recipe.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {Object} props.recipe - The recipe data.
+ * @param {Object} props.Allergies - The allergens data.
+ * @returns {JSX.Element} - Rendered component.
+ */
 function Recipe({ recipe, Allergies }) {
   const [showInstructions, setShowInstructions] = useState(false);
   const initialStepsToShow = 7;
@@ -29,17 +38,21 @@ function Recipe({ recipe, Allergies }) {
 
   const { theme } = useTheme();
 
+  // Loading state check
   if (!recipe) {
     return <Loading />;
   }
 
+  // Theme and container styling based on the theme
   const textClass = theme === "dark" ? "text-white" : "text-black";
   const containerClass = theme === "dark" ? "bg-gray-700" : "bg-blue";
 
+  // Extracting ingredients for rendering
   const ingredientsList = Object.entries(recipe.ingredients).map(
     (ingredient) => `${ingredient}`,
   );
 
+  // Handlers for showing/hiding ingredients
   const handleShowMoreIngredients = () => {
     setShowIngredients(true);
     setVisibleIngredients(recipe.ingredients.length);
@@ -50,6 +63,7 @@ function Recipe({ recipe, Allergies }) {
     setVisibleIngredients(initialIngredientsToShow);
   };
 
+  // Rendering visible ingredients
   const renderedIngredients = Object.entries(recipe.ingredients)
     .slice(0, visibleIngredients)
     .map(([ingredient, quantity]) => (
@@ -58,6 +72,7 @@ function Recipe({ recipe, Allergies }) {
       </li>
     ));
 
+  // Handlers for showing/hiding instructions
   const handleShowMore = () => {
     setShowInstructions(true);
     setVisibleSteps(recipe.instructions.length);
@@ -68,6 +83,7 @@ function Recipe({ recipe, Allergies }) {
     setVisibleSteps(initialStepsToShow);
   };
 
+  // Rendering visible instructions
   const renderedInstructions = recipe.instructions
     .slice(0, visibleSteps)
     .map((step, index) => (
@@ -76,6 +92,7 @@ function Recipe({ recipe, Allergies }) {
       </p>
     ));
 
+  // Component rendering
   return (
     <div className={`mt-12 p-6 lg:p-12 ${textClass}`}>
       <Link href="/">
@@ -110,6 +127,7 @@ function Recipe({ recipe, Allergies }) {
           </div>
           <Description description={recipe.description} recipeId={recipe._id} />
 
+          {/* Additional recipe details */}
           <div className="flex items-center mt-2">
             <FaUsers className="mr-2" />
             <b>Servings:</b>
@@ -123,6 +141,7 @@ function Recipe({ recipe, Allergies }) {
             {recipe.category}
           </div>
 
+          {/* Timings, Allergens, and Published information */}
           <div className={`mt-2 ${textClass}`}>
             <PrepTime prepTime={recipe.prep} />
             <CookTime cookTime={recipe.cook} />
@@ -135,7 +154,9 @@ function Recipe({ recipe, Allergies }) {
           </div>
         </div>
 
+        {/* Ingredients, Tags, and Instructions */}
         <div className={`space-y-12 ${textClass}`}>
+          {/* Ingredients Section */}
           <div className="border-8 border-purple-500 mt-14 p-4 rounded-lg">
             <h3 className="text-2xl font-semibold">Ingredients:</h3>
             {renderedIngredients}
@@ -149,7 +170,11 @@ function Recipe({ recipe, Allergies }) {
               </button>
             )}
           </div>
+
+          {/* Recipe Tags Section */}
           <RecipeDetailTags recipe={recipe} />
+
+          {/* Instructions Section */}
           <div className="border-8 border-green-500 p-4 rounded-lg space-y-0">
             <h3 className="text-2xl font-semibold">Instructions</h3>
             {renderedInstructions}
