@@ -22,7 +22,8 @@
       // Prefer JSDoc notation
       "react/prop-types": "off",
       //for react hooks to not assume dependencies, mount/unmount
-      "react-hooks/exhaustive-deps": "off"
+      "react-hooks/exhaustive-deps": "off",
+      "no-console":"off"
 
     }
 }
