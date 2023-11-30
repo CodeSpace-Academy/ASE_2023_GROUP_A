@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
 import { usePageContext } from "../components/Context/CurrentPageContexts/CurrentHomePage";
 import EnvError from "./error";
 import Loading from "../components/Loading/Loading";
@@ -16,17 +16,17 @@ function Home() {
   const favoriteContext = useContext(FavoritesContext);
 
   // Custom fetcher function for useSWR to fetch favorite recipes data
-  const fetcher = (url) => fetch(url).then((res) => res.json());
+  // const fetcher = (url) => fetch(url).then((res) => res.json());
 
   // Use the useSWR hook to fetch data for the user's favorite recipes
-  const { data: favoritesData, error } = useSWR(
-    "api/recipes/Favourites",
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  );
-
+  // const { data: favoritesData, error } = useSWR(
+  //   "api/recipes/Favourites",
+  //   fetcher,
+  //   {
+  //     revalidateOnFocus: false,
+  //   }
+  // );
+  const favoritesData = favoriteContext;
   /**
    * A function to manually refresh the favorites data.
    * It triggers a revalidation of the 'favorites' data using the mutate function.
@@ -55,12 +55,12 @@ function Home() {
   }
 
   // If there is an error fetching data or no data is available, display a loading component
-  if (error || !favoritesData) {
-    return <Loading />;
-  }
+  // if ( !favoritesData) {
+  //   return <Loading />;
+  // }
 
   // Extract the list of favorite recipes from the fetched data
-  const favorites = favoritesData.favorites || [];
+  const favorites = favoriteContext.userFavorites || [];
 
   // Render the RecipeList component with the list of favorite recipes
   return <RecipeList favorites={favorites} />;

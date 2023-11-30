@@ -40,7 +40,14 @@ import { responsive } from "../../helpers/settings/settings";
 
 function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
-  const { currentPage, updatePage, api } = usePageContext();
+  const {
+    currentPage,
+    updatePage,
+    api,
+    setFilteredPage,
+    updateFilteredPage,
+    filteredPage,
+  } = usePageContext();
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -97,6 +104,7 @@ function RecipeList({ favorites }) {
       console.error("Error fetching original recipes:", err);
     }
   };
+
   const fetchFilteredRecipes = async () => {
     try {
       const response = await fetch(apiUrl);
@@ -158,23 +166,10 @@ function RecipeList({ favorites }) {
   }, [currentPage]);
 
   useEffect(() => {
-    let typingTimeout;
-
-    if (
-      searchQuery.length >= 4 ||
-      selectedTags.length > 0 ||
-      selectedIngredients.length > 0 ||
-      selectedCategories.length > 0 ||
-      selectedInstructions
-    ) {
-      clearTimeout(typingTimeout);
-
-      typingTimeout = setTimeout(() => {
-        fetchFilteredRecipes();
-      }, 500);
-    }
-
-    return () => clearTimeout(typingTimeout);
+      fetchFilteredRecipes();
+      // Filters are applied, update the filtered page
+      updateFilteredPage(1);
+    console.log("RECIPES # RECIPES:", recipes);
   }, [
     searchQuery,
     selectedTags,
@@ -184,9 +179,118 @@ function RecipeList({ favorites }) {
     sortOrder,
   ]);
 
+  //  const fetchRecipesByFilters = async (filters, sortOrder) => {
+  //    try {
+  //      console.log("API URL:", apiUrl);
 
+  //      // Fetch data from the API
+  //      const response = await fetch(apiUrl);
+
+  //      if (!response.ok) {
+  //        throw new Error("Failed to fetch data");
+  //      }
+
+  //      // Parse the response and update state
+  //      const result = await response.json();
+  //       mutate(apiUrl);
+  //      setRecipes(result.recipes);
+  //      setTotalRecipes(result.totalCount);
+
+  //      // Handle messages when no recipes are found
+  //     //  if (result.totalCount === 0) {
+  //     //    setNoRecipesFoundMessage(
+  //     //      `No Recipes Found for ${
+  //     //        selectedInstructions > 0
+  //     //          ? "Specified number of steps"
+  //     //          : searchQuery.length > 0
+  //     //          ? searchQuery
+  //     //          : "chosen filters"
+  //     //      }`
+  //     //    );
+  //     //  } else {
+  //     //    setNoRecipesFoundMessage(null);
+  //     //  }
+
+  //      // Update the URL with the current filters
+  //      const queryParams = new URLSearchParams(filters);
+  //      if (searchQuery.length > 0) {
+  //        queryParams.set("searchQuery", searchQuery);
+  //      } else {
+  //        queryParams.delete("searchQuery");
+  //      }
+
+  //      if (selectedTags.length > 0) {
+  //        queryParams.set("tags", selectedTags.join(","));
+  //      } else {
+  //        queryParams.delete("tags");
+  //      }
+
+  //      if (selectedCategories.length > 0) {
+  //        queryParams.set("categories", selectedCategories.join(","));
+  //      } else {
+  //        queryParams.delete("categories");
+  //      }
+
+  //      if (selectedIngredients.length > 0) {
+  //        queryParams.set("ingredients", selectedIngredients.join(","));
+  //      } else {
+  //        queryParams.delete("ingredients");
+  //      }
+
+  //      if (selectedInstructions) {
+  //        queryParams.set("instructions", selectedInstructions.toString());
+  //      } else {
+  //        queryParams.delete("instructions");
+  //      }
+
+  //      if (sortOrder) {
+  //        queryParams.set("sortOrders", sortOrder);
+  //      } else {
+  //        queryParams.delete("sortOrders");
+  //      }
+
+  //      const queryString = queryParams.toString();
+  //      const url = queryString ? `/?${queryString}` : "/";
+  //      router.push(url);
+  //    } catch (error) {
+  //      console.error("Error in fetchRecipesByFilters:", error);
+  //      throw error; // Rethrow the error to propagate it to the caller
+  //    }
+  //  };
+
+  // const fetchReci = async () => {
+  //   const data = await fetchRecipesByFilters(filters, sortOrder);
+  //   return data;
+  // };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // Fetch initial data without filters
+  //       const response = await fetch(`${api}`);
+
+  //       if (!response.status) {
+  //         throw new Error("Failed to fetch data");
+  //       }
+
+  //       // Parse the response JSON
+  //       const result = await response.json();
+
+  //       // Update the state with initial recipes and total count
+  //       setRecipes(result.data.recipes);
+  //       setTotalRecipes(result.data.totalCount);
+  //       console.log("FILTERED RECIPES:", result.data.recipes);
+  //       console.log("FILTERED RECIPES COUNT:", result.data.recipes);
+  //     } catch (error) {
+  //       console.error("Error in initial data fetch:", error);
+  //       // Handle error if needed
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
   useEffect(() => {
     updatePage(currentPage);
+    fetchRecipes();
   }, [currentPage]);
 
   useEffect(() => {
@@ -197,10 +301,30 @@ function RecipeList({ favorites }) {
 
   const handlePageChange = useCallback(
     (event, page) => {
-      updatePage(page);
+      if (
+        selectedTags.length > 0 ||
+        selectedIngredients.length > 0 ||
+        selectedCategories.length > 0 ||
+        selectedInstructions ||
+        sortOrder
+      ) {
+        // Filters are applied, update the filtered page
+        updateFilteredPage(page);
+      } else {
+        // No filters applied, update the original page
+        updatePage(page);
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [updatePage]
+    [
+      updatePage,
+      updateFilteredPage,
+      selectedTags,
+      selectedIngredients,
+      selectedCategories,
+      selectedInstructions,
+      sortOrder,
+    ]
   );
 
   function countAppliedFilters(
@@ -266,6 +390,52 @@ function RecipeList({ favorites }) {
     setSortOrder(sortOrders || null);
   }, []);
 
+  // useEffect(() => {
+  //   let typingTimeout;
+
+  //   if (
+  //     searchQuery.length >= 4 ||
+  //     selectedTags.length > 0 ||
+  //     selectedIngredients.length > 0 ||
+  //     selectedCategories.length > 0 ||
+  //     selectedInstructions
+  //   ) {
+  //     clearTimeout(typingTimeout);
+
+  //     typingTimeout = setTimeout(() => {
+  //       fetchRecipesByFilters(filters, sortOrder);
+  //     }, 500);
+  //   }
+
+  //   return () => clearTimeout(typingTimeout);
+  // }, [
+  //   searchQuery,
+  //   selectedTags,
+  //   selectedIngredients,
+  //   selectedCategories,
+  //   selectedInstructions,
+  //   sortOrder,
+  // ]);
+
+  // useEffect(() => {
+  //   const filter = async () => {
+  //     try {
+  //       const data = await fetchRecipes();
+  //       return data;
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   };
+  //   filter();
+  // }, [
+  //   searchQuery,
+  //   selectedTags,
+  //   selectedIngredients,
+  //   selectedCategories,
+  //   selectedInstructions,
+  //   sortOrder,
+  // ]);
+
   const fetchAutocompleteSuggestions = async (searchInput) => {
     try {
       if (searchInput.length === 0 || !fuse) {
@@ -293,19 +463,36 @@ function RecipeList({ favorites }) {
     setSelectedInstructions(null);
     setAutocompleteSuggestions([]);
     setFilterCount(0);
-    updatePage(currentPage);
+    // updatePage(currentPage);
     router.push("/");
   }
 
-  const handleSearchButton = () => {
+  const handleSearchButton = useCallback(() => {
     if (searchQuery.length >= 4) {
-      fetchFilteredRecipes();
+      const filters = {
+        searchQuery,
+        tags: selectedTags,
+        ingredients: selectedIngredients,
+        categories: selectedCategories,
+        instructions: parseInt(selectedInstructions, 10),
+      };
+      fetchRecipesByFilters(filters);
     }
-  };
+  }, [
+    searchQuery,
+    selectedTags,
+    selectedIngredients,
+    selectedCategories,
+    selectedInstructions,
+    sortOrder,
+  ]);
 
-  const handleChange = (event) => {
-    setSelectedInstructions(event.target.value);
-  };
+  const handleChange = useCallback(
+    (event) => {
+      setSelectedInstructions(event.target.value);
+    },
+    [setSelectedInstructions]
+  );
   const handleViewFavorites = () => {
     setShowCarousel(!showCarousel);
   };
@@ -433,26 +620,37 @@ function RecipeList({ favorites }) {
           )}
         </div>
       )}
-      <>
-        <p style={{ textAlign: "center" }}>
-          <span style={{ fontWeight: "bold" }}>{displayRemainingRecipes} </span>
-          recipes remaining
-        </p>
-
-        <div className="flex justify-center pb-8 gap-10">
-          <Stack spacing={2} justifyContent="center" alignItems="center">
-            <Pagination
-              count={pageNumbers}
-              page={currentPage}
-              onChange={handlePageChange}
-              color="primary"
-            />
-          </Stack>
-        </div>
-      </>
+      {(filterCount === 0 || totalRecipes === 0) && (
+        <>
+          <p style={{ textAlign: "center" }}>
+            <span style={{ fontWeight: "bold" }}>
+              {displayRemainingRecipes}{" "}
+            </span>
+            recipes remaining
+          </p>
+        </>
+      )}
       <FloatingButton
         className={theme === "light" ? "bg-blue-500" : "bg-blue-800"}
       />
+      <div className="flex justify-center pb-8 gap-10">
+        <Stack spacing={2} justifyContent="center" alignItems="center">
+          <Pagination
+            count={pageNumbers}
+            page={
+              selectedTags.length > 0 ||
+              selectedIngredients.length > 0 ||
+              selectedCategories.length > 0 ||
+              selectedInstructions ||
+              sortOrder
+                ? filteredPage
+                : currentPage
+            }
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </Stack>
+      </div>
     </div>
   );
 }

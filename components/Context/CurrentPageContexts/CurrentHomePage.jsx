@@ -1,12 +1,7 @@
 // PageContext.js
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useMemo,
-} from "react";
+import React, { createContext, useContext, useState, useMemo } from "react";
 import { useRouter } from "next/router";
+
 const PageContext = createContext();
 
 export const PageProvider = ({ children }) => {
@@ -14,46 +9,37 @@ export const PageProvider = ({ children }) => {
   const [currentPage, setCurrentPage] = useState(
     isServer ? 1 : parseInt(localStorage.getItem("lastPage") || 1)
   );
-  // const [currentApiRout, setCurrentApiRout] = useState(
-  //   `/api/recipes?page=${currentPage}`
-  // );
+  const [filteredPage, setFilteredPage] = useState(
+    isServer ? 1 : parseInt(localStorage.getItem("lastFilteredPage") || 1)
+  );
+
   const router = useRouter();
 
   const api = `/api/recipes?page=${currentPage}`;
 
-const updatePage = (newPageNumber) => {
-  setCurrentPage((prevPage) => {
-    console.log("Updating page number:", newPageNumber);
-    console.log("PREVIOUS PAGE Number:", prevPage);
-    console.log("API:", `/api/recipes?page=${newPageNumber}`);
-    localStorage.setItem("lastPage", newPageNumber.toString());
-    if (!isServer) {
+  const updatePage = (newPageNumber) => {
+    setCurrentPage((prevPage) => {
       localStorage.setItem("lastPage", newPageNumber.toString());
-    }
-    return newPageNumber;
-  });
-};
+      if (!isServer) {
+        localStorage.setItem("lastPage", newPageNumber.toString());
+      }
+      return newPageNumber;
+    });
+  };
 
-  // useEffect(() => {
-  //   // console.log("CURRENT PAGE API:", currentApiRout);
-  //   const initialPage = parseInt(localStorage.getItem("lastPage"));
-  //   updatePage(initialPage);
-  // }, []);
-
-  // useEffect(() => {
-  //   setCurrentApiRout(`/api/recipes?page=${currentPage}`);
-  //   console.log("CURRENT PAGE API:", currentApiRout);
-  // }, [currentPage, setCurrentApiRout]);
-
-  // useEffect(() => {
-  //   updatePage(currentPage)
-  // }, [currentPage])
+  const updateFilteredPage = (newPageNumber) => {
+    setFilteredPage((prevPage) => {
+      localStorage.setItem("lastFilteredPage", newPageNumber.toString());
+      if (!isServer) {
+        localStorage.setItem("lastFilteredPage", newPageNumber.toString());
+      }
+      return newPageNumber;
+    });
+  };
 
   const goBack = () => {
     const pageNumber = parseInt(localStorage.getItem("lastPage"));
     if (pageNumber > 1) {
-      console.log("CURRENT PAGE Number FROM CONTEXT:", pageNumber);
-      console.log("CURRENT ROUTER FROM CONTEXT:", router);
       updatePage(pageNumber);
       router.push("/");
     }
@@ -64,10 +50,13 @@ const updatePage = (newPageNumber) => {
       currentPage,
       setCurrentPage,
       updatePage,
+      filteredPage,
+      setFilteredPage,
+      updateFilteredPage,
       goBack,
       api,
     }),
-    [currentPage]
+    [currentPage, filteredPage]
   );
 
   return (

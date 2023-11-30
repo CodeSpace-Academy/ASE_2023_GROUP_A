@@ -9,7 +9,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable implicit-arrow-linebreak */
 import { useState, createContext } from "react";
-
+// import useSWR from "swr";
 const FavoritesContext = createContext({
   userFavorites: [],
   totalFavorites: 0,
@@ -24,6 +24,26 @@ const FavoritesContext = createContext({
 export function FavoritesContextProvider({ children }) {
   const [userFavorites, setUserFavorites] = useState([]);
   const [changeListeners, setChangeListeners] = useState([]);
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+
+  // Use the useSWR hook to fetch data for the user's favorite recipes
+  // const { data: favoritesData, error } = useSWR(
+  //   "api/recipes/Favourites",
+  //   fetcher,
+  //   {
+  //     revalidateOnFocus: false,
+  //   }
+  // );
+
+  /**
+   * A function to manually refresh the favorites data.
+   * It triggers a revalidation of the 'favorites' data using the mutate function.
+   */
+  // const refreshFavorites = async () => {
+  //   await mutate("api/recipes/Favourites");
+  // };
+
+
   const notifyChangeListeners = () => {
     changeListeners.forEach((listener) => {
       listener();

@@ -12,7 +12,7 @@ import React, {
   useContext,
   useMemo,
 } from "react";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
 import { useRouter } from "next/router";
 import Fuse from "fuse.js";
 import Pagination from "@mui/material/Pagination";
@@ -43,14 +43,8 @@ function SimilarRecipes() {
   const favoriteContext = useContext(FavoritesContext);
   const [sortOrder, setSortOrder] = useState("default");
   // console.log("CURRENT PAGE:", currentSimilarRecipesPage);
-  const fetcher = (url) => fetch(url).then((res) => res.json());
   // Use the useSWR hook to fetch data for the user's favorite recipes
-  const {
-    data: favoritesData,
-    isLoading,
-    error,
-  } = useSWR("/api/recipes/Favourites", fetcher);
-
+  const favoritesData = favoriteContext.userFavorites;
   /**
    * A function to manually refresh the favorites data.
    * It triggers a revalidation of the 'favorites' data using the mutate function.
@@ -119,12 +113,10 @@ function SimilarRecipes() {
   useEffect(() => {
     // Fetch the original recipes without search when the component mounts
     fetchOriginalRecipes();
-
     // Update the favorites in the context when the component mounts
-    if (favoritesData) {
-      favoriteContext.updateFavorites(favoritesData.favorites || []);
-    }
-
+    // if (favoritesData) {
+    //   favoriteContext.updateFavorites(favoritesData.favorites || []);
+    // }
     // Add the change listener for future updates
     favoriteContext.addChangeListener(refreshFavorites);
 
