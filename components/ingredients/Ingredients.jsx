@@ -3,7 +3,7 @@ import Select from "react-select";
 
 /**
  * Functional component representing a multi-select dropdown for ingredients.
- *
+ * it's a component
  * @component
  * @param {Object} props - The component's props.
  * @param {string[]} props.selectedIngredients - The selected ingredients.
