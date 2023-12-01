@@ -6,5 +6,5 @@
   "workbench.editor.autoLockGroups": {
     "mainThreadWebview-markdown.preview": true
   },
-  "editor.inlineSuggest.showToolbar": "always"
+  "editor.inlineSuggest.showToolbar": "onHover"
 }
