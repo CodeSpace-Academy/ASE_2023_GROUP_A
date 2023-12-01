@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import fetchRecipes from "../../helpers/hook"
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
-import FloatingButton from "../Buttons/floatingButton/FloatingButton";
+import FloatingButton from "../Buttons/FloatingButton/FloatingButton";
 import "react-multi-carousel/lib/styles.css";
 import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "../../components/Context/ThemeContext"
