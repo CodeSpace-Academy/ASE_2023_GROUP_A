@@ -1,4 +1,4 @@
-.floatingButton {
+.FloatingButton {
   position: fixed;
   bottom: 22%;
   right: 20px;
@@ -18,10 +18,10 @@
  
 }
 
-.floatingButton:hover {
+.FloatingButton:hover {
   background-color: #0056b3;
 }
-.floatingButton2 {
+.FloatingButton2 {
   position: fixed;
   bottom: 12%;
   right: 20px;
@@ -41,6 +41,6 @@
 
 }
 
-.floatingButton2:hover {
+.FloatingButton2:hover {
   background-color: #0056b3;
 }

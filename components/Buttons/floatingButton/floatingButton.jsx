@@ -1,25 +1,62 @@
 import React from "react";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
-import classes from "./floatingButton.module.css";
+import classes from "./FloatingButton.module.css";
 
+/**
+ * FloatingButton component that provides buttons for scrolling to the top and bottom of the page.
+ *
+ * @component
+ * @example
+  * <FloatingButton />
+ */
 export default function FloatingButton() {
-  const handleScrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-  const handleScrollToBottom = () => {
+  /**
+   * Handles scrolling based on the specified direction.
+   *
+   * @param {string} direction - The direction to scroll ("up" or "down").
+   * @returns {void}
+   */
+  const handleScroll = (direction) => {
+    const topPosition = direction === "up" ? 0 : document.body.scrollHeight;
+
     window.scrollTo({
-      top: document.body.scrollHeight,
+      top: topPosition,
       behavior: "smooth",
     });
   };
+
   return (
     <>
-      { /* eslint-disable-next-line jsx-a11y/no-static-element-interactions */ }
-      <div className={classes.floatingButton} onClick={handleScrollToTop}>
+      {/* Scroll to Top Button */}
+      <div
+        className={classes.floatingButton}
+        onClick={() => handleScroll("up")}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            handleScroll("up");
+          }
+        }}
+        role="button"
+        tabIndex="0"
+        aria-label="Scroll to Top"
+      >
         <FaArrowUp />
       </div>
-      <div className={classes.floatingButton2} onClick={handleScrollToBottom}>
-        <FaArrowDown/>
+
+      {/* Scroll to Bottom Button */}
+      <div
+        className={classes.floatingButton2}
+        onClick={() => handleScroll("down")}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            handleScroll("down");
+          }
+        }}
+        role="button"
+        tabIndex="0"
+        aria-label="Scroll to Bottom"
+      >
+        <FaArrowDown />
       </div>
     </>
   );
