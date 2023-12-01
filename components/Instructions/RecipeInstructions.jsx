@@ -64,7 +64,7 @@ function RecipeInstructions({ recipes, recipeId }) {
           sortedInstructions.sort((a, b) => a.index - b.index);
 
           const reorderedInstructions = sortedInstructions.map((instruction) => (
-            <li key={instruction.index} className="text-black-200  mb-3">
+            <li key={instruction.index} className="text-black-200">
               {instruction.instruction}
             </li>
           ));

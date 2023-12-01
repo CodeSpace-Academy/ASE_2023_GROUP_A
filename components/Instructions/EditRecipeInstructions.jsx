@@ -11,7 +11,7 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
   const [editedInstructions, setEditedInstructions] = useState([
     ...instructions,
   ]);
-  const [setEditMode] = useState(true);
+  const [, setEditMode] = useState(true);
 
   /**
    * Handles changes to instruction input fields.
