@@ -11,7 +11,7 @@
       // using underscores is a common Javascript convention and for certain databases it might be overly strict
       "no-underscore-dangle":"off",
       // helps avoid conflicts and allow flexibility
-      "linebreak-style":"off",
+      "linebreak-style": "off",
       // this choice is a matter of personal or team preference
       "double-quoted": "off",
       // allows flexibility in the use for string literals
@@ -29,7 +29,7 @@
 
       "react-hooks/rules-of-hooks":"off",
       "import/no-named-as-default": "off",
-      "import/no-named-as-default-member": "off",
+      "import/no-named-as-default-member": "off"
 
     }
 }

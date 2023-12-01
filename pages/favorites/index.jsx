@@ -46,7 +46,7 @@ function FavoritesPage() {
   const favoriteRecipes = favoriteCtx.favorites || [];
 
   useEffect(() => {
-    if (favoriteRecipes.length > 0 && ) {
+    if (favoriteRecipes.length > 0 ) {
       setFilteredRecipes([...favoriteRecipes].flat());
       // setFuse(new Fuse([...favoriteRecipes].flat(), options));
       setIsLoading(false);

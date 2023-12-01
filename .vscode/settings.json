@@ -8,5 +8,8 @@
     },
     "docwriter.progress.trackTypes": false,
     "docwriter.progress.trackMethods": false,
-    "docwriter.progress.trackClasses": false
+    "docwriter.progress.trackClasses": false,
+    "cSpell.words": [
+        "linebreak"
+    ]
 }
