@@ -42,7 +42,7 @@ function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
   const { currentPage, updatePage, api } = usePageContext();
   const [totalRecipes, setTotalRecipes] = useState(0);
-  const [filteredPage, setFilteredPage] = useState(1);
+  const [filteredPage] = useState(1);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -50,8 +50,8 @@ function RecipeList({ favorites }) {
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedInstructions, setSelectedInstructions] = useState(null);
   const [sortOrder, setSortOrder] = useState(null);
-  const [fuse, setFuse] = useState(null);
-  const [noRecipesFoundMessage, setNoRecipesFoundMessage] = useState(null);
+  const [fuse] = useState(null);
+  const [noRecipesFoundMessage] = useState(null);
   const [filterCount, setFilterCount] = useState(0);
   const [showCarousel, setShowCarousel] = useState(false);
   const favoriteContext = useContext(FavoritesContext);
