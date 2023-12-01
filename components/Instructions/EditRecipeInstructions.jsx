@@ -13,7 +13,6 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
   ]);
   const [setEditMode] = useState(true);
 
-
   /**
    * Handles changes to instruction input fields.
    *
@@ -46,10 +45,10 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
         setEditedInstructions(updatedInstructions);
         setEditMode((prevState) => !prevState);
       } else {
-        console.error("Failed to update instructions.");
+        throw new Error("Failed to update instructions.");
       }
     } catch (error) {
-      console.error("Error updating instructions:", error);
+      throw new Error("Error updating instructions:", error);
     } finally {
       setEditMode(false);
     }
@@ -72,7 +71,7 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
 
       <ol className="list-decimal list-inside ">
         {editedInstructions.map((instruction, index) => (
-          <li key={index}>
+          <li key={editedInstructions.recipeId}>
             <input
               className="w-full bg-gray-200"
               type="text"

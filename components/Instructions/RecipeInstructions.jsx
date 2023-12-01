@@ -40,10 +40,10 @@ function RecipeInstructions({ recipes, recipeId }) {
       if (response.ok) {
         setInstructions(editedInstructions);
       } else {
-        console.error("Failed to update instructions.");
+        throw new Error("Failed to update instructions.");
       }
     } catch {
-      console.error("Error updating instructions:", error);
+      throw new Error("Error updating instructions:", error);
     } finally {
       setEditMode(false);
     }
@@ -53,7 +53,7 @@ function RecipeInstructions({ recipes, recipeId }) {
    * Fetches the instructions from the API and sets the state.
    */
   useEffect(() => {
-    const delay = 2000; 
+    const delay = 2000;
 
     const timeoutId = setTimeout(() => {
       try {
