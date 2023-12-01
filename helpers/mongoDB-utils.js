@@ -520,17 +520,17 @@ export const getSimilarRecipesWithTotalCount = async (
 
 export const getModifiedRecipesWithTotalCount = async (
   skip,
+  sortOrder,
   filters = {},
-  sortOrder
 ) => {
   try {
-    
     const cl = await client.connect();
     const db = cl.db("devdb");
     const collection = db.collection("recipes");
 
-    const { searchQuery, tags, ingredients, categories, instructions } =
-      filters;
+    const {
+      searchQuery, tags, ingredients, categories, instructions,
+    } = filters;
 
     const query = {};
 
@@ -599,7 +599,8 @@ export const getModifiedRecipesWithTotalCount = async (
 
     // Execute the query and fetch total count
     const [recipes, totalCount] = await Promise.all([
-      collection.find(query).sort(sortCriteria).limit(100).skip(skip).toArray(),
+      collection.find(query).sort(sortCriteria).limit(100).skip(skip)
+        .toArray(),
       collection.find(query).count(),
     ]);
 

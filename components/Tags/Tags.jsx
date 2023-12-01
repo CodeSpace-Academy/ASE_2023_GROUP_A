@@ -85,7 +85,7 @@ function Tags({ setSelectedTags, selectedTags }) {
       <Select
         isMulti
         options={tags}
-        value={tags.filter((tag) => selectedTags?.includes(tag.value))}
+        value={tags.filter((tag) => (selectedTags ? selectedTags.includes(tag.value) : []))}
         onChange={handleTagChange}
         styles={customStyles}
         blurInputOnSelect

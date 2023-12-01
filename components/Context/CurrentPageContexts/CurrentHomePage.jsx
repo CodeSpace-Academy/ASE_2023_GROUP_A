@@ -16,57 +16,29 @@ export const PageProvider = ({ children }) => {
   //   ? 1
   //   : parseInt(localStorage.getItem("isFiltered")) || 0;
   const [currentPage, setCurrentPage] = useState(
-    isServer ? 1 : parseInt(localStorage.getItem("lastPage") || 1)
+    isServer ? 1 : parseInt(localStorage.getItem("lastPage") || 1, 10),
   );
-  const [filteredPage, setFilteredPage] = useState(
-    isServer ? 1 : parseInt(localStorage.getItem("lastFilteredPage") || 1)
-  );
-  const [filtered, setFiltered] = useState(false);
-  const router = useRouter();
 
-  const updateFilters = (isFiltered) => {
-    setFiltered((prev) => {
-      if (!isServer) {
-        localStorage.setItem("isFiltered", isFiltered);
-      }
-      return isFiltered;
-    });
-  };
+  const router = useRouter();
 
   useEffect(() => {
     if (!isServer) {
       localStorage.setItem("lastPage", currentPage.toString());
-      localStorage.setItem("lastFilteredPage", filteredPage.toString());
     }
-  }, [currentPage, filteredPage]);
+  }, [currentPage]);
 
   const updatePage = (newPageNumber) => {
-    updateFilters(false);
-    setCurrentPage((prevPage) => {
+    setCurrentPage(() => {
       localStorage.setItem("lastPage", newPageNumber.toString());
       if (!isServer) {
-        updateFilters(false);
         localStorage.setItem("lastPage", newPageNumber.toString());
       }
       return newPageNumber;
     });
   };
 
-  const updateFilteredPage = (newPageNumber) => {
-    updateFilters(true);
-    setFilteredPage((prevPage) => {
-      localStorage.setItem("lastFilteredPage", newPageNumber.toString());
-      updateFilters(true);
-      if (!isServer) {
-        localStorage.setItem("lastFilteredPage", newPageNumber.toString());
-        // returntrue;
-      }
-      return newPageNumber;
-    });
-  };
-
   const goBack = () => {
-    const pageNumber = parseInt(localStorage.getItem("lastPage"));
+    const pageNumber = parseInt(localStorage.getItem("lastPage"), 10);
     if (pageNumber > 1) {
       updatePage(pageNumber);
       router.push("/");
@@ -79,16 +51,13 @@ export const PageProvider = ({ children }) => {
       currentPage,
       setCurrentPage,
       updatePage,
-      filteredPage,
-      setFilteredPage,
-      updateFilteredPage,
       goBack,
       api,
     }),
     [api,
-    currentPage,
-    updatePage,
-]
+      currentPage,
+      updatePage,
+    ],
   );
 
   return (
@@ -100,7 +69,7 @@ export const usePageContext = () => {
   const context = useContext(PageContext);
   if (!context) {
     throw new Error(
-      "usePageNumber must only be used within a page number provider"
+      "usePageNumber must only be used within a page number provider",
     );
   }
   return context;

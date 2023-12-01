@@ -94,7 +94,8 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
       <Select
         isMulti
         options={ingredients}
-        value={ingredients.filter((ingredient) => selectedIngredients?.includes(ingredient.value))}
+        value={ingredients.filter((ingredient) => (selectedIngredients
+          ? selectedIngredients.includes(ingredient.value) : []))}
         onChange={handleIngredientChange}
         styles={customStyles}
         blurInputOnSelect

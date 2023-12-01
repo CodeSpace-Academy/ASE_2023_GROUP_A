@@ -1,12 +1,13 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable react/jsx-no-bind */
+/* eslint-disable react/jsx-no-comment-textnodes */
 /* eslint-disable no-nested-ternary */
 import React, {
   useEffect,
   useState,
   useContext,
-  useMemo,
   useCallback,
 } from "react";
-import useSWR, { mutate } from "swr";
 import { useRouter } from "next/router";
 
 import Carousel from "react-multi-carousel";
@@ -14,7 +15,6 @@ import "react-multi-carousel/lib/styles.css";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { v4 as KeyUUID } from "uuid";
-import Fuse from "fuse.js";
 
 // import fetchRecipes from "../../helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
@@ -80,7 +80,7 @@ function RecipeList({ favorites }) {
     instructions: parseInt(selectedInstructions, 10),
   };
   const apiUrl = `${api}&filters=${JSON.stringify(
-    filters
+    filters,
   )}&sortOrder=${sortOrder}`;
 
   const fetchRecipes = async () => {
@@ -163,11 +163,11 @@ function RecipeList({ favorites }) {
     let typingTimeout;
 
     if (
-      searchQuery.length >= 4 ||
-      selectedTags.length > 0 ||
-      selectedIngredients.length > 0 ||
-      selectedCategories.length > 0 ||
-      selectedInstructions
+      searchQuery.length >= 4
+      || selectedTags.length > 0
+      || selectedIngredients.length > 0
+      || selectedCategories.length > 0
+      || selectedInstructions
     ) {
       clearTimeout(typingTimeout);
 
@@ -186,7 +186,6 @@ function RecipeList({ favorites }) {
     sortOrder,
   ]);
 
-
   // useEffect(() => {
   //   updatePage(currentPage);
   // }, []);
@@ -202,34 +201,34 @@ function RecipeList({ favorites }) {
       updatePage(page);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [updatePage]
+    [updatePage],
   );
 
   function countAppliedFilters(
-    selectedCategories,
-    selectedIngredients,
-    selectedTags,
-    selectedInstructions
+    Categories,
+    Ingredients,
+    Tags,
+    Instructions,
   ) {
     let count = 0;
 
-    if (selectedCategories.length > 0) {
+    if (Categories.length > 0) {
       count++;
     }
 
-    if (selectedIngredients.length > 0) {
+    if (Ingredients.length > 0) {
       count++;
     }
 
-    if (selectedTags.length > 0) {
+    if (Tags.length > 0) {
       count++;
     }
 
-    if (selectedInstructions > 0) {
+    if (Instructions > 0) {
       count++;
     }
     // Check if selectedInstructions is not null before comparing
-    if (selectedInstructions !== null && selectedInstructions > 0) {
+    if (Instructions !== null && Instructions > 0) {
       count++;
     }
     return count;
@@ -240,7 +239,7 @@ function RecipeList({ favorites }) {
       selectedCategories,
       selectedIngredients,
       selectedTags,
-      selectedInstructions
+      selectedInstructions,
     );
     setFilterCount(counts);
   }, [
@@ -256,7 +255,6 @@ function RecipeList({ favorites }) {
       ingredients,
       categories,
       instructions,
-      searchQuery,
       sortOrders,
     } = router.query;
     // updatePage(currentPage);
@@ -315,7 +313,7 @@ function RecipeList({ favorites }) {
   const recipesPerPage = 100;
   const displayRemainingRecipes = Math.max(
     0,
-    totalRecipes - recipesPerPage * currentPage
+    totalRecipes - recipesPerPage * currentPage,
   );
   return (
     <div>
@@ -381,21 +379,22 @@ function RecipeList({ favorites }) {
       </div>
       {autocompleteSuggestions.length > 0 && (
         <ul className="autocomplete-list">
-          {autocompleteSuggestions.map((suggestion, index) => (
-            <li key={`${index}:${suggestion}`}>
+          {autocompleteSuggestions.map((suggestion) => (
+            <li key={KeyUUID()}>
               <button
                 type="button"
-                onClick={() => handleAutocompleteSelect(suggestion)}
+                onClick={() => fetchAutocompleteSuggestions(suggestion)}
               >
                 {suggestion}
               </button>
             </li>
           ))}
-          {autocompleteSuggestions.map((suggestion, index) => (
+          // eslint-disable-next-line no-unused-vars
+          {autocompleteSuggestions.map((suggestion) => (
             <li key={KeyUUID()}>
               <button
                 type="button"
-                onClick={() => handleAutocompleteSelect(suggestion)}
+                onClick={() => fetchAutocompleteSuggestions(suggestion)}
               >
                 {suggestion}
               </button>
@@ -435,23 +434,24 @@ function RecipeList({ favorites }) {
           )}
         </div>
       )}
-      <>
-        <p style={{ textAlign: "center" }}>
-          <span style={{ fontWeight: "bold" }}>{displayRemainingRecipes} </span>
-          recipes remaining
-        </p>
+      <p style={{ textAlign: "center" }}>
+        <span style={{ fontWeight: "bold" }}>
+          {displayRemainingRecipes}
+          {' '}
+        </span>
+        recipes remaining
+      </p>
 
-        <div className="flex justify-center pb-8 gap-10">
-          <Stack spacing={2} justifyContent="center" alignItems="center">
-            <Pagination
-              count={pageNumbers}
-              page={currentPage}
-              onChange={handlePageChange}
-              color="primary"
-            />
-          </Stack>
-        </div>
-      </>
+      <div className="flex justify-center pb-8 gap-10">
+        <Stack spacing={2} justifyContent="center" alignItems="center">
+          <Pagination
+            count={pageNumbers}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </Stack>
+      </div>
       <FloatingButton
         className={theme === "light" ? "bg-blue-500" : "bg-blue-800"}
       />

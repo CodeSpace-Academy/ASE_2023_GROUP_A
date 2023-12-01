@@ -182,14 +182,6 @@ function SimilarRecipes() {
 
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (error) {
-    return <p>Error fetching favorites</p>;
-  }
-
   // Extract the list of favorite recipes from the fetched data
   const favorites = favoritesData ? favoritesData.favorites || [] : [];
 
@@ -243,7 +235,7 @@ function SimilarRecipes() {
             <Loading />
           ) : (
             <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {similarRecipes.map((recipe, index) => (
+              {similarRecipes.map((recipe) => (
                 <RecipeCard
                   Key={KeyUUID()}
                   recipe={recipe}
