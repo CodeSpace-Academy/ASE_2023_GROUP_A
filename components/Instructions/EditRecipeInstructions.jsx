@@ -13,7 +13,6 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
   ]);
   const [setEditMode] = useState(true);
 
-
   /**
    * Handles changes to instruction input fields.
    *
@@ -87,7 +86,8 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
         <button
           type="button"
           onClick={handleSaveButtonClick}
-          className="ml-10 mt-3 flex border border-black text-black hover:text-blue-400 px-3 py-2 rounded-lg">
+          className="ml-10 mt-3 flex border border-black text-black hover:text-blue-400 px-3 py-2 rounded-lg"
+        >
           Save
         </button>
 
