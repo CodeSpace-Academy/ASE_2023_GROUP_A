@@ -26,7 +26,7 @@ function Home() {
   //     revalidateOnFocus: false,
   //   }
   // );
-  const favoritesData = favoriteContext;
+  // const favoritesData = favoriteContext;
   /**
    * A function to manually refresh the favorites data.
    * It triggers a revalidation of the 'favorites' data using the mutate function.

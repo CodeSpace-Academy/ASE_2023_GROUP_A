@@ -14,12 +14,13 @@ import { getModifiedRecipesWithTotalCount } from "../../../helpers/mongoDB-utils
 const ITEMS_PER_PAGE = 100;
 
 const handler = async (req, res) => {
-  if (req.method !== "GET") {
+  if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { page, filters, sortOrder } = req.query;
+    const { page } = req.query;
+    const { filters, sortOrder } = req.query;
     const decodedFilters = JSON.parse(decodeURIComponent(filters));
     console.log("FILTERS:", decodedFilters);
     console.log("SORTORDER:", sortOrder);

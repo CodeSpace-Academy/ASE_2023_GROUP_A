@@ -16,7 +16,7 @@ import Stack from "@mui/material/Stack";
 import { v4 as KeyUUID } from "uuid";
 import Fuse from "fuse.js";
 
-// import fetchRecipes from "../../helpers/hook";
+import fetchRecipes from "../../helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import FavCard from "../Cards/FavCard";
 import Hero from "../Landing/Hero";
@@ -40,14 +40,7 @@ import { responsive } from "../../helpers/settings/settings";
 
 function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
-  const {
-    currentPage,
-    updatePage,
-    api,
-    setFilteredPage,
-    updateFilteredPage,
-    filteredPage,
-  } = usePageContext();
+  const { currentPage, updatePage, api } = usePageContext();
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -65,19 +58,6 @@ function RecipeList({ favorites }) {
   const isDarkTheme = theme === "dark";
   const router = useRouter();
 
-  // const {
-  //   data: recipesData,
-  //   error: recipesError,
-  //   isLoading,
-  // } = useSWR(`${api}`, fetchRecipes, {
-  //   revalidateOnFocus: false, // Disable revalidation on focus to prevent unnecessary re-fetching
-  // });
-
-  // const { data, error, loading } = useSWR(`${api}`, fetchRecipes);
-
-  // if (error) {
-  //   return <h1>Error Failed to Fetch Recipes</h1>;
-  // }
   const filters = {
     searchQuery,
     tags: selectedTags,
@@ -90,93 +70,110 @@ function RecipeList({ favorites }) {
   )}&sortOrder=${sortOrder}`;
   console.log("API URL:", apiUrl);
 
-  const fetchRecipes = async () => {
-          updatePage(currentPage);
-    try {
-      const response = await fetch(apiUrl);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+  const { data, error, loading } = useSWR(api ,
+    fetchRecipes);
+  
+  
+  
+  
+    const fetchORecipes = async () => {
+      if (fetchingRecipes) {
+        return;
       }
-      const data = await response.json();
-      setRecipes(data.recipes);
-      setTotalRecipes(data.totalCount);
-    } catch (err) {
-      console.error("Error fetching original recipes:", err);
-    }
-  };
-
-  const fetchFilteredRecipes = async () => {
-          updateFilteredPage(1);
-    try {
-      const response = await fetch(apiUrl);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+  
+      setFetchingRecipes(true);
+      updatePage(currentPage);
+      try {
+        if (!data && error) {
+          throw new Error(`HTTP error! Status: ${error}`);
+        }
+        setRecipes(data.recipes);
+        setTotalRecipes(data.totalCount);
+      } catch (err) {
+        throw new Error("Error fetching original recipes:", err);
+      } finally {
+        setFetchingRecipes(false);
       }
-      const data = await response.json();
-      setRecipes(data.recipes);
-      setTotalRecipes(data.totalCount);
-    } catch (err) {
-      console.error("Error fetching original recipes:", err);
-    }
-    const queryParams = new URLSearchParams(filters);
-    if (searchQuery.length > 0) {
-      queryParams.set("searchQuery", searchQuery);
-    } else {
-      queryParams.delete("searchQuery");
-    }
+    };
+  
+    useEffect(() => {
+      if (!loading && data && !fetchingRecipes) {
+        fetchORecipes();
+      }
+    }, [data, loading]);
 
-    if (selectedTags.length > 0) {
-      queryParams.set("tags", selectedTags.join(","));
-    } else {
-      queryParams.delete("tags");
-    }
-
-    if (selectedCategories.length > 0) {
-      queryParams.set("categories", selectedCategories.join(","));
-    } else {
-      queryParams.delete("categories");
-    }
-
-    if (selectedIngredients.length > 0) {
-      queryParams.set("ingredients", selectedIngredients.join(","));
-    } else {
-      queryParams.delete("ingredients");
-    }
-
-    if (selectedInstructions) {
-      queryParams.set("instructions", selectedInstructions.toString());
-    } else {
-      queryParams.delete("instructions");
-    }
-
-    if (sortOrder) {
-      queryParams.set("sortOrders", sortOrder);
-    } else {
-      queryParams.delete("sortOrders");
-    }
-
-    const queryString = queryParams.toString();
-    const url = queryString ? `/?${queryString}` : "/";
-    router.push(url);
-  };
-
+    const fetchFilteredRecipes = async () => {
+      try {
+        const response = await fetch(apiUrl);
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setRecipes(data.recipes);
+        setTotalRecipes(data.totalCount);
+      } catch (err) {
+        console.error("Error fetching original recipes:", err);
+      }
+      const queryParams = new URLSearchParams(filters);
+      if (searchQuery.length > 0) {
+        queryParams.set("searchQuery", searchQuery);
+      } else {
+        queryParams.delete("searchQuery");
+      }
+  
+      if (selectedTags.length > 0) {
+        queryParams.set("tags", selectedTags.join(","));
+      } else {
+        queryParams.delete("tags");
+      }
+  
+      if (selectedCategories.length > 0) {
+        queryParams.set("categories", selectedCategories.join(","));
+      } else {
+        queryParams.delete("categories");
+      }
+  
+      if (selectedIngredients.length > 0) {
+        queryParams.set("ingredients", selectedIngredients.join(","));
+      } else {
+        queryParams.delete("ingredients");
+      }
+  
+      if (selectedInstructions) {
+        queryParams.set("instructions", selectedInstructions.toString());
+      } else {
+        queryParams.delete("instructions");
+      }
+  
+      if (sortOrder) {
+        queryParams.set("sortOrders", sortOrder);
+      } else {
+        queryParams.delete("sortOrders");
+      }
+  
+      const queryString = queryParams.toString();
+      const url = queryString ? `/?${queryString}` : "/";
+      router.push(url);
+    };
   useEffect(() => {
-    // Fetch the original recipes without search when the component mounts
-    if(selectedTags.length === 0 ||
-      selectedIngredients.length === 0 ||
-      selectedCategories.length === 0 ||
-      !selectedInstructions) {
+    let typingTimeout;
 
-    fetchRecipes();
+    if (
+      searchQuery.length >= 4 ||
+      selectedTags.length > 0 ||
+      selectedIngredients.length > 0 ||
+      selectedCategories.length > 0 ||
+      selectedInstructions
+    ) {
+      clearTimeout(typingTimeout);
+
+      typingTimeout = setTimeout(() => {
+        fetchFilteredRecipes();
+      }, 500);
     }
-  }, [currentPage]);
 
-  useEffect(() => {
-      fetchFilteredRecipes();
-      // Filters are applied, update the filtered page
-    console.log("RECIPES # RECIPES:", recipes);
+    return () => clearTimeout(typingTimeout);
   }, [
     searchQuery,
     selectedTags,
@@ -187,10 +184,9 @@ function RecipeList({ favorites }) {
   ]);
 
 
-  // useEffect(() => {
-  //   updatePage(currentPage);
-  //   fetchRecipes();
-  // }, [currentPage]);
+  useEffect(() => {
+    updatePage(currentPage);
+  }, [currentPage]);
 
   useEffect(() => {
     favoriteContext.updateFavorites(favorites);
@@ -200,30 +196,10 @@ function RecipeList({ favorites }) {
 
   const handlePageChange = useCallback(
     (event, page) => {
-      if (
-        selectedTags.length > 0 ||
-        selectedIngredients.length > 0 ||
-        selectedCategories.length > 0 ||
-        selectedInstructions ||
-        sortOrder
-      ) {
-        // Filters are applied, update the filtered page
-        updateFilteredPage(page);
-      } else {
-        // No filters applied, update the original page
-        updatePage(page);
-      }
+      updatePage(page);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [
-      currentPage,
-      filteredPage,
-      selectedTags,
-      selectedIngredients,
-      selectedCategories,
-      selectedInstructions,
-      sortOrder,
-    ]
+    [updatePage]
   );
 
   function countAppliedFilters(
@@ -289,52 +265,6 @@ function RecipeList({ favorites }) {
     setSortOrder(sortOrders || null);
   }, []);
 
-  // useEffect(() => {
-  //   let typingTimeout;
-
-  //   if (
-  //     searchQuery.length >= 4 ||
-  //     selectedTags.length > 0 ||
-  //     selectedIngredients.length > 0 ||
-  //     selectedCategories.length > 0 ||
-  //     selectedInstructions
-  //   ) {
-  //     clearTimeout(typingTimeout);
-
-  //     typingTimeout = setTimeout(() => {
-  //       fetchRecipesByFilters(filters, sortOrder);
-  //     }, 500);
-  //   }
-
-  //   return () => clearTimeout(typingTimeout);
-  // }, [
-  //   searchQuery,
-  //   selectedTags,
-  //   selectedIngredients,
-  //   selectedCategories,
-  //   selectedInstructions,
-  //   sortOrder,
-  // ]);
-
-  // useEffect(() => {
-  //   const filter = async () => {
-  //     try {
-  //       const data = await fetchRecipes();
-  //       return data;
-  //     } catch (error) {
-  //       console.error("Error:", error);
-  //     }
-  //   };
-  //   filter();
-  // }, [
-  //   searchQuery,
-  //   selectedTags,
-  //   selectedIngredients,
-  //   selectedCategories,
-  //   selectedInstructions,
-  //   sortOrder,
-  // ]);
-
   const fetchAutocompleteSuggestions = async (searchInput) => {
     try {
       if (searchInput.length === 0 || !fuse) {
@@ -366,25 +296,15 @@ function RecipeList({ favorites }) {
     router.push("/");
   }
 
-  const handleSearchButton = useMemo(() => {
+  const handleSearchButton = () => {
     if (searchQuery.length >= 4) {
       fetchFilteredRecipes();
     }
-  }, [
-    searchQuery,
-    selectedTags,
-    selectedIngredients,
-    selectedCategories,
-    selectedInstructions,
-    sortOrder,
-  ]);
+  };
 
-  const handleChange = useCallback(
-    (event) => {
-      setSelectedInstructions(event.target.value);
-    },
-    [setSelectedInstructions]
-  );
+  const handleChange = (event) => {
+    setSelectedInstructions(event.target.value);
+  };
   const handleViewFavorites = () => {
     setShowCarousel(!showCarousel);
   };
@@ -512,37 +432,26 @@ function RecipeList({ favorites }) {
           )}
         </div>
       )}
-      {(filterCount === 0 || totalRecipes === 0) && (
-        <>
-          <p style={{ textAlign: "center" }}>
-            <span style={{ fontWeight: "bold" }}>
-              {displayRemainingRecipes}{" "}
-            </span>
-            recipes remaining
-          </p>
-        </>
-      )}
+      <>
+        <p style={{ textAlign: "center" }}>
+          <span style={{ fontWeight: "bold" }}>{displayRemainingRecipes} </span>
+          recipes remaining
+        </p>
+
+        <div className="flex justify-center pb-8 gap-10">
+          <Stack spacing={2} justifyContent="center" alignItems="center">
+            <Pagination
+              count={pageNumbers}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Stack>
+        </div>
+      </>
       <FloatingButton
         className={theme === "light" ? "bg-blue-500" : "bg-blue-800"}
       />
-      <div className="flex justify-center pb-8 gap-10">
-        <Stack spacing={2} justifyContent="center" alignItems="center">
-          <Pagination
-            count={pageNumbers}
-            page={
-              selectedTags.length > 0 ||
-              selectedIngredients.length > 0 ||
-              selectedCategories.length > 0 ||
-              selectedInstructions ||
-              sortOrder
-                ? filteredPage
-                : currentPage
-            }
-            onChange={handlePageChange}
-            color="primary"
-          />
-        </Stack>
-      </div>
     </div>
   );
 }

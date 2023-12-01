@@ -122,7 +122,7 @@ function SimilarRecipes() {
 
     // Cleanup: Remove the change listener when the component unmounts
     return () => favoriteContext.removeChangeListener(refreshFavorites);
-  }, [recipeTitle, currentSimilarRecipesPage]);
+  }, []);
 
   // useEffect(() => {
   //   // Update the favorites in the context when favoritesData changes

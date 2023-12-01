@@ -59,7 +59,7 @@ export const PageProvider = ({ children }) => {
       updateFilters(true);
       if (!isServer) {
         localStorage.setItem("lastFilteredPage", newPageNumber.toString());
-        true;
+        // returntrue;
       }
       return newPageNumber;
     });
@@ -72,7 +72,7 @@ export const PageProvider = ({ children }) => {
       router.push("/");
     }
   };
-  const api = `/api/recipes?page=${filtered ? filteredPage : currentPage}`;
+  const api = `/api/recipes?page=${currentPage}`;
 
   const contextValue = useMemo(
     () => ({
@@ -85,7 +85,10 @@ export const PageProvider = ({ children }) => {
       goBack,
       api,
     }),
-    [currentPage, filteredPage]
+    [api,
+    currentPage,
+    updatePage,
+]
   );
 
   return (

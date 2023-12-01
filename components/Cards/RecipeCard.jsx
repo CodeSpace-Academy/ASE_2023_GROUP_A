@@ -19,9 +19,7 @@ import {
 } from "../TimeAndDate/TimeConvertor";
 import FavoritesContext from "../Context/Favorites-context";
 import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRecipe";
-import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "../Context/ThemeContext";
-import { CookTime, PrepTime, TotalTime } from "../TimeAndDate/TimeConvertor";
 import LoadingCard from "./LoadingCard";
 import Title from "./Title";
 

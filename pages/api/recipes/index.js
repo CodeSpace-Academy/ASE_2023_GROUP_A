@@ -16,18 +16,14 @@ const ITEMS_PER_PAGE = 100;
 const handler = async (req, res) => {
     const isServer = typeof window === "undefined";
   try {
-    const { page, filters, sortOrder} = req.query;
-    
-    const decodedFilters = JSON.parse(decodeURIComponent(filters));
-    console.log("DECODED FILTERS:", decodedFilters);
-    console.log("FILTERS:", filters);
-    console.log("SORTORDER:", sortOrder);
-    console.log("INCOMIING REQUEST:", page);
+    const { page } = req.query;
+    const decodedFilters = decodeURIComponent(filters);
+
     const skip = (page - 1) * ITEMS_PER_PAGE;
 
     const data = await getModifiedRecipesWithTotalCount(
       skip,
-      decodedFilters,
+      filters,
       sortOrder
     );
     res.status(200).json({
