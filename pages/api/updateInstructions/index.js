@@ -12,15 +12,17 @@
  * error or the conditions are not met, it returns a 400 or 500 status code with an appropriate error
  * message
  */
-import { updateRecipeInstructions } from "../../../helpers/mongoDB-utils";
+
+
+import { updateRecipeInstructions } from "@/helpers/mongoDB-utils";
 
 async function handler(req, res) {
   if (req.method === "PUT") {
-    console.log("reaches", req);
+    console.log('reaches', req)
     try {
       const { recipeId, instructions } = req.body;
 
-      console.log("POP: ", recipeId, instructions);
+      console.log('POP: ', recipeId, instructions)
 
       if (!instructions) {
         return res.status(400).json({ message: "Invalid instructions format" });
@@ -31,8 +33,9 @@ async function handler(req, res) {
 
       if (result.success) {
         return res.status(200).json({ message: result.message });
+      } else {
+        return res.status(500).json({ message: "Internal server error" });
       }
-      return res.status(500).json({ message: "Internal server error" });
     } catch (error) {
       console.error("Request handling error:", error);
       return res.status(500).json({ message: "Internal server error" });

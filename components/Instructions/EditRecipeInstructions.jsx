@@ -11,8 +11,8 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
   const [editedInstructions, setEditedInstructions] = useState([
     ...instructions,
   ]);
+  const [setEditMode] = useState(true);
 
-  const [, setEditMode] = useState(true);
 
   /**
    * Handles changes to instruction input fields.
@@ -25,7 +25,6 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
     updatedInstructions[index] = newValue;
     setEditedInstructions(updatedInstructions);
   };
-
   /**
    * Saves the edited instructions to the database.
    */
@@ -34,7 +33,6 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
       recipeId,
       instructions: editedInstructions,
     });
-
     try {
       const response = await fetch("/api/updateInstructions", {
         method: "PUT",
@@ -43,8 +41,9 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
         },
         body: requestBody,
       });
-
       if (response.ok) {
+        const updatedInstructions = [...editedInstructions];
+        setEditedInstructions(updatedInstructions);
         setEditMode((prevState) => !prevState);
       } else {
         console.error("Failed to update instructions.");
@@ -54,6 +53,10 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
     } finally {
       setEditMode(false);
     }
+  };
+
+  const handleSaveButtonClick = () => {
+    handleInstructionsSave();
   };
 
   /**
@@ -67,11 +70,11 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
     <>
       <h3 className="mt-2 text-lg font-semibold">Edit Instructions</h3>
 
-      <ol className="list-decimal list-inside bg-pink-200">
+      <ol className="list-decimal list-inside ">
         {editedInstructions.map((instruction, index) => (
           <li key={index}>
             <input
-              className="w-full"
+              className="w-full bg-gray-200"
               type="text"
               value={instruction}
               onChange={(e) => handleInputChange(index, e.target.value)}
@@ -80,12 +83,15 @@ function EditRecipeInstructions({ instructions, recipeId, onCancel }) {
         ))}
       </ol>
 
-      <div className="flex flex-row gap-4">
-        <button type="button" onClick={handleInstructionsSave}>
+      <div className="flex flex-row gap-4 ">
+        <button
+          type="button"
+          onClick={handleSaveButtonClick}
+          className="ml-10 mt-3 flex border border-black text-black hover:text-blue-400 px-3 py-2 rounded-lg">
           Save
         </button>
 
-        <button type="button" onClick={handleCancel}>
+        <button type="button" onClick={handleCancel} className="ml-10  mt-3 flex border border-black text-black hover:text-blue-400 px-2 py-2 rounded-lg">
           Cancel
         </button>
       </div>
