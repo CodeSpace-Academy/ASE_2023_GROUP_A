@@ -22,7 +22,7 @@ const handler = async (req, res) => {
     const data = await getModifiedRecipesWithTotalCount(
       skip,
       decodedFilters,
-      sortOrder
+      sortOrder,
     );
     res.status(200).json({
       recipes: data.recipes,
