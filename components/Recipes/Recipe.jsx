@@ -96,12 +96,12 @@ function Recipe({ recipe, Allergies }) {
   return (
     <div className={`mt-12 p-6 lg:p-12 ${textClass}`}>
       <Link href="/">
-        <span className={`flex text-xl gap-2 p-4 ${textClass}`}>
+        <span className={`flex text-xl gap-2 p-2 ${textClass}`}>
           <button
             type="button"
             className="ml-10 flex border bg-gradient-to-br from-white to-gray-400 text-white hover:text-blue-400 px-3 py-2 rounded-lg"
           >
-            <FaArrowLeft className="mr-2" />
+            <FaArrowLeft className="mr-2 mt-1" />
             <p>Back to More Recipes</p>
           </button>
         </span>
