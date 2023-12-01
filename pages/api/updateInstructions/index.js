@@ -15,7 +15,6 @@
  *  it returns a 400 or 500 status code with an appropriate error message
  */
 
-
 import { updateRecipeInstructions } from "../../../helpers/mongoDB-utils";
 
 async function handler(req, res) {
@@ -23,9 +22,6 @@ async function handler(req, res) {
     console.log('reaches', req);
     try {
       const { recipeId, instructions } = req.body;
-
-      console.log('POP: ', recipeId, instructions)
-
       if (!instructions) {
         return res.status(400).json({ message: "Invalid instructions format" });
       }
