@@ -17,10 +17,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
 import Fuse from "fuse.js";
+import { v4 as KeyUUID } from "uuid";
 import RecipeCard from '../../components/Cards/RecipeCard';
 import FavoritesContext from '../../components/Context/Favorites-context';
 import Loading from '../../components/Loading/Loading';
-import { v4 as KeyUUID } from "uuid";
 
 function FavoritesPage() {
   const favoriteCtx = useContext(FavoritesContext);
@@ -46,7 +46,7 @@ function FavoritesPage() {
   const favoriteRecipes = favoriteCtx.favorites || [];
 
   useEffect(() => {
-    if (favoriteRecipes.length > 0 ) {
+    if (favoriteRecipes.length > 0) {
       setFilteredRecipes([...favoriteRecipes].flat());
       // setFuse(new Fuse([...favoriteRecipes].flat(), options));
       setIsLoading(false);
@@ -58,7 +58,7 @@ function FavoritesPage() {
       setIsLoading(false);
     }
     if (recipesError) {
-      alert("Error fetching Favorites:", recipesError.json());
+      throw new Error("Error fetching Favorites:", recipesError.json());
     }
   }, [favoriteRecipes, favoritesData]);
 
