@@ -1,40 +1,122 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Recipe App Readme
+
+## Project Overview
+
+Welcome to our Recipe App project! This repository is the collaborative effort of our agile team working on building an innovative recipe application using Next.js and various other libraries.
+
+## Table of Contents
+
+- [Recipe App Readme](#recipe-app-readme)
+  - [Project Overview](#project-overview)
+  - [Table of Contents](#table-of-contents)
+  - [Team Members](#team-members)
+  - [Features](#features)
+  - [Libraries](#libraries)
+  - [Getting Started](#getting-started)
+  - [Development Workflow](#development-workflow)
+    - [Branching Strategy](#branching-strategy)
+  - [Contribution Guidelines](#contribution-guidelines)
+  - [Acknowledgments](#acknowledgments)
+
+## Team Members
+
+- **Product Owner:** David Robertson
+- **Product Manager:** Renzo Van Wyk
+- **Scrum Master:** Chad Bosch
+- **Agile Members:**
+  - Keorapetse Magano
+  - Lulu Mosobe
+  - Mothusi Mathuloe
+  - Mpho Makgwe
+  - Olga Maseng
+  - Oratile Mokgoatlheng
+  - Otshepeng Setuke
+  - Refilwe Nqatyelwa
+
+## Features
+
+Our Recipe App comes with a variety of features to enhance the user experience:
+
+- Displaying recipe cards with cooking time, prep time, tags, categories, and more.
+- Filtering recipes by steps, prep time, tags, and categories.
+- Search functionality with highlighted title matches.
+- Adding recipes to favorites.
+- Editing recipe descriptions and instructions.
+- Theme toggling.
+- Pagination for navigating through recipe pages.
+- Previewing recipes.
+- Viewing detailed recipe information.
+
+## Libraries
+
+Our project utilizes the following libraries to power our application:
+
+- **@emotion/react@11.11.1**
+- **@fortawesome/fontawesome-free@6.4.2**
+- **@heroicons/react@2.0.18**
+- **@mui/icons-material@5.14.16**
+- **@mui/material@5.14.18**
+- **@next/eslint-plugin-next@14.0.1**
+- **@types/node@20.8.3**
+- **@types/react@18.2.25**
+- **autoprefixer@10.4.16**
+- **cookies-next@4.1.0**
+- **eslint-config-airbnb@19.0.4**
+- **eslint-config-prettier@9.0.0**
+- **eslint-plugin-import@2.29.0**
+- **eslint-plugin-jsx-a11y@6.8.0**
+- **eslint-plugin-next@0.0.0**
+- **eslint-plugin-react-hooks@4.6.0**
+- **eslint-plugin-react@7.33.2**
+- **eslint@8.54.0**
+- **heroicons@2.0.18**
+- **js-cookie@3.0.5**
+- **mongodb@6.1.0**
+- **next-themes@0.2.1**
+- **next@13.5.4**
+- **postcss-import@15.1.0**
+- **react-dom@18.2.0**
+- **react-highlight-words@0.20.0**
+- **react-icons@4.12.0**
+- **react-multi-carousel@2.8.4**
+- **react-responsive-carousel@3.2.23**
+- **react-select@5.7.7**
+- **react@18.2.0**
+- **styled-components@6.1.1**
+- **swr@2.2.4**
+- **tailwindcss@3.3.3**
+- **typescript@5.2.2**
+- **uuid@9.0.1**
 
 ## Getting Started
 
-First, run the development server:
+To get started with the Recipe App locally, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone the repository: `git clone <repository-url>`
+2. Install dependencies: `npm install`
+3. Start the development server: `npm run dev`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Development Workflow
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Our agile development process follows the Scrum methodology, with regular sprint planning, daily stand-ups, and sprint reviews. The Scrum Master, Chad Bosch, is responsible for ensuring the team's adherence to Scrum principles and facilitating smooth communication.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### Branching Strategy
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+For contributing to the project, follow these steps:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Create a new branch for your feature or bug fix: `git checkout -b feature/your-feature`
+2. Fetch the latest changes from the main branch: `git fetch origin main`
+3. Merge the latest changes into your branch: `git merge origin/main`
+4. Implement your changes and test thoroughly.
+5. Push your branch to the repository: `git push origin feature/your-feature`
+6. Submit a pull request for review.
 
-## Learn More
+## Contribution Guidelines
 
-To learn more about Next.js, take a look at the following resources:
+We welcome contributions from all team members. If you have ideas for improvements or new features, please follow our [Contribution Guidelines](CONTRIBUTING.md).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Acknowledgments
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+We would like to express our gratitude to the entire team for their hard work and dedication to making this Recipe App a success. Special thanks to our Product Manager, Renzo Van Wyk, and our Scrum Master, Chad Bosch, for their leadership and guidance. Together, we are creating a delightful experience for our users!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Happy coding! 🚀
