@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import { mutate } from "swr";
-import { usePageContext } from "../components/Context/CurrentPageContexts/CurrentHomePage";
+import useSWR, { mutate } from "swr";
+
 import EnvError from "./error";
 import Loading from "../components/Loading/Loading";
 import FavoritesContext from "../components/Context/Favorites-context";
@@ -16,17 +16,14 @@ function Home() {
   const favoriteContext = useContext(FavoritesContext);
 
   // Custom fetcher function for useSWR to fetch favorite recipes data
-  // const fetcher = (url) => fetch(url).then((res) => res.json());
+  const fetcher = (url) => fetch(url).then((res) => res.json());
 
   // Use the useSWR hook to fetch data for the user's favorite recipes
-  // const { data: favoritesData, error } = useSWR(
-  //   "api/recipes/Favourites",
-  //   fetcher,
-  //   {
-  //     revalidateOnFocus: false,
-  //   }
-  // );
-  // const favoritesData = favoriteContext;
+  const {
+    data: favoritesData,
+    error,
+  } = useSWR("api/recipes/Favourites", fetcher);
+
   /**
    * A function to manually refresh the favorites data.
    * It triggers a revalidation of the 'favorites' data using the mutate function.
@@ -46,48 +43,25 @@ function Home() {
 
   // Check if required environment variables are present, if not, display an error component
   if (
-    process.env === undefined ||
-    !process.env.mongodb_password ||
-    !process.env.mongodb_username ||
-    !process.env.mongodb_uri
+    process.env === undefined
+    || !process.env.mongodb_password
+    || !process.env.mongodb_username
+    || !process.env.mongodb_uri
   ) {
     return <EnvError />;
   }
 
   // If there is an error fetching data or no data is available, display a loading component
-  // if ( !favoritesData) {
-  //   return <Loading />;
-  // }
+  if (error || !favoritesData) {
+    return <Loading />;
+  }
 
   // Extract the list of favorite recipes from the fetched data
-  const favorites = favoriteContext.userFavorites || [];
+  const favorites = favoritesData.favorites || [];
 
   // Render the RecipeList component with the list of favorite recipes
   return <RecipeList favorites={favorites} />;
 }
-// Create a file, for example, utils/api.js
-// const getBaseURL = () => {
-//   if (process.env.NODE_ENV === "development") {
-//     // Development environment
-//     return "http://localhost:3000";
-//   } else {
-//     // Production or other environments
-//     return process.env.NEXT_PUBLIC_BASE_URL || "";
-//   }
-// };
-
-  // export const getServerSideProps = async ({ query }) => {
-  
-  //   const { page = 1 } = query;
-  //   const baseURL = getBaseURL();
-  //   const response = await fetch(`${baseURL}/api/recipes?page=${page}`);
-  //   const data = await response.json();
-  //   return {
-  //     props: {
-  //       initialData: data,
-  //     },
-  //   };
-  // };
 
 // Export the Home component as the default export
 export default Home;

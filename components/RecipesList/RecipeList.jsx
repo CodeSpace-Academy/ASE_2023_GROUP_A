@@ -16,7 +16,7 @@ import Stack from "@mui/material/Stack";
 import { v4 as KeyUUID } from "uuid";
 import Fuse from "fuse.js";
 
-import fetchRecipes from "../../helpers/hook";
+// import fetchRecipes from "../../helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import FavCard from "../Cards/FavCard";
 import Hero from "../Landing/Hero";
@@ -42,6 +42,7 @@ function RecipeList({ favorites }) {
   const [recipes, setRecipes] = useState([]);
   const { currentPage, updatePage, api } = usePageContext();
   const [totalRecipes, setTotalRecipes] = useState(0);
+  const [filteredPage, setFilteredPage] = useState(1);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -58,6 +59,19 @@ function RecipeList({ favorites }) {
   const isDarkTheme = theme === "dark";
   const router = useRouter();
 
+  // const {
+  //   data: recipesData,
+  //   error: recipesError,
+  //   isLoading,
+  // } = useSWR(`${api}`, fetchRecipes, {
+  //   revalidateOnFocus: false, // Disable revalidation on focus to prevent unnecessary re-fetching
+  // });
+
+  // const { data, error, loading } = useSWR(`${api}`, fetchRecipes);
+
+  // if (error) {
+  //   return <h1>Error Failed to Fetch Recipes</h1>;
+  // }
   const filters = {
     searchQuery,
     tags: selectedTags,
@@ -68,94 +82,83 @@ function RecipeList({ favorites }) {
   const apiUrl = `${api}&filters=${JSON.stringify(
     filters
   )}&sortOrder=${sortOrder}`;
-  console.log("API URL:", apiUrl);
 
-  const { data, error, loading } = useSWR(api ,
-    fetchRecipes);
-  
-  
-  
-  
-    const fetchORecipes = async () => {
-      if (fetchingRecipes) {
-        return;
-      }
-  
-      setFetchingRecipes(true);
-      updatePage(currentPage);
-      try {
-        if (!data && error) {
-          throw new Error(`HTTP error! Status: ${error}`);
-        }
-        setRecipes(data.recipes);
-        setTotalRecipes(data.totalCount);
-      } catch (err) {
-        throw new Error("Error fetching original recipes:", err);
-      } finally {
-        setFetchingRecipes(false);
-      }
-    };
-  
-    useEffect(() => {
-      if (!loading && data && !fetchingRecipes) {
-        fetchORecipes();
-      }
-    }, [data, loading]);
+  const fetchRecipes = async () => {
+    updatePage(currentPage);
+    try {
+      const response = await fetch(apiUrl);
 
-    const fetchFilteredRecipes = async () => {
-      try {
-        const response = await fetch(apiUrl);
-  
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        setRecipes(data.recipes);
-        setTotalRecipes(data.totalCount);
-      } catch (err) {
-        console.error("Error fetching original recipes:", err);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const queryParams = new URLSearchParams(filters);
-      if (searchQuery.length > 0) {
-        queryParams.set("searchQuery", searchQuery);
-      } else {
-        queryParams.delete("searchQuery");
+      const data = await response.json();
+      setRecipes(data.recipes);
+      setTotalRecipes(data.totalCount);
+    } catch (err) {
+      console.error("Error fetching original recipes:", err);
+    }
+  };
+  const fetchFilteredRecipes = async () => {
+    updatePage(filteredPage);
+    try {
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
-      if (selectedTags.length > 0) {
-        queryParams.set("tags", selectedTags.join(","));
-      } else {
-        queryParams.delete("tags");
-      }
-  
-      if (selectedCategories.length > 0) {
-        queryParams.set("categories", selectedCategories.join(","));
-      } else {
-        queryParams.delete("categories");
-      }
-  
-      if (selectedIngredients.length > 0) {
-        queryParams.set("ingredients", selectedIngredients.join(","));
-      } else {
-        queryParams.delete("ingredients");
-      }
-  
-      if (selectedInstructions) {
-        queryParams.set("instructions", selectedInstructions.toString());
-      } else {
-        queryParams.delete("instructions");
-      }
-  
-      if (sortOrder) {
-        queryParams.set("sortOrders", sortOrder);
-      } else {
-        queryParams.delete("sortOrders");
-      }
-  
-      const queryString = queryParams.toString();
-      const url = queryString ? `/?${queryString}` : "/";
-      router.push(url);
-    };
+      const data = await response.json();
+      setRecipes(data.recipes);
+      setTotalRecipes(data.totalCount);
+    } catch (err) {
+      console.error("Error fetching original recipes:", err);
+    }
+    const queryParams = new URLSearchParams(filters);
+    if (searchQuery.length > 0) {
+      queryParams.set("searchQuery", searchQuery);
+    } else {
+      queryParams.delete("searchQuery");
+    }
+
+    if (selectedTags.length > 0) {
+      queryParams.set("tags", selectedTags.join(","));
+    } else {
+      queryParams.delete("tags");
+    }
+
+    if (selectedCategories.length > 0) {
+      queryParams.set("categories", selectedCategories.join(","));
+    } else {
+      queryParams.delete("categories");
+    }
+
+    if (selectedIngredients.length > 0) {
+      queryParams.set("ingredients", selectedIngredients.join(","));
+    } else {
+      queryParams.delete("ingredients");
+    }
+
+    if (selectedInstructions) {
+      queryParams.set("instructions", selectedInstructions.toString());
+    } else {
+      queryParams.delete("instructions");
+    }
+
+    if (sortOrder) {
+      queryParams.set("sortOrders", sortOrder);
+    } else {
+      queryParams.delete("sortOrders");
+    }
+
+    const queryString = queryParams.toString();
+    const url = queryString ? `/?${queryString}` : "/";
+    router.push(url);
+  };
+
+  useEffect(() => {
+    // Fetch the original recipes without search when the component mounts
+    fetchRecipes();
+  }, [currentPage]);
+
   useEffect(() => {
     let typingTimeout;
 
@@ -184,13 +187,13 @@ function RecipeList({ favorites }) {
   ]);
 
 
-  useEffect(() => {
-    updatePage(currentPage);
-  }, [currentPage]);
+  // useEffect(() => {
+  //   updatePage(currentPage);
+  // }, []);
 
   useEffect(() => {
     favoriteContext.updateFavorites(favorites);
-  }, [favorites]);
+  }, [currentPage]);
 
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
 

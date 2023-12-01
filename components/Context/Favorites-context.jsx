@@ -8,8 +8,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable implicit-arrow-linebreak */
-import { useState, createContext, useEffect } from "react";
-// import useSWR from "swr";
+import { useState, createContext } from "react";
+
 const FavoritesContext = createContext({
   userFavorites: [],
   totalFavorites: 0,
@@ -21,36 +21,9 @@ const FavoritesContext = createContext({
   removeChangeListener: (listener) => { },
 });
 
-export function FavoritesContextProvider({ children }) {
+export function FavoritesContextProvider(props) {
   const [userFavorites, setUserFavorites] = useState([]);
   const [changeListeners, setChangeListeners] = useState([]);
-  // const fetcher = (url) => fetch(url).then((res) => res.json());
-
-  // // Use the useSWR hook to fetch data for the user's favorite recipes
-  // const { data: favoritesData, error } = useSWR(
-  //   "/api/recipes/Favourites",
-  //   fetcher,
-  //   {
-  //     revalidateOnFocus: false,
-  //   }
-  // );
-
-  /**
-   * A function to manually refresh the favorites data.
-   * It triggers a revalidation of the 'favorites' data using the mutate function.
-   */
-  // const refreshFavorites = async () => {
-  //   await mutate("api/recipes/Favourites");
-  // };
-  const fetchFavorites = async () => {
-    const response = await fetch("/api/recipes/Favourites");
-    if (response.ok) {
-      const data = await response.json();
-      return data;
-    }
-  };
-  useEffect(()=>{},[])
-
   const notifyChangeListeners = () => {
     changeListeners.forEach((listener) => {
       listener();
@@ -72,13 +45,8 @@ export function FavoritesContextProvider({ children }) {
   };
 
   function isRecipeInFavorites(recipeId, userfavorites) {
-    if (Array.isArray(userfavorites)) {
-      return userfavorites.some((recipe) => recipe && recipe._id === recipeId);
-    }
-      // If not an array, handle accordingly (assuming it's a single recipe)
-      return userfavorites && userfavorites._id === recipeId;
+    return Array.from(userfavorites).some((recipe) => recipe && recipe._id === recipeId);
   }
-
   const addChangeListener = (listener) => {
     setChangeListeners((prevListeners) => [...prevListeners, listener]);
   };
@@ -99,7 +67,7 @@ export function FavoritesContextProvider({ children }) {
   };
     return (
       <FavoritesContext.Provider value={context}>
-        {children}
+        {props.children}
       </FavoritesContext.Provider>
   );
 }

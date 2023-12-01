@@ -14,16 +14,14 @@ import { getModifiedRecipesWithTotalCount } from "../../../helpers/mongoDB-utils
 const ITEMS_PER_PAGE = 100;
 
 const handler = async (req, res) => {
-    const isServer = typeof window === "undefined";
   try {
-    const { page } = req.query;
-    const decodedFilters = decodeURIComponent(filters);
-
+    const { page, filters, sortOrder } = req.query;
+    const decodedFilters = JSON.parse(decodeURIComponent(filters));
     const skip = (page - 1) * ITEMS_PER_PAGE;
 
     const data = await getModifiedRecipesWithTotalCount(
       skip,
-      filters,
+      decodedFilters,
       sortOrder
     );
     res.status(200).json({
