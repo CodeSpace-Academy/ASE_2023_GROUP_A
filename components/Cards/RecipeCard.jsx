@@ -55,8 +55,8 @@ const RecipeCard = ({
     );
   }
   // Determine the first image for the recipe
-  const firstImage =
-    recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
+  const firstImage = recipe.images && recipe.images.length > 0
+    ? recipe.images[0] : recipe.image;
 
   // Check if the recipe is marked as a favorite
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);

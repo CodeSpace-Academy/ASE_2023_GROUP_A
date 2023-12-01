@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import React from "react";
 import classes from "./hero.module.css";
 import SearchBar from "../SearchBar/SearchBar";
