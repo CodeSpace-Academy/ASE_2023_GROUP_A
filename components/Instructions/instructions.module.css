@@ -1,0 +1,36 @@
+.instructionsInput {
+  width: 5em;
+  height: 1.5em;
+  display: inline-block;
+  padding: 7px;
+  outline: none;
+  font-size: 1rem;
+  color: black;
+  border-radius: 5px;
+  border: 2px solid white;
+  background-color: transparent;
+  
+  @media (min-width: 800px) {
+      width: 9em;
+      height: 2.5em;
+    }
+
+    @media (max-width: 799px) {
+        color: white;
+    }
+}
+
+.instructionsInput:focus {
+  border: 2px solid darkblue;
+}
+
+/* .instructionsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+} */
+
+.instructionsInput::placeholder {
+  color: white;
+  font-style: italic;
+}
