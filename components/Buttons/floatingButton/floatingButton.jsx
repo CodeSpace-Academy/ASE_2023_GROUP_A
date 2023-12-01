@@ -13,7 +13,6 @@ export default function FloatingButton() {
       behavior: "smooth",
     });
   };
-
   return (
     <>
       <div
