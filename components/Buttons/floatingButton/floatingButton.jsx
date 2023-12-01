@@ -1,6 +1,6 @@
 import React from "react";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
-import { useTheme } from "@/components/Context/ThemeContext";
+import { useTheme } from "../../Context/ThemeContext";
 import classes from "./floatingButton.module.css";
 
 export default function FloatingButton() {
@@ -16,12 +16,29 @@ export default function FloatingButton() {
   };
   return (
     <>
-      { /* eslint-disable-next-line jsx-a11y/no-static-element-interactions */ }
-      <div className={`${theme === "light" ? "bg-blue-500" : "bg-blue-900"} ${classes.floatingButton}`} onClick={handleScrollToTop}>
+      <div
+        className={`${theme === "light" ? "bg-blue-500" : "bg-blue-900"} ${
+          classes.floatingButton
+        }`}
+        onClick={handleScrollToTop}
+        onKeyUp={handleScrollToTop}
+        role="button"
+        tabIndex={0}
+        aria-label="to top"
+      >
         <FaArrowUp />
       </div>
-      <div className={`${theme === "light" ? "bg-blue-500" : "bg-blue-800"} ${classes.floatingButton2}`} onClick={handleScrollToBottom}>
-        <FaArrowDown/>
+      <div
+        className={`${theme === "light" ? "bg-blue-500" : "bg-blue-800"} ${
+          classes.floatingButton2
+        }`}
+        onClick={handleScrollToBottom}
+        onKeyDown={handleScrollToBottom}
+        role="button"
+        tabIndex={0}
+        aria-label="to bottom"
+      >
+        <FaArrowDown />
       </div>
     </>
   );
