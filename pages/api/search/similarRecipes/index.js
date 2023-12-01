@@ -3,7 +3,7 @@ import { getSimilarRecipesWithTotalCount } from "../../../../helpers/mongoDB-uti
 
 const handler = async (request, response) => {
   const page = request.query.page && request.query.page > 0
-    ? parseInt(request.query.page, 10)
+    ? parseInt(request.query.page, 32)
     : 1;
   const limit = 100;
   const skip = (page - 1) * limit;

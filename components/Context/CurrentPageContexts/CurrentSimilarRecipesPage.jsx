@@ -10,7 +10,7 @@ export const SimilarRecipesPageProvider = ({ children }) => {
 
   useEffect(() => {
     // Access localStorage only on the client side
-    const initialPageNumber = parseInt(localStorage.getItem('lastPage')) || 1;
+    const initialPageNumber = parseInt(localStorage.getItem('lastPage'), 10) || 1;
     setSimilarRecipesCurrentPage(initialPageNumber);
   }, []);
 

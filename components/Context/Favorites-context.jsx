@@ -8,7 +8,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable implicit-arrow-linebreak */
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 // import useSWR from "swr";
 const FavoritesContext = createContext({
   userFavorites: [],
@@ -24,11 +24,11 @@ const FavoritesContext = createContext({
 export function FavoritesContextProvider({ children }) {
   const [userFavorites, setUserFavorites] = useState([]);
   const [changeListeners, setChangeListeners] = useState([]);
-  const fetcher = (url) => fetch(url).then((res) => res.json());
+  // const fetcher = (url) => fetch(url).then((res) => res.json());
 
-  // Use the useSWR hook to fetch data for the user's favorite recipes
+  // // Use the useSWR hook to fetch data for the user's favorite recipes
   // const { data: favoritesData, error } = useSWR(
-  //   "api/recipes/Favourites",
+  //   "/api/recipes/Favourites",
   //   fetcher,
   //   {
   //     revalidateOnFocus: false,
@@ -42,7 +42,14 @@ export function FavoritesContextProvider({ children }) {
   // const refreshFavorites = async () => {
   //   await mutate("api/recipes/Favourites");
   // };
-
+  const fetchFavorites = async () => {
+    const response = await fetch("/api/recipes/Favourites");
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    }
+  };
+  useEffect(()=>{},[])
 
   const notifyChangeListeners = () => {
     changeListeners.forEach((listener) => {

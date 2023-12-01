@@ -91,6 +91,7 @@ function RecipeList({ favorites }) {
   console.log("API URL:", apiUrl);
 
   const fetchRecipes = async () => {
+          updatePage(currentPage);
     try {
       const response = await fetch(apiUrl);
 
@@ -106,6 +107,7 @@ function RecipeList({ favorites }) {
   };
 
   const fetchFilteredRecipes = async () => {
+          updateFilteredPage(1);
     try {
       const response = await fetch(apiUrl);
 
@@ -162,13 +164,18 @@ function RecipeList({ favorites }) {
 
   useEffect(() => {
     // Fetch the original recipes without search when the component mounts
+    if(selectedTags.length === 0 ||
+      selectedIngredients.length === 0 ||
+      selectedCategories.length === 0 ||
+      !selectedInstructions) {
+
     fetchRecipes();
+    }
   }, [currentPage]);
 
   useEffect(() => {
       fetchFilteredRecipes();
       // Filters are applied, update the filtered page
-      updateFilteredPage(1);
     console.log("RECIPES # RECIPES:", recipes);
   }, [
     searchQuery,
@@ -179,119 +186,11 @@ function RecipeList({ favorites }) {
     sortOrder,
   ]);
 
-  //  const fetchRecipesByFilters = async (filters, sortOrder) => {
-  //    try {
-  //      console.log("API URL:", apiUrl);
 
-  //      // Fetch data from the API
-  //      const response = await fetch(apiUrl);
-
-  //      if (!response.ok) {
-  //        throw new Error("Failed to fetch data");
-  //      }
-
-  //      // Parse the response and update state
-  //      const result = await response.json();
-  //       mutate(apiUrl);
-  //      setRecipes(result.recipes);
-  //      setTotalRecipes(result.totalCount);
-
-  //      // Handle messages when no recipes are found
-  //     //  if (result.totalCount === 0) {
-  //     //    setNoRecipesFoundMessage(
-  //     //      `No Recipes Found for ${
-  //     //        selectedInstructions > 0
-  //     //          ? "Specified number of steps"
-  //     //          : searchQuery.length > 0
-  //     //          ? searchQuery
-  //     //          : "chosen filters"
-  //     //      }`
-  //     //    );
-  //     //  } else {
-  //     //    setNoRecipesFoundMessage(null);
-  //     //  }
-
-  //      // Update the URL with the current filters
-  //      const queryParams = new URLSearchParams(filters);
-  //      if (searchQuery.length > 0) {
-  //        queryParams.set("searchQuery", searchQuery);
-  //      } else {
-  //        queryParams.delete("searchQuery");
-  //      }
-
-  //      if (selectedTags.length > 0) {
-  //        queryParams.set("tags", selectedTags.join(","));
-  //      } else {
-  //        queryParams.delete("tags");
-  //      }
-
-  //      if (selectedCategories.length > 0) {
-  //        queryParams.set("categories", selectedCategories.join(","));
-  //      } else {
-  //        queryParams.delete("categories");
-  //      }
-
-  //      if (selectedIngredients.length > 0) {
-  //        queryParams.set("ingredients", selectedIngredients.join(","));
-  //      } else {
-  //        queryParams.delete("ingredients");
-  //      }
-
-  //      if (selectedInstructions) {
-  //        queryParams.set("instructions", selectedInstructions.toString());
-  //      } else {
-  //        queryParams.delete("instructions");
-  //      }
-
-  //      if (sortOrder) {
-  //        queryParams.set("sortOrders", sortOrder);
-  //      } else {
-  //        queryParams.delete("sortOrders");
-  //      }
-
-  //      const queryString = queryParams.toString();
-  //      const url = queryString ? `/?${queryString}` : "/";
-  //      router.push(url);
-  //    } catch (error) {
-  //      console.error("Error in fetchRecipesByFilters:", error);
-  //      throw error; // Rethrow the error to propagate it to the caller
-  //    }
-  //  };
-
-  // const fetchReci = async () => {
-  //   const data = await fetchRecipesByFilters(filters, sortOrder);
-  //   return data;
-  // };
   // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       // Fetch initial data without filters
-  //       const response = await fetch(`${api}`);
-
-  //       if (!response.status) {
-  //         throw new Error("Failed to fetch data");
-  //       }
-
-  //       // Parse the response JSON
-  //       const result = await response.json();
-
-  //       // Update the state with initial recipes and total count
-  //       setRecipes(result.data.recipes);
-  //       setTotalRecipes(result.data.totalCount);
-  //       console.log("FILTERED RECIPES:", result.data.recipes);
-  //       console.log("FILTERED RECIPES COUNT:", result.data.recipes);
-  //     } catch (error) {
-  //       console.error("Error in initial data fetch:", error);
-  //       // Handle error if needed
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-  useEffect(() => {
-    updatePage(currentPage);
-    fetchRecipes();
-  }, [currentPage]);
+  //   updatePage(currentPage);
+  //   fetchRecipes();
+  // }, [currentPage]);
 
   useEffect(() => {
     favoriteContext.updateFavorites(favorites);
@@ -317,8 +216,8 @@ function RecipeList({ favorites }) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [
-      updatePage,
-      updateFilteredPage,
+      currentPage,
+      filteredPage,
       selectedTags,
       selectedIngredients,
       selectedCategories,
@@ -463,20 +362,13 @@ function RecipeList({ favorites }) {
     setSelectedInstructions(null);
     setAutocompleteSuggestions([]);
     setFilterCount(0);
-    // updatePage(currentPage);
+    updatePage(currentPage);
     router.push("/");
   }
 
-  const handleSearchButton = useCallback(() => {
+  const handleSearchButton = useMemo(() => {
     if (searchQuery.length >= 4) {
-      const filters = {
-        searchQuery,
-        tags: selectedTags,
-        ingredients: selectedIngredients,
-        categories: selectedCategories,
-        instructions: parseInt(selectedInstructions, 10),
-      };
-      fetchRecipesByFilters(filters);
+      fetchFilteredRecipes();
     }
   }, [
     searchQuery,
