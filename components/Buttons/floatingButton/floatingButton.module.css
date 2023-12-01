@@ -1,8 +1,8 @@
 .floatingButton {
   position: fixed;
-  bottom: 20%;
+  bottom: 22%;
   right: 20px;
-  /* background-color: #007bff; */
+
   color: #fff;
   border: none;
   border-radius: 50%;
@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  /* transition: background-color 0.3s; */
+ 
 }
 
 .floatingButton:hover {
@@ -23,9 +23,9 @@
 }
 .floatingButton2 {
   position: fixed;
-  bottom: 10%;
+  bottom: 12%;
   right: 20px;
-  /* background-color: #007bff; */
+
   color: #fff;
   border: none;
   border-radius: 50%;
@@ -38,7 +38,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  /* transition: background-color 0.3s; */
+
 }
 
 .floatingButton2:hover {

@@ -5,18 +5,16 @@
  * @param {Array} props.allergens - List of allergens to check against the recipe ingredients.
  * @returns {JSX.Element} - Rendered component.
  */
-
+import React from "react";
 import classes from "./allergens.module.css";
 
 function Allergens({ recipeIngredients, allergens }) {
   // Filter allergens based on the recipe ingredients
   const allergensList = allergens.filter(
-    (allergen) =>
-      recipeIngredients &&
-      recipeIngredients.length > 0 &&
-      recipeIngredients.some((ingredient) =>
-        ingredient.toLowerCase().includes(allergen.toLowerCase())
-      )
+    (allergen) => recipeIngredients
+      && recipeIngredients.length > 0
+      // eslint-disable-next-line max-len
+      && recipeIngredients.some((ingredient) => ingredient.toLowerCase().includes(allergen.toLowerCase()),),
   );
 
   // Check if there are any allergens to display
@@ -39,12 +37,10 @@ function Allergens({ recipeIngredients, allergens }) {
             >
               {allergensList.map((allergen, index) => {
                 // Check if the allergen is "egg" and handle pluralization
-                const ingredientAmount = recipeIngredients.find((ingredient) =>
-                  ingredient.toLowerCase().includes(allergen.toLowerCase())
-                );
-                const isPlural =
-                  ingredientAmount &&
-                  ingredientAmount.toLowerCase().includes("eggs");
+                // eslint-disable-next-line max-len
+                const ingredientAmount = recipeIngredients.find((ingredient) => ingredient.toLowerCase().includes(allergen.toLowerCase()),);
+                const isPlural = ingredientAmount
+                  && ingredientAmount.toLowerCase().includes("eggs");
 
                 // Render each allergen as a list item
                 return (
@@ -53,7 +49,7 @@ function Allergens({ recipeIngredients, allergens }) {
                     className={`mr-4 p-2 mb-2 sm:mb-0 md:mb-0 sm:mr-1 md:mr-4 ${classes["button-86"]}`}
                     role="button"
                   >
-                    <div className={`flex items-center`}>{allergen}</div>
+                    <div className="flex items-center">{allergen}</div>
                   </li>
                 );
               })}
@@ -66,5 +62,3 @@ function Allergens({ recipeIngredients, allergens }) {
 }
 
 export default Allergens;
-
-

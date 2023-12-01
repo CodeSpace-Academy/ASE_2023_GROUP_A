@@ -97,7 +97,7 @@ function Recipe({ recipe, Allergies }) {
               <div className={`${textClass} mt-4`}>
                 <Published published={recipe.published} />
               </div>
-              {showInstructions && <RecipeInstructions recipes={recipe} />}
+              {showInstructions && <RecipeInstructions recipes={recipe} recipeId={recipe._id} />}
             </div>
           </div>
         </div>

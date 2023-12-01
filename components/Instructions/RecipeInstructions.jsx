@@ -117,7 +117,7 @@ function RecipeInstructions({ recipes, recipeId }) {
     content = (
       <>
         <ol className="list-decimal list-inside">{instructions}</ol>
-        <button onClick={toggleEditMode} type="button">
+        <button onClick={toggleEditMode} type="button" className="ml-10 flex border border-black text-black hover:text-blue-400 px-2 py-2 rounded-lg">
           Edit Instructions
         </button>
       </>

@@ -14,7 +14,11 @@ module.exports = {
   reactStrictMode: true,
   eslint: {
     dirs: [
-      "componets/categories/categories.jsx",
+      "components/categories/categories.jsx",
+      "components/Allergens/allergens.js",
+      "components/badges/badges.jsx",
+      "components/Buttons/Favorites/  FavoritesButton.jsx",
+      "components/Buttons/floatingButton/FloatingButton.jsx",
       "components/ingredients/ingredients.jsx",
       "components/instructions/instructions.jsx",
       "components/searchBar/searchBar.jsx",
@@ -22,7 +26,9 @@ module.exports = {
       "components/tags/Tags.jsx",
       "components/Landing/hero.jsx",
       "components/RecipeList/RecipeList.js",
-      "components/badges/badges.jsx",
+
+      "components/instructions/EditRecipeInstruction.jsx",
+      "components/instructions/RecipeInstruction.jsx",
       "helpers/mongoDB-utils.js",
       "pages/api/combined",
     ],
