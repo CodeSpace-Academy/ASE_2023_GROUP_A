@@ -1,24 +1,33 @@
-# Recipe App Readme
+# Rando Sando 'Cooking Devs' Recipe App
 
-## Project Overview
+<div align="center">
+  <img src="../ASE_2023_GROUP_A/public/Images/logo3.png" alt="Recipe App Logo" width="200"/>
+</div>
+
+## 🍲 Project Overview
 
 Welcome to our Recipe App project! This repository is the collaborative effort of our agile team working on building an innovative recipe application using Next.js and various other libraries.
 
-## Table of Contents
+## 🌐 Table of Contents
 
-- [Recipe App Readme](#recipe-app-readme)
-  - [Project Overview](#project-overview)
-  - [Table of Contents](#table-of-contents)
-  - [Team Members](#team-members)
-  - [Features](#features)
-  - [Libraries](#libraries)
-  - [Getting Started](#getting-started)
-  - [Development Workflow](#development-workflow)
+- [Rando Sando 'Cooking Devs' Recipe App](#rando-sando-cooking-devs-recipe-app)
+  - [🍲 Project Overview](#-project-overview)
+  - [🌐 Table of Contents](#-table-of-contents)
+  - [🧑‍🍳 Team Members](#-team-members)
+  - [🚀 Features](#-features)
+  - [📚 Libraries](#-libraries)
+  - [🚀 Getting Started](#-getting-started)
+  - [🛠️ Development Workflow](#️-development-workflow)
+    - [Sprint Planning](#sprint-planning)
+    - [Daily Stand-ups](#daily-stand-ups)
+    - [Sprint Reviews](#sprint-reviews)
     - [Branching Strategy](#branching-strategy)
-  - [Contribution Guidelines](#contribution-guidelines)
-  - [Acknowledgments](#acknowledgments)
+  - [🤝 Contribution Guidelines](#-contribution-guidelines)
+  - [🙏 Acknowledgments](#-acknowledgments)
 
-## Team Members
+## 🧑‍🍳 Team Members
+
+Meet the amazing chefs behind the scenes:
 
 - **Product Owner:** David Robertson
 - **Product Manager:** Renzo Van Wyk
@@ -33,7 +42,7 @@ Welcome to our Recipe App project! This repository is the collaborative effort o
   - Otshepeng Setuke
   - Refilwe Nqatyelwa
 
-## Features
+## 🚀 Features
 
 Our Recipe App comes with a variety of features to enhance the user experience:
 
@@ -47,9 +56,9 @@ Our Recipe App comes with a variety of features to enhance the user experience:
 - Previewing recipes.
 - Viewing detailed recipe information.
 
-## Libraries
+## 📚 Libraries
 
-Our project utilizes the following libraries to power our application:
+Our secret recipe includes the use of these powerful libraries:
 
 - **@emotion/react@11.11.1**
 - **@fortawesome/fontawesome-free@6.4.2**
@@ -88,7 +97,7 @@ Our project utilizes the following libraries to power our application:
 - **typescript@5.2.2**
 - **uuid@9.0.1**
 
-## Getting Started
+## 🚀 Getting Started
 
 To get started with the Recipe App locally, follow these steps:
 
@@ -96,11 +105,25 @@ To get started with the Recipe App locally, follow these steps:
 2. Install dependencies: `npm install`
 3. Start the development server: `npm run dev`
 
-## Development Workflow
+## 🛠️ Development Workflow
 
 Our agile development process follows the Scrum methodology, with regular sprint planning, daily stand-ups, and sprint reviews. The Scrum Master, Chad Bosch, is responsible for ensuring the team's adherence to Scrum principles and facilitating smooth communication.
 
+### Sprint Planning
+
+At the beginning of each sprint, the team conducts a sprint planning session. During this meeting, the Product Manager, Chad Bosch, presents the prioritized user stories and features for the upcoming sprint. The team collaboratively estimates the effort required for each task and commits to a set of deliverables for the sprint.
+
+### Daily Stand-ups
+
+We conduct daily stand-up meetings to keep everyone in the loop and address any challenges. Each team member provides a brief update on their progress, highlights any impediments, and communicates their plan for the day. This short, focused meeting ensures that everyone is on the same page and can quickly address any blockers.
+
+### Sprint Reviews
+
+At the end of each sprint, the team holds a sprint review to showcase the completed worrk. This session allows for feedback and discussions on the features delivered during the sprint.
+
 ### Branching Strategy
+
+We use a branching strategy to manage code changes efficiently. When contributing to the project, follow these steps:
 
 For contributing to the project, follow these steps:
 
@@ -111,11 +134,11 @@ For contributing to the project, follow these steps:
 5. Push your branch to the repository: `git push origin feature/your-feature`
 6. Submit a pull request for review.
 
-## Contribution Guidelines
+## 🤝 Contribution Guidelines
 
 We welcome contributions from all team members. If you have ideas for improvements or new features, please follow our [Contribution Guidelines](CONTRIBUTING.md).
 
-## Acknowledgments
+## 🙏 Acknowledgments
 
 We would like to express our gratitude to the entire team for their hard work and dedication to making this Recipe App a success. Special thanks to our Product Manager, Renzo Van Wyk, and our Scrum Master, Chad Bosch, for their leadership and guidance. Together, we are creating a delightful experience for our users!
 
