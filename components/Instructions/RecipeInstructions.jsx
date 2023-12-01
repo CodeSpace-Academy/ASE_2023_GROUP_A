@@ -53,7 +53,7 @@ function RecipeInstructions({ recipes, recipeId }) {
    * Fetches the instructions from the API and sets the state.
    */
   useEffect(() => {
-    const delay = 2000; 
+    const delay = 2000;
 
     const timeoutId = setTimeout(() => {
       try {
