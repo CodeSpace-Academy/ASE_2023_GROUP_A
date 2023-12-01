@@ -113,20 +113,17 @@ export default function SearchBar({ onSearch, searchQuery, setSearchQuery }) {
       </div>
       {searchHistory.length > 0 && showSearchButton && !isLongQuery && (
   <div className="relative">
-    <div className="absolute top-0 left-0 right-0 h-[3rem] flex flex-col">
-      <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-gray-300 scrollbar-track-rounded-full hover:scrollbar-thumb-gray-700 hover:scrollbar-track-gray-200 transition-all">
-        {searchHistory.map((historyItem) => (
-          <div className="history" key={uuidv4()}>
-            <button type="button" onClick={() => handleHistoryClick(historyItem)}>
-              {historyItem}
-            </button>
-          </div>
-        ))}
-      </div>
+    <div className="absolute top-0 left-0 right-0 overflow-y-scroll max-h-[3rem]">
+      {searchHistory.map((historyItem) => (
+        <div className="history" key={uuidv4()}>
+          <button type="button" onClick={() => handleHistoryClick(historyItem)}>
+            {historyItem}
+          </button>
+        </div>
+      ))}
     </div>
   </div>
 )}
-
 
     </div>
   );
