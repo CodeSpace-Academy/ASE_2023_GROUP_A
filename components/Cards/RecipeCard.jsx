@@ -10,6 +10,14 @@ import { toast } from "react-toastify";
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
 import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
 
+import {
+  CookTime,
+  PrepTime,
+  TotalTime,
+  Steps,
+  Published,
+} from "../TimeAndDate/TimeConvertor";
+import FavoritesContext from "../Context/Favorites-context";
 import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRecipe";
 import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "../Context/ThemeContext";
@@ -49,7 +57,8 @@ const RecipeCard = ({
     );
   }
   // Determine the first image for the recipe
-  const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
+  const firstImage =
+    recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
 
   // Check if the recipe is marked as a favorite
   const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
@@ -147,16 +156,13 @@ const RecipeCard = ({
             title={correctedTitle}
             searchQuery={[searchQuery]}
           />
-          <div className="mb-1">
-            {/* Display preparation time */}
+          <div className="pl-5">
             <PrepTime prepTime={recipe.prep} />
-          </div>
-          <div className="mb-">
-            {/* Display cooking time */}
             <CookTime cookTime={recipe.cook} />
+            <TotalTime totalTime={recipe} />
+            <Published published={recipe.published} />
+            <Steps instructions={recipe.instructions} />
           </div>
-          {/* Display total time for the recipe */}
-          <TotalTime totalTime={recipe} />
         </div>
         <div>
           {/* Display favorite button */}
@@ -165,7 +171,7 @@ const RecipeCard = ({
               <span aria-label="Remove from favorites">
                 {/* Display filled star icon for favorites */}
                 <StarFilled
-                  className={`w-6 h-6 ${
+                  className={`w-6 h-6 ml-5 ${
                     theme === "light" ? "text-blue-900" : "text-custom-blue-10"
                   }`}
                 />
@@ -180,7 +186,7 @@ const RecipeCard = ({
               <span>
                 {/* Display empty star icon for non-favorites */}
                 <StarEmpty
-                  className={`w-6 h-6 ${
+                  className={`w-6 h-6 ml-5 ${
                     theme === "dark" ? "text-white" : "text-custom-blue-10"
                   }`}
                 />
