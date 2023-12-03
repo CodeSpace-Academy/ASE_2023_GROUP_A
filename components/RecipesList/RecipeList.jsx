@@ -300,7 +300,6 @@ function RecipeList() {
           </div>
         )}
       </div>
-      // eslint-disable-next-line no-unused-vars
       {autocompleteSuggestions.map((suggestion) => (
         <li key={KeyUUID()}>
           <button
