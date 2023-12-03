@@ -30,6 +30,8 @@ module.exports = {
         alkatra: ["Alkatra", "sans"],
         dm_mono: ["DM Mono", "italic"],
         eduNswActFoundation: ["Edu NSW ACT Foundation", "sans"],
+        deliciouse: ["Delicious Handrawn", "sans"],
+        fastHand: ["Fasthand", "sans"],
       },
     },
   },

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -7,9 +8,7 @@
  * @returns {JSX.Element} - Rendered SimilarRecipes component.
  */
 import React, {
-  useEffect,
-  useState,
-  useMemo,
+  useEffect, useState, useCallback, useMemo,
 } from "react";
 import { useRouter } from "next/router";
 import Fuse from "fuse.js";
@@ -26,11 +25,8 @@ import FloatingButton from "../../../components/Buttons/FloatingButton/FloatingB
 function SimilarRecipes() {
   const router = useRouter();
   const { slug } = router.query;
-  const {
-    currentSimilarRecipesPage,
-    setSimilarRecipesCurrentPage,
-  } = useSimilarRecipesPageContext();
-  const [originalRecipes, setOriginalRecipes] = useState([]); // New state for original recipes
+  const { currentSimilarRecipesPage, updatePageNumber } = useSimilarRecipesPageContext();
+  const [filteredPage, setFilteredPage] = useState(1);
   const [similarRecipes, setSimilarRecipes] = useState([]);
   // const [fuse, setFuse] = useState(null);
   const [totalRecipes, setTotalRecipes] = useState(0);
@@ -40,6 +36,12 @@ function SimilarRecipes() {
   // const favoriteContext = useContext(FavoritesContext);
   const [sortOrder, setSortOrder] = useState("default");
 
+  const filtersExist = searchQuery
+    || selectedTags
+    || selectedCategories
+    || sortOrder !== "default";
+
+  const pageToUse = filtersExist ? filteredPage : currentSimilarRecipesPage;
   /**
    * A function to manually refresh the favorites data.
    * It triggers a revalidation of the 'favorites' data using the mutate function.
@@ -53,10 +55,11 @@ function SimilarRecipes() {
    * @function
    * @returns {Promise<void>} - Resolves when the similar recipes are fetched and updated.
    */
-  const searchSimilarRecipes = async () => {
+  const searchSimilarRecipes = async (page) => {
+    updatePageNumber(page);
     try {
       const response = await fetch(
-        `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&searchQuery=${searchQuery}&page=${currentSimilarRecipesPage}&tag=${selectedTags.join(
+        `/api/search/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&searchQuery=${searchQuery}&page=${page}&tag=${selectedTags.join(
           ",",
         )}&category=${selectedCategories.join(",")}&sortOrder=${sortOrder}`,
       );
@@ -72,79 +75,60 @@ function SimilarRecipes() {
       console.error("Error fetching recipes:", err);
     }
   };
-
-  // Function to fetch original recipes
-  const fetchOriginalRecipes = async () => {
-    try {
-      const response = await fetch(
-        `/api/search/similarRecipes/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&page=${currentSimilarRecipesPage}`,
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setOriginalRecipes(data.similarRecipes);
-      setTotalRecipes(data.totalSimilarRecipes);
-      // await mutate("/api/recipes/Favourites")
-    } catch (err) {
-      console.error("Error fetching original recipes:", err);
-    }
-  };// empty dependency array to run only once
-
-  useEffect(() => {
-    // Fetch the original recipes without search when the component mounts
-    fetchOriginalRecipes();
-  }, []);
-
   const fuse = useMemo(() => {
-    if (originalRecipes.length > 0) {
+    if (similarRecipes.length > 0) {
       const options = {
         keys: ["title", "description", "tags", "ingredients"],
         includeMatches: true,
         threshold: 0.3,
       };
-      return new Fuse(originalRecipes, options);
+      return new Fuse(similarRecipes, options);
     }
     return null;
-  }, [originalRecipes]);
+  }, [similarRecipes]);
 
   useEffect(() => {
-    // Perform fuzzy search when searchQuery changes
-    if (
-      (fuse && searchQuery.length >= 4)
-      || selectedTags
-      || selectedCategories
-      || sortOrder
-    ) {
-      // If searchQuery is not sufficient for fuzzy search, reset to original recipes
-      searchSimilarRecipes();
-    } else {
-      setSimilarRecipes(originalRecipes);
+    if (selectedTags.length > 0 || selectedCategories.length > 0) {
+      searchSimilarRecipes(filteredPage);
     }
+    searchSimilarRecipes(currentSimilarRecipesPage);
+    console.log("Filtered Page:", filteredPage);
+    console.log("UnFiltered Current Page:", currentSimilarRecipesPage);
   }, [
     searchQuery,
-    fuse,
-    originalRecipes,
     selectedTags,
     selectedCategories,
     sortOrder,
+    currentSimilarRecipesPage,
+    filteredPage,
+    filtersExist,
   ]);
+
   /**
    * Function to handle page change in the pagination component.
    * @param {object} event - The event object.
    * @param {number} page - The selected page number.
    * @returns {void}
    */
-  const handlePageChange = (event, page) => {
-    setSimilarRecipesCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const handlePageChange = useCallback(
+    (event, page) => {
+      if (filtersExist) {
+        setFilteredPage(page);
+        // searchSimilarRecipes(pageToUse); // Use pageToUse consistently
+      } else {
+        updatePageNumber(page);
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [
+      currentSimilarRecipesPage,
+      filteredPage,
+    ],
+  );
 
   const handleSearch = () => {
     // Trigger the search when the search button is clicked
-    searchSimilarRecipes();
+    searchSimilarRecipes(filteredPage);
   };
 
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
@@ -155,45 +139,64 @@ function SimilarRecipes() {
   // Rest of your code...
 
   return (
-    <div className="pt-12">
-      <h2>
-        Similar Recipes For:
-        <span>{slug}</span>
-      </h2>
-      <input
-        id="searchBar"
-        type="text"
-        placeholder="Search for recipes..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-      <button htmlFor="searchBar" type="button" onClick={handleSearch}>
-        Search
-      </button>
-      <Tags Key={KeyUUID()} setSelectedTags={setSelectedTags} selectedTags={selectedTags} />
-      <Categories
-        Key={KeyUUID()}
-        setSelectedCategories={setSelectedCategories}
-        selectedCategories={selectedCategories}
-      />
-      <label htmlFor="sortOrder">Sort Order:</label>
-      <select
-        id="sortOrder"
-        value={sortOrder}
-        onChange={(e) => setSortOrder(e.target.value)}
-      >
-        <option value="default">Default</option>
-        <option value="A-Z">Alphabetical (A-Z)</option>
-        <option value="Z-A">Alphabetical (Z-A)</option>
-        <option value="Oldest">Oldest</option>
-        <option value="Recent">Recent</option>
-        <option value="cooktime(asc)">Cook Time (Ascending)</option>
-        <option value="cooktime(desc)">Cook Time (Descending)</option>
-        <option value="preptime(asc)">Prep Time (Ascending)</option>
-        <option value="preptime(desc)">Prep Time (Descending)</option>
-        <option value="steps(asc)">Steps (Ascending)</option>
-        <option value="steps(desc)">Steps (Descending)</option>
-      </select>
+    <div className="pt-20">
+      <div className="flex space-x-4 p-4 bg-gray-100 rounded-md font-dm_mono shadow-md">
+        <input
+          id="searchBar"
+          type="text"
+          placeholder="Search for recipes..."
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button
+          htmlFor="searchBar"
+          type="button"
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+          onClick={handleSearch}
+        >
+          Search
+        </button>
+        <Tags
+          Key={KeyUUID()}
+          setSelectedTags={setSelectedTags}
+          selectedTags={selectedTags}
+        />
+        <Categories
+          Key={KeyUUID()}
+          setSelectedCategories={setSelectedCategories}
+          selectedCategories={selectedCategories}
+        />
+        <label htmlFor="sortOrder" className="flex items-center">
+          Sort Order:
+        </label>
+        <select
+          id="sortOrder"
+          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+        >
+          <option value="default">Default</option>
+          <option value="A-Z">Alphabetical (A-Z)</option>
+          <option value="Z-A">Alphabetical (Z-A)</option>
+          <option value="Oldest">Oldest</option>
+          <option value="Recent">Recent</option>
+          <option value="cooktime(asc)">Cook Time (Ascending)</option>
+          <option value="cooktime(desc)">Cook Time (Descending)</option>
+          <option value="preptime(asc)">Prep Time (Ascending)</option>
+          <option value="preptime(desc)">Prep Time (Descending)</option>
+          <option value="steps(asc)">Steps (Ascending)</option>
+          <option value="steps(desc)">Steps (Descending)</option>
+        </select>
+      </div>
+      <div className="text-center">
+        <h2 className="text-2xl font-fastHand mb-4">
+          Similar Recipes For:
+          <span className="font-bold underline font-deliciouse text-blue-black-10">
+            {slug}
+          </span>
+        </h2>
+      </div>
 
       {similarRecipes === null ? (
         <p>No similar recipes found.</p>
@@ -204,10 +207,7 @@ function SimilarRecipes() {
           ) : (
             <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {similarRecipes.map((recipe) => (
-                <RecipeCard
-                  Key={KeyUUID()}
-                  recipe={recipe}
-                />
+                <RecipeCard Key={KeyUUID()} recipe={recipe} />
               ))}
             </div>
           )}
@@ -218,7 +218,7 @@ function SimilarRecipes() {
         <Stack spacing={2} justifyContent="center" alignItems="center">
           <Pagination
             count={pageNumbers}
-            page={currentSimilarRecipesPage}
+            page={pageToUse}
             onChange={handlePageChange}
             color="primary"
           />

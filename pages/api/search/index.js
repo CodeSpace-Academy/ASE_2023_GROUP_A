@@ -11,7 +11,7 @@ const handler = async (req, res) => {
     const searchResult = await filtering(searchQuery);
     return res.status(200).json({ recipes: searchResult });
   } catch (error) {
-    console.error("Error searching recipes:", error);
+    // console.error("Error searching recipes:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };

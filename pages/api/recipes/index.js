@@ -19,22 +19,18 @@ const handler = async (req, res) => {
     const decodedFilters = JSON.parse(decodeURIComponent(filters));
     const skip = (page - 1) * ITEMS_PER_PAGE;
 
-    console.log("FILTERS:", decodedFilters);
-    console.log("SORTORDER:", sortOrder);
-    console.log("INCOMIING REQUEST:", page);
-
     const data = await getModifiedRecipesWithTotalCount(
       skip,
       sortOrder,
       decodedFilters,
     );
-    res.status(200).json({
+    return res.status(200).json({
       recipes: data.recipes,
       totalCount: data.totalCount,
     });
   } catch (error) {
-    console.error("Error fetching recipes:", error);
-    res.status(500).json({ error: "Error fetching recipes" });
+    // console.error("Error fetching recipes:", error);
+    return res.status(500).json({ error: "Error fetching recipes" });
   }
 };
 

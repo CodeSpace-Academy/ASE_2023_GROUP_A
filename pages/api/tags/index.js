@@ -1,4 +1,4 @@
-import { getTags } from "@/helpers/mongoDB-utils";
+import { getTags } from "../../../helpers/mongoDB-utils";
 
 export default async (req, res) => {
   if (req.method === "GET") {

@@ -1,5 +1,5 @@
 // pages/api/searchSimilarRecipesMongo.js
-import { getSimilarRecipesWithTotalCount } from "../../../../helpers/mongoDB-utils";
+import { getSimilarRecipesWithTotalCount } from "../../../helpers/mongoDB-utils";
 
 const handler = async (request, response) => {
   if (request.method !== "GET") {
@@ -31,7 +31,7 @@ const handler = async (request, response) => {
       totalSimilarRecipes: result.totalCount,
     });
   } catch (error) {
-    console.error("Error fetching similar recipes:", error);
+    // console.error("Error fetching similar recipes:", error);
     return response.status(500).json({ error: "Internal server error" });
   }
 };
