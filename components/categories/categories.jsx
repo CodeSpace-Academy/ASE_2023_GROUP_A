@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
+import { useTheme } from "../Context/ThemeContext";
 
 /**
  * Functional component representing a multi-select dropdown for categories.
@@ -12,6 +13,7 @@ import Select from "react-select";
  */
 function Categories({ selectedCategories, setSelectedCategories }) {
   const [categories, setCategories] = useState([]);
+  const { theme } = useTheme();
 
   useEffect(() => {
     /**
@@ -31,13 +33,13 @@ function Categories({ selectedCategories, setSelectedCategories }) {
             data[0].categories.map((category) => ({
               label: category,
               value: category,
-            }))
+            })),
           );
         } else {
-          console.error("Failed to fetch categories");
+          throw Error("Failed to fetch categories");
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        throw Error("Error fetching categories:", error);
       }
     }
 
@@ -57,13 +59,13 @@ function Categories({ selectedCategories, setSelectedCategories }) {
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
+      background: "#3496c7",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "#007bff",
+      backgroundColor: theme === 'light' ? "#007bff" : "#0d203eee",
       color: "black",
       width: "fitContent",
       cursor: "pointer",
@@ -85,6 +87,7 @@ function Categories({ selectedCategories, setSelectedCategories }) {
     menu: (base) => ({
       ...base,
       width: "12em",
+      zIndex: "100",
     }),
   };
 
@@ -93,13 +96,11 @@ function Categories({ selectedCategories, setSelectedCategories }) {
       <Select
         isMulti
         options={categories}
-        value={categories.filter((category) =>
-          selectedCategories?.includes(category.value)
-        )}
+        value={categories.filter((category) => selectedCategories?.includes(category.value))}
         onChange={handleCategoryChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="Select category"
+        placeholder="Select Category"
       />
     </div>
   );

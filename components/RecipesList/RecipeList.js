@@ -7,7 +7,7 @@ import Carousel from "react-multi-carousel";
 import fetchRecipes from "../../helpers/hook";
 import RecipeCard from "../Cards/RecipeCard";
 import Hero from "../Landing/hero";
-import FloatingButton from "../Buttons/floatingButton/FloatingButton";
+import FloatingButton from "../Buttons/floatingButton/floatingButton";
 import "react-multi-carousel/lib/styles.css";
 import FavoritesContext from "../Context/Favorites-context";
 import { useTheme } from "../Context/ThemeContext";
@@ -48,7 +48,9 @@ function RecipeList({ favorites }) {
     isLoading,
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
-  if (recipesError) { /* empty */ }
+  if (recipesError) {
+    throw Error;
+  }
 
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
 
@@ -69,7 +71,7 @@ function RecipeList({ favorites }) {
     selectedCategories,
     selectedIngredients,
     selectedTags,
-    selectedInstructions
+    selectedInstructions,
   ) {
     let count = 0;
 
@@ -336,7 +338,7 @@ function RecipeList({ favorites }) {
         <Loading />
       ) : favorites.length === 0 ? (
         <p className={isDarkTheme ? "text-white" : ""}>
-          No favorite recipes yet.
+          All favorites will appear here
         </p>
       ) : (
         <div className="h-3/5">
@@ -374,7 +376,7 @@ function RecipeList({ favorites }) {
           {noRecipesFoundMessage}
         </p>
       ) : (
-        <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-4">
           {recipes.map((recipe, index) => (
             <div key={index}>
               <RecipeCard
@@ -392,7 +394,7 @@ function RecipeList({ favorites }) {
         <>
           <p style={{ textAlign: "center" }}>
             <span style={{ fontWeight: "bold" }}>
-{remainingRecipes}
+              {remainingRecipes}
               {' '}
             </span>
             recipes remaining
@@ -408,11 +410,11 @@ function RecipeList({ favorites }) {
               />
             </Stack>
           </div>
-          <FloatingButton className={theme === 'light' ? 'bg-blue-500' : 'bg-blue-800'} />
         </>
       )}
+      <FloatingButton />
     </div>
-    
+
   );
 }
 
