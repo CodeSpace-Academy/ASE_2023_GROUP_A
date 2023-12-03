@@ -16,11 +16,9 @@ export const SimilarRecipesPageProvider = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("Current PageContext1:", currentSimilarRecipesPage);
     if (!isServer) {
       localStorage.setItem("lastSimilarPage", currentSimilarRecipesPage.toString());
     }
-    console.log("Current PageContext2:", currentSimilarRecipesPage);
   }, [currentSimilarRecipesPage]);
 
   const updatePageNumber = (newPageNumber) => {
@@ -36,17 +34,20 @@ export const SimilarRecipesPageProvider = ({ children }) => {
   const goBack2 = () => {
     const pageNumber = parseInt(localStorage.getItem("lastSimilarPage"), 10);
     if (pageNumber >= 1) {
-      updatePageNumber(pageNumber);
+      setSimilarRecipesCurrentPage(pageNumber);
       router.back();
     }
   };
 
-  const contextValue = useMemo(() => ({
-    currentSimilarRecipesPage,
-    setSimilarRecipesCurrentPage,
-    updatePageNumber,
-    goBack2,
-  }), [currentSimilarRecipesPage]);
+  const contextValue = useMemo(
+    () => ({
+      currentSimilarRecipesPage,
+      updatePageNumber,
+      setSimilarRecipesCurrentPage,
+      goBack2,
+    }),
+    [currentSimilarRecipesPage, updatePageNumber, goBack2],
+  );
 
   return (
     <SimilarRecipesPageContext.Provider

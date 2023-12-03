@@ -37,7 +37,7 @@ const Categories = ({ selectedCategories, setSelectedCategories }) => {
           console.error("Failed to fetch categories");
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        return error("Error fetching categories:", error);
       }
     }
 
@@ -93,7 +93,8 @@ const Categories = ({ selectedCategories, setSelectedCategories }) => {
       <Select
         isMulti
         options={categories}
-        value={categories.filter((category) => selectedCategories?.includes(category.value))}
+        value={categories.filter((category) => (selectedCategories
+          ? selectedCategories.includes(category.value) : []))}
         onChange={handleCategoryChange}
         styles={customStyles}
         blurInputOnSelect
@@ -101,6 +102,6 @@ const Categories = ({ selectedCategories, setSelectedCategories }) => {
       />
     </div>
   );
-}
+};
 
 export default Categories;

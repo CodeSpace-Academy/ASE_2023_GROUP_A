@@ -19,27 +19,34 @@ import useSimilarRecipesPageContext from "../../../components/Context/CurrentPag
 import RecipeCard from "../../../components/Cards/RecipeCard";
 import Loading from "../../../components/Loading/Loading";
 import Tags from "../../../components/Tags/Tags.jsx";
-import Categories from "../../../components/Categories/Categories.jsx";
+import Categories from "../../../components/Categories/CategoriesMenu.jsx";
 import FloatingButton from "../../../components/Buttons/FloatingButton/FloatingButton";
 
 function SimilarRecipes() {
   const router = useRouter();
   const { slug } = router.query;
-  const { currentSimilarRecipesPage, updatePageNumber } = useSimilarRecipesPageContext();
+  const {
+    currentSimilarRecipesPage,
+    updatePageNumber,
+  } = useSimilarRecipesPageContext();
   const [filteredPage, setFilteredPage] = useState(1);
   const [similarRecipes, setSimilarRecipes] = useState([]);
-  // const [fuse, setFuse] = useState(null);
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  // const favoriteContext = useContext(FavoritesContext);
   const [sortOrder, setSortOrder] = useState("default");
 
-  const filtersExist = searchQuery
-    || selectedTags
-    || selectedCategories
+  const filtersExist = searchQuery.length > 0
+    || selectedTags.length > 0
+    || selectedCategories.length > 0
     || sortOrder !== "default";
+
+  const filters = {
+    searchQuery,
+    tags: selectedTags,
+    categories: selectedCategories,
+  };
 
   const pageToUse = filtersExist ? filteredPage : currentSimilarRecipesPage;
   /**
@@ -56,7 +63,6 @@ function SimilarRecipes() {
    * @returns {Promise<void>} - Resolves when the similar recipes are fetched and updated.
    */
   const searchSimilarRecipes = async (page) => {
-    updatePageNumber(page);
     try {
       const response = await fetch(
         `/api/search/searchSimilarRecipesMongo?recipeTitle=${recipeTitle}&searchQuery=${searchQuery}&page=${page}&tag=${selectedTags.join(
@@ -88,8 +94,52 @@ function SimilarRecipes() {
   }, [similarRecipes]);
 
   useEffect(() => {
-    if (selectedTags.length > 0 || selectedCategories.length > 0) {
+    if (filtersExist) {
       searchSimilarRecipes(filteredPage);
+      const queryParams = new URLSearchParams(filters);
+      if (searchQuery.length > 0) {
+        queryParams.set("searchQuery", searchQuery);
+      } else {
+        queryParams.delete("searchQuery");
+      }
+
+      if (selectedTags.length > 0) {
+        queryParams.set("tags", selectedTags.join(","));
+      } else {
+        queryParams.delete("tags");
+      }
+
+      if (selectedCategories.length > 0) {
+        queryParams.set("categories", selectedCategories.join(","));
+      } else {
+        queryParams.delete("categories");
+      }
+
+      if (searchQuery.length >= 4
+        || selectedTags.length > 0
+        || selectedCategories.length > 0
+      ) {
+        const queryString = queryParams.toString();
+        const path = router.asPath;
+        const url = queryString ? `${path}/?${queryString}` : `${path}`;
+        router.replace(url);
+        console.log("ROUTER AS PATH:", path, "URL:", url);
+      } else {
+        const path = router.asPath;
+        router.push(path);
+        console.log("ROUTER AS PATH:", path);
+      }
+    } else if (!filtersExist) {
+      setFilteredPage(1);
+    } else {
+      setFilteredPage(1);
+      setSearchQuery("");
+      setSelectedTags([]);
+      setSelectedCategories([]);
+      setSortOrder("default");
+      const path = router.asPath;
+      router.push(path);
+      console.log("ROUTER AS PATH:", path);
     }
     searchSimilarRecipes(currentSimilarRecipesPage);
     console.log("Filtered Page:", filteredPage);
@@ -120,10 +170,7 @@ function SimilarRecipes() {
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [
-      currentSimilarRecipesPage,
-      filteredPage,
-    ],
+    [currentSimilarRecipesPage, filteredPage],
   );
 
   const handleSearch = () => {

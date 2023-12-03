@@ -37,7 +37,6 @@ export function FavoritesContextProvider(props) {
         const data = await response.json();
         return data.favorites || [];
       } catch (error) {
-        console.error("Error fetching favorites:", error);
         return [];
       }
     };

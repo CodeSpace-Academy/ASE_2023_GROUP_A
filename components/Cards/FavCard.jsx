@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React, { useContext } from 'react';
 
 import Image from 'next/legacy/image';
@@ -33,8 +34,8 @@ const FavCard = ({ recipe, favorites }) => {
           toast.success('Recipe removed from favorites!');
         }
       } catch (error) {
-        console.error('Error removing favorite:', error);
         toast.error('Error removing recipe from favorites.');
+        return error("Error removing favorite:", error);
       }
     }
   };
@@ -63,7 +64,7 @@ const FavCard = ({ recipe, favorites }) => {
             </div>
           )}
         </div>
-        <div className={`flex flex-col justify-between h-16 p-4`}>
+        <div className="flex flex-col justify-between h-16 p-4">
           <div className="text-center">
             <h3 className="text-lg font-semibold">{recipe.title}</h3>
           </div>

@@ -118,7 +118,7 @@ const RecipeCard = ({
       }
     } catch (error) {
       toast.error("Error adding recipe to favorites.");
-      console.error(new Error("Error adding favorite:", error));
+      return error(new Error("Error adding favorite:", error));
     }
   };
 
