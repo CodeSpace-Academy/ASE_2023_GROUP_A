@@ -36,7 +36,7 @@ export const PageProvider = ({ children }) => {
 
   const goBack = () => {
     const pageNumber = parseInt(localStorage.getItem("lastPage"), 10);
-    if (pageNumber > 1) {
+    if (pageNumber >= 1) {
       updatePage(pageNumber);
       router.back();
     }
