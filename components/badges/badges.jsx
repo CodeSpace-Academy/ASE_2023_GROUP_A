@@ -1,6 +1,7 @@
 import React from "react";
 import Badge from "@mui/material/Badge";
 import { FaTrash } from "react-icons/fa";
+import { useTheme } from "../Context/ThemeContext";
 
 /**
  * Keeps track of the number of filters applied and number of recipes being displayed. Also resets
@@ -13,14 +14,24 @@ import { FaTrash } from "react-icons/fa";
  * @param {number} props.filterCount - The count of active filters.
  * @returns {JSX.Element} - The component's rendered elements.
  */
-export default function Badges({ numberOfRecipes, handleDefault, filterCount }) {
+export default function Badges({
+  numberOfRecipes,
+  handleDefault,
+  filterCount,
+}) {
+  const { theme } = useTheme();
+
   return (
-    <div className="flex mt-10">
+    <div
+      className={`flex mt-10 ${
+        theme === "light" ? "text-black" : "text-white"
+      }`}
+    >
       {/* Badge for active filters */}
       <Badge
         badgeContent={filterCount}
         color="primary"
-        style={{ margin: "auto", fontWeight: "bold", zIndex: "-1" }}
+        style={{ margin: "auto", fontWeight: "bold" }}
       >
         FILTERS
       </Badge>
@@ -31,7 +42,7 @@ export default function Badges({ numberOfRecipes, handleDefault, filterCount }) 
           style={{ display: "inline-flex", fontWeight: "bold", gap: "0.2em" }}
         >
           Remove Filters
-          <FaTrash style={{ color: "blue", opacity: "0.5" }} />
+          <FaTrash style={{ color: "#1d8eb9", opacity: "0.8" }} />
         </span>
       </button>
 
@@ -39,7 +50,7 @@ export default function Badges({ numberOfRecipes, handleDefault, filterCount }) 
       <Badge
         badgeContent={numberOfRecipes}
         color="primary"
-        style={{ margin: "auto", fontWeight: "bold", zIndex: "-1" }}
+        style={{ margin: "auto", fontWeight: "bold" }}
       >
         Recipes
       </Badge>

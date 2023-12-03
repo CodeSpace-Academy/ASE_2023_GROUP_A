@@ -1,17 +1,17 @@
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/router";
-import fetchRecipes from "../../helpers/hook"
-import RecipeCard from "../Cards/RecipeCard";
-import Hero from "../Landing/hero";
-import FloatingButton from "../Buttons/floatingButton/FloatingButton";
-import "react-multi-carousel/lib/styles.css";
-import FavoritesContext from "../Context/Favorites-context";
-import { useTheme } from "../../components/Context/ThemeContext"
-import Badges from "../badges/badges";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Carousel from "react-multi-carousel";
+import fetchRecipes from "../../helpers/hook";
+import RecipeCard from "../Cards/RecipeCard";
+import Hero from "../Landing/hero";
+import FloatingButton from "../Buttons/floatingButton/floatingButton";
+import "react-multi-carousel/lib/styles.css";
+import FavoritesContext from "../Context/Favorites-context";
+import { useTheme } from "../Context/ThemeContext";
+import Badges from "../badges/badges";
 import { responsive } from "../../helpers/settings/settings";
 import Loading from "../Loading/Loading";
 
@@ -49,6 +49,7 @@ function RecipeList({ favorites }) {
   } = useSWR(`/api/recipes?page=${currentPage}`, fetchRecipes);
 
   if (recipesError) {
+    throw Error;
   }
 
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
@@ -70,7 +71,7 @@ function RecipeList({ favorites }) {
     selectedCategories,
     selectedIngredients,
     selectedTags,
-    selectedInstructions
+    selectedInstructions,
   ) {
     let count = 0;
 
@@ -98,7 +99,7 @@ function RecipeList({ favorites }) {
       selectedCategories,
       selectedIngredients,
       selectedTags,
-      selectedInstructions
+      selectedInstructions,
     );
     setFilterCount(counts);
   }, [
@@ -133,18 +134,18 @@ function RecipeList({ favorites }) {
                 selectedInstructions > 0
                   ? "Specified number of steps"
                   : searchQuery.length > 0
-                  ? searchQuery
-                  : "chosen filters"
-              }`
+                    ? searchQuery
+                    : "chosen filters"
+              }`,
             );
           } else {
             setNoRecipesFoundMessage(null);
           }
         } else {
-          throw Error
+          throw Error;
         }
       } else {
-        throw Error
+        throw Error;
       }
 
       const queryParams = new URLSearchParams(filters);
@@ -190,7 +191,7 @@ function RecipeList({ favorites }) {
 
       router.push(url);
     } catch (error) {
-      throw Error
+      throw Error;
     }
   };
 
@@ -209,7 +210,7 @@ function RecipeList({ favorites }) {
     setSelectedTags(tags ? tags.split(",") : []);
     setSelectedIngredients(ingredients ? ingredients.split(",") : []);
     setSelectedCategories(categories ? categories.split(",") : []);
-    setSelectedInstructions(instructions ? parseInt(instructions) : null);
+    setSelectedInstructions(instructions ? parseInt(instructions, 10) : null);
     setSearchQuery(searchQuery || "");
     setSortOrder(sortOrders || null);
   }, []);
@@ -218,11 +219,11 @@ function RecipeList({ favorites }) {
     let typingTimeout;
 
     if (
-      searchQuery.length <= 4 ||
-      selectedTags.length > 0 ||
-      selectedIngredients.length > 0 ||
-      selectedCategories.length > 0 ||
-      selectedInstructions
+      searchQuery.length <= 4
+      || selectedTags.length > 0
+      || selectedIngredients.length > 0
+      || selectedCategories.length > 0
+      || selectedInstructions
     ) {
       clearTimeout(typingTimeout);
 
@@ -232,7 +233,7 @@ function RecipeList({ favorites }) {
           searchQuery,
           ingredients: selectedIngredients,
           categories: selectedCategories,
-          instructions: parseInt(selectedInstructions),
+          instructions: parseInt(selectedInstructions, 10),
         };
 
         fetchRecipesByFilters(filters, sortOrder);
@@ -257,18 +258,18 @@ function RecipeList({ favorites }) {
         setAutocompleteSuggestions([]);
       } else {
         const response = await fetch(
-          `/api/autocomplete?searchQuery=${searchQuery}`
+          `/api/autocomplete?searchQuery=${searchQuery}`,
         );
 
         if (response.ok) {
           const data = await response.json();
           setAutocompleteSuggestions(data.autocomplete);
         } else {
-          throw Error
+          throw Error;
         }
       }
     } catch (error) {
-      throw Error
+      throw Error;
     }
   };
 
@@ -296,7 +297,7 @@ function RecipeList({ favorites }) {
         tags: selectedTags,
         ingredients: selectedIngredients,
         categories: selectedCategories,
-        instructions: parseInt(selectedInstructions),
+        instructions: parseInt(selectedInstructions, 10),
       };
       fetchRecipesByFilters(filters);
     }
@@ -341,7 +342,7 @@ function RecipeList({ favorites }) {
           All favorites will appear here
         </p>
       ) : (
-        <div className={`h-3/5`}>
+        <div className="h-3/5">
           <Carousel responsive={responsive} containerClass="carousel-container">
             {favorites.map((recipe) => (
               <div key={recipe.recipe._id}>
@@ -393,10 +394,13 @@ function RecipeList({ favorites }) {
       {(filterCount === 0 || recipes.length === 0) && (
         <>
           <p style={{ textAlign: "center" }}>
-            <span style={{ fontWeight: "bold" }}>{remainingRecipes} </span>
+            <span style={{ fontWeight: "bold" }}>
+              {remainingRecipes}
+              {' '}
+            </span>
             recipes remaining
           </p>
-          
+
           <div className="flex justify-center pb-8 gap-10">
             <Stack spacing={2} justifyContent="center" alignItems="center">
               <Pagination
@@ -407,11 +411,11 @@ function RecipeList({ favorites }) {
               />
             </Stack>
           </div>
-          <FloatingButton className={theme === 'light' ? 'bg-blue-500' : 'bg-blue-800'} />
         </>
       )}
+      <FloatingButton />
     </div>
-    
+
   );
 }
 

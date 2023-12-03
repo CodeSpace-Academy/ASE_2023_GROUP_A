@@ -6,6 +6,7 @@ import Tags from "../Tags/Tags";
 import Ingredients from "../ingredients/ingredients";
 import DropdownMenu from "../sort/sort";
 import InstructionF from "../Instructions/instructions";
+import { useTheme } from "../Context/ThemeContext";
 
 /**
  * Functional component representing the hero section of the application.
@@ -44,9 +45,10 @@ export default function Hero({
   setSortOrder,
   sortOrder,
 }) {
+  const { theme } = useTheme();
   return (
-    <div className={classes.heroImage}>
-      <div className={classes.heroContent}>
+    <div className={`sm:portrait:h-screen max-w-full ${classes.heroImage}`}>
+      <div className={`sm:mt-20 sm:block ${classes.heroContent} ${theme === "light" ? " bg-blue-400 !important" : " bg-gray-700 !important"} bg-opacity-70`}>
         <div className={classes.search}>
           <SearchBar
             handleDefault={handleDefaultSearch}

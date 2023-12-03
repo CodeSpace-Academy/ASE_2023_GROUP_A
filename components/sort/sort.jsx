@@ -3,9 +3,11 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
+import { useTheme } from "../Context/ThemeContext";
 
 export default function DropdownMenu({ sortOrder, setSortOrder }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const { theme } = useTheme();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -50,7 +52,7 @@ export default function DropdownMenu({ sortOrder, setSortOrder }) {
   return (
     <div>
       <Button
-        sx={{ background: "#007bff", "&:hover": { background: "lightBlue" } }}
+        sx={{ background: `${theme === 'light' ? "#007bff !important" : "#0d203eee !important"}`, "&:hover": { background: "lightBlue !important" } }}
         aria-controls="simple-menu"
         aria-haspopup="true"
         variant="contained"
