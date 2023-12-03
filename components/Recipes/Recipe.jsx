@@ -12,38 +12,43 @@ import RecipeDetailTags from "../Tags/RecipeDetailTags";
 import Description from "../Description/Description";
 import Allergens from "../Allergens/Allergens";
 import CoverImage from "../Images/CoverImage";
-import IngredientsList from '../Ingredients/IngredientsList';
-import RecipeInstructions from '../Instructions/RecipeInstructions';
-import Loading from '../Loading/Loading';
-import { useTheme } from '../Context/ThemeContext';
-import { usePageContext } from '../Context/CurrentPageContexts/CurrentHomePage';
-
+import IngredientsList from "../Ingredients/IngredientsList";
+import RecipeInstructions from "../Instructions/RecipeInstructions";
+import Loading from "../Loading/Loading";
+import { useTheme } from "../Context/ThemeContext";
+import { usePageContext } from "../Context/CurrentPageContexts/CurrentHomePage";
 
 function Recipe({ recipe, Allergies }) {
   const [showTags, setShowTags] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const { theme } = useTheme();
   const { goBack } = usePageContext();
-  if (!recipe) { return (<Loading />); }
+  if (!recipe) {
+    return <Loading />;
+  }
 
   const textClass = theme === "dark" ? "text-white" : "text-black";
   const ingredientsList = Object.entries(recipe.ingredients).map(
-    (ingredient) => `${ingredient}`,
+    (ingredient) => `${ingredient}`
   );
 
   const firstImage = recipe.images[0];
 
   return (
     <div className={` mt-19 p-14 ${textClass}`}>
-        <span
-          className={`flex text-black-600 text-xl gap-2 p-4 mt-2 ${textClass}`}
+      <span
+        className={`flex text-black-600 text-xl gap-2 p-4 mt-2 ${textClass}`}
+      >
+        <button
+          type="button"
+          onClick={goBack}
+          className="ml-10 flex border bg-gradient-to-br from-white to-gray-400 text-white hover:text-blue-400 px-2 py-2 rounded-lg"
         >
-          <button type="button" onClick={goBack} className="ml-10 flex border bg-gradient-to-br from-white to-gray-400 text-white hover:text-blue-400 px-2 py-2 rounded-lg">
-            {" "}
-            <FaArrowLeft className="mr-2" />
-            <p>Back to More Recipes </p>
-          </button>
-        </span>
+          {" "}
+          <FaArrowLeft className="mr-2" />
+          <p>Back to More Recipes </p>
+        </button>
+      </span>
       <div
         className={`bg-${
           theme === "dark" ? "gray-700" : "white"
@@ -68,17 +73,13 @@ function Recipe({ recipe, Allergies }) {
 
             <div className="flex items-center pt-2">
               <FaUsers className="mr-2" />
-              <b>Servings</b>
-              :
-              {recipe.servings}
+              <b>Servings</b>:{recipe.servings}
             </div>
 
             <div className="flex items-center">
               {" "}
               <FiBook className="mr-2" />
-              <b>Category</b>
-              :
-              {recipe.category}
+              <b>Category</b>:{recipe.category}
             </div>
 
             <div className={` mt-2 ${textClass}`}>

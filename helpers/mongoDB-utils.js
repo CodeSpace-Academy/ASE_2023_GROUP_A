@@ -546,17 +546,31 @@ export const getModifiedRecipesWithTotalCount = async (
       };
 
       // Combine fuzzy search with existing conditions
-      query.$and = [fuzzySearchQuery];
+      if (query.$and) {
+        query.$and.push(fuzzySearchQuery);
+      } else {
+        query.$and = [fuzzySearchQuery];
+      }
     }
 
     // Handle category filter
     if (categories && categories.length > 0) {
-      query.category = { $all: categories };
+      const categoryFilter = { category: { $all: categories } };
+      if (query.$and) {
+        query.$and.push(categoryFilter);
+      } else {
+        query.$and = [categoryFilter];
+      }
     }
 
     // Handle tag filter
     if (tags && tags.length > 0) {
-      query.tags = { $all: tags };
+      const tagFilter = { tags: { $all: tags } };
+      if (query.$and) {
+        query.$and.push(tagFilter);
+      } else {
+        query.$and = [tagFilter];
+      }
     }
 
     // Handle ingredient filter
@@ -564,7 +578,11 @@ export const getModifiedRecipesWithTotalCount = async (
       const ingredientQueries = ingredients.map((ingredient) => ({
         [`ingredients.${ingredient}`]: { $exists: true },
       }));
-      query.$and = ingredientQueries;
+      if (query.$and) {
+        query.$and.push({ $or: ingredientQueries });
+      } else {
+        query.$and = [{ $or: ingredientQueries }];
+      }
     }
 
     // Handle instructions filter
@@ -599,7 +617,10 @@ export const getModifiedRecipesWithTotalCount = async (
 
     // Execute the query and fetch total count
     const [recipes, totalCount] = await Promise.all([
-      collection.find(query).sort(sortCriteria).limit(100).skip(skip)
+      collection.find(query)
+        .sort(sortCriteria)
+        .limit(100)
+        .skip(skip)
         .toArray(),
       collection.find(query).count(),
     ]);

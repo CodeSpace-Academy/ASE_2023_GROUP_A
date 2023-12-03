@@ -1,4 +1,5 @@
-import { FaTag } from "react-icons/fa";
+import React from "react";
+import { v4 as KeyUUID } from "uuid"; // Import mutate for manual revalidation
 
 const RecipeDetailTags = ({ recipe }) => {
   try {
@@ -6,15 +7,12 @@ const RecipeDetailTags = ({ recipe }) => {
       return <div>Loading please wait...</div>;
     }
 
+    // Display tags for the recipe
     return (
-      <div className=' pb-2 items-center pt-2'>
-        <div className='flex'>
-          <FaTag className='mr-2' />
-          <b>Tags</b>
-        </div>
-        <ul className='list-disc list-inside'>
-          {recipe.tags.map((tag, index) => (
-            <li key={index} className='text-gray-1000'>
+      <div>
+        <ul className="list-disc list-inside">
+          {recipe.tags.map((tag) => (
+            <li key={KeyUUID()} className="text-gray-600">
               {tag}
             </li>
           ))}
@@ -22,6 +20,7 @@ const RecipeDetailTags = ({ recipe }) => {
       </div>
     );
   } catch (error) {
+    // Handle and log errors that occur during tag rendering
     console.error("An error occurred:", error);
     return <div>Failed to load tags!</div>;
   }

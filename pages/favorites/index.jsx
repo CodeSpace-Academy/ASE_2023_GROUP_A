@@ -245,11 +245,12 @@ function FavoritesPage() {
           <Loading />
         ) : filteredRecipes.length === 0 ? (
           <Image
-            height={200}
-            width={200}
-            src="../Images/nix.png"
-            alt="No Likes"
+            src="/Images/nix.png"
+            alt="No Favorites Found"
+            width={500}
+            height={300}
           />
+
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredRecipes.map((result) => (

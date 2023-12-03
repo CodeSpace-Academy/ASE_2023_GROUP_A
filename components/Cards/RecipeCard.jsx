@@ -1,5 +1,6 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-alert */
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
@@ -37,29 +38,26 @@ import Title from "./Title";
 const RecipeCard = ({
   recipe,
   searchQuery,
-  favorites,
   Key,
 }) => {
+  const [recipeIsFavorite, setRecipeIsFavorite] = useState(false);
   const { theme } = useTheme();
   const favoriteCtx = useContext(FavoritesContext);
 
-  useEffect(() => {
-    favoriteCtx.updateFavorites(favorites);
-  }, [favorites]);
-
-  if (!recipe) {
-    return (
-      <div>
-        <LoadingCard />
-      </div>
-    );
+  if ((!recipe)) {
+    return <LoadingCard />;
   }
+
   // Determine the first image for the recipe
   const firstImage = recipe.images && recipe.images.length > 0
     ? recipe.images[0] : recipe.image;
-
+  const favorites = favoriteCtx.favorites || [];
   // Check if the recipe is marked as a favorite
-  const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
+
+  useEffect(() => {
+    const isFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
+    setRecipeIsFavorite(isFavorite);
+  }, [favorites, favoriteCtx, recipe._id]);
 
   // eslint-disable-next-line no-shadow
   const removeFavoriteHandler = async () => {
@@ -81,7 +79,9 @@ const RecipeCard = ({
         if (response.ok) {
           // Update the state and display a success message
           favoriteCtx.removeFavorite(recipe._id);
+          // favoriteCtx.removeChangeListener(refreshFavorites);
           toast.success("Recipe removed from favorites!");
+          // refreshFavorites();
         } else {
           toast.error("Error removing recipe from favorites.");
         }
@@ -109,9 +109,11 @@ const RecipeCard = ({
         if (response.ok) {
           // Update the state and display a success message
           favoriteCtx.addFavorite(recipe);
+          // favoriteCtx.addChangeListener(refreshFavorites);
           toast.success("Recipe added to favorites!");
         } else {
           toast.error("Error adding recipe to favorites.");
+          // refreshFavorites();
         }
       }
     } catch (error) {

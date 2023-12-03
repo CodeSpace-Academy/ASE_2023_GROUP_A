@@ -12,9 +12,6 @@ const PageContext = createContext();
 
 export const PageProvider = ({ children }) => {
   const isServer = typeof window === "undefined";
-  // const isFiltered = isServer
-  //   ? 1
-  //   : parseInt(localStorage.getItem("isFiltered")) || 0;
   const [currentPage, setCurrentPage] = useState(
     isServer ? 1 : parseInt(localStorage.getItem("lastPage") || 1, 10),
   );
@@ -49,14 +46,15 @@ export const PageProvider = ({ children }) => {
   const contextValue = useMemo(
     () => ({
       currentPage,
-      setCurrentPage,
       updatePage,
       goBack,
       api,
     }),
-    [api,
+    [
+      api,
       currentPage,
       updatePage,
+      goBack,
     ],
   );
 

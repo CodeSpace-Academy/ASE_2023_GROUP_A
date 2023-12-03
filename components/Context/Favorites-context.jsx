@@ -8,7 +8,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable implicit-arrow-linebreak */
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 
 const FavoritesContext = createContext({
   userFavorites: [],
@@ -24,6 +24,37 @@ const FavoritesContext = createContext({
 export function FavoritesContextProvider(props) {
   const [userFavorites, setUserFavorites] = useState([]);
   const [changeListeners, setChangeListeners] = useState([]);
+    /**
+   * A function to manually refresh the favorites data.
+   * It triggers a revalidation of the 'favorites' data using the mutate function.
+   */
+    const fetchFavorites = async () => {
+      try {
+        const response = await fetch("/api/recipes/Favourites");
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.favorites || [];
+      } catch (error) {
+        console.error("Error fetching favorites:", error);
+        return [];
+      }
+    };
+    useEffect(() => {
+      const fetchFavoritesData = async () => {
+        try {
+          const favorites = await fetchFavorites();
+          if (favorites) {
+            setUserFavorites(favorites);
+          }
+        } catch (error) {
+          console.error("Error fetching favorites:", error);
+        }
+      };
+
+      fetchFavoritesData();
+    }, []);
   const notifyChangeListeners = () => {
     changeListeners.forEach((listener) => {
       listener();
@@ -45,8 +76,11 @@ export function FavoritesContextProvider(props) {
   };
 
   function isRecipeInFavorites(recipeId, userfavorites) {
-    return Array.from(userfavorites).some((recipe) => recipe && recipe._id === recipeId);
+    return userfavorites
+    && Array.from(userfavorites)
+    .some((recipe) => recipe && recipe._id === recipeId);
   }
+
   const addChangeListener = (listener) => {
     setChangeListeners((prevListeners) => [...prevListeners, listener]);
   };

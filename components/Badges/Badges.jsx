@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable no-plusplus */
+import React, { useEffect } from "react";
 import Badge from "@mui/material/Badge";
 import { FaTrash } from "react-icons/fa";
 
@@ -13,7 +14,59 @@ import { FaTrash } from "react-icons/fa";
  * @param {number} props.filterCount - The count of active filters.
  * @returns {JSX.Element} - The component's rendered elements.
  */
-export default function Badges({ numberOfRecipes, handleDefault, filterCount }) {
+export default function Badges({
+  numberOfRecipes,
+  handleDefault,
+  selectedCategories,
+  selectedIngredients,
+  selectedTags,
+  selectedInstructions,
+  filterCount,
+  setFilterCount,
+}) {
+  function countAppliedFilters(
+    Categories,
+    Ingredients,
+    Tags,
+    Instructions,
+  ) {
+    let count = 0;
+
+    if (Categories.length > 0) {
+      count++;
+    }
+
+    if (Ingredients.length > 0) {
+      count++;
+    }
+
+    if (Tags.length > 0) {
+      count++;
+    }
+
+    if (Instructions > 0) {
+      count++;
+    }
+    // Check if selectedInstructions is not null before comparing
+    if (Instructions !== null && Instructions > 0) {
+      count++;
+    }
+    return count;
+  }
+  useEffect(() => {
+    const counts = countAppliedFilters(
+      selectedCategories,
+      selectedIngredients,
+      selectedTags,
+      selectedInstructions,
+    );
+    setFilterCount(counts);
+  }, [
+    selectedTags,
+    selectedIngredients,
+    selectedCategories,
+    selectedInstructions,
+  ]);
   return (
     <div className="flex mt-10">
       {/* Badge for active filters */}

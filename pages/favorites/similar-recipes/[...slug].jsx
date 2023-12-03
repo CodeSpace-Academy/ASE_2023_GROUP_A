@@ -9,17 +9,14 @@
 import React, {
   useEffect,
   useState,
-  useContext,
   useMemo,
 } from "react";
-import { mutate } from "swr";
 import { useRouter } from "next/router";
 import Fuse from "fuse.js";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { v4 as KeyUUID } from "uuid";
 import useSimilarRecipesPageContext from "../../../components/Context/CurrentPageContexts/CurrentSimilarRecipesPage.jsx";
-import FavoritesContext from "../../../components/Context/Favorites-context";
 import RecipeCard from "../../../components/Cards/RecipeCard";
 import Loading from "../../../components/Loading/Loading";
 import Tags from "../../../components/Tags/Tags.jsx";
@@ -40,20 +37,13 @@ function SimilarRecipes() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const favoriteContext = useContext(FavoritesContext);
+  // const favoriteContext = useContext(FavoritesContext);
   const [sortOrder, setSortOrder] = useState("default");
-  // console.log("CURRENT PAGE:", currentSimilarRecipesPage);
-  // Use the useSWR hook to fetch data for the user's favorite recipes
-  const favoritesData = favoriteContext.userFavorites;
+
   /**
    * A function to manually refresh the favorites data.
    * It triggers a revalidation of the 'favorites' data using the mutate function.
    */
-  const refreshFavorites = async () => {
-    await mutate("/api/recipes/Favourites");
-  };
-
-  // Set up an event listener for changes in favorite recipes
 
   const recipeTitle = Array.isArray(slug) ? slug[0] : slug;
 
@@ -101,35 +91,12 @@ function SimilarRecipes() {
     } catch (err) {
       console.error("Error fetching original recipes:", err);
     }
-  };
-  // useEffect(() => {
-  //   if (favoritesData) {
-  //     favoriteContext.updateFavorites(favoritesData.favorites || []);
-  //   }
-  //   favoriteContext.addChangeListener(refreshFavorites);
-  //   return () => favoriteContext.removeChangeListener(refreshFavorites);
-  // }, [favoriteContext.userFavorites]); // empty dependency array to run only once
+  };// empty dependency array to run only once
 
   useEffect(() => {
     // Fetch the original recipes without search when the component mounts
     fetchOriginalRecipes();
-    // Update the favorites in the context when the component mounts
-    // if (favoritesData) {
-    //   favoriteContext.updateFavorites(favoritesData.favorites || []);
-    // }
-    // Add the change listener for future updates
-    favoriteContext.addChangeListener(refreshFavorites);
-
-    // Cleanup: Remove the change listener when the component unmounts
-    return () => favoriteContext.removeChangeListener(refreshFavorites);
   }, []);
-
-  // useEffect(() => {
-  //   // Update the favorites in the context when favoritesData changes
-  //   if (favoritesData) {
-  //     favoriteContext.updateFavorites(favoritesData.favorites || []);
-  //   }
-  // }, [favoritesData]);
 
   const fuse = useMemo(() => {
     if (originalRecipes.length > 0) {
@@ -183,7 +150,7 @@ function SimilarRecipes() {
   const pageNumbers = Math.ceil((totalRecipes || 0) / 100);
 
   // Extract the list of favorite recipes from the fetched data
-  const favorites = favoritesData ? favoritesData.favorites || [] : [];
+  // const favorites = favoritesData ? favoritesData.favorites || [] : [];
 
   // Rest of your code...
 
@@ -203,8 +170,9 @@ function SimilarRecipes() {
       <button htmlFor="searchBar" type="button" onClick={handleSearch}>
         Search
       </button>
-      <Tags setSelectedTags={setSelectedTags} selectedTags={selectedTags} />
+      <Tags Key={KeyUUID()} setSelectedTags={setSelectedTags} selectedTags={selectedTags} />
       <Categories
+        Key={KeyUUID()}
         setSelectedCategories={setSelectedCategories}
         selectedCategories={selectedCategories}
       />
@@ -239,7 +207,6 @@ function SimilarRecipes() {
                 <RecipeCard
                   Key={KeyUUID()}
                   recipe={recipe}
-                  favorites={favorites}
                 />
               ))}
             </div>
