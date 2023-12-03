@@ -1,13 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/jsx-indent */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable indent */
-/* eslint-disable react/jsx-no-constructed-context-values */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable implicit-arrow-linebreak */
 import { useState, createContext } from "react";
 
 const FavoritesContext = createContext({

@@ -1,7 +1,12 @@
+import React from "react";
 import Link from "next/link";
-import { useTheme } from "@/components/Context/ThemeContext";
+import { useTheme } from "../Context/ThemeContext";
 import classes from "./Footer.module.css";
 
+/**
+ * Footer component for displaying site information and links.
+ * @returns {JSX.Element} - The rendered Footer component.
+ */
 export default function Footer() {
   const pageName = "< Cooking Devs />";
   const currentYear = new Date().getFullYear();
@@ -59,13 +64,19 @@ export default function Footer() {
         </Link>
       </div>
       <div className={`${classes.copyright}`}>
-      <small
-        className={`text-sm text-center mb-0 pt-2 ${
-          isDarkTheme ? "text-white" : ""
-        }`}
-      >
-        Copyright © {currentYear} {pageName} Pty Ltd | All rights reserved
-      </small>
+        <small
+          className={`text-sm text-center mb-0 pt-2 ${
+            isDarkTheme ? "text-white" : ""
+          }`}
+        >
+          Copyright ©
+          {' '}
+          {currentYear}
+          {' '}
+          {pageName}
+          {' '}
+          Pty Ltd | All rights reserved
+        </small>
       </div>
     </footer>
   );
