@@ -13,7 +13,7 @@ const PageContext = createContext();
 export const PageProvider = ({ children }) => {
   const isServer = typeof window === "undefined";
   const [currentPage, setCurrentPage] = useState(
-    isServer ? 1 : parseInt(localStorage.getItem("lastPage") || 1, 10)
+    isServer ? 1 : parseInt(localStorage.getItem("lastPage") || 1, 10),
   );
 
   const router = useRouter();
@@ -50,7 +50,7 @@ export const PageProvider = ({ children }) => {
       goBack,
       api,
     }),
-    [api, currentPage, updatePage, goBack]
+    [api, currentPage, updatePage, goBack],
   );
 
   return (
@@ -62,7 +62,7 @@ export const usePageContext = () => {
   const context = useContext(PageContext);
   if (!context) {
     throw new Error(
-      "usePageNumber must only be used within a page number provider"
+      "usePageNumber must only be used within a page number provider",
     );
   }
   return context;
