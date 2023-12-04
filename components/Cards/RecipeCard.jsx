@@ -43,23 +43,20 @@ const RecipeCard = ({
   const [recipeIsFavorite, setRecipeIsFavorite] = useState(false);
   const { theme } = useTheme();
   const favoriteCtx = useContext(FavoritesContext);
-
-  if ((!recipe)) {
-    return <LoadingCard />;
-  }
-
-  // Determine the first image for the recipe
-  const firstImage = recipe.images && recipe.images.length > 0
-    ? recipe.images[0] : recipe.image;
   const favorites = favoriteCtx.favorites || [];
-  // Check if the recipe is marked as a favorite
-
   useEffect(() => {
     const isFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
     setRecipeIsFavorite(isFavorite);
   }, [favorites, favoriteCtx, recipe._id]);
 
-  // eslint-disable-next-line no-shadow
+  // Determine the first image for the recipe
+  const firstImage = recipe.images && recipe.images.length > 0
+    ? recipe.images[0] : recipe.image;
+
+  // Check if the recipe is marked as a favorite
+  if ((!recipe)) {
+    return <LoadingCard />;
+  }
   const removeFavoriteHandler = async () => {
     // Display a confirmation dialog
     const userConfirmed = window.confirm(
@@ -113,12 +110,13 @@ const RecipeCard = ({
           toast.success("Recipe added to favorites!");
         } else {
           toast.error("Error adding recipe to favorites.");
+          throw new Error("Error removing recipe from favorites.");
           // refreshFavorites();
         }
       }
     } catch (error) {
       toast.error("Error adding recipe to favorites.");
-      return error(new Error("Error adding favorite:", error));
+      return error;
     }
   };
 

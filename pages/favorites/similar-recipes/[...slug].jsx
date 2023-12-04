@@ -76,6 +76,9 @@ function SimilarRecipes() {
       }
 
       const data = await response.json();
+      if (!data) {
+        throw new Error("Error fetching recipes");
+      }
       setSimilarRecipes(data.similarRecipes);
       setTotalRecipes(data.totalSimilarRecipes);
     } catch (err) {

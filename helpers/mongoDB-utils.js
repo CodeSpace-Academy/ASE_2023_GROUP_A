@@ -513,8 +513,7 @@ export const getSimilarRecipesWithTotalCount = async (
 
     return { similarRecipes, totalCount };
   } catch (error) {
-    console.error("Error fetching similar recipes:", error);
-    throw error;
+    return error;
   }
 };
 
@@ -627,7 +626,6 @@ export const getModifiedRecipesWithTotalCount = async (
 
     return { recipes, totalCount };
   } catch (error) {
-    console.error("Error fetching recipes:", error);
-    throw error;
+    return error;
   }
 };
