@@ -267,13 +267,15 @@ function RecipeList() {
       />
 
       <div className="my-8">
-        <button
-          type="button"
-          onClick={handleViewFavorites}
-          className="bg-blue-500 px-4 py-2 rounded-md"
-        >
-          {showCarousel ? "Hide Favourites" : "view Favourites"}
-        </button>
+        <div className="flex w-full justify-center"
+          <button
+            type="button"
+            onClick={handleViewFavorites}
+            className="bg-blue-500 px-4 py-2 rounded-md"
+          >
+            {showCarousel ? "Hide Favourites" : "View Favourites"}
+          </button>
+        </div>
 
         {showCarousel && (
           <div>
