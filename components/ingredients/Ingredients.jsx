@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
+import { useTheme } from "../Context/ThemeContext";
+
 /**
  * Functional component representing a multi-select dropdown for ingredients.
  * it's a component
@@ -12,6 +14,7 @@ import Select from "react-select";
  */
 function Ingredients({ selectedIngredients, setSelectedIngredients }) {
   const [ingredients, setIngredients] = useState([]);
+  const { theme } = useTheme();
 
   useEffect(() => {
     /**
@@ -58,13 +61,13 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
+      background: "#3496c7",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "#007bff",
+      backgroundColor: theme === 'light' ? "#007bff" : "#0d203eee",
       color: "white",
       width: "fitContent",
       cursor: "pointer",
@@ -99,7 +102,7 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
         onChange={handleIngredientChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="Select ingredient"
+        placeholder="Select Ingredient"
       />
     </div>
   );

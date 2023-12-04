@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
+import { useTheme } from "../Context/ThemeContext";
+
 /**
  * Functional component representing a tags selection component.
  *
@@ -12,6 +14,7 @@ import Select from "react-select";
  */
 function Tags({ setSelectedTags, selectedTags }) {
   const [tags, setTags] = useState([]);
+  const { theme } = useTheme();
 
   useEffect(() => {
     async function fetchTags() {
@@ -49,13 +52,13 @@ function Tags({ setSelectedTags, selectedTags }) {
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
+      background: "#3496c7",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "#007bff",
+      backgroundColor: theme === 'light' ? "#007bff" : "#0d203eee",
       color: "black",
       width: "fitContent",
       cursor: "pointer",

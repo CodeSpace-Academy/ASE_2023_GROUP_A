@@ -1,6 +1,6 @@
-/* eslint-disable consistent-return */
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
+import { useTheme } from "../Context/ThemeContext";
 
 /**
  * Functional component representing a multi-select dropdown for categories.
@@ -13,6 +13,7 @@ import Select from "react-select";
  */
 const Categories = ({ selectedCategories, setSelectedCategories }) => {
   const [categories, setCategories] = useState([]);
+  const { theme } = useTheme();
 
   useEffect(() => {
     /**
@@ -34,9 +35,11 @@ const Categories = ({ selectedCategories, setSelectedCategories }) => {
               value: category,
             })),
           );
+        } else {
+          throw Error("Failed to fetch categories");
         }
       } catch (error) {
-        return error("Error fetching categories:", error);
+        throw Error("Error fetching categories:", error);
       }
     }
 
@@ -56,13 +59,13 @@ const Categories = ({ selectedCategories, setSelectedCategories }) => {
   const customStyles = {
     multiValue: (base) => ({
       ...base,
-      background: "red",
+      background: "#3496c7",
       color: "white",
     }),
 
     control: (base) => ({
       ...base,
-      backgroundColor: "#007bff",
+      backgroundColor: theme === 'light' ? "#007bff" : "#0d203eee",
       color: "black",
       width: "fitContent",
       cursor: "pointer",
@@ -84,6 +87,7 @@ const Categories = ({ selectedCategories, setSelectedCategories }) => {
     menu: (base) => ({
       ...base,
       width: "12em",
+      zIndex: "100",
     }),
   };
 
@@ -97,7 +101,7 @@ const Categories = ({ selectedCategories, setSelectedCategories }) => {
         onChange={handleCategoryChange}
         styles={customStyles}
         blurInputOnSelect
-        placeholder="Select category"
+        placeholder="Select Category"
       />
     </div>
   );

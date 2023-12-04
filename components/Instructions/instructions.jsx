@@ -1,4 +1,5 @@
 import React from "react";
+import classes from "./instructions.module.css";
 
 /**
  * An input field for the number of instructions.
@@ -11,14 +12,14 @@ import React from "react";
  */
 export default function InstructionF({ handleChange, selectedInstructions }) {
   return (
-    <div className="flex">
+    <div className={`flex ${classes.instructionsContainer}`}>
       <input
         type="number"
         min={0}
-        placeholder="Number of instructions..."
-        value={parseInt(selectedInstructions, 2)}
+        placeholder="# of Instructions"
+        value={parseInt(selectedInstructions, 10)}
         onChange={handleChange}
-        className="border border-gray-300 rounded-l-md px-4 py-2"
+        className={`${classes.instructionsInput}`}
       />
     </div>
   );
