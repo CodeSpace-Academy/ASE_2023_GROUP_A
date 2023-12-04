@@ -34,25 +34,22 @@ export default function Badges({
   ) {
     let count = 0;
 
-    if (Categories.length > 0) {
+    if (Categories && Categories.length > 0) {
       count++;
     }
 
-    if (Ingredients.length > 0) {
+    if (Ingredients && Ingredients.length > 0) {
       count++;
     }
 
-    if (Tags.length > 0) {
+    if (Tags && Tags.length > 0) {
       count++;
     }
 
-    if (Instructions > 0) {
+    if (Instructions && Instructions.length > 0) {
       count++;
     }
-    // Check if selectedInstructions is not null before comparing
-    if (Instructions !== null && Instructions > 0) {
-      count++;
-    }
+
     return count;
   }
   useEffect(() => {
