@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
@@ -33,8 +34,6 @@ const Categories = ({ selectedCategories, setSelectedCategories }) => {
               value: category,
             })),
           );
-        } else {
-          console.error("Failed to fetch categories");
         }
       } catch (error) {
         return error("Error fetching categories:", error);

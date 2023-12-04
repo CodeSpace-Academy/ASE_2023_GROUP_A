@@ -5,7 +5,6 @@
 import React, {
   useEffect,
   useState,
-  Suspense,
   useCallback,
   useContext,
 } from "react";
@@ -160,6 +159,11 @@ function RecipeList() {
     fetchOriginalAndFilteredData();
   }, [
     filtersExist,
+    searchQuery,
+    selectedTags,
+    selectedIngredients,
+    selectedCategories,
+    selectedInstructions,
     currentPage,
     pageToUse,
   ]);
@@ -289,9 +293,7 @@ function RecipeList() {
                 >
                   {favorites.map((recipe) => (
                     <div key={recipe.recipe._id}>
-                      <Suspense fallback={<p>Loading Favorite..</p>}>
-                        <FavCard recipe={recipe.recipe} favorites={favorites} />
-                      </Suspense>
+                      <FavCard recipe={recipe.recipe} favorites={favorites} />
                     </div>
                   ))}
                 </Carousel>

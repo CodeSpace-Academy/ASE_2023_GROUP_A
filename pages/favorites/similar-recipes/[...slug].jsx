@@ -30,6 +30,7 @@ function SimilarRecipes() {
     updatePageNumber,
   } = useSimilarRecipesPageContext();
   const [filteredPage, setFilteredPage] = useState(1);
+  const [originalUrl, setOriginalUrl] = useState('');
   const [similarRecipes, setSimilarRecipes] = useState([]);
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
@@ -80,6 +81,37 @@ function SimilarRecipes() {
     } catch (err) {
       console.error("Error fetching recipes:", err);
     }
+    const queryParams = new URLSearchParams(filters);
+    if (searchQuery.length > 0) {
+      queryParams.set("searchQuery", searchQuery);
+    } else {
+      queryParams.delete("searchQuery");
+    }
+
+    if (selectedTags.length > 0) {
+      queryParams.set("tags", selectedTags.join(","));
+    } else {
+      queryParams.delete("tags");
+    }
+
+    if (selectedCategories.length > 0) {
+      queryParams.set("categories", selectedCategories.join(","));
+    } else {
+      queryParams.delete("categories");
+    }
+
+    if (
+      searchQuery.length > 0
+      || selectedTags.length > 0
+      || selectedCategories.length > 0
+    ) {
+      const queryString = queryParams.toString();
+      // const path = router.asPath;
+      const url = queryString
+        ? `${originalUrl}/?${queryString}`
+        : `${originalUrl}`;
+      router.replace(url);
+    }
   };
   const fuse = useMemo(() => {
     if (similarRecipes.length > 0) {
@@ -94,41 +126,17 @@ function SimilarRecipes() {
   }, [similarRecipes]);
 
   useEffect(() => {
+    router.replace(
+      `/favorites/similar-recipes/${recipeTitle}`,
+    );
+    const path = router.asPath;
+    setOriginalUrl(path);
+    console.log("ORIGINAL URL:", originalUrl);
+  }, []);
+
+  useEffect(() => {
     if (filtersExist) {
       searchSimilarRecipes(filteredPage);
-      const queryParams = new URLSearchParams(filters);
-      if (searchQuery.length > 0) {
-        queryParams.set("searchQuery", searchQuery);
-      } else {
-        queryParams.delete("searchQuery");
-      }
-
-      if (selectedTags.length > 0) {
-        queryParams.set("tags", selectedTags.join(","));
-      } else {
-        queryParams.delete("tags");
-      }
-
-      if (selectedCategories.length > 0) {
-        queryParams.set("categories", selectedCategories.join(","));
-      } else {
-        queryParams.delete("categories");
-      }
-
-      if (searchQuery.length >= 4
-        || selectedTags.length > 0
-        || selectedCategories.length > 0
-      ) {
-        const queryString = queryParams.toString();
-        const path = router.asPath;
-        const url = queryString ? `${path}/?${queryString}` : `${path}`;
-        router.replace(url);
-        console.log("ROUTER AS PATH:", path, "URL:", url);
-      } else {
-        const path = router.asPath;
-        router.push(path);
-        console.log("ROUTER AS PATH:", path);
-      }
     } else if (!filtersExist) {
       setFilteredPage(1);
     } else {
@@ -137,14 +145,14 @@ function SimilarRecipes() {
       setSelectedTags([]);
       setSelectedCategories([]);
       setSortOrder("default");
-      const path = router.asPath;
-      router.push(path);
-      console.log("ROUTER AS PATH:", path);
     }
+    // console.log("ORIGINAL URL:", originalUrl);
+    // router.push(originalUrl);
     searchSimilarRecipes(currentSimilarRecipesPage);
     console.log("Filtered Page:", filteredPage);
     console.log("UnFiltered Current Page:", currentSimilarRecipesPage);
   }, [
+    originalUrl,
     searchQuery,
     selectedTags,
     selectedCategories,

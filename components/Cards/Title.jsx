@@ -37,6 +37,12 @@ function Title({ title, searchQuery }) {
   };
 
   const titleClass = calculateFontSize();
+  const decodeHtmlEntities = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  };
+
+  const correctedTitle = decodeHtmlEntities(sanitizedTitle);
 
   return (
     <h2 className={`${titleClass} font-semibold mb-2 font-alkatra h-[40px]`}>
@@ -44,11 +50,11 @@ function Title({ title, searchQuery }) {
         <Highlighter
           highlightClassName="YourHighlightClass"
           searchWords={searchQuery}
-          textToHighlight={sanitizedTitle}
+          textToHighlight={correctedTitle}
           autoEscape
         />
       ) : (
-        sanitizedTitle
+        correctedTitle
       )}
     </h2>
   );
