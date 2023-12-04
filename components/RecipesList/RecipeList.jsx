@@ -90,8 +90,6 @@ function RecipeList() {
   };
 
   const fetchOriginalAndFilteredData = async () => {
-    updatePage(currentPage);
-
     try {
       // For searching with Fuse.js
       if (fuse() && searchQuery.length >= 4) {
@@ -156,16 +154,41 @@ function RecipeList() {
   };
 
   useEffect(() => {
+    const {
+      tags,
+      ingredients,
+      categories,
+      instructions,
+      sortOrders,
+      searchQuery: urlSearchQuery,
+    } = router.query;
+
+    // Set filters based on URL query parameters
+    setSelectedTags(tags ? tags.split(",") : []);
+    setSelectedIngredients(ingredients ? ingredients.split(",") : []);
+    setSelectedCategories(categories ? categories.split(",") : []);
+    setSelectedInstructions(instructions ? parseInt(instructions, 10) : null);
+    setSearchQuery(urlSearchQuery || "");
+    setSortOrder(sortOrders || null);
+
+    // Fetch data based on filters
+    fetchOriginalAndFilteredData();
+  }, []);
+
+  useEffect(() => {
+    // Update the URL with the current filter
+    const queryParams = new URLSearchParams(filters);
+    const queryString = queryParams.toString();
+    const url = queryString ? `/?${queryString}` : "/";
+    router.replace(url);
     fetchOriginalAndFilteredData();
   }, [
-    filtersExist,
     searchQuery,
     selectedTags,
     selectedIngredients,
     selectedCategories,
     selectedInstructions,
-    currentPage,
-    pageToUse,
+    sortOrder,
   ]);
 
   const handlePageChange = useCallback(
@@ -267,7 +290,7 @@ function RecipeList() {
       />
 
       <div className="my-8">
-        <div className="flex w-full justify-center"
+        <div className="flex w-full justify-center">
           <button
             type="button"
             onClick={handleViewFavorites}
