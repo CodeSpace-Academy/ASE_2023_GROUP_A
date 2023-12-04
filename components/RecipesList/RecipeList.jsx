@@ -328,25 +328,24 @@ function RecipeList() {
         {recipes && recipes.length === 0 && totalRecipes === 0 ? (
           <Loading />
         ) : (
-          <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {recipes && recipes.map((recipe) => (
-              <div key={KeyUUID()}>
-                <RecipeCard
-                  key={recipe._id}
-                  recipe={recipe}
-                  searchQuery={searchQuery}
-                  description={recipe.description}
-                />
-              </div>
-            ))}
+          <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {recipes
+              && recipes.map((recipe) => (
+                <div key={KeyUUID()}>
+                  <RecipeCard
+                    key={recipe._id}
+                    recipe={recipe}
+                    searchQuery={searchQuery}
+                    description={recipe.description}
+                  />
+                </div>
+              ))}
           </div>
         )}
       </div>
-
       <p style={{ textAlign: "center" }}>
         <span style={{ fontWeight: "bold" }}>
           {displayRemainingRecipes}
-          {' '}
         </span>
         recipes remaining
       </p>

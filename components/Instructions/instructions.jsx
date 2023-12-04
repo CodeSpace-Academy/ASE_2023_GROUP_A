@@ -7,7 +7,7 @@ import classes from "./instructions.module.css";
  * @component
  * @param {Object} props - The component's props.
  * @param {Function} props.handleChange - The function to handle changes in the input.
- * @param {string} props.selectedInstructions - The selected number of instructions.
+ * @param {Number} props.selectedInstructions - The selected number of instructions.
  * @returns {JSX.Element} - The component's rendered elements.
  */
 export default function InstructionF({ handleChange, selectedInstructions }) {
@@ -17,7 +17,7 @@ export default function InstructionF({ handleChange, selectedInstructions }) {
         type="number"
         min={0}
         placeholder="# of Instructions"
-        value={parseInt(selectedInstructions, 10)}
+        value={parseInt(selectedInstructions, 10) || 0}
         onChange={handleChange}
         className={`${classes.instructionsInput}`}
       />
