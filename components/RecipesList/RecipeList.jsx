@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-plusplus */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable react/jsx-no-comment-textnodes */
@@ -28,17 +29,32 @@ import { responsive } from "../../helpers/settings/settings";
 
 function RecipeList() {
   const router = useRouter();
+  const {
+    // page,
+    tags,
+    ingredients,
+    categories,
+    instructions,
+    sortOrders,
+    searchQuery: urlSearchQuery,
+  } = router.query;
   const [recipes, setRecipes] = useState([]);
   const { currentPage, updatePage } = usePageContext();
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [filteredPage, setFilteredPage] = useState(1);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedInstructions, setSelectedInstructions] = useState(null);
-  const [sortOrder, setSortOrder] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(urlSearchQuery || "");
+  const [selectedCategories, setSelectedCategories] = useState(
+    categories ? categories.split(",") : [],
+  );
+  const [selectedIngredients, setSelectedIngredients] = useState(
+    ingredients ? ingredients.split(",") : [],
+  );
+  const [selectedTags, setSelectedTags] = useState(tags ? tags.split(",") : []);
+  const [selectedInstructions, setSelectedInstructions] = useState(
+    instructions ? parseInt(instructions, 10) : null,
+  );
+  const [sortOrder, setSortOrder] = useState(sortOrders || null);
   const [noRecipesFoundMessage, setNoRecipesFoundMessage] = useState(false);
   const [filterCount, setFilterCount] = useState(0);
   const [showCarousel, setShowCarousel] = useState(false);// Add loading state
@@ -108,9 +124,8 @@ function RecipeList() {
         setNoRecipesFoundMessage(originalData.recipes.length === 0);
       }
     } catch (err) {
-      console.error("Error fetching recipes:", err);
+      return err;
     }
-
     const queryParams = new URLSearchParams(filters);
     if (searchQuery.length > 0) {
       queryParams.set("searchQuery", searchQuery);
@@ -154,33 +169,6 @@ function RecipeList() {
   };
 
   useEffect(() => {
-    const {
-      tags,
-      ingredients,
-      categories,
-      instructions,
-      sortOrders,
-      searchQuery: urlSearchQuery,
-    } = router.query;
-
-    // Set filters based on URL query parameters
-    setSelectedTags(tags ? tags.split(",") : []);
-    setSelectedIngredients(ingredients ? ingredients.split(",") : []);
-    setSelectedCategories(categories ? categories.split(",") : []);
-    setSelectedInstructions(instructions ? parseInt(instructions, 10) : null);
-    setSearchQuery(urlSearchQuery || "");
-    setSortOrder(sortOrders || null);
-
-    // Fetch data based on filters
-    fetchOriginalAndFilteredData();
-  }, []);
-
-  useEffect(() => {
-    // Update the URL with the current filter
-    const queryParams = new URLSearchParams(filters);
-    const queryString = queryParams.toString();
-    const url = queryString ? `/?${queryString}` : "/";
-    router.replace(url);
     fetchOriginalAndFilteredData();
   }, [
     searchQuery,

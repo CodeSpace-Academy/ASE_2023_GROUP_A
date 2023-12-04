@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { useTheme } from "../Context/ThemeContext";
@@ -39,7 +40,7 @@ const Categories = ({ selectedCategories, setSelectedCategories }) => {
           throw Error("Failed to fetch categories");
         }
       } catch (error) {
-        throw Error("Error fetching categories:", error);
+        return error;
       }
     }
 

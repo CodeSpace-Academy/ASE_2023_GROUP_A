@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/extensions */
@@ -82,7 +83,7 @@ function SimilarRecipes() {
       setSimilarRecipes(data.similarRecipes);
       setTotalRecipes(data.totalSimilarRecipes);
     } catch (err) {
-      console.error("Error fetching recipes:", err);
+      return err;
     }
     const queryParams = new URLSearchParams(filters);
     if (searchQuery.length > 0) {
@@ -133,8 +134,6 @@ function SimilarRecipes() {
       `/favorites/similar-recipes/${recipeTitle}`,
     );
     const path = router.asPath;
-    setOriginalUrl(path);
-    console.log("ORIGINAL URL:", originalUrl);
   }, []);
 
   useEffect(() => {
@@ -149,11 +148,7 @@ function SimilarRecipes() {
       setSelectedCategories([]);
       setSortOrder("default");
     }
-    // console.log("ORIGINAL URL:", originalUrl);
-    // router.push(originalUrl);
     searchSimilarRecipes(currentSimilarRecipesPage);
-    console.log("Filtered Page:", filteredPage);
-    console.log("UnFiltered Current Page:", currentSimilarRecipesPage);
   }, [
     originalUrl,
     searchQuery,
