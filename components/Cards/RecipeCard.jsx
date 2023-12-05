@@ -1,10 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-alert */
 import React, { useContext, useState, useEffect } from "react";
-
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import Image from "next/legacy/image";
 import { toast } from "react-toastify";
 
