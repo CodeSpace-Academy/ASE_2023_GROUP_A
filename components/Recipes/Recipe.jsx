@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import { FiBook } from "react-icons/fi";
-import { FaArrowLeft, FaTag, FaUsers } from "react-icons/fa";
+import { FaArrowLeft, FaUsers } from "react-icons/fa";
 import {
   CookTime,
   PrepTime,
@@ -10,40 +9,74 @@ import {
 } from "../TimeAndDate/TimeConvertor";
 import RecipeDetailTags from "../Tags/RecipeDetailTags";
 import Description from "../Description/Description";
-import Allergens from "../Allergens/allergens";
+import Allergens from "../Allergens/Allergens";
 import CoverImage from "../Images/CoverImage";
-import IngredientsList from "../ingredients/IngredientsList";
+import IngredientsList from "../Ingredients/IngredientsList";
 import RecipeInstructions from "../Instructions/RecipeInstructions";
 import Loading from "../Loading/Loading";
 import { useTheme } from "../Context/ThemeContext";
+import { usePageContext } from "../Context/CurrentPageContexts/CurrentHomePage";
 
 function Recipe({ recipe, Allergies }) {
-  const [showTags, setShowTags] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const { theme } = useTheme();
-
-  if (!recipe) { return (<Loading />); }
+  const { goBack } = usePageContext();
+  if (!recipe) {
+    return <Loading />;
+  }
 
   const textClass = theme === "dark" ? "text-white" : "text-black";
   const ingredientsList = Object.entries(recipe.ingredients).map(
     (ingredient) => `${ingredient}`,
   );
 
-  const firstImage = recipe.images[0];
+  const downloadRecipe = async (format) => {
+    try {
+      const response = await fetch(
+        `api/download?recipeId=${recipe._id}&format=${format}`,
+      );
+      if (response.ok) {
+        const blob = await response.blob();
+
+        if (navigator.msSaveOrOpenBlob) {
+          // For Microsoft browsers
+          navigator.msSaveOrOpenBlob(blob, `recipe_${recipe._id}.${format}`);
+        } else {
+          // For other browsers
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `recipe_${recipe._id}.${format}`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+      } else {
+        console.error("Error downloading recipe:", response.statusText);
+        alert("Error downloading recipe. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error downloading recipe:", error.message);
+      alert("Error downloading recipe. Please try again later.");
+    }
+  };
 
   return (
     <div className={` mt-19 p-14 ${textClass}`}>
-      <Link href="/">
-        <span
-          className={`flex text-black-600 text-xl gap-2 p-4 mt-2 ${textClass}`}
+      <span
+        className={`flex text-black-600 text-xl gap-2 p-4 mt-2 ${textClass}`}
+      >
+        <button
+          type="button"
+          onClick={goBack}
+          className="ml-10 flex border bg-gradient-to-br from-white to-gray-400 text-white hover:text-blue-400 px-2 py-2 rounded-lg"
         >
-          <button type="button" className="ml-10 flex border bg-gradient-to-br from-white to-gray-400 text-white hover:text-blue-400 px-2 py-2 rounded-lg">
-            {" "}
-            <FaArrowLeft className="mr-2" />
-            <p>Back to More Recipes </p>
-          </button>
-        </span>
-      </Link>
+          {" "}
+          <FaArrowLeft className="mr-2" />
+          <p>Back to More Recipes </p>
+        </button>
+      </span>
       <div
         className={`bg-${
           theme === "dark" ? "gray-700" : "white"
@@ -105,6 +138,36 @@ function Recipe({ recipe, Allergies }) {
               {showInstructions && <RecipeInstructions recipes={recipe} />}
             </div>
           </div>
+        </div>
+        <div className="flex mt-4 space-x-4">
+          <button
+            type="button"
+            onClick={() => downloadRecipe("json")}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Download JSON
+          </button>
+          <button
+            type="button"
+            onClick={() => downloadRecipe("text")}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Download Text
+          </button>
+          <button
+            type="button"
+            onClick={() => downloadRecipe("pdf")}
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Download PDF
+          </button>
+          <button
+            type="button"
+            onClick={() => downloadRecipe("excel")}
+            className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Download Excel
+          </button>
         </div>
       </div>
     </div>

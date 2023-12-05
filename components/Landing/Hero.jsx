@@ -1,10 +1,11 @@
+/* eslint-disable import/no-unresolved */
 import React from "react";
 import classes from "./hero.module.css";
-import SearchBar from "../searchBar/searchBar";
-import Categories from "../categories/categories";
+import SearchBar from "../SearchBar/SearchBar";
+import Categories from "../Categories/CategoriesMenu";
 import Tags from "../Tags/Tags";
-import Ingredients from "../ingredients/ingredients";
-import DropdownMenu from "../sort/sort";
+import Ingredients from "../Ingredients/Ingredients";
+import DropdownMenu from "../Sort/Sort";
 import InstructionF from "../Instructions/instructions";
 import { useTheme } from "../Context/ThemeContext";
 

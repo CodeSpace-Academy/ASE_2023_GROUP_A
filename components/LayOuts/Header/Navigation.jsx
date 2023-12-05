@@ -3,11 +3,11 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/legacy/image";
 
-import { useTheme } from "@/components/Context/ThemeContext";
+import { useTheme } from "../../Context/ThemeContext";
 
 // Faves
 import { useContext } from "react";
-import FavoritesContext from "@/components/Context/Favorites-context";
+import FavoritesContext from "../../Context/Favorites-context";
 import Badge from "@mui/material/Badge";
 import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 
@@ -90,7 +90,7 @@ const Navigation = () => {
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4 justify-start">
               <Link
-                href={`/FavoritesPage`}
+                href={`/favorites`}
                 className={`${
                   theme === "dark" ? "text-white" : "text-black"
                 } hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium`}
@@ -100,7 +100,7 @@ const Navigation = () => {
                   badgeContent={favoriteCtx.totalFavorites}
                   color="primary"
                   className="w-4 mr-8 text-center"
-                ></Badge>
+                />
               </Link>
             </div>
           </div>
@@ -128,7 +128,7 @@ const Navigation = () => {
                 aria-expanded={mobileMenuOpen ? "true" : "false"}
                 aria-haspopup="true"
               >
-                <span className="absolute -inset-1.5"></span>
+                <span className="absolute -inset-1.5"/>
                 <span className="sr-only">Open user menu</span>
               </button>
             </div>
@@ -147,7 +147,8 @@ const Navigation = () => {
                 Recipe
               </Link>
               <Link
-                href={`/FavoritesPage`}
+                href={`/favorites`}
+                type="button"
                 className="text-black-300 hover-bg-gray-700 hover-text-white block rounded-md px-3 py-2 text-base font-medium"
               >
                 Favorites{" "}

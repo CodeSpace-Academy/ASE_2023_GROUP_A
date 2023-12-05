@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { useTheme } from "../Context/ThemeContext";
@@ -11,7 +12,7 @@ import { useTheme } from "../Context/ThemeContext";
  * @param {Function} props.setSelectedCategories - The function to set selected categories.
  * @returns {JSX.Element} - The component's rendered elements.
  */
-function Categories({ selectedCategories, setSelectedCategories }) {
+const Categories = ({ selectedCategories, setSelectedCategories }) => {
   const [categories, setCategories] = useState([]);
   const { theme } = useTheme();
 
@@ -39,7 +40,7 @@ function Categories({ selectedCategories, setSelectedCategories }) {
           throw Error("Failed to fetch categories");
         }
       } catch (error) {
-        throw Error("Error fetching categories:", error);
+        return error;
       }
     }
 
@@ -96,7 +97,8 @@ function Categories({ selectedCategories, setSelectedCategories }) {
       <Select
         isMulti
         options={categories}
-        value={categories.filter((category) => selectedCategories?.includes(category.value))}
+        value={categories.filter((category) => (selectedCategories
+          ? selectedCategories.includes(category.value) : []))}
         onChange={handleCategoryChange}
         styles={customStyles}
         blurInputOnSelect
@@ -104,6 +106,6 @@ function Categories({ selectedCategories, setSelectedCategories }) {
       />
     </div>
   );
-}
+};
 
 export default Categories;

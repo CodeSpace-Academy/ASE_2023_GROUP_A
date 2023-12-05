@@ -8,38 +8,36 @@ export default function FloatingButton() {
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
   const handleScrollToBottom = () => {
     window.scrollTo({
       top: document.body.scrollHeight,
       behavior: "smooth",
     });
   };
+
   return (
     <>
-      <div
+      <button
+        alt="up button"
         className={`${theme === "light" ? "bg-blue-500" : "bg-blue-900"} ${
           classes.floatingButton
         }`}
         onClick={handleScrollToTop}
-        onKeyUp={handleScrollToTop}
-        role="button"
-        tabIndex={0}
-        aria-label="to top"
+        type="button"
       >
         <FaArrowUp />
-      </div>
-      <div
-        className={`${theme === "light" ? "bg-blue-500" : "bg-blue-800"} ${
+      </button>
+      <button
+        alt="down button"
+        className={`${theme === "light" ? "bg-blue-500" : "bg-blue-900"} ${
           classes.floatingButton2
         }`}
         onClick={handleScrollToBottom}
-        onKeyDown={handleScrollToBottom}
-        role="button"
-        tabIndex={0}
-        aria-label="to bottom"
+        type="button"
       >
         <FaArrowDown />
-      </div>
+      </button>
     </>
   );
 }

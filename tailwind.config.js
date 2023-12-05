@@ -22,11 +22,16 @@ module.exports = {
         "custom-blue": {
           10: "#4888b1",
         },
+        "blue-black": {
+          10: "#000019",
+        },
       },
       fontFamily: {
         alkatra: ["Alkatra", "sans"],
         dm_mono: ["DM Mono", "italic"],
         eduNswActFoundation: ["Edu NSW ACT Foundation", "sans"],
+        deliciouse: ["Delicious Handrawn", "sans"],
+        fastHand: ["Fasthand", "sans"],
       },
     },
   },

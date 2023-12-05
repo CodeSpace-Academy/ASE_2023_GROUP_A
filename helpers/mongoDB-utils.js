@@ -1,4 +1,8 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable new-cap */
 import { MongoClient, ServerApiVersion } from "mongodb";
+import { PDFDocument } from "pdf-lib";
+import * as XLSX from "xlsx";
 
 const uri = process.env.mongodb_uri;
 
@@ -208,7 +212,9 @@ export const addFavoriteToMongoDB = async (recipe) => {
   try {
     const favoritesCollection = client.db("devdb").collection("favorites"); // Create or use a 'favorites' collection
     // Check if the user's favorite already exists
-    const existingFavorite = await favoritesCollection.findOne({ _id: recipe._id });
+    const existingFavorite = await favoritesCollection.findOne({
+      _id: recipe._id,
+    });
     if (existingFavorite) {
       // Handle the case where the favorite already exists
       throw new Error("could not add recipe to favorites");
@@ -279,7 +285,9 @@ export async function searchSuggestions(searchQuery) {
 
     return autocompleteResults;
   } catch (error) {
-    throw new Error("could not fetch suggestions based on the search query provided");
+    throw new Error(
+      "could not fetch suggestions based on the search query provided",
+    );
   }
 }
 
@@ -394,3 +402,441 @@ export async function filtering(filters, sortOrder) {
     );
   }
 }
+
+export const getSimilarRecipesWithTotalCount = async (
+  recipeTitle,
+  skip,
+  searchQuery,
+  sortOrder,
+  filters = {},
+) => {
+  try {
+    const cl = await client.connect();
+    const db = cl.db("devdb");
+    const collection = db.collection("recipes");
+    const { tag, category } = filters;
+
+    // Check if favoriteRecipe is null
+    const favoriteRecipe = await collection.findOne({ title: recipeTitle });
+    if (!favoriteRecipe) {
+      return { similarRecipes: [], totalCount: 0 };
+    }
+
+    // Initialize the query object
+    const query = {};
+
+    // Add category condition if it exists
+    // Add category condition if it exists
+    if (
+      category
+      && (Array.isArray(category) ? category.length > 0 : category)
+    ) {
+      query.category = {
+        $all: Array.isArray(category) ? category : [category],
+      };
+    }
+
+    // Add tag condition if it exists
+    if (tag && (Array.isArray(tag) ? tag.length > 0 : tag)) {
+      query.tags = { $all: Array.isArray(tag) ? tag : [tag] };
+    }
+
+    // Initialize sortCriteria
+
+    // Ensure that favoriteRecipe.tags is an array
+    const tags = Array.isArray(favoriteRecipe.tags)
+      ? favoriteRecipe.tags
+      : [favoriteRecipe.tags];
+
+    const categoryQuery = Array.isArray(favoriteRecipe.category)
+      ? { category: { $in: favoriteRecipe.category } }
+      : { category: favoriteRecipe.category };
+
+    const baseQuery = {
+      $or: [
+        { tags: { $in: tags } },
+        categoryQuery,
+        // You can add more complete conditions based on your requirements
+      ],
+      title: { $ne: favoriteRecipe.title }, // Exclude the favorite recipe itself
+    };
+
+    // If searchQuery exists, add it to the base query for fuzzy search
+    const regexSearchQuery = searchQuery
+      ? {
+        $or: [
+          { title: { $regex: new RegExp(searchQuery, "i") } },
+          { description: { $regex: new RegExp(searchQuery, "i") } },
+          { tags: { $regex: new RegExp(searchQuery, "i") } },
+          { ingredients: { $regex: new RegExp(searchQuery, "i") } },
+        ],
+      }
+      : {};
+
+    // Merge the baseQuery, regexSearchQuery, and additional query conditions
+    const finalQuery = {
+      ...baseQuery,
+      ...regexSearchQuery,
+      ...query,
+    };
+
+    let sortCriteria = {};
+
+    // Handle sort order based on sortOrder value
+    if (sortOrder === "default") {
+      sortCriteria = {};
+    } else if (sortOrder === "A-Z") {
+      sortCriteria = { title: 1 };
+    } else if (sortOrder === "Z-A") {
+      sortCriteria = { title: -1 };
+    } else if (sortOrder === "Oldest") {
+      sortCriteria = { published: 1 };
+    } else if (sortOrder === "Recent") {
+      sortCriteria = { published: -1 };
+    } else if (sortOrder === "cooktime(asc)") {
+      sortCriteria = { cook: 1 };
+    } else if (sortOrder === "cooktime(desc)") {
+      sortCriteria = { cook: -1 };
+    } else if (sortOrder === "preptime(asc)") {
+      sortCriteria = { prep: 1 };
+    } else if (sortOrder === "preptime(desc)") {
+      sortCriteria = { prep: -1 };
+    } else if (sortOrder === "steps(desc)") {
+      sortCriteria = { instructions: -1 };
+    } else if (sortOrder === "steps(asc)") {
+      sortCriteria = { instructions: 1 };
+    }
+    const similarRecipes = await collection
+      .find(finalQuery)
+      .sort(sortCriteria)
+      .limit(100)
+      .skip(skip)
+      .toArray();
+
+    const totalCount = await collection.find(finalQuery).count();
+
+    return { similarRecipes, totalCount };
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getModifiedRecipesWithTotalCount = async (
+  skip,
+  sortOrder,
+  filters = {},
+) => {
+  try {
+    const cl = await client.connect();
+    const db = cl.db("devdb");
+    const collection = db.collection("recipes");
+
+    const {
+      searchQuery, tags, ingredients, categories, instructions,
+    } = filters;
+
+    const query = {};
+
+    // Handle search query
+    if (searchQuery && searchQuery.length > 0) {
+      const fuzzySearchQuery = {
+        $or: [
+          { title: { $regex: searchQuery, $options: "i" } },
+          { description: { $regex: searchQuery, $options: "i" } },
+          { tags: { $regex: searchQuery, $options: "i" } },
+          { ingredients: { $regex: searchQuery, $options: "i" } },
+        ],
+      };
+
+      // Combine fuzzy search with existing conditions
+      if (query.$and) {
+        query.$and.push(fuzzySearchQuery);
+      } else {
+        query.$and = [fuzzySearchQuery];
+      }
+    }
+
+    // Handle category filter
+    if (categories && categories.length > 0) {
+      const categoryFilter = { category: { $all: categories } };
+      if (query.$and) {
+        query.$and.push(categoryFilter);
+      } else {
+        query.$and = [categoryFilter];
+      }
+    }
+
+    // Handle tag filter
+    if (tags && tags.length > 0) {
+      const tagFilter = { tags: { $all: tags } };
+      if (query.$and) {
+        query.$and.push(tagFilter);
+      } else {
+        query.$and = [tagFilter];
+      }
+    }
+
+    // Handle ingredient filter
+    if (ingredients && ingredients.length > 0) {
+      const ingredientQueries = ingredients.map((ingredient) => ({
+        [`ingredients.${ingredient}`]: { $exists: true },
+      }));
+      if (query.$and) {
+        query.$and.push({ $or: ingredientQueries });
+      } else {
+        query.$and = [{ $or: ingredientQueries }];
+      }
+    }
+
+    // Handle instructions filter
+    if (instructions) {
+      query.instructions = { $size: instructions };
+    }
+
+    let sortCriteria = {};
+
+    // Handle sort order based on sortOrder value
+    if (sortOrder === "[A-Z]") {
+      sortCriteria = { title: 1 };
+    } else if (sortOrder === "[Z-A]") {
+      sortCriteria = { title: -1 };
+    } else if (sortOrder === "Oldest") {
+      sortCriteria = { published: 1 };
+    } else if (sortOrder === "Recent") {
+      sortCriteria = { published: -1 };
+    } else if (sortOrder === "cooktime(asc)") {
+      sortCriteria = { cook: 1 };
+    } else if (sortOrder === "cooktime(desc)") {
+      sortCriteria = { cook: -1 };
+    } else if (sortOrder === "preptime(asc)") {
+      sortCriteria = { prep: 1 };
+    } else if (sortOrder === "preptime(desc)") {
+      sortCriteria = { prep: -1 };
+    } else if (sortOrder === "steps(desc)") {
+      sortCriteria = { instructions: -1 };
+    } else if (sortOrder === "steps(asc)") {
+      sortCriteria = { instructions: 1 };
+    }
+
+    // Execute the query and fetch total count
+    const [recipes, totalCount] = await Promise.all([
+      collection.find(query)
+        .sort(sortCriteria)
+        .limit(100)
+        .skip(skip)
+        .toArray(),
+      collection.find(query).count(),
+    ]);
+
+    return { recipes, totalCount };
+  } catch (error) {
+    return error;
+  }
+};
+
+/**
+ * Format recipe data as plain text.
+ * @param {Object} recipeData - The recipe data to format.
+ * @returns {string} - The recipe content in plain text.
+ */
+const formatRecipeAsPlainText = (recipeData) => {
+  // Implement your logic to format recipe data as plain text
+  // For example, you can iterate over recipeData and create a string representation
+  let plainTextContent = `Recipe: ${recipeData.title}\n\n`;
+  plainTextContent += `Description: ${recipeData.description}\n\n`;
+  plainTextContent += 'Ingredients:\n';
+  // Iterate over ingredients and add them to the plain text content
+  Object.entries(recipeData.ingredients).forEach(([ingredient, quantity]) => {
+    plainTextContent += `${ingredient}: ${quantity}\n`;
+  });
+  // Add more sections as needed
+  return plainTextContent;
+};
+const formatRecipeAsExcel = (recipeData) => {
+  // Define columns for Excel sheet
+  const columns = [
+    "Title",
+    "Description",
+    "Prep Time",
+    "Cook Time",
+    "Category",
+    "Servings",
+    "Published",
+    // Add more columns as needed
+  ];
+
+  // Extract values for each column
+  const values = [
+    recipeData.title,
+    recipeData.description,
+    recipeData.prep,
+    recipeData.cook,
+    recipeData.category,
+    recipeData.servings,
+    recipeData.published,
+    // Add more values as needed
+  ];
+
+  // Create an Excel sheet
+  const ws = XLSX.utils.json_to_sheet([columns, values], { skipHeader: true });
+
+  // Create a workbook
+  const wb = XLSX.utils.book_new();
+
+  // Append the sheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, "Recipe");
+
+  // Generate Excel Blob
+  const excelBlob = XLSX.write(wb, { bookType: "xlsx", type: "blob" });
+
+  return excelBlob;
+};
+
+const formatRecipeAsPdf = async (recipeData) => {
+  const pdfDoc = await PDFDocument.create();
+  const page = pdfDoc.addPage();
+  const { height } = page.getSize();
+
+  // Access properties directly from the recipeData object
+  page.drawText(`Title: ${recipeData.title}`, { x: 10, y: height - 20 });
+  page.drawText(`Description: ${recipeData.description}`, {
+    x: 10,
+    y: height - 40,
+  });
+  page.drawText(`Prep Time: ${recipeData.prep} minutes`, {
+    x: 10,
+    y: height - 60,
+  });
+  page.drawText(`Cook Time: ${recipeData.cook} minutes`, {
+    x: 10,
+    y: height - 80,
+  });
+  page.drawText(`Category: ${recipeData.category}`, { x: 10, y: height - 100 });
+  page.drawText(`Servings: ${recipeData.servings}`, { x: 10, y: height - 120 });
+  page.drawText(`Published: ${recipeData.published}`, {
+    x: 10,
+    y: height - 140,
+  });
+
+  // Add more content as needed
+  // ...
+
+  // Save the PDF to a Blob
+  const pdfBytes = await pdfDoc.save();
+
+  // Log the PDF as a Blob for debugging
+  // console.log(
+  //   "DOWNLOADABLE RECIPE PDF:",
+  //   new Blob([pdfBytes], { type: "application/pdf" }),
+  // );
+
+  return pdfBytes;
+};
+/**
+ * Convert recipe data to the specified format.
+ * @param {Object} recipeData - The recipe data to convert.
+ * @param {string} format - The desired format ('json' or 'text').
+ * @returns {string} - The recipe content in the specified format.
+ */
+// export const convertRecipeToFormat = (recipeData, format) => {
+//   switch (format) {
+//     case "json":
+//       console.log("RECIPE CONVERTED TO JSON:", recipeData);
+//       return JSON.stringify(recipeData, null, 2); // Prettified JSON with 2-space indentation
+//     case "text":
+//       console.log("RECIPE CONVERTED TO text:", recipeData);
+//       return formatRecipeAsPlainText(recipeData); // Implement this function for text format
+//     // Add more cases for other formats if needed
+//     case "xml":
+//       return formatRecipeAsExcel(recipeData); // Implement this function for XML format
+//     case "html":
+//       return formatRecipeAsHtml(recipeData);
+//     default:
+//       throw new Error(`Unsupported format: ${format}`);
+//   }
+// };
+// Helper function to get content type based on format
+const getContentType = (format) => {
+  switch (format) {
+    case "json":
+      return "application/json";
+    case "text":
+      return "text/plain";
+    case "pdf":
+      return "application/pdf";
+    case "excel":
+      return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    default:
+      return "application/octet-stream";
+  }
+};
+export const fetchRecipeDataFromMongoById = async (recipeId) => {
+  try {
+    const collection = client.db("devdb").collection("recipes");
+
+    // Convert the recipeId to UUID
+    const uuid = recipeId; // Assuming recipeId is already a string in UUID format
+
+    const recipeData = await collection.findOne({ _id: uuid });
+    return recipeData;
+  } catch (error) {
+    throw new Error("Could not fetch recipe details by ID");
+  }
+};
+
+export const downloadRecipe = async (res, recipeId, format) => {
+  try {
+    // Fetch recipe data from MongoDB
+    const recipeData = await fetchRecipeDataFromMongoById(recipeId);
+    // console.log("DOWNLOADABLE RECIPE:", recipeData);
+    // Check if recipe data is available
+    if (!recipeData) {
+      res.status(404).json({ error: "Recipe not found" });
+      return;
+    }
+
+    // Check if the requested format is supported
+    if (!["json", "text", "pdf", "excel"].includes(format)) {
+      res.status(400).json({ error: "Unsupported format" });
+      return;
+    }
+
+    // Implement logic to convert recipeData to the specified format
+    let recipeContent;
+
+    switch (format) {
+      case "json":
+        recipeContent = JSON.stringify(recipeData, null, 2);
+        break;
+      case "text":
+        recipeContent = formatRecipeAsPlainText(recipeData);
+        break;
+      case "pdf": {
+        recipeContent = await formatRecipeAsPdf(recipeData);
+        break;
+      }
+
+      case "excel": {
+        // Format recipe data as Excel
+        recipeContent = await formatRecipeAsExcel(recipeData);
+        break;
+      }
+      default:
+        throw new Error(`Unsupported format: ${format}`);
+    }
+
+    // Set appropriate headers for download
+    res.setHeader("Content-Type", getContentType(format));
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=recipe_${recipeId}.${format}`,
+    );
+
+    // Send the recipe content as the response
+    res.end(recipeContent);
+    res.send(recipeContent);
+  } catch (error) {
+    // console.error("Error downloading recipe:", error);
+    res.status(500).json({ error: "Error downloading recipe" });
+  }
+};
