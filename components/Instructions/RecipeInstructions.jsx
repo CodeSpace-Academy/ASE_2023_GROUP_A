@@ -2,7 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import Loading from "../Loading/Loading";
 
 // RecipeInstructions component displays a list of instructions for a recipe
-const RecipeInstructions = ({ recipes }) => {
+function RecipeInstructions({ recipes }) {
   // State to handle loading and error states
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,7 +19,7 @@ const RecipeInstructions = ({ recipes }) => {
       try {
         // Sort the instructions based on their index
         const sortedInstructions = recipes.instructions.map(
-          (instruction, index) => ({ index, instruction })
+          (instruction, index) => ({ index, instruction }),
         );
         sortedInstructions.sort((a, b) => a.index - b.index);
 
@@ -45,11 +45,11 @@ const RecipeInstructions = ({ recipes }) => {
   }, [recipes.instructions]);
 
   return (
-    <Fragment>
-      <h3 className="mt-2 text-lg font-semibold"></h3>
+    <>
+      <h3 className="mt-2 text-lg font-semibold" />
       {loading ? (
         // Display a loading message while instructions are being processed
-        <p><Loading/></p>
+        <p><Loading /></p>
       ) : error ? (
         // Display an error message if an error occurs
         <p>{error}</p>
@@ -57,8 +57,8 @@ const RecipeInstructions = ({ recipes }) => {
         // Display the ordered list of instructions
         <ol className="list-decimal list-inside">{instructions}</ol>
       )}
-    </Fragment>
+    </>
   );
-};
+}
 
 export default RecipeInstructions;
