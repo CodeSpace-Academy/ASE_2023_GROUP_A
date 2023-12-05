@@ -54,6 +54,7 @@ const RecipeCard = ({
   }
   const removeFavoriteHandler = async () => {
     // Display a confirmation dialog
+    // eslint-disable-next-line no-alert
     const userConfirmed = window.confirm(
       "Are you sure you want to remove this recipe from your favorites?",
     );

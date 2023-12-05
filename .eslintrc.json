@@ -23,8 +23,6 @@
       // Allowing Arrow functions Components
       "react/function-component-definition": "off",
 
-      "consistent-return": "off",
-
-      "no-alert": "off"
+      "consistent-return": "off"
     }
 }
