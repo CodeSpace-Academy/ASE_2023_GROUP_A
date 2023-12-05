@@ -30,7 +30,7 @@ const RecipePage = () => {
     <div>
       <Recipe
         recipe={recipe}
-        description={recipe.description}
+        // description={recipe.description}
         Allergies={allergens}
       />
     </div>

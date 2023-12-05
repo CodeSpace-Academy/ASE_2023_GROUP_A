@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable new-cap */
 import { MongoClient, ServerApiVersion } from "mongodb";
-import { jsPDF } from "jspdf";
+import { PDFDocument } from "pdf-lib";
 import * as XLSX from "xlsx";
 
 const uri = process.env.mongodb_uri;
@@ -692,34 +692,46 @@ const formatRecipeAsExcel = (recipeData) => {
   return excelBlob;
 };
 
-const formatRecipeAsPdf = (recipeData) => {
-  const pdfDoc = new jsPDF();
+const formatRecipeAsPdf = async (recipeData) => {
+  const pdfDoc = await PDFDocument.create();
+  const page = pdfDoc.addPage();
+  const { height } = page.getSize();
 
-  // Add content to the PDF
-  pdfDoc.text(`Title: ${recipeData.title}`, 10, 10);
-  pdfDoc.text(`Description: ${recipeData.description}`, 10, 20);
-  pdfDoc.text(`Prep Time: ${recipeData.prep} minutes`, 10, 30);
-  pdfDoc.text(`Cook Time: ${recipeData.cook} minutes`, 10, 40);
-  pdfDoc.text(`Category: ${recipeData.category}`, 10, 50);
-  pdfDoc.text(`Servings: ${recipeData.servings}`, 10, 60);
-  pdfDoc.text(`Published: ${recipeData.published}`, 10, 70);
+  // Access properties directly from the recipeData object
+  page.drawText(`Title: ${recipeData.title}`, { x: 10, y: height - 20 });
+  page.drawText(`Description: ${recipeData.description}`, {
+    x: 10,
+    y: height - 40,
+  });
+  page.drawText(`Prep Time: ${recipeData.prep} minutes`, {
+    x: 10,
+    y: height - 60,
+  });
+  page.drawText(`Cook Time: ${recipeData.cook} minutes`, {
+    x: 10,
+    y: height - 80,
+  });
+  page.drawText(`Category: ${recipeData.category}`, { x: 10, y: height - 100 });
+  page.drawText(`Servings: ${recipeData.servings}`, { x: 10, y: height - 120 });
+  page.drawText(`Published: ${recipeData.published}`, {
+    x: 10,
+    y: height - 140,
+  });
 
   // Add more content as needed
   // ...
 
-  return pdfDoc.output("blob");
-};
+  // Save the PDF to a Blob
+  const pdfBytes = await pdfDoc.save();
 
-// const formatRecipeAsHtml = (recipeData) => {
-//   const htmlString = `
-//     <div>
-//       <h1>${recipeData.title}</h1>
-//       <p>${recipeData.description}</p>
-//       <!-- Add more HTML elements for other properties -->
-//     </div>
-//   `;
-//   return htmlString;
-// };
+  // Log the PDF as a Blob for debugging
+  console.log(
+    "DOWNLOADABLE RECIPE PDF:",
+    new Blob([pdfBytes], { type: "application/pdf" }),
+  );
+
+  return pdfBytes;
+};
 /**
  * Convert recipe data to the specified format.
  * @param {Object} recipeData - The recipe data to convert.
@@ -800,13 +812,13 @@ export const downloadRecipe = async (res, recipeId, format) => {
         recipeContent = formatRecipeAsPlainText(recipeData);
         break;
       case "pdf": {
-        recipeContent = formatRecipeAsPdf(recipeData);
+        recipeContent = await formatRecipeAsPdf(recipeData);
         break;
       }
 
       case "excel": {
         // Format recipe data as Excel
-        recipeContent = formatRecipeAsExcel(recipeData);
+        recipeContent = await formatRecipeAsExcel(recipeData);
         break;
       }
       default:
