@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import { FiBook } from "react-icons/fi";
 import { FaArrowLeft, FaUsers } from "react-icons/fa";
 import {
@@ -19,7 +18,6 @@ import { useTheme } from "../Context/ThemeContext";
 import { usePageContext } from "../Context/CurrentPageContexts/CurrentHomePage";
 
 function Recipe({ recipe, Allergies }) {
-  const [showTags, setShowTags] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const { theme } = useTheme();
   const { goBack } = usePageContext();
@@ -29,10 +27,40 @@ function Recipe({ recipe, Allergies }) {
 
   const textClass = theme === "dark" ? "text-white" : "text-black";
   const ingredientsList = Object.entries(recipe.ingredients).map(
-    (ingredient) => `${ingredient}`
+    (ingredient) => `${ingredient}`,
   );
 
-  const firstImage = recipe.images[0];
+  const downloadRecipe = async (format) => {
+    try {
+      const response = await fetch(
+        `api/download?recipeId=${recipe._id}&format=${format}`,
+      );
+      if (response.ok) {
+        const blob = await response.blob();
+
+        if (navigator.msSaveOrOpenBlob) {
+          // For Microsoft browsers
+          navigator.msSaveOrOpenBlob(blob, `recipe_${recipe._id}.${format}`);
+        } else {
+          // For other browsers
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `recipe_${recipe._id}.${format}`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+      } else {
+        console.error("Error downloading recipe:", response.statusText);
+        alert("Error downloading recipe. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error downloading recipe:", error.message);
+      alert("Error downloading recipe. Please try again later.");
+    }
+  };
 
   return (
     <div className={` mt-19 p-14 ${textClass}`}>
@@ -73,13 +101,17 @@ function Recipe({ recipe, Allergies }) {
 
             <div className="flex items-center pt-2">
               <FaUsers className="mr-2" />
-              <b>Servings</b>:{recipe.servings}
+              <b>Servings</b>
+              :
+              {recipe.servings}
             </div>
 
             <div className="flex items-center">
               {" "}
               <FiBook className="mr-2" />
-              <b>Category</b>:{recipe.category}
+              <b>Category</b>
+              :
+              {recipe.category}
             </div>
 
             <div className={` mt-2 ${textClass}`}>
@@ -106,6 +138,36 @@ function Recipe({ recipe, Allergies }) {
               {showInstructions && <RecipeInstructions recipes={recipe} />}
             </div>
           </div>
+        </div>
+        <div className="flex mt-4 space-x-4">
+          <button
+            type="button"
+            onClick={() => downloadRecipe("json")}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Download JSON
+          </button>
+          <button
+            type="button"
+            onClick={() => downloadRecipe("text")}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Download Text
+          </button>
+          <button
+            type="button"
+            onClick={() => downloadRecipe("pdf")}
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Download PDF
+          </button>
+          <button
+            type="button"
+            onClick={() => downloadRecipe("excel")}
+            className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Download Excel
+          </button>
         </div>
       </div>
     </div>

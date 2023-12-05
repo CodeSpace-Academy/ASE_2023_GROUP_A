@@ -1,11 +1,7 @@
 import {
-  connectToCollection,
-  closeMongoDBConnection,
-} from "../../../helpers/mongoDB-connection";
-import {
   fetchRecipeDataFromMongo,
   fetchAllergens,
-} from "../../../helpers/mongoDB-utils";
+} from "../../../../helpers/mongoDB-utils";
 
 const handler = async (req, res) => {
   try {

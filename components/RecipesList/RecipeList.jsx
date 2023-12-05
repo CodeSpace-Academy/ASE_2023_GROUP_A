@@ -28,6 +28,17 @@ import { useTheme } from "../Context/ThemeContext";
 import { responsive } from "../../helpers/settings/settings";
 
 function RecipeList() {
+  const STORAGE_KEY = "recipeListState"; // Define a key for localStorage
+  const isServer = typeof window === "undefined";
+  // Retrieve state from localStorage or use default values
+  const initialState = JSON.parse(isServer ? null : localStorage.getItem(STORAGE_KEY)) || {
+    searchQuery: "",
+    selectedCategories: [],
+    selectedIngredients: [],
+    selectedTags: [],
+    selectedInstructions: null,
+    sortOrder: null,
+  };
   const router = useRouter();
   const {
     // page,
@@ -43,18 +54,26 @@ function RecipeList() {
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [filteredPage, setFilteredPage] = useState(1);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(urlSearchQuery || "");
+  const [searchQuery, setSearchQuery] = useState(
+    urlSearchQuery || initialState.searchQuery,
+  );
   const [selectedCategories, setSelectedCategories] = useState(
-    categories ? categories.split(",") : [],
+    categories ? categories.split(",") : initialState.selectedCategories,
   );
   const [selectedIngredients, setSelectedIngredients] = useState(
-    ingredients ? ingredients.split(",") : [],
+    ingredients ? ingredients.split(",") : initialState.selectedIngredients,
   );
-  const [selectedTags, setSelectedTags] = useState(tags ? tags.split(",") : []);
+  const [selectedTags, setSelectedTags] = useState(
+    tags ? tags.split(",") : initialState.selectedTags,
+  );
   const [selectedInstructions, setSelectedInstructions] = useState(
-    instructions ? parseInt(instructions, 10) : null,
+    instructions
+      ? parseInt(instructions, 10)
+      : initialState.selectedInstructions,
   );
-  const [sortOrder, setSortOrder] = useState(sortOrders || null);
+  const [sortOrder, setSortOrder] = useState(
+    sortOrders || initialState.sortOrder,
+  );
   const [noRecipesFoundMessage, setNoRecipesFoundMessage] = useState(false);
   const [filterCount, setFilterCount] = useState(0);
   const [showCarousel, setShowCarousel] = useState(false);// Add loading state
@@ -170,6 +189,16 @@ function RecipeList() {
 
   useEffect(() => {
     fetchOriginalAndFilteredData();
+    const stateToSave = {
+      searchQuery,
+      selectedCategories,
+      selectedIngredients,
+      selectedTags,
+      selectedInstructions,
+      sortOrder,
+    };
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
   }, [
     searchQuery,
     selectedTags,

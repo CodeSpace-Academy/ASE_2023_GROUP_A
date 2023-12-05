@@ -1,4 +1,8 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable new-cap */
 import { MongoClient, ServerApiVersion } from "mongodb";
+import { jsPDF } from "jspdf";
+import * as XLSX from "xlsx";
 
 const uri = process.env.mongodb_uri;
 
@@ -627,5 +631,200 @@ export const getModifiedRecipesWithTotalCount = async (
     return { recipes, totalCount };
   } catch (error) {
     return error;
+  }
+};
+
+/**
+ * Format recipe data as plain text.
+ * @param {Object} recipeData - The recipe data to format.
+ * @returns {string} - The recipe content in plain text.
+ */
+const formatRecipeAsPlainText = (recipeData) => {
+  // Implement your logic to format recipe data as plain text
+  // For example, you can iterate over recipeData and create a string representation
+  let plainTextContent = `Recipe: ${recipeData.title}\n\n`;
+  plainTextContent += `Description: ${recipeData.description}\n\n`;
+  plainTextContent += 'Ingredients:\n';
+  // Iterate over ingredients and add them to the plain text content
+  Object.entries(recipeData.ingredients).forEach(([ingredient, quantity]) => {
+    plainTextContent += `${ingredient}: ${quantity}\n`;
+  });
+  // Add more sections as needed
+  return plainTextContent;
+};
+const formatRecipeAsExcel = (recipeData) => {
+  // Define columns for Excel sheet
+  const columns = [
+    "Title",
+    "Description",
+    "Prep Time",
+    "Cook Time",
+    "Category",
+    "Servings",
+    "Published",
+    // Add more columns as needed
+  ];
+
+  // Extract values for each column
+  const values = [
+    recipeData.title,
+    recipeData.description,
+    recipeData.prep,
+    recipeData.cook,
+    recipeData.category,
+    recipeData.servings,
+    recipeData.published,
+    // Add more values as needed
+  ];
+
+  // Create an Excel sheet
+  const ws = XLSX.utils.json_to_sheet([columns, values], { skipHeader: true });
+
+  // Create a workbook
+  const wb = XLSX.utils.book_new();
+
+  // Append the sheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, "Recipe");
+
+  // Generate Excel Blob
+  const excelBlob = XLSX.write(wb, { bookType: "xlsx", type: "blob" });
+
+  return excelBlob;
+};
+
+const formatRecipeAsPdf = (recipeData) => {
+  const pdfDoc = new jsPDF();
+
+  // Add content to the PDF
+  pdfDoc.text(`Title: ${recipeData.title}`, 10, 10);
+  pdfDoc.text(`Description: ${recipeData.description}`, 10, 20);
+  pdfDoc.text(`Prep Time: ${recipeData.prep} minutes`, 10, 30);
+  pdfDoc.text(`Cook Time: ${recipeData.cook} minutes`, 10, 40);
+  pdfDoc.text(`Category: ${recipeData.category}`, 10, 50);
+  pdfDoc.text(`Servings: ${recipeData.servings}`, 10, 60);
+  pdfDoc.text(`Published: ${recipeData.published}`, 10, 70);
+
+  // Add more content as needed
+  // ...
+
+  return pdfDoc.output("blob");
+};
+
+// const formatRecipeAsHtml = (recipeData) => {
+//   const htmlString = `
+//     <div>
+//       <h1>${recipeData.title}</h1>
+//       <p>${recipeData.description}</p>
+//       <!-- Add more HTML elements for other properties -->
+//     </div>
+//   `;
+//   return htmlString;
+// };
+/**
+ * Convert recipe data to the specified format.
+ * @param {Object} recipeData - The recipe data to convert.
+ * @param {string} format - The desired format ('json' or 'text').
+ * @returns {string} - The recipe content in the specified format.
+ */
+// export const convertRecipeToFormat = (recipeData, format) => {
+//   switch (format) {
+//     case "json":
+//       console.log("RECIPE CONVERTED TO JSON:", recipeData);
+//       return JSON.stringify(recipeData, null, 2); // Prettified JSON with 2-space indentation
+//     case "text":
+//       console.log("RECIPE CONVERTED TO text:", recipeData);
+//       return formatRecipeAsPlainText(recipeData); // Implement this function for text format
+//     // Add more cases for other formats if needed
+//     case "xml":
+//       return formatRecipeAsExcel(recipeData); // Implement this function for XML format
+//     case "html":
+//       return formatRecipeAsHtml(recipeData);
+//     default:
+//       throw new Error(`Unsupported format: ${format}`);
+//   }
+// };
+// Helper function to get content type based on format
+const getContentType = (format) => {
+  switch (format) {
+    case "json":
+      return "application/json";
+    case "text":
+      return "text/plain";
+    case "pdf":
+      return "application/pdf";
+    case "excel":
+      return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    default:
+      return "application/octet-stream";
+  }
+};
+export const fetchRecipeDataFromMongoById = async (recipeId) => {
+  try {
+    const collection = client.db("devdb").collection("recipes");
+
+    // Convert the recipeId to UUID
+    const uuid = recipeId; // Assuming recipeId is already a string in UUID format
+
+    const recipeData = await collection.findOne({ _id: uuid });
+    return recipeData;
+  } catch (error) {
+    throw new Error("Could not fetch recipe details by ID");
+  }
+};
+
+export const downloadRecipe = async (res, recipeId, format) => {
+  try {
+    // Fetch recipe data from MongoDB
+    const recipeData = await fetchRecipeDataFromMongoById(recipeId);
+    console.log("DOWNLOADABLE RECIPE:", recipeData);
+    // Check if recipe data is available
+    if (!recipeData) {
+      res.status(404).json({ error: "Recipe not found" });
+      return;
+    }
+
+    // Check if the requested format is supported
+    if (!["json", "text", "pdf", "excel"].includes(format)) {
+      res.status(400).json({ error: "Unsupported format" });
+      return;
+    }
+
+    // Implement logic to convert recipeData to the specified format
+    let recipeContent;
+
+    switch (format) {
+      case "json":
+        recipeContent = JSON.stringify(recipeData, null, 2);
+        break;
+      case "text":
+        recipeContent = formatRecipeAsPlainText(recipeData);
+        break;
+      case "pdf": {
+        recipeContent = formatRecipeAsPdf(recipeData);
+        break;
+      }
+
+      case "excel": {
+        // Format recipe data as Excel
+        recipeContent = formatRecipeAsExcel(recipeData);
+        break;
+      }
+      default:
+        throw new Error(`Unsupported format: ${format}`);
+    }
+
+    // Set appropriate headers for download
+    res.setHeader("Content-Type", getContentType(format));
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=recipe_${recipeId}.${format}`,
+    );
+
+    // Send the recipe content as the response
+    res.end(recipeContent);
+    res.send(recipeContent);
+  } catch (error) {
+    console.error("Error downloading recipe:", error);
+    res.status(500).json({ error: "Error downloading recipe" });
   }
 };

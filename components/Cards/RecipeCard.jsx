@@ -119,7 +119,6 @@ const RecipeCard = ({
       return error;
     }
   };
-
   const decodeHtmlEntities = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent || "";
@@ -184,9 +183,7 @@ const RecipeCard = ({
               <span>
                 {/* Display empty star icon for non-favorites */}
                 <StarEmpty
-                  className={`w-6 h-6 ml-5 ${
-                    theme === "dark" ? "text-white" : "text-custom-blue-10"
-                  }`}
+                  className={`w-6 h-6 ml-5 ${theme === "dark" ? "text-white" : "text-custom-blue-10"}`}
                 />
               </span>
             </button>
