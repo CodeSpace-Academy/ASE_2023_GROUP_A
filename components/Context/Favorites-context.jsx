@@ -1,14 +1,7 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/jsx-indent */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable indent */
-/* eslint-disable react/jsx-no-constructed-context-values */
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable implicit-arrow-linebreak */
-import { useState, createContext, useEffect } from "react";
+import React, {
+  useState, createContext, useEffect, useMemo,
+} from "react";
 
 const FavoritesContext = createContext({
   userFavorites: [],
@@ -21,39 +14,39 @@ const FavoritesContext = createContext({
   removeChangeListener: (listener) => { },
 });
 
-export function FavoritesContextProvider(props) {
+export function FavoritesContextProvider({ children }) {
   const [userFavorites, setUserFavorites] = useState([]);
   const [changeListeners, setChangeListeners] = useState([]);
-    /**
+  /**
    * A function to manually refresh the favorites data.
    * It triggers a revalidation of the 'favorites' data using the mutate function.
    */
-    const fetchFavorites = async () => {
+  const fetchFavorites = async () => {
+    try {
+      const response = await fetch("/api/recipes/Favourites");
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.favorites || [];
+    } catch (error) {
+      return [];
+    }
+  };
+  useEffect(() => {
+    const fetchFavoritesData = async () => {
       try {
-        const response = await fetch("/api/recipes/Favourites");
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+        const favorites = await fetchFavorites();
+        if (favorites) {
+          setUserFavorites(favorites);
         }
-        const data = await response.json();
-        return data.favorites || [];
       } catch (error) {
-        return [];
+        return error;
       }
     };
-    useEffect(() => {
-      const fetchFavoritesData = async () => {
-        try {
-          const favorites = await fetchFavorites();
-          if (favorites) {
-            setUserFavorites(favorites);
-          }
-        } catch (error) {
-          return error;
-        }
-      };
 
-      fetchFavoritesData();
-    }, []);
+    fetchFavoritesData();
+  }, []);
   const notifyChangeListeners = () => {
     changeListeners.forEach((listener) => {
       listener();
@@ -69,15 +62,15 @@ export function FavoritesContextProvider(props) {
     notifyChangeListeners();
   };
   const removeFavoritesHandler = (recipeId) => {
-    setUserFavorites((prevUserFavorites) => prevUserFavorites.filter((favorite) =>
-      favorite._id !== recipeId));
+    setUserFavorites((prevUserFavorites) => prevUserFavorites
+      .filter((favorite) => favorite._id !== recipeId));
     notifyChangeListeners();
   };
 
   function isRecipeInFavorites(recipeId, userfavorites) {
     return userfavorites
     && Array.from(userfavorites)
-    .some((recipe) => recipe && recipe._id === recipeId);
+      .some((recipe) => recipe && recipe._id === recipeId);
   }
 
   const addChangeListener = (listener) => {
@@ -88,20 +81,31 @@ export function FavoritesContextProvider(props) {
     setChangeListeners((prevListeners) => prevListeners.filter((l) => l !== listener));
   };
 
-  const context = {
-    favorites: userFavorites,
-    totalFavorites: userFavorites.length,
-    addFavorite: addFavoritesHandler,
-    updateFavorites: updateFavoritesHandler,
-    removeFavorite: removeFavoritesHandler,
-    recipeIsFavorite: isRecipeInFavorites,
-    addChangeListener,
-    removeChangeListener,
-  };
-    return (
-      <FavoritesContext.Provider value={context}>
-        {props.children}
-      </FavoritesContext.Provider>
+  const context = useMemo(
+    () => ({
+      favorites: userFavorites,
+      totalFavorites: userFavorites.length,
+      addFavorite: addFavoritesHandler,
+      updateFavorites: updateFavoritesHandler,
+      removeFavorite: removeFavoritesHandler,
+      recipeIsFavorite: isRecipeInFavorites,
+      addChangeListener,
+      removeChangeListener,
+    }),
+    [
+      userFavorites,
+      addFavoritesHandler,
+      updateFavoritesHandler,
+      removeFavoritesHandler,
+      isRecipeInFavorites,
+      addChangeListener,
+      removeChangeListener,
+    ],
+  );
+  return (
+    <FavoritesContext.Provider value={context}>
+      {children}
+    </FavoritesContext.Provider>
   );
 }
 

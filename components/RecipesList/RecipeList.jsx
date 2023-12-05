@@ -1,7 +1,4 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-plusplus */
 /* eslint-disable react/jsx-no-bind */
-/* eslint-disable react/jsx-no-comment-textnodes */
 /* eslint-disable no-nested-ternary */
 import React, {
   useEffect,
