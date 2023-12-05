@@ -1,4 +1,4 @@
-import { searching } from "@/helpers/mongoDB-utils";
+import { filtering } from "../../../helpers/mongoDB-utils";
 
 const handler = async (req, res) => {
   if (req.method !== "POST") {
@@ -8,11 +8,11 @@ const handler = async (req, res) => {
   const { searchQuery } = req.body;
 
   try {
-    const searchResult = await searching(searchQuery);
-    res.status(200).json({ recipes: searchResult });
+    const searchResult = await filtering(searchQuery);
+    return res.status(200).json({ recipes: searchResult });
   } catch (error) {
-    console.error("Error searching recipes:", error);
-    res.status(500).json({ error: "Internal server error" });
+    // console.error("Error searching recipes:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 

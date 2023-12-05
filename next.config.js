@@ -3,6 +3,7 @@
 const { components } = require("react-select");
 
 module.exports = {
+
   env: {
     mongodb_password: process.env.mongodb_password,
     mongodb_username: process.env.mongodb_username,
@@ -15,18 +16,29 @@ module.exports = {
   eslint: {
     dirs: [
       "componets/categories/categories.jsx",
-      "components/ingredients/ingredients.jsx",
-      "components/instructions/instructions.jsx",
+      "components/Ingredients/Ingredients.jsx",
+      "components/Instructions/Instructions.jsx",
       "components/searchBar/searchBar.jsx",
       "components/sort/sort.jsx",
-      "components/tags/Tags.jsx",
-      "components/Landing/hero.jsx",
-      "components/RecipeList/RecipeList.js",
-      "components/badges/badges.jsx",
+      "components/Tags/Tags.jsx",
+      "components/Landing/Hero.jsx",
+      "components/Badges/Badges.jsx",
       "helpers/mongoDB-utils.js",
       "pages/api/combined",
+      "pages/api/search/similarRecipes",
+      "/pages/favorites",
+      "/pages/index.jsx",
+      "/components/Context/Favorites-context.jsx",
+      "/components/Cards/RecipeCard.jsx",
+      "/components/LayOuts/Header/Navigation.jsx",
+      "components/Ingredients/IngredientsList.jsx",
+      "components/Landing/Hero.jsx",
+      "components/Buttons/FloatingButton/FloatingButton.jsx",
+      "components/Context/CurrentPageContexts/CurrentHomePage.jsx",
+      "components/Badges/Badges.jsx",
     ],
   },
+
   webpack: (config, { dev }) => {
     if (dev) {
       config.resolve.alias["react-dom$"] = "react-dom/profiling";
@@ -35,3 +47,5 @@ module.exports = {
     return config;
   },
 };
+
+

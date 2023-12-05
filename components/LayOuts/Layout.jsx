@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme } from "../Context/ThemeContext";
 import Navigation from "./Header/Navigation";
-import Footer from "../footer/Footer";
+import Footer from "../Footer/Footer";
 
 const Layout = ({ children }) => {
   const { theme } = useTheme();

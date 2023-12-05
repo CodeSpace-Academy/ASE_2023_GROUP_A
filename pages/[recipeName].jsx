@@ -1,7 +1,7 @@
-import { useRouter } from "next/router";
-import Recipe from "../components/Recipes/Recipe";
+import React, { useRouter } from "next/router";
 import useSWR from "swr";
-import Loading from "@/components/Loading/Loading";
+import Recipe from "../components/Recipes/Recipe";
+import Loading from "../components/Loading/Loading";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -13,20 +13,24 @@ const RecipePage = () => {
   const { data, error } = useSWR(`api/recipes/${recipeName}`, fetcher);
 
   if (error || !data) {
-    return <div><Loading/></div>;
+    return <div><Loading /></div>;
   }
 
   const { recipe, allergens } = data;
 
   if (!recipe || !recipe.description || !allergens) {
-    <p>Can't find recipes for ${recipeName}</p>
+    <p>
+      Can&rsquo;t find recipes for
+      $
+      {recipeName}
+    </p>;
   }
 
   return (
     <div>
       <Recipe
         recipe={recipe}
-        description={recipe.description}
+        // description={recipe.description}
         Allergies={allergens}
       />
     </div>

@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable no-plusplus */
+import React, { useEffect } from "react";
 import Badge from "@mui/material/Badge";
 import { FaTrash } from "react-icons/fa";
 import { useTheme } from "../Context/ThemeContext";
@@ -17,10 +18,54 @@ import { useTheme } from "../Context/ThemeContext";
 export default function Badges({
   numberOfRecipes,
   handleDefault,
+  selectedCategories,
+  selectedIngredients,
+  selectedTags,
+  selectedInstructions,
   filterCount,
+  setFilterCount,
 }) {
   const { theme } = useTheme();
+  function countAppliedFilters(
+    Categories,
+    Ingredients,
+    Tags,
+    Instructions,
+  ) {
+    let count = 0;
 
+    if (Categories && Categories.length > 0) {
+      count++;
+    }
+
+    if (Ingredients && Ingredients.length > 0) {
+      count++;
+    }
+
+    if (Tags && Tags.length > 0) {
+      count++;
+    }
+
+    if (Instructions && Instructions.length > 0) {
+      count++;
+    }
+
+    return count;
+  }
+  useEffect(() => {
+    const counts = countAppliedFilters(
+      selectedCategories,
+      selectedIngredients,
+      selectedTags,
+      selectedInstructions,
+    );
+    setFilterCount(counts);
+  }, [
+    selectedTags,
+    selectedIngredients,
+    selectedCategories,
+    selectedInstructions,
+  ]);
   return (
     <div
       className={`flex mt-10 ${
@@ -46,7 +91,6 @@ export default function Badges({
         </span>
       </button>
 
-      {/* Badge for the number of recipes */}
       <Badge
         badgeContent={numberOfRecipes}
         color="primary"

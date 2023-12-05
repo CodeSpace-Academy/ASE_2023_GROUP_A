@@ -5,7 +5,7 @@ import { useTheme } from "../Context/ThemeContext";
 
 /**
  * Functional component representing a multi-select dropdown for ingredients.
- *
+ * it's a component
  * @component
  * @param {Object} props - The component's props.
  * @param {string[]} props.selectedIngredients - The selected ingredients.
@@ -97,7 +97,8 @@ function Ingredients({ selectedIngredients, setSelectedIngredients }) {
       <Select
         isMulti
         options={ingredients}
-        value={ingredients.filter((ingredient) => selectedIngredients?.includes(ingredient.value))}
+        value={ingredients.filter((ingredient) => (selectedIngredients
+          ? selectedIngredients.includes(ingredient.value) : []))}
         onChange={handleIngredientChange}
         styles={customStyles}
         blurInputOnSelect

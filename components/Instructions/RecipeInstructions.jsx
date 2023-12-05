@@ -1,4 +1,5 @@
-import { Fragment, useState, useEffect } from "react";
+/* eslint-disable no-nested-ternary */
+import React, { useState, useEffect } from "react";
 import Loading from "../Loading/Loading";
 
 // RecipeInstructions component displays a list of instructions for a recipe
@@ -33,7 +34,7 @@ function RecipeInstructions({ recipes }) {
         // Set the reordered instructions and mark loading as complete
         setInstructions(reorderedInstructions);
         setLoading(false);
-      } catch (error) {
+      } catch (err) {
         // Handle any errors that occur during the process
         setError("An error occurred while fetching instructions.");
         setLoading(false);
@@ -46,7 +47,7 @@ function RecipeInstructions({ recipes }) {
 
   return (
     <>
-      <h3 className="mt-2 text-lg font-semibold" />
+      <h3 className="mt-2 text-lg font-semibold">Error</h3>
       {loading ? (
         // Display a loading message while instructions are being processed
         <p><Loading /></p>

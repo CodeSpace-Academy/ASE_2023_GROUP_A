@@ -1,7 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
+
 import Image from "next/legacy/image";
-import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
+import { toast } from "react-toastify";
+
 import { StarIcon as StarEmpty } from "@heroicons/react/24/outline";
+import { StarIcon as StarFilled } from "@heroicons/react/24/solid";
+
 import {
   CookTime,
   PrepTime,
@@ -12,7 +16,7 @@ import {
 import FavoritesContext from "../Context/Favorites-context";
 import ViewRecipeDetails from "../Buttons/ViewRecipeButton/ViewRecipe";
 import { useTheme } from "../Context/ThemeContext";
-import Loading from "../Loading/Loading";
+import LoadingCard from "./LoadingCard";
 import Title from "./Title";
 
 /**
@@ -26,67 +30,101 @@ import Title from "./Title";
  * @param {string} props.Key - The unique key for the recipe card.
  * @returns {JSX.Element} - The rendered RecipeCard component.
  */
-function RecipeCard({
-  recipe, searchQuery, favorites, Key,
-}) {
+const RecipeCard = ({
+  recipe,
+  searchQuery,
+  Key,
+}) => {
+  const [recipeIsFavorite, setRecipeIsFavorite] = useState(false);
   const { theme } = useTheme();
   const favoriteCtx = useContext(FavoritesContext);
-
-  // Display loading spinner if recipe data is not available
-  if (!recipe) {
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
-  }
+  const favorites = favoriteCtx.favorites || [];
+  useEffect(() => {
+    const isFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
+    setRecipeIsFavorite(isFavorite);
+  }, [favorites, favoriteCtx, recipe._id]);
 
   // Determine the first image for the recipe
-  const firstImage = recipe.images && recipe.images.length > 0 ? recipe.images[0] : recipe.image;
+  const firstImage = recipe.images && recipe.images.length > 0
+    ? recipe.images[0] : recipe.image;
 
   // Check if the recipe is marked as a favorite
-  const recipeIsFavorite = favoriteCtx.recipeIsFavorite(recipe._id, favorites);
-
-  // Remove a recipe from favorites
+  if ((!recipe)) {
+    return <LoadingCard />;
+  }
   const removeFavoriteHandler = async () => {
-    try {
-      const response = await fetch(`api/recipes/Favourites`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ recipeId: recipe._id }),
-      });
+    // Display a confirmation dialog
+    // eslint-disable-next-line no-alert
+    const userConfirmed = window.confirm(
+      "Are you sure you want to remove this recipe from your favorites?",
+    );
+    if (userConfirmed) {
+      try {
+        // Send a request to remove the recipe from MongoDB
+        const response = await fetch(`/api/recipes/Favourites`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ recipeId: recipe._id }),
+        });
 
-      if (response.ok) {
-        favoriteCtx.removeFavorite(recipe._id);
+        if (response.ok) {
+          // Update the state and display a success message
+          favoriteCtx.removeFavorite(recipe._id);
+          // favoriteCtx.removeChangeListener(refreshFavorites);
+          toast.success("Recipe removed from favorites!");
+          // refreshFavorites();
+        } else {
+          toast.error("Error removing recipe from favorites.");
+        }
+      } catch (error) {
+        toast.error("Error removing recipe from favorites.");
+        return error;
       }
-    } catch (error) {
-      console.error("Error removing favorite:", error);
     }
   };
 
   // Add a recipe to favorites
   const addFavoritesHandler = async () => {
     try {
-      const response = await fetch(`api/recipes/Favourites`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(recipe),
-      });
-      favoriteCtx.addFavorite(recipe);
-      return response;
+      // Check if the recipe is already a favorite
+      if (!recipeIsFavorite) {
+        // Add the recipe to MongoDB
+        const response = await fetch(`/api/recipes/Favourites`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(recipe),
+        });
+
+        if (response.ok) {
+          // Update the state and display a success message
+          favoriteCtx.addFavorite(recipe);
+          // favoriteCtx.addChangeListener(refreshFavorites);
+          toast.success("Recipe added to favorites!");
+        } else {
+          toast.error("Error adding recipe to favorites.");
+          throw new Error("Error removing recipe from favorites.");
+          // refreshFavorites();
+        }
+      }
     } catch (error) {
-      console.error("Error adding favorite:", error);
-      return undefined;
+      toast.error("Error adding recipe to favorites.");
+      return error;
     }
   };
+  const decodeHtmlEntities = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  };
+
+  const correctedTitle = decodeHtmlEntities(recipe.title);
 
   return (
     <div
-      key={Key}
+      key={`${Key},${recipe.title}`}
       className={`${
         theme === "light" ? "text-black bg-blue-300" : "text-white bg-gray-700"
       } rounded shadow mt-8 mb-4 flex flex-col transform transition-transform hover:scale-105`}
@@ -108,7 +146,7 @@ function RecipeCard({
           {/* Display recipe title with optional highlighting */}
           <Title
             key={`${recipe._id}${recipe.title}`}
-            title={recipe.title}
+            title={correctedTitle}
             searchQuery={[searchQuery]}
           />
           <div className="pl-5">
@@ -141,9 +179,7 @@ function RecipeCard({
               <span>
                 {/* Display empty star icon for non-favorites */}
                 <StarEmpty
-                  className={`w-6 h-6 ml-5 ${
-                    theme === "dark" ? "text-white" : "text-custom-blue-10"
-                  }`}
+                  className={`w-6 h-6 ml-5 ${theme === "dark" ? "text-white" : "text-custom-blue-10"}`}
                 />
               </span>
             </button>
@@ -154,6 +190,6 @@ function RecipeCard({
       </div>
     </div>
   );
-}
+};
 
 export default RecipeCard;

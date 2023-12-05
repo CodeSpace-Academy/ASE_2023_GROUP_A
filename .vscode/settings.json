@@ -5,5 +5,11 @@
     "editor.wordWrap": "on",
     "workbench.editor.autoLockGroups": {
         "mainThreadWebview-markdown.preview": true
-    }
+    },
+    "docwriter.progress.trackTypes": false,
+    "docwriter.progress.trackMethods": false,
+    "docwriter.progress.trackClasses": false,
+    "cSpell.words": [
+        "linebreak"
+    ]
 }
