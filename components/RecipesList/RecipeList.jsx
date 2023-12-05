@@ -203,6 +203,8 @@ function RecipeList() {
     selectedCategories,
     selectedInstructions,
     sortOrder,
+    currentPage,
+    filteredPage,
   ]);
 
   const handlePageChange = useCallback(
