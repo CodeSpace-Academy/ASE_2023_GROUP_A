@@ -22,7 +22,7 @@
       "react-hooks/exhaustive-deps": "off",
       // Allowing Arrow functions Components
       "react/function-component-definition": "off",
-
+      //For Arrow functions do not always return a vlue.
       "consistent-return": "off"
     }
 }
