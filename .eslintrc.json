@@ -22,6 +22,7 @@
       "react-hooks/exhaustive-deps": "off",
       // Allowing Arrow functions Components
       "react/function-component-definition": "off",
-      "consistent-return": "off"
+      "consistent-return": "off",
+      "no-warning-comments": "off"
     }
 }
