@@ -725,10 +725,10 @@ const formatRecipeAsPdf = async (recipeData) => {
   const pdfBytes = await pdfDoc.save();
 
   // Log the PDF as a Blob for debugging
-  console.log(
-    "DOWNLOADABLE RECIPE PDF:",
-    new Blob([pdfBytes], { type: "application/pdf" }),
-  );
+  // console.log(
+  //   "DOWNLOADABLE RECIPE PDF:",
+  //   new Blob([pdfBytes], { type: "application/pdf" }),
+  // );
 
   return pdfBytes;
 };
@@ -788,7 +788,7 @@ export const downloadRecipe = async (res, recipeId, format) => {
   try {
     // Fetch recipe data from MongoDB
     const recipeData = await fetchRecipeDataFromMongoById(recipeId);
-    console.log("DOWNLOADABLE RECIPE:", recipeData);
+    // console.log("DOWNLOADABLE RECIPE:", recipeData);
     // Check if recipe data is available
     if (!recipeData) {
       res.status(404).json({ error: "Recipe not found" });
@@ -836,7 +836,7 @@ export const downloadRecipe = async (res, recipeId, format) => {
     res.end(recipeContent);
     res.send(recipeContent);
   } catch (error) {
-    console.error("Error downloading recipe:", error);
+    // console.error("Error downloading recipe:", error);
     res.status(500).json({ error: "Error downloading recipe" });
   }
 };

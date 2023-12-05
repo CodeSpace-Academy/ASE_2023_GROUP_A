@@ -48,7 +48,7 @@ export function FavoritesContextProvider(props) {
             setUserFavorites(favorites);
           }
         } catch (error) {
-          console.error("Error fetching favorites:", error);
+          return error;
         }
       };
 

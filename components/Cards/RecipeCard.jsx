@@ -78,8 +78,8 @@ const RecipeCard = ({
           toast.error("Error removing recipe from favorites.");
         }
       } catch (error) {
-        console.error("Error removing favorite:", error);
         toast.error("Error removing recipe from favorites.");
+        return error;
       }
     }
   };
