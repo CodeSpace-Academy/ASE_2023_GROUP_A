@@ -1,6 +1,5 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-alert */
 import React, { useContext, useState, useEffect } from "react";
+
 import Image from "next/legacy/image";
 import { toast } from "react-toastify";
 
