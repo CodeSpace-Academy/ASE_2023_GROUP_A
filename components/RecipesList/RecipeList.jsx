@@ -198,13 +198,13 @@ function RecipeList() {
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
-          const delay = 500; // Adjust the delay as needed
-      const timeoutId = setTimeout(() => {
-        fetchOriginalAndFilteredData();
-      }, delay);
-      return () => {
-        clearTimeout(timeoutId);
-      };
+    const delay = 500; // Adjust the delay as needed
+    const timeoutId = setTimeout(() => {
+      fetchOriginalAndFilteredData();
+    }, delay);
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [
     searchQuery,
     selectedTags,
@@ -320,8 +320,8 @@ function RecipeList() {
             type="button"
             onClick={handleViewFavorites}
             className={`${
-                  theme === "light" ? " bg-blue-500 text-black" : "text-white bg-gray-700"
-                } hover:bg-gray-700 hover:text-white px-4 py-2 text-lg font-medium rounded-md`}
+              theme === "light" ? " bg-blue-500 text-black" : "text-white bg-gray-700"
+            } hover:bg-gray-700 hover:text-white px-4 py-2 text-lg font-medium rounded-md`}
           >
             {showCarousel ? "Hide Favourites" : "View Favourites"}
           </button>
