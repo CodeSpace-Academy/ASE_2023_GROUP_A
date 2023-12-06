@@ -47,7 +47,6 @@ function Allergens({ recipeIngredients, allergens }) {
                   <li
                     key={index}
                     className={`mr-4 p-2 mb-2 sm:mb-0 md:mb-0 sm:mr-1 md:mr-4 ${classes["button-86"]}`}
-                    role="button"
                   >
                     <div className="flex items-center">{allergen}</div>
                   </li>

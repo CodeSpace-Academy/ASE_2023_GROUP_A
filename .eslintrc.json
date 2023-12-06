@@ -23,6 +23,10 @@
       // Allowing Arrow functions Components
       "react/function-component-definition": "off",
       // For Arrow functions do not always return a value.
-      "consistent-return": "off"
+      "consistent-return": "off",
+      // Disable no-console rule
+      "no-console": "off",
+      // Disable no-alert rule
+      "no-alert": "off"
     }
 }
