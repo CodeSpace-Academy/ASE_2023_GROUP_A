@@ -326,13 +326,14 @@ function RecipeList() {
                 No favorite recipes yet.
               </p>
             ) : (
-              <div className="mt-4">
+              <div className="mt-6 ">
                 <Carousel
                   responsive={responsive}
                   containerClass="carousel-container"
+                  className="gap-2 m-3 bg-[linear-gradient(180deg,transparent,#38487875,transparent)]"
                 >
                   {favorites.map((recipe) => (
-                    <div key={recipe.recipe._id}>
+                    <div key={recipe.recipe._id} className="gap-12 m-3">
                       <FavCard recipe={recipe.recipe} favorites={favorites} />
                     </div>
                   ))}
