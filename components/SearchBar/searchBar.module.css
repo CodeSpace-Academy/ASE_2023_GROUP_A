@@ -18,7 +18,7 @@
 
   @media (max-width: 799px) {
     color: white;
-    border-color: yellow;
+    border-color: white;
   }
 }
 
@@ -39,7 +39,7 @@
 
   @media (max-width:799px) {
     .searchInput::placeholder{
-      color: yellow;
+      color: black;
     }
   }
 
