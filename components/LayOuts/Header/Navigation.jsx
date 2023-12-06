@@ -77,7 +77,7 @@ const Navigation = () => {
               </svg>
             </button>
           </div>
-          <div className="flex mr- flex-shrink-0 items-center">
+          <div className="flex mr- flex-shrink-0 items-center mr-12">
             <Link href={`/`}>
               <Image
                 src="/Images/logo3.png"
@@ -93,7 +93,7 @@ const Navigation = () => {
                 href={`/favorites`}
                 className={`${
                   theme === "dark" ? "text-white" : "text-black"
-                } hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-lg font-medium`}
+                } hover:bg-gray-700 hover:text-white rounded-md  px-3 py-2 text-lg font-medium`}
               >
                 Favorites{" "}
                 <Badge
@@ -133,29 +133,25 @@ const Navigation = () => {
               </button>
             </div>
             <div
-              className={`absolute top-12 left-0 ${
+              className={`absolute top-16 left-0 ${
                 mobileMenuOpen
-                  ? "bg-blue-500 w-full mt-5 text- mr-6 text-center "
+                  ? "bg-blue-500 w-full mt-5 text-black mr-6 text-center "
                   : "hidden"
               }`}
               id="mobile-menu"
             >
               <Link
-                href={`/Recipe_List`}
-                className="text-black-300 hover-bg-gray-700 hover-text-white block rounded-md px-3 py-2 text-base font-medium"
-              >
-                Recipe
-              </Link>
-              <Link
                 href={`/favorites`}
                 type="button"
-                className="text-black-300 hover-bg-gray-700 hover-text-white block rounded-md px-3 py-2 text-base font-medium"
+                className={`${
+                  theme === "light" ? "text-black" : "text-white bg-gray-700"
+                } hover:bg-gray-700 hover:text-white w-full py-2 text-lg font-medium `}      
               >
                 Favorites{" "}
                 <Badge
                   badgeContent={favoriteCtx.totalFavorites}
                   color="primary"
-                  className="w-3  text- mr-6 text-center"
+                  className="w-0 "
                 ></Badge>
               </Link>
             </div>
