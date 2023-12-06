@@ -209,6 +209,7 @@ function Recipe({ recipe, Allergies }) {
           </div>
 
           {/* Recipe Tags Section */}
+          <h3 className="text-2xl font-semibold mt-14">Tags:</h3>
           <RecipeDetailTags recipe={recipe} />
 
           {/* Instructions Section */}
