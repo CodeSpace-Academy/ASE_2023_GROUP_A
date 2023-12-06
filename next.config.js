@@ -60,11 +60,9 @@ module.exports = {
 
       // Helpers
       "helpers/mongoDB-utils.js",
-
       // API's
       "pages/api/combined",
       "pages/api/search/similarRecipes",
-
       // Pages
       "pages/favorites",
       "pages/index.jsx",
