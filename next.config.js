@@ -27,11 +27,13 @@ module.exports = {
       "components/Cards/LoadingCard.jsx",
       "components/Cards/RecipeCard.jsx",
       "components/Cards/Title.jsx",
+
       // Categories
-      "components/categories/categories.jsx",
+      "components/Categories/CategoriesMenu.jsx",
 
       // Context
       "components/Context/CurrentPageContexts/CurrentHomePage.jsx",
+      "components/Context/CurrentPageContexts/CurrentSimilarRecipes.jsx",
       "components/Context/Favorites-context.jsx",
 
       // Descriptions
