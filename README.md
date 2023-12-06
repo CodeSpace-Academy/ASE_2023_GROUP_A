@@ -1,7 +1,7 @@
 # Rando Sando 'Cooking Devs' Recipe App
 
 <div align="center">
-  <img src="../ASE_2023_GROUP_A/public/Images/logo3.png" alt="Recipe App Logo" width="200"/>
+  <img src="../ASE_2023_GROUP_A/public/Images/logo3.png" alt="Recipe App Logo" width="100"/>
 </div>
 
 ## 🍲 Project Overview

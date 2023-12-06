@@ -47,7 +47,7 @@ const FavCard = ({ recipe, favorites }) => {
       <div
         className={`${
           theme === "dark" ? "text-custom-color-mixed-20" : "text-blue-black-10"
-        } bg-blue-400 rounded-lg shadow-lg overflow-hidden`}
+        } bg-blue-400 rounded-lg shadow-lg overflow-hidden mr-4`}
       >
         <div className="relative h-40 overflow-hidden">
           {firstImage ? (
