@@ -17,7 +17,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
 import Fuse from "fuse.js";
-import { SearchIcon, SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/24/outline';
 import { v4 as KeyUUID } from "uuid";
 import RecipeCard from '../../components/Cards/RecipeCard';
 import FavoritesContext from '../../components/Context/Favorites-context';
@@ -209,42 +208,43 @@ function FavoritesPage() {
   return (
     <section>
       <strong>
-        <h1 className="py-10 px-5 mx-20 my-10 flex w-full justify-center">My Favorites</h1>
+        <h1 className="py-10 px-5 bg-blue-400 mx-20 my-10 flex w-full justify-center">My Favorites</h1>
       </strong>
       <section className="mx-5">
         {/* Add sorting options here */}
         <div className="flex flex-col md:flex-row items-center justify-center bg-gray-100 p-6 rounded shadow-md">
-          <div className="relative flex items-center">
-            <input
-              type="text"
-              placeholder="Search recipes"
-              value={searchTerm}
-              onChange={handleSearch}
-              className="w-full md:w-64 px-4 py-2 pr-10 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-            />
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              <SearchIcon className="h-5 w-5 text-gray-500" />
-            </div>
-          </div>
-          <div className="mt-4 md:mt-0 md:ml-4">
+          <input
+            type="text"
+            placeholder="Search recipes"
+            value={searchTerm}
+            onChange={handleSearch}
+            className="w-full md:w-48 bg-blue-200 md:w-64 px-4 py-2 mb-4 md:mr-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+          />
+
+          <div className="bg-blue-100">
             <select
               id="sortOrder"
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
-              className="w-full md:w-48 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="w-full md:w-48 bg-blue-200 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             >
-              {/* ... */}
+              <option value="default">Default</option>
+              <option value="A-Z">Alphabetical (A-Z)</option>
+              <option value="Z-A">Alphabetical (Z-A)</option>
+              <option value="Oldest">Oldest</option>
+              <option value="Recent">Recent</option>
+              <option value="cooktime(asc)">Cook Time (Ascending)</option>
+              <option value="cooktime(desc)">Cook Time (Descending)</option>
+              <option value="preptime(asc)">Prep Time (Ascending)</option>
+              <option value="preptime(desc)">Prep Time (Descending)</option>
+              <option value="steps(asc)">Steps (Ascending)</option>
+              <option value="steps(desc)">Steps (Descending)</option>
             </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              {sortOrder.includes('asc') ? (
-                <SortAscendingIcon className="h-5 w-5 text-gray-500" />
-              ) : (
-                <SortDescendingIcon className="h-5 w-5 text-gray-500" />
-              )}
-            </div>
           </div>
         </div>
-
+        {/* <Link href="/" className="py-10 px-5 mx-12">
+          <strong> Explore Recipes</strong>
+        </Link> */}
         {isLoading ? (
           <Loading />
         ) : filteredRecipes.length === 0 ? (
@@ -275,10 +275,6 @@ function FavoritesPage() {
             ))}
           </div>
         )}
-
-        {/* <Link href="/" className="py-10 px-5 mx-12">
-          <strong> Explore Recipes</strong>
-        </Link> */}
       </section>
     </section>
   );
