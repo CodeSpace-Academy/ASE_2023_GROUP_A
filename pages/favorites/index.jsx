@@ -16,8 +16,10 @@ import { v4 as KeyUUID } from "uuid";
 import RecipeCard from "../../components/Cards/RecipeCard";
 import FavoritesContext from "../../components/Context/Favorites-context";
 import Loading from "../../components/Loading/Loading";
+import { useTheme } from "../../components/Context/ThemeContext";
 
 function FavoritesPage() {
+  const theme = useTheme();
   const favoriteCtx = useContext(FavoritesContext);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [sortOrderTitle, setSortOrderTitle] = useState("asc");
@@ -210,7 +212,13 @@ function FavoritesPage() {
   return (
     <section className="mt-0 pt-6 pb-10">
       <strong>
-        <h1 className="py-10 px-5 mx-20 my-10">My Favorites</h1>
+        <h1
+          className={`py-10 px-5 mx-20 my-10 ${
+            theme === "light" ? "text-black" : "text-white"
+          }`}
+        >
+          My Favorites
+        </h1>
       </strong>
       <section className="mx-5">
         {/* Add sorting options here */}
