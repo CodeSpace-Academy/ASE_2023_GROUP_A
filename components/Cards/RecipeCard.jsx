@@ -126,7 +126,7 @@ const RecipeCard = ({
     <div
       key={`${Key},${recipe.title}`}
       className={`${
-        theme === "light" ? "text-black bg-blue-300" : "text-white bg-gray-700"
+        theme === "light" ? "text-black bg-blue-400" : "text-white bg-gray-700"
       } rounded shadow mt-8 mb-4 flex flex-col transform transition-transform hover:scale-105`}
     >
       <div className="w-full h-56 md:h-92 mb-4 relative aspect-h-9">
