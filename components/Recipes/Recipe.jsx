@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useState } from "react";
 import Link from "next/link";
 import { FiBook } from "react-icons/fi";
@@ -120,12 +121,11 @@ function Recipe({ recipe, Allergies }) {
           URL.revokeObjectURL(url);
         }
       } else {
-        console.error("Error downloading recipe:", response.statusText);
-        alert("Error downloading recipe. Please try again later.");
+        throw new Error("Error downloading recipe:", response.statusText);
       }
-    } catch (error) {
-      console.error("Error downloading recipe:", error.message);
-      alert("Error downloading recipe. Please try again later.");
+    } catch (err) {
+      alert(`Error downloading recipe. Please try again later.${err}`);
+      return err;
     }
   };
 
