@@ -36,9 +36,7 @@ module.exports = {
       "components/Context/Favorites-context.jsx",
 
       // Descriptions
-
       // Footer
-
       // Ingredients
       "components/Ingredients/Ingredients.jsx",
       "components/Ingredients/IngredientsList.jsx",
