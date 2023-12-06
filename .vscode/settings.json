@@ -10,5 +10,5 @@
   "docwriter.progress.trackMethods": false,
   "docwriter.progress.trackClasses": false,
   "cSpell.words": ["linebreak"],
-  "editor.inlineSuggest.showToolbar": "onHover"
+  "editor.inlineSuggest.showToolbar": "always"
 }

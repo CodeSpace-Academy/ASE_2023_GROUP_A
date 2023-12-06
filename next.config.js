@@ -33,7 +33,6 @@ module.exports = {
 
       // Context
       "components/Context/CurrentPageContexts/CurrentHomePage.jsx",
-      "components/Context/CurrentPageContexts/CurrentSimilarRecipes.jsx",
       "components/Context/Favorites-context.jsx",
 
       // Descriptions
