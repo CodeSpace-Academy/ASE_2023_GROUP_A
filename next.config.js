@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const { components } = require("react-select");
+require("react-select");
 
 module.exports = {
 
@@ -15,27 +15,61 @@ module.exports = {
   reactStrictMode: true,
   eslint: {
     dirs: [
-      "componets/categories/categories.jsx",
-      "components/Ingredients/Ingredients.jsx",
-      "components/Instructions/Instructions.jsx",
-      "components/searchBar/searchBar.jsx",
-      "components/sort/sort.jsx",
-      "components/Tags/Tags.jsx",
-      "components/Landing/Hero.jsx",
+      "components/Allergens/Allergens.jsx",
       "components/Badges/Badges.jsx",
+
+      // Buttons
+      "components/Buttons/FloatingButton/FloatingButton.jsx",
+      "components/ViewRecipeButton/ViewRecipeButton.jsx",
+
+      // Cards
+      "components/Cards/FaveCard.jsx",
+      "components/Cards/LoadingCard.jsx",
+      "components/Cards/RecipeCard.jsx",
+      "components/Cards/Title.jsx",
+      // Categories
+      "components/categories/categories.jsx",
+
+      // Context
+      "components/Context/CurrentPageContexts/CurrentHomePage.jsx",
+      "components/Context/Favorites-context.jsx",
+
+      // Descriptions
+
+      // Footer
+
+      // Ingredients
+      "components/Ingredients/Ingredients.jsx",
+      "components/Ingredients/IngredientsList.jsx",
+
+      // Instructions
+      "components/Instructions/Instructions.jsx",
+
+      // Landing
+      "components/Landing/Hero.jsx",
+
+      // LayOuts
+      "components/LayOuts/Header/Navigation.jsx",
+
+      // SearchBar
+      "components/searchBar/searchBar.jsx",
+
+      // Sort
+      "components/sort/sort.jsx",
+      // Tags
+      "components/Tags/Tags.jsx",
+
+      // Helpers
       "helpers/mongoDB-utils.js",
+
+      // API's
       "pages/api/combined",
       "pages/api/search/similarRecipes",
-      "/pages/favorites",
-      "/pages/index.jsx",
-      "/components/Context/Favorites-context.jsx",
-      "/components/Cards/RecipeCard.jsx",
-      "/components/LayOuts/Header/Navigation.jsx",
-      "components/Ingredients/IngredientsList.jsx",
-      "components/Landing/Hero.jsx",
-      "components/Buttons/FloatingButton/FloatingButton.jsx",
-      "components/Context/CurrentPageContexts/CurrentHomePage.jsx",
-      "components/Badges/Badges.jsx",
+
+      // Pages
+      "pages/favorites",
+      "pages/index.jsx",
+
     ],
   },
 
@@ -47,5 +81,3 @@ module.exports = {
     return config;
   },
 };
-
-
