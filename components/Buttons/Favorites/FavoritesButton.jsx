@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -65,7 +65,7 @@ export default function FavoriteButton() {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Delete from Favorites?"}
+          Delete from Favorites?
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

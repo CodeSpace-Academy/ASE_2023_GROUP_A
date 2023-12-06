@@ -1,15 +1,14 @@
 {
-    "docwriter.style": "JSDoc",
-    "files.autoSave": "afterDelay",
-    "editor.cursorStyle": "line",
-    "editor.wordWrap": "on",
-    "workbench.editor.autoLockGroups": {
-        "mainThreadWebview-markdown.preview": true
-    },
-    "docwriter.progress.trackTypes": false,
-    "docwriter.progress.trackMethods": false,
-    "docwriter.progress.trackClasses": false,
-    "cSpell.words": [
-        "linebreak"
-    ]
+  "docwriter.style": "JSDoc",
+  "files.autoSave": "afterDelay",
+  "editor.cursorStyle": "line",
+  "editor.wordWrap": "on",
+  "workbench.editor.autoLockGroups": {
+    "mainThreadWebview-markdown.preview": true
+  },
+  "docwriter.progress.trackTypes": false,
+  "docwriter.progress.trackMethods": false,
+  "docwriter.progress.trackClasses": false,
+  "cSpell.words": ["linebreak"],
+  "editor.inlineSuggest.showToolbar": "onHover"
 }

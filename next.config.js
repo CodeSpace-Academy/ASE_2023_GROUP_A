@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const { components } = require("react-select");
+require("react-select");
 
 module.exports = {
 
@@ -15,27 +15,28 @@ module.exports = {
   reactStrictMode: true,
   eslint: {
     dirs: [
-      "componets/categories/categories.jsx",
+      "components/Allergens/Allergens.jsx",
+      "components/Badges/Badges.jsx",
+      "components/Buttons/Favorites/FavoritesButton.jsx",
+      "components/categories/categories.jsx",
       "components/Ingredients/Ingredients.jsx",
       "components/Instructions/Instructions.jsx",
       "components/searchBar/searchBar.jsx",
       "components/sort/sort.jsx",
       "components/Tags/Tags.jsx",
       "components/Landing/Hero.jsx",
-      "components/Badges/Badges.jsx",
       "helpers/mongoDB-utils.js",
       "pages/api/combined",
       "pages/api/search/similarRecipes",
-      "/pages/favorites",
-      "/pages/index.jsx",
-      "/components/Context/Favorites-context.jsx",
-      "/components/Cards/RecipeCard.jsx",
-      "/components/LayOuts/Header/Navigation.jsx",
+      "pages/favorites",
+      "pages/index.jsx",
+      "components/Context/Favorites-context.jsx",
+      "components/Cards/RecipeCard.jsx",
+      "components/LayOuts/Header/Navigation.jsx",
       "components/Ingredients/IngredientsList.jsx",
       "components/Landing/Hero.jsx",
       "components/Buttons/FloatingButton/FloatingButton.jsx",
       "components/Context/CurrentPageContexts/CurrentHomePage.jsx",
-      "components/Badges/Badges.jsx",
     ],
   },
 
@@ -47,5 +48,3 @@ module.exports = {
     return config;
   },
 };
-
-
