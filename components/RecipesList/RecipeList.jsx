@@ -95,6 +95,19 @@ function RecipeList() {
 
   const pageToUse = filtersExist ? filteredPage : currentPage;
 
+  const updateStateFromQuery = () => {
+    setSearchQuery(urlSearchQuery || initialState.searchQuery);
+    setSelectedCategories(categories ? categories.split(",") : initialState.selectedCategories);
+    setSelectedIngredients(ingredients ? ingredients.split(",") : initialState.selectedIngredients);
+    setSelectedTags(tags ? tags.split(",") : initialState.selectedTags);
+    setSelectedInstructions(instructions
+      ? parseInt(instructions, 10) : initialState.selectedInstructions);
+    setSortOrder(sortOrders || initialState.sortOrder);
+  };
+  useEffect(() => {
+    updateStateFromQuery();
+  }, [urlSearchQuery, categories, ingredients, tags, instructions, sortOrders]);
+
   const fetchData = async (url, options = {}) => {
     try {
       const response = await fetch(url, options);
@@ -122,22 +135,13 @@ function RecipeList() {
 
   const fetchOriginalAndFilteredData = async () => {
     try {
-      // For searching with Fuse.js
-      if (fuse() && searchQuery.length >= 4) {
-        const results = fuse().search(searchQuery);
-        const searchedRecipes = results.map((result) => result.item);
-        setRecipes(searchedRecipes);
-        setTotalRecipes(searchedRecipes.length);
-        setNoRecipesFoundMessage(searchedRecipes.length === 0);
-      } else {
-        // For filtering without searching
-        const originalData = await fetchData(
-          `/api/recipes?page=${pageToUse}&filters=${JSON.stringify(filters)}&sortOrder=${sortOrder}`,
-        );
-        setRecipes(originalData.recipes);
-        setTotalRecipes(originalData.totalCount);
-        setNoRecipesFoundMessage(originalData.recipes.length === 0);
-      }
+      // For filtering without searching
+      const originalData = await fetchData(
+        `/api/recipes?page=${pageToUse}&filters=${JSON.stringify(filters)}&sortOrder=${sortOrder}`,
+      );
+      setRecipes(originalData.recipes);
+      setTotalRecipes(originalData.totalCount);
+      setNoRecipesFoundMessage(originalData.recipes.length === 0);
     } catch (err) {
       return err;
     }
@@ -184,7 +188,6 @@ function RecipeList() {
   };
 
   useEffect(() => {
-    fetchOriginalAndFilteredData();
     const stateToSave = {
       searchQuery,
       selectedCategories,
@@ -195,6 +198,13 @@ function RecipeList() {
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+          const delay = 500; // Adjust the delay as needed
+      const timeoutId = setTimeout(() => {
+        fetchOriginalAndFilteredData();
+      }, delay);
+      return () => {
+        clearTimeout(timeoutId);
+      };
   }, [
     searchQuery,
     selectedTags,
