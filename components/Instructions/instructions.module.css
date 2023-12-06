@@ -1,14 +1,14 @@
 .instructionsInput {
-  width: 5em;
-  height: 1.9rem;
+  width: 4rem;
+  height: 0.001rem;
   display: inline-block;
   padding: 7px;
   outline: none;
   font-size: 1rem;
   color: black;
-  border-radius: 4px;
+  border-radius: 3px;
   border: 1px solid white;
-  background-color: rgb(39, 121, 184);
+  background-color: rgb(44, 129, 194);
   
   @media (min-width: 800px) {
       width: 9em;
