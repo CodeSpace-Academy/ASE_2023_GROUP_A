@@ -38,7 +38,6 @@ function RecipeList() {
   };
   const router = useRouter();
   const {
-    // page,
     tags,
     ingredients,
     categories,
