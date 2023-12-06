@@ -309,7 +309,9 @@ function RecipeList() {
           <button
             type="button"
             onClick={handleViewFavorites}
-            className="bg-blue-500 px-4 py-2 rounded-md"
+            className={`${
+                  theme === "light" ? " bg-blue-500 text-black" : "text-white bg-gray-700"
+                } hover:bg-gray-700 hover:text-white px-4 py-2 text-lg font-medium rounded-md`}
           >
             {showCarousel ? "Hide Favourites" : "View Favourites"}
           </button>

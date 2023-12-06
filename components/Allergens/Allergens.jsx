@@ -35,24 +35,17 @@ function Allergens({ recipeIngredients, allergens }) {
             <ul
               className={`flex flex-wrap justify-evenly sm:justify-center md:justify-between  ${classes["align-left"]}`}
             >
-              {allergensList.map((allergen, index) => {
-                // Check if the allergen is "egg" and handle pluralization
-                const ingredientAmount = recipeIngredients.find((ingredient) =>
-                  ingredient.toLowerCase().includes(allergen.toLowerCase()));
-                const isPlural = ingredientAmount
-                  && ingredientAmount.toLowerCase().includes("eggs");
-
+              {allergensList.map((allergen) =>
                 // Render each allergen as a list item
-                return (
+                // eslint-disable-next-line implicit-arrow-linebreak
+                (
                   <li
-                    key={index}
+                    key={allergen.index}
                     className={`mr-4 p-2 mb-2 sm:mb-0 md:mb-0 sm:mr-1 md:mr-4 ${classes["button-86"]}`}
-                    role="button"
                   >
                     <div className="flex items-center">{allergen}</div>
                   </li>
-                );
-              })}
+                ))}
             </ul>
           )}
         </div>
