@@ -38,7 +38,6 @@ function RecipeList() {
   };
   const router = useRouter();
   const {
-    // page,
     tags,
     ingredients,
     categories,
@@ -203,6 +202,8 @@ function RecipeList() {
     selectedCategories,
     selectedInstructions,
     sortOrder,
+    currentPage,
+    filteredPage,
   ]);
 
   const handlePageChange = useCallback(
