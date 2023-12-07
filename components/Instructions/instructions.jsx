@@ -12,7 +12,7 @@ import classes from "./instructions.module.css";
  */
 export default function InstructionF({ handleChange, selectedInstructions }) {
   return (
-    <div className={`flex ${classes.instructionsContainer}`}>
+    <div className={`flex ${classes.instructionsContainer }`}>
       <input
         type="number"
         min={0}

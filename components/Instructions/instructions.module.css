@@ -1,14 +1,14 @@
 .instructionsInput {
-  width: 5em;
-  height: 1.5em;
+  width: 4rem;
+  height: 0.001rem;
   display: inline-block;
   padding: 7px;
   outline: none;
   font-size: 1rem;
   color: black;
-  border-radius: 5px;
-  border: 2px solid white;
-  background-color: transparent;
+  border-radius: 3px;
+  border: 1px solid white;
+  background-color: rgb(44, 129, 194);
   
   @media (min-width: 800px) {
       width: 9em;
@@ -21,14 +21,9 @@
 }
 
 .instructionsInput:focus {
-  border: 2px solid darkblue;
+  border: 2px solid rgb(31, 31, 183);
 }
 
-/* .instructionsContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-} */
 
 .instructionsInput::placeholder {
   color: white;
