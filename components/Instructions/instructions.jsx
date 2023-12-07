@@ -17,7 +17,7 @@ export default function InstructionF({ handleChange, selectedInstructions }) {
         type="number"
         min={0}
         placeholder="# of Instructions"
-        value={parseInt(selectedInstructions, 10) || 0}
+        value={parseInt(selectedInstructions, 10)}
         onChange={handleChange}
         className={`${classes.instructionsInput}`}
       />
