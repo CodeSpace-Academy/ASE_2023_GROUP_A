@@ -612,10 +612,45 @@ export const getModifiedRecipesWithTotalCount = async (
       sortCriteria = { prep: 1 };
     } else if (sortOrder === "preptime(desc)") {
       sortCriteria = { prep: -1 };
-    } else if (sortOrder === "steps(desc)") {
-      sortCriteria = { instructions: -1 };
-    } else if (sortOrder === "steps(asc)") {
-      sortCriteria = { instructions: 1 };
+    } else if (sortOrder === "steps(desc)" || sortOrder === "steps(asc)") {
+      const sortOrderValue = sortOrder === "steps(desc)" ? -1 : 1;
+      try {
+        const result = await collection
+          .aggregate([
+            { $match: query },
+            {
+              $project: {
+                title: 1,
+                instructions: 1,
+                prep: 1,
+                cook: 1,
+                images: 1,
+                sortOrder: { $size: "$instructions" },
+              },
+            },
+            { $sort: { sortOrder: sortOrderValue } },
+            {
+              $project: {
+                title: 1,
+                instructions: 1,
+                prep: 1,
+                cook: 1,
+                images: 1,
+              },
+            },
+          ])
+          .limit(100)
+          .skip(skip)
+          .toArray();
+
+        const totalCount = await collection.find(query).count();
+
+        return { recipes: result, totalCount };
+      } catch (error) {
+        throw new Error(
+          "Could not filter recipes according to the filters selected",
+        );
+      }
     }
 
     // Execute the query and fetch total count
@@ -633,7 +668,6 @@ export const getModifiedRecipesWithTotalCount = async (
     return error;
   }
 };
-
 /**
  * Format recipe data as plain text.
  * @param {Object} recipeData - The recipe data to format.

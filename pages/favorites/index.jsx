@@ -213,7 +213,7 @@ function FavoritesPage() {
     <section className="mt-0 pt-6 pb-10">
       <strong>
         <h1
-          className={`py-10 px-5 mx-20 my-10 ${
+          className={`py-10 px-5 bg-blue-400 mx-20 my-10 flex w-full justify-center ${
             theme === "light" ? "text-black" : "text-white"
           }`}
         >
@@ -222,19 +222,21 @@ function FavoritesPage() {
       </strong>
       <section className="mx-5">
         {/* Add sorting options here */}
-        <div>
+        <div className="flex flex-col md:flex-row items-center justify-center bg-gray-100 p-6 rounded shadow-md">
           <input
             type="text"
             placeholder="Search recipes"
             value={searchTerm}
             onChange={handleSearch}
-            className="px-4 py-2 border border-gray-300 rounded mb-4"
+            className="w-full md:w-48 bg-blue-200 md:w-64 px-4 py-2 mb-4 md:mr-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
           />
-          <div>
+
+          <div className="bg-blue-100">
             <select
               id="sortOrder"
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
+              className="w-full md:w-48 bg-blue-200 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             >
               <option value="default">Default</option>
               <option value="A-Z">Alphabetical (A-Z)</option>
@@ -250,7 +252,9 @@ function FavoritesPage() {
             </select>
           </div>
         </div>
-
+        {/* <Link href="/" className="py-10 px-5 mx-12">
+          <strong> Explore Recipes</strong>
+        </Link> */}
         {isLoading ? (
           <Loading />
         ) : filteredRecipes.length === 0 ? (
@@ -261,7 +265,7 @@ function FavoritesPage() {
             height={300}
           />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filteredRecipes.map((result) => (
               <div key={KeyUUID()}>
                 <RecipeCard
