@@ -7,22 +7,19 @@
  * @component
  * @returns {JSX.Element} - Rendered FavoritesPage component.
  */
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  useMemo,
-} from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import useSWR from 'swr';
+import React, { useContext, useEffect, useState, useMemo } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import useSWR from "swr";
 import Fuse from "fuse.js";
 import { v4 as KeyUUID } from "uuid";
-import RecipeCard from '../../components/Cards/RecipeCard';
-import FavoritesContext from '../../components/Context/Favorites-context';
-import Loading from '../../components/Loading/Loading';
+import RecipeCard from "../../components/Cards/RecipeCard";
+import FavoritesContext from "../../components/Context/Favorites-context";
+import Loading from "../../components/Loading/Loading";
+import { useTheme } from "../../components/Context/ThemeContext";
 
 function FavoritesPage() {
+  const theme = useTheme();
   const favoriteCtx = useContext(FavoritesContext);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [sortOrderTitle, setSortOrderTitle] = useState("asc");
@@ -40,7 +37,7 @@ function FavoritesPage() {
 
   const { data: favoritesData, error: recipesError } = useSWR(
     "/api/recipes/Favourites",
-    fetcher,
+    fetcher
   );
 
   const favoriteRecipes = favoriteCtx.favorites || [];
@@ -102,13 +99,20 @@ function FavoritesPage() {
     const sortedRecipes = [...filteredRecipes].sort((a, b) => {
       if (sortType === "title") {
         return sortOrder1 * a.recipe.title.localeCompare(b.recipe.title);
-      } if (sortType === "prepTime") {
+      }
+      if (sortType === "prepTime") {
         return sortOrder1 * (a.recipe.prep - b.recipe.prep);
-      } if (sortType === "cookTime") {
+      }
+      if (sortType === "cookTime") {
         return sortOrder1 * (a.recipe.cook - b.recipe.cook);
-      } if (sortType === "steps") {
-        return sortOrder1 * (a.recipe.instructions.length - b.recipe.instructions.length);
-      } if (sortType === "totalTime") {
+      }
+      if (sortType === "steps") {
+        return (
+          sortOrder1 *
+          (a.recipe.instructions.length - b.recipe.instructions.length)
+        );
+      }
+      if (sortType === "totalTime") {
         const aTotalTime = a.recipe.prep + a.recipe.cook;
         const bTotalTime = b.recipe.prep + b.recipe.cook;
         return sortOrder1 * (aTotalTime - bTotalTime);
@@ -206,9 +210,15 @@ function FavoritesPage() {
   };
 
   return (
-    <section>
+    <section className="mt-0 pt-6 pb-10">
       <strong>
-        <h1 className="py-10 px-5 bg-blue-400 mx-20 my-10 flex w-full justify-center">My Favorites</h1>
+        <h1
+          className={`py-10 px-5 bg-blue-400 mx-20 my-10 flex w-full justify-center ${
+            theme === "light" ? "text-black" : "text-white"
+          }`}
+        >
+          My Favorites
+        </h1>
       </strong>
       <section className="mx-5">
         {/* Add sorting options here */}
@@ -254,7 +264,6 @@ function FavoritesPage() {
             width={500}
             height={300}
           />
-
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filteredRecipes.map((result) => (
@@ -269,13 +278,27 @@ function FavoritesPage() {
                   href={`/favorites/similar-recipes/${result.recipe.title}`}
                 >
                   {" "}
-                  View similar recipes
+                  <button
+                    type="button"
+                    className="text-lg font-semibold bg-slate-400 rounded-xl p-2 mt-5 hover:bg-slate-50"
+                  >
+                    View similar recipes ⇨
+                  </button>
                 </Link>
               </div>
             ))}
           </div>
         )}
       </section>
+      <br />
+      <br />
+      <br />
+      <Link href="/" className="py-10 px-5 mt-12">
+        <strong className="text-lg bg-sky-600 rounded-xl p-1 hover:bg-sky-400">
+          {" "}
+          Explore Recipes
+        </strong>
+      </Link>
     </section>
   );
 }
